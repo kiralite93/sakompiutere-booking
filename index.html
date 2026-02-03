@@ -335,7 +335,7 @@
 
     /* Print support */
     @media print{
-      header, #rightSide, #openAdminBtn, #exitAdminBtn, #introBox, #step1Box, #step2Box, #step3Box, #myBox { display:none !important; }
+      header, #rightSide, #openAdminBtn, #exitAdminBtn, #introBox, #step1Box, #step2Box, #step3Box, #myBox, #authBox { display:none !important; }
       body{ background:#fff !important; color:#000 !important; }
       .card{ box-shadow:none !important; background:#fff !important; border:1px solid #ddd !important; }
       .wrap{ max-width:100% !important; }
@@ -360,10 +360,42 @@
         <button id="lang_en">EN</button>
         <button id="lang_ka">KA</button>
       </div>
+
+      <div class="pill" id="authPill" style="display:none;">
+        👤 <strong id="authEmailPill">—</strong>
+      </div>
+
+      <button class="mini ghost" id="logoutBtn" style="display:none;">🚪 Logout</button>
+
       <div class="pill"><span id="t_today">Сегодня</span>: <strong id="todayPill">—</strong></div>
       <div class="pill"><span id="t_bookings">Броней</span>: <strong id="countPill">0</strong></div>
     </div>
   </header>
+
+  <!-- AUTH BOX -->
+  <div class="card" id="authBox" style="margin-top:16px;">
+    <div class="hd">
+      <h2>🔐 Вход / Регистрация</h2>
+      <div class="hint">Чтобы брони были общими для всех — нужно войти</div>
+    </div>
+    <div class="bd">
+      <div class="row">
+        <div>
+          <label>Email</label>
+          <input id="authEmail" type="email" placeholder="email@example.com" />
+        </div>
+        <div>
+          <label>Password</label>
+          <input id="authPass" type="password" placeholder="••••••••" />
+        </div>
+      </div>
+      <div class="btns">
+        <button class="primary" id="loginBtn">Войти</button>
+        <button class="ghost" id="registerBtn">Регистрация</button>
+      </div>
+      <div class="notice" id="authMsg" style="margin-top:10px;">—</div>
+    </div>
+  </div>
 
   <div class="grid">
     <!-- LEFT -->
@@ -549,7 +581,7 @@
             </table>
 
             <div class="hint" style="margin-top:10px;" id="t_myCancelHint">
-              Отменить можно только свои брони (по нику). Админ может отменять любые.
+              Отменить можно только свои брони. Админ может отменять любые.
             </div>
           </div>
         </div>
@@ -624,14 +656,43 @@
   </div>
 </div>
 
-<script>
+<!-- ✅ Firebase + App logic -->
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js";
+import {
+  getAuth, onAuthStateChanged,
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+  signOut
+} from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
+import {
+  getFirestore, collection, addDoc, deleteDoc, doc,
+  onSnapshot, query, orderBy
+} from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
+
 (() => {
+  // =========================
+  // FIREBASE CONFIG (ТВОЙ)
+  // =========================
+  const firebaseConfig = {
+    apiKey: "AIzaSyDJ-5e_xLPW9PnYT66ENey_Ndh8HJdI5wc",
+    authDomain: "sakompiutere-gaming.firebaseapp.com",
+    projectId: "sakompiutere-gaming",
+    storageBucket: "sakompiutere-gaming.firebasestorage.app",
+    messagingSenderId: "508996154674",
+    appId: "1:508996154674:web:0b6e475d284c49ba80d32b"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+  const db = getFirestore(app);
+
   // =========================
   // CONFIG (тут меняешь правила под клуб)
   // =========================
   const PCs = ["Bishop","Godzilla","Elf","Kadita","Orc","Lancelot","Fantomas","Soultaker","Pudge","Kratos"];
 
-  const STORAGE_KEY = "sg_bookings_v3";
+  // local-only keys (язык, админ-режим, ник)
   const LANG_KEY = "sg_lang";
   const ADMIN_KEY = "sg_admin";
   const NICK_KEY = "sg_nick";
@@ -644,13 +705,14 @@
   const MAX_DAYS_AHEAD = 14;   // максимум брони вперёд
   const ARRIVE_MIN_BEFORE = 5; // текст “приди за 5 минут”
 
+
   // Рабочие часы (если клуб не 24/7)
   const WORKING_HOURS_ENABLED = true; // ← поставь false если 24/7
   const WORK_START = "10:00";         // открытие
   const WORK_END = "03:00";           // закрытие (может быть на следующий день)
 
   // =========================
-  // i18n
+  // i18n (оставил твой)
   // =========================
   const i18n = {
     ru: {
@@ -697,7 +759,7 @@
       colNote:"Комментарий",
       colCost:"Стоимость",
       colCancel:"Отмена",
-      myCancelHint:"Отменить можно только свои брони (по нику). Админ может отменять любые.",
+      myCancelHint:"Отменить можно только свои брони. Админ может отменять любые.",
       sideTitle:"Подсказка",
       sideHint:"чтобы игрок понял сразу",
       help:
@@ -734,7 +796,7 @@
       msgAdminOff:"Admin выключен.",
       promptAdmin:"Введи админ-пароль:",
       wrongPass:"Неверный пароль.",
-      confirmWipe:"Точно стереть ВСЕ брони на этом устройстве?",
+      confirmWipe:"Точно стереть ВСЕ брони? (если нет прав — часть не удалится)",
       nextStepsTitle:"Что дальше?",
       nextSteps1:"✅ Подойди к администратору и назови свой ник.",
       nextSteps2:`⏰ Рекомендуем прийти за ${ARRIVE_MIN_BEFORE} минут до начала.`,
@@ -746,7 +808,6 @@
       qrHint:"QR обновится после создания брони. Если QR не появился — всё равно ок.",
       availHint:"Сейчас ПК подсвечены по выбранному интервалу: зелёный — свободен, красный — занят."
     },
-
     en: {
       title:"Sakompiutere Gaming — Booking",
       sub:"Pick PC → pick time → confirm",
@@ -791,7 +852,7 @@
       colNote:"Note",
       colCost:"Cost",
       colCancel:"Cancel",
-      myCancelHint:"You can cancel only your bookings (by nickname). Admin can cancel any.",
+      myCancelHint:"You can cancel only your bookings. Admin can cancel any.",
       sideTitle:"Hint",
       sideHint:"so users understand fast",
       help:
@@ -828,7 +889,7 @@
       msgAdminOff:"Admin disabled.",
       promptAdmin:"Enter admin password:",
       wrongPass:"Wrong password.",
-      confirmWipe:"Delete ALL bookings on this device?",
+      confirmWipe:"Delete ALL bookings? (if no permission — some won’t delete)",
       nextStepsTitle:"What’s next?",
       nextSteps1:"✅ Tell admin your nickname.",
       nextSteps2:`⏰ Please come ${ARRIVE_MIN_BEFORE} minutes earlier.`,
@@ -840,7 +901,6 @@
       qrHint:"QR updates after booking. If not visible — it’s OK.",
       availHint:"PCs are highlighted for your selected time: green — free, red — busy."
     },
-
     ka: {
       title:"Sakompiutere Gaming — Booking",
       sub:"აირჩიე PC → აირჩიე დრო → დაადასტურე",
@@ -885,7 +945,7 @@
       colNote:"შენიშვნა",
       colCost:"ფასი",
       colCancel:"გაუქმება",
-      myCancelHint:"შეგიძლია გააუქმო მხოლოდ შენი ჯავშანი (ნიკით). ადმინს შეუძლია ყველა.",
+      myCancelHint:"შეგიძლია გააუქმო მხოლოდ შენი ჯავშანი. ადმინს შეუძლია ყველა.",
       sideTitle:"მინიშნება",
       sideHint:"რომ სწრაფად გაიგონ",
       help:
@@ -922,7 +982,7 @@
       msgAdminOff:"Admin გამორთულია.",
       promptAdmin:"შეიყვანე admin პაროლი:",
       wrongPass:"არასწორი პაროლი.",
-      confirmWipe:"წაშალო ყველა ჯავშანი ამ მოწყობილობაზე?",
+      confirmWipe:"წაშალო ყველა ჯავშანი? (თუ არ გაქვს უფლება — ნაწილი ვერ წაიშლება)",
       nextStepsTitle:"შემდეგ რა?",
       nextSteps1:"✅ უთხარი ადმინს შენი ნიკი.",
       nextSteps2:`⏰ მოდი ${ARRIVE_MIN_BEFORE} წუთით ადრე.`,
@@ -960,19 +1020,88 @@
   }
 
   // =========================
-  // Storage
+  // Auth UI
   // =========================
-  function loadBookings(){
-    try{
-      const raw = localStorage.getItem(STORAGE_KEY);
-      const arr = raw ? JSON.parse(raw) : [];
-      return Array.isArray(arr) ? arr : [];
-    }catch(e){ return []; }
+  let currentUser = null;
+  function setAuthUI(loggedIn){
+    $("authBox").style.display = loggedIn ? "none" : "block";
+    $("logoutBtn").style.display = loggedIn ? "inline-block" : "none";
+    $("authPill").style.display = loggedIn ? "inline-flex" : "none";
+    if(!loggedIn){
+      // блокируем старт без логина
+      $("startBtn").disabled = true;
+      $("startBtn").style.opacity = ".55";
+      $("startBtn").style.pointerEvents = "none";
+    }else{
+      $("startBtn").disabled = false;
+      $("startBtn").style.opacity = "1";
+      $("startBtn").style.pointerEvents = "auto";
+    }
   }
-  function saveBookings(arr){ localStorage.setItem(STORAGE_KEY, JSON.stringify(arr)); }
+
+  $("loginBtn").onclick = async () => {
+    $("authMsg").textContent = "…";
+    try{
+      await signInWithEmailAndPassword(auth, $("authEmail").value.trim(), $("authPass").value);
+      $("authMsg").textContent = "✅ OK";
+    }catch(e){
+      $("authMsg").textContent = "❌ " + (e?.message || e);
+    }
+  };
+
+  $("registerBtn").onclick = async () => {
+    $("authMsg").textContent = "…";
+    try{
+      await createUserWithEmailAndPassword(auth, $("authEmail").value.trim(), $("authPass").value);
+      $("authMsg").textContent = "✅ Аккаунт создан";
+    }catch(e){
+      $("authMsg").textContent = "❌ " + (e?.message || e);
+    }
+  };
+
+  $("logoutBtn").onclick = async () => {
+    await signOut(auth);
+  };
 
   // =========================
-  // State
+  // Firestore (bookings)
+  // =========================
+  // ВАЖНО: теперь бронь общая для всех, хранится в Firestore
+  // bookings[] всегда обновляется из onSnapshot.
+  let bookings = [];
+
+  function startBookingsListener(){
+    const qRef = query(collection(db, "bookings"), orderBy("startAbsMs"));
+    onSnapshot(qRef, (snap) => {
+      bookings = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+      // обновить UI
+      renderPills();
+      renderSelected();
+      updateAvailabilityUI();
+      renderAdminTable();
+      renderTodayCards();
+
+      // если открыт "мои брони" — обновим
+      if(!$("myBox").classList.contains("hide")){
+        renderMyTable($("myNickInput").value);
+      }
+    }, (err) => {
+      console.error("Firestore snapshot error:", err);
+    });
+  }
+
+  async function firestoreDeleteBooking(docId){
+    try{
+      await deleteDoc(doc(db, "bookings", docId));
+      return true;
+    }catch(e){
+      alert("Нет прав удалить эту бронь (или ошибка). " + (e?.message || e));
+      return false;
+    }
+  }
+
+  // =========================
+  // State (local-only)
   // =========================
   let lang = localStorage.getItem(LANG_KEY) || "ru";
   if(!i18n[lang]) lang = "ru";
@@ -980,8 +1109,6 @@
   let isAdmin = localStorage.getItem(ADMIN_KEY) === "1";
   let onlyFree = localStorage.getItem(ONLY_FREE_KEY) === "1";
   let selectedPCs = new Set();
-
-  let bookings = loadBookings();
 
   // =========================
   // i18n apply
@@ -1204,7 +1331,6 @@
     if(endMin > startMin){
       endAbs = new Date(d0.getFullYear(), d0.getMonth(), d0.getDate(), Math.floor(endMin/60), endMin%60, 0, 0);
     }else{
-      // overnight to next day
       spansMidnight = true;
       const d1 = addDays(d0, 1);
       endAbs = new Date(d1.getFullYear(), d1.getMonth(), d1.getDate(), Math.floor(endMin/60), endMin%60, 0, 0);
@@ -1215,7 +1341,7 @@
   function minutesBetween(a,b){ return Math.round((b - a)/60000); }
 
   // =========================
-  // Working hours check (supports overnight hours)
+  // Working hours check
   // =========================
   function isWithinWorkingHours(range){
     if(!WORKING_HOURS_ENABLED) return true;
@@ -1223,8 +1349,6 @@
     const ws = minutesFromTimeStr(WORK_START);
     const we = minutesFromTimeStr(WORK_END);
 
-    // Working window can cross midnight.
-    // We validate that BOTH start and end are inside the open window.
     const startMin = minutesFromTimeStr(range.startStr);
     const endMin = minutesFromTimeStr(range.endStr);
 
@@ -1232,12 +1356,10 @@
       if(we > ws){
         return m >= ws && m <= we;
       }else{
-        // window crosses midnight, e.g. 10:00 -> 03:00 means open from 10:00..24:00 and 00:00..03:00
         return (m >= ws && m <= 1440) || (m >= 0 && m <= we);
       }
     };
 
-    // If booking spans midnight, still check each endpoint by its local time component.
     return within(startMin) && within(endMin);
   }
 
@@ -1245,7 +1367,10 @@
   // Convert stored booking to absolute range
   // =========================
   function bookingToAbs(b){
-    // b: {dateStart, start, end, spansMidnight, ...} (we keep compatibility with old)
+    // if Firestore contains startAbsMs/endAbsMs — use them (fast + accurate)
+    if(typeof b.startAbsMs === "number" && typeof b.endAbsMs === "number"){
+      return { startAbs: new Date(b.startAbsMs), endAbs: new Date(b.endAbsMs) };
+    }
     const dateISO = b.dateStart || b.date || "";
     const d0 = parseDateISO(dateISO);
     const sMin = minutesFromTimeStr(b.start);
@@ -1286,7 +1411,7 @@
     const grid = $("pcGrid");
     grid.innerHTML = "";
 
-    const range = getRangeFromInputs(); // may be null on step1
+    const range = getRangeFromInputs();
     const date = $("date").value;
 
     for(const pc of PCs){
@@ -1294,7 +1419,6 @@
       let label = "Free";
       let detail = "—";
 
-      // if we have time range, show exact free/busy
       if(range){
         const c = firstConflictForPC(pc, range);
         if(c){
@@ -1307,7 +1431,6 @@
           detail = "Free for selected time";
         }
       }else{
-        // fallback day-based info
         const dayList = bookings
           .filter(b => b.pc===pc && (b.dateStart||b.date)===date)
           .sort((a,b)=>a.start.localeCompare(b.start));
@@ -1318,7 +1441,6 @@
         }
       }
 
-      // Only free filter
       if(onlyFree && range){
         const c = firstConflictForPC(pc, range);
         if(c) continue;
@@ -1371,7 +1493,6 @@
     if(!nick) return {ok:false, msg:t("msgNick")};
     if(selectedPCs.size===0) return {ok:false, msg:t("msgPickPc")};
 
-    // date range
     const dateISO = $("date").value;
     if(!dateISO) return {ok:false, msg:t("msgTime")};
 
@@ -1380,9 +1501,7 @@
     const diffDays = Math.round((d0 - today0)/86400000);
     if(diffDays > MAX_DAYS_AHEAD) return {ok:false, msg:t("msgTooFar")};
 
-    // store nick
     localStorage.setItem(NICK_KEY, nick);
-
     return {ok:true};
   }
 
@@ -1393,14 +1512,11 @@
     const mins = minutesBetween(range.startAbs, range.endAbs);
     if(mins < MIN_BOOK_MINUTES || mins > MAX_BOOK_HOURS*60) return {ok:false, msg:t("msgDur")};
 
-    // cannot book in past
     const now = new Date();
     if(range.startAbs.getTime() < now.getTime()) return {ok:false, msg:t("msgPast")};
 
-    // working hours check
     if(!isWithinWorkingHours(range)) return {ok:false, msg:t("msgHours")};
 
-    // conflicts check for all selected PCs
     for(const pc of selectedPCs){
       const c = firstConflictForPC(pc, range);
       if(c){
@@ -1411,56 +1527,8 @@
   }
 
   // =========================
-  // Create bookings (multi-PC)
+  // Share + QR
   // =========================
-  function createMultiBooking(){
-    const v = validateBeforeCreate();
-    if(!v.ok){
-      setMsg(v.msg, "bad");
-      return;
-    }
-    const range = v.range;
-
-    const nick = ($("nick").value||"").trim();
-    const note = ($("note").value||"").trim();
-    const pricePerHour = Number($("price").value || 5);
-    const mins = minutesBetween(range.startAbs, range.endAbs);
-    const perPc = calcPriceGel(pricePerHour, mins);
-
-    const created = [];
-    for(const pc of selectedPCs){
-      created.push({
-        id: (crypto.randomUUID ? crypto.randomUUID() : String(Date.now()) + "_" + Math.random().toString(16).slice(2)),
-        nick,
-        pc,
-        dateStart: range.dateStartISO,
-        start: range.startStr,
-        end: range.endStr,
-        spansMidnight: range.spansMidnight,
-        note,
-        pricePerHour,
-        totalGel: perPc,
-        createdAt: new Date().toISOString()
-      });
-    }
-
-    bookings = bookings.concat(created);
-    saveBookings(bookings);
-    renderPills();
-    renderAdminTable();
-    setMsg(`${t("msgCreated")}: ${created.length}`, "good");
-    renderMyTable(nick);
-    renderSummary();
-    renderTodayCards();
-
-    // Generate QR for this booking set (share payload)
-    const payload = buildShareText({ nick, pcs:Array.from(selectedPCs), range, note, perPc, total: perPc*selectedPCs.size });
-    renderQR(payload);
-
-    // copy-friendly success
-    $("qrHint").textContent = t("qrHint");
-  }
-
   function buildShareText({nick, pcs, range, note, perPc, total}){
     const when = range.spansMidnight
       ? `${range.dateStartISO} ${range.startStr} → ${addDays(parseDateISO(range.dateStartISO),1).toISOString().slice(0,10)} ${range.endStr}`
@@ -1507,15 +1575,13 @@
   function renderQR(text){
     const canvas = $("qrCanvas");
     if(!window.QRCode || !QRCode.toCanvas){
-      // fallback: clear canvas
       const ctx = canvas.getContext("2d");
       ctx.clearRect(0,0,canvas.width,canvas.height);
-      const g = ctx;
-      g.fillStyle = "#ffffff";
-      g.fillRect(0,0,canvas.width,canvas.height);
-      g.fillStyle = "#111111";
-      g.font = "12px sans-serif";
-      g.fillText("QR lib not loaded", 20, 80);
+      ctx.fillStyle = "#ffffff";
+      ctx.fillRect(0,0,canvas.width,canvas.height);
+      ctx.fillStyle = "#111111";
+      ctx.font = "12px sans-serif";
+      ctx.fillText("QR lib not loaded", 20, 80);
       return;
     }
     QRCode.toCanvas(canvas, text, { width: 160, margin: 1 }, (err) => {
@@ -1524,6 +1590,72 @@
         ctx.clearRect(0,0,canvas.width,canvas.height);
       }
     });
+  }
+
+  // =========================
+  // Create bookings (Firestore)
+  // =========================
+  async function createMultiBooking(){
+    const v = validateBeforeCreate();
+    if(!v.ok){
+      setMsg(v.msg, "bad");
+      return;
+    }
+    if(!currentUser){
+      setMsg("Login required.", "bad");
+      return;
+    }
+
+    const range = v.range;
+    const nick = ($("nick").value||"").trim();
+    const note = ($("note").value||"").trim();
+    const pricePerHour = Number($("price").value || 5);
+    const mins = minutesBetween(range.startAbs, range.endAbs);
+    const perPc = calcPriceGel(pricePerHour, mins);
+
+    const pcs = Array.from(selectedPCs);
+    let createdCount = 0;
+
+    try{
+      for(const pc of pcs){
+        await addDoc(collection(db, "bookings"), {
+          ownerUid: currentUser.uid,
+          ownerEmail: currentUser.email || null,
+
+          nick,
+          pc,
+
+          dateStart: range.dateStartISO,
+          start: range.startStr,
+          end: range.endStr,
+          spansMidnight: range.spansMidnight,
+
+          note,
+          pricePerHour,
+          totalGel: perPc,
+
+          // for sorting & fast overlap checks
+          startAbsMs: range.startAbs.getTime(),
+          endAbsMs: range.endAbs.getTime(),
+
+          createdAtMs: Date.now()
+        });
+        createdCount++;
+      }
+
+      setMsg(`${t("msgCreated")}: ${createdCount}`, "good");
+      renderMyTable(nick);
+      renderSummary();
+      renderTodayCards();
+
+      const payload = buildShareText({ nick, pcs, range, note, perPc, total: perPc*pcs.length });
+      renderQR(payload);
+      $("qrHint").textContent = t("qrHint");
+
+    }catch(e){
+      console.error(e);
+      setMsg("❌ Firestore error: " + (e?.message || e), "bad");
+    }
   }
 
   // =========================
@@ -1601,7 +1733,7 @@
   }
 
   // =========================
-  // My bookings + cancel own
+  // My bookings + cancel
   // =========================
   function renderMyTable(nick){
     const tbody = $("myTable");
@@ -1640,25 +1772,20 @@
     }
 
     tbody.querySelectorAll("button[data-id]").forEach(btn=>{
-      btn.addEventListener("click", ()=>{
+      btn.addEventListener("click", async ()=>{
         const id = btn.getAttribute("data-id");
         const b = bookings.find(x=>x.id===id);
         if(!b) return;
 
-        // only cancel own (by nickname) unless admin
-        const currentNick = ($("myNickInput").value || "").trim().toLowerCase();
-        if(!isAdmin && (b.nick||"").trim().toLowerCase() !== currentNick){
+        // allowed if owner or local admin
+        const ownerOk = currentUser && b.ownerUid === currentUser.uid;
+        if(!ownerOk && !isAdmin){
           alert("You can cancel only your bookings.");
           return;
         }
+
         if(!confirm(`Cancel booking?\n${b.nick} • ${b.pc}\n${b.dateStart||b.date} ${b.start}→${b.end}`)) return;
-        bookings = bookings.filter(x=>x.id!==id);
-        saveBookings(bookings);
-        renderPills();
-        renderMyTable($("myNickInput").value);
-        renderAdminTable();
-        updateAvailabilityUI();
-        renderTodayCards();
+        await firestoreDeleteBooking(id);
       });
     });
   }
@@ -1672,7 +1799,7 @@
   function closeMyBox(){ $("myBox").classList.add("hide"); }
 
   // =========================
-  // Admin
+  // Admin table
   // =========================
   function renderAdminTable(){
     $("adminBox").classList.toggle("hide", !isAdmin);
@@ -1703,17 +1830,12 @@
     }
 
     tbody.querySelectorAll("button[data-id]").forEach(btn=>{
-      btn.addEventListener("click", ()=>{
+      btn.addEventListener("click", async ()=>{
         const id = btn.getAttribute("data-id");
         const b = bookings.find(x=>x.id===id);
         if(!b) return;
         if(!confirm(`Delete booking?\n${b.nick} • ${b.pc}\n${b.dateStart||b.date} ${b.start}→${b.end}`)) return;
-        bookings = bookings.filter(x=>x.id!==id);
-        saveBookings(bookings);
-        renderPills();
-        renderAdminTable();
-        updateAvailabilityUI();
-        renderTodayCards();
+        await firestoreDeleteBooking(id);
       });
     });
   }
@@ -1789,7 +1911,6 @@
     });
 
     $("date").addEventListener("change", ()=>{
-      // if date too far ahead warn but not block until creation
       updateAvailabilityUI();
       renderTodayCards();
     });
@@ -1862,17 +1983,21 @@
     $("search").addEventListener("input", renderAdminTable);
     $("clearFilterBtn").onclick = () => { $("search").value=""; renderAdminTable(); };
     $("printTodayAdminBtn").onclick = () => { renderTodayCards(); window.print(); };
-    $("wipeBtn").onclick = () => {
+
+    $("wipeBtn").onclick = async () => {
       if(!confirm(t("confirmWipe"))) return;
-      bookings = [];
-      saveBookings(bookings);
-      selectedPCs.clear();
-      renderSelected();
-      renderPills();
-      updateAvailabilityUI();
-      renderAdminTable();
-      renderTodayCards();
-      setMsg("Wiped.", "good");
+      // Попытаемся удалить всё, что видно. Если правил нет — часть не удалится (покажет ошибку).
+      const ids = bookings.map(b=>b.id);
+      let ok=0, fail=0;
+      for(const id of ids){
+        try{
+          await deleteDoc(doc(db,"bookings",id));
+          ok++;
+        }catch(e){
+          fail++;
+        }
+      }
+      setMsg(`Wipe done. deleted=${ok} failed=${fail}`, fail ? "bad":"good");
     };
 
     // Esc back to intro
@@ -1880,13 +2005,32 @@
       if(e.key === "Escape") showIntro();
     });
 
-    // initial cross-midnight pill + availability hint
     updateAvailabilityUI();
     renderSummary();
     showIntro();
   }
 
+  // =========================
+  // AUTH STATE → start app
+  // =========================
+  setAuthUI(false);
   boot();
+
+  onAuthStateChanged(auth, (user) => {
+    currentUser = user;
+
+    if(!user){
+      $("authEmailPill").textContent = "—";
+      setAuthUI(false);
+      // остановим бронь листенер? (ничего страшного, просто не запускаем)
+      return;
+    }
+
+    $("authEmailPill").textContent = user.email || "user";
+    setAuthUI(true);
+    startBookingsListener();
+  });
+
 })();
 </script>
 </body>
