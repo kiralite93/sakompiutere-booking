@@ -101,7 +101,7 @@
       border-bottom:1px solid var(--line);
     }
     .hd h2{margin:0; font-size:14px}
-    .hint{color:var(--muted); font-size:12px; line-height:1.35}
+    .hint{color:var(--muted); font-size:12px}
     .bd{padding:14px 16px}
 
     .stepper{display:flex; gap:10px; flex-wrap:wrap; align-items:center;}
@@ -160,7 +160,7 @@
     .mini{padding:6px 10px; border-radius:12px; font-size:12px; font-weight:1000}
 
     label{display:block; font-size:12px; color:var(--muted); margin:0 0 6px}
-    input{
+    input, select{
       width:100%;
       padding:11px 12px;
       border-radius:14px;
@@ -169,7 +169,7 @@
       color:var(--text);
       outline:none;
     }
-    input:focus{border-color: rgba(110,231,255,.6); box-shadow:0 0 0 3px rgba(110,231,255,.12)}
+    input:focus, select:focus{border-color: rgba(110,231,255,.6); box-shadow:0 0 0 3px rgba(110,231,255,.12)}
     .row{display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:10px;}
     @media (max-width:520px){ .row{grid-template-columns:1fr;} }
 
@@ -190,7 +190,7 @@
       transition: transform .08s ease, border-color .12s ease, box-shadow .12s ease;
       user-select:none;
       position:relative;
-      min-height:70px;
+      min-height:78px;
     }
     .pc:hover{transform: translateY(-1px); border-color: rgba(110,231,255,.4)}
     .pc .name{font-weight:1100; letter-spacing:.3px}
@@ -226,50 +226,65 @@
       color: var(--text);
     }
 
-    .chipbar{display:flex; gap:8px; flex-wrap:wrap; margin-top:10px}
-    .chip{
-      padding:9px 10px; border-radius:999px;
-      border:1px solid var(--line);
-      background:rgba(0,0,0,.22);
-      cursor:pointer;
-      font-weight:1100;
+    .chipsSelected{
+      display:flex; gap:8px; flex-wrap:wrap; margin-top:10px;
+      padding:10px; border-radius:16px; border:1px solid var(--line);
+      background:rgba(0,0,0,.18);
+    }
+    .pcchip{
+      display:inline-flex; align-items:center; gap:8px;
+      padding:7px 10px; border-radius:999px;
+      border:1px solid rgba(110,231,255,.30);
+      background: rgba(110,231,255,.08);
       font-size:12px;
+      font-weight:1000;
+      cursor:pointer;
       user-select:none;
     }
-    .chip.active{
-      border-color: rgba(110,231,255,.6);
-      background: rgba(110,231,255,.10);
-    }
-    .chip.disabled{
-      opacity:.45;
-      cursor:not-allowed;
+    .pcchip .x{
+      width:18px; height:18px; border-radius:999px;
+      border:1px solid rgba(255,255,255,.12);
+      display:grid; place-items:center;
+      color: var(--muted);
+      background: rgba(0,0,0,.20);
+      font-weight:1100;
     }
 
+    /* Slot UI */
+    .slotToolbar{display:flex; gap:10px; flex-wrap:wrap; align-items:center; margin-top:10px}
     .slotGrid{
       display:grid;
-      grid-template-columns: repeat(6, 1fr);
-      gap:8px;
+      grid-template-columns: repeat(4, 1fr);
+      gap:10px;
       margin-top:10px;
     }
-    @media (max-width:980px){ .slotGrid{grid-template-columns: repeat(4, 1fr);} }
-    @media (max-width:520px){ .slotGrid{grid-template-columns: repeat(3, 1fr);} }
-
+    @media (max-width: 980px){ .slotGrid{grid-template-columns: repeat(2, 1fr);} }
     .slot{
-      padding:10px 10px;
-      border-radius:14px;
       border:1px solid var(--line);
+      border-radius:16px;
       background:rgba(0,0,0,.22);
+      padding:12px;
       cursor:pointer;
-      font-weight:1100;
-      font-size:12px;
-      text-align:center;
       user-select:none;
+      transition: transform .08s ease, border-color .12s ease;
+      position:relative;
+      min-height:72px;
     }
-    .slot:hover{border-color: rgba(110,231,255,.5)}
-    .slot.active{
-      border-color: rgba(52,211,153,.55);
-      background: rgba(52,211,153,.10);
+    .slot:hover{transform: translateY(-1px); border-color: rgba(110,231,255,.4)}
+    .slot .t1{font-weight:1100}
+    .slot .t2{margin-top:6px; font-size:12px; color:var(--muted); display:flex; gap:8px; align-items:center; flex-wrap:wrap}
+    .slot.free{border-color: rgba(52,211,153,.45)}
+    .slot.busy{border-color: rgba(251,113,133,.55)}
+    .slot.selected{box-shadow: 0 0 0 3px rgba(110,231,255,.10); border-color: rgba(110,231,255,.75)}
+    .slot .badge{
+      padding:6px 10px; border-radius:999px;
+      border:1px solid var(--line);
+      background: rgba(0,0,0,.20);
+      font-size:12px;
+      font-weight:1100;
     }
+    .badge.ok{border-color: rgba(52,211,153,.35); color: rgba(52,211,153,.95)}
+    .badge.bad{border-color: rgba(251,113,133,.35); color: rgba(251,113,133,.95)}
 
     .table{
       width:100%;
@@ -289,7 +304,12 @@
     .table th{color:var(--muted); font-weight:1100; text-align:left; background:rgba(255,255,255,.03)}
     .table tr:last-child td{border-bottom:none}
 
-    .hide{display:none !important;}
+    .footerbar{
+      display:flex; justify-content:space-between; gap:10px; flex-wrap:wrap;
+      margin-top:12px;
+      color: var(--muted);
+      font-size:12px;
+    }
     .kbd{
       font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
       padding:2px 6px;
@@ -299,11 +319,36 @@
       color:var(--muted);
       font-size:12px;
     }
+    .hide{display:none !important;}
+
+    /* Modal */
+    .modalBack{
+      position:fixed; inset:0;
+      background:rgba(0,0,0,.55);
+      display:none;
+      align-items:center;
+      justify-content:center;
+      z-index:100;
+      padding:18px;
+    }
+    .modalBack.show{display:flex;}
+    .modal{
+      width:min(520px, 100%);
+      border:1px solid var(--line);
+      border-radius:18px;
+      background: linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,.02));
+      box-shadow: var(--shadow);
+      overflow:hidden;
+    }
+    .modal .mh{padding:14px 16px; border-bottom:1px solid var(--line); display:flex; justify-content:space-between; align-items:center; gap:10px}
+    .modal .mb{padding:14px 16px}
+    .mut{color:var(--muted); font-size:12px}
 
     @media print{
-      header, #rightSide, #openAdminBtn, #exitAdminBtn, #introBox, #step1Box, #step2Box, #step3Box, #myBox { display:none !important; }
+      header, #rightSide, #openAdminBtn, #exitAdminBtn, #introBox, #step1Box, #step2Box, #step3Box, #myBox, #adminBox, #authBack { display:none !important; }
       body{ background:#fff !important; color:#000 !important; }
       .card{ box-shadow:none !important; background:#fff !important; border:1px solid #ddd !important; }
+      .wrap{ max-width:100% !important; }
     }
   </style>
 </head>
@@ -314,7 +359,7 @@
       <div class="logo" aria-hidden="true"></div>
       <div>
         <h1 id="t_title">Sakompiutere Gaming — Booking</h1>
-        <p class="sub" id="t_sub">Выбери ПК → выбери длительность → выбери старт</p>
+        <p class="sub" id="t_sub">Выбери ПК → выбери слот → подтвердить</p>
       </div>
     </div>
 
@@ -324,6 +369,8 @@
         <button id="lang_en">EN</button>
         <button id="lang_ka">KA</button>
       </div>
+
+      <div class="pill"><span id="t_user">Аккаунт</span>: <strong id="userPill">—</strong></div>
       <div class="pill"><span id="t_today">Сегодня</span>: <strong id="todayPill">—</strong></div>
       <div class="pill"><span id="t_bookings">Броней</span>: <strong id="countPill">0</strong></div>
     </div>
@@ -334,22 +381,31 @@
     <div class="card">
       <div class="hd">
         <div class="stepper">
-          <div class="step" id="step1"><span class="n">1</span><span id="t_step1">ПК</span></div>
-          <div class="step" id="step2"><span class="n">2</span><span id="t_step2">Длительность + старт</span></div>
-          <div class="step" id="step3"><span class="n">3</span><span id="t_step3">Готово</span></div>
+          <div class="step" id="step1"><span class="n">1</span><span id="t_step1">Компьютеры</span></div>
+          <div class="step" id="step2"><span class="n">2</span><span id="t_step2">Слот</span></div>
+          <div class="step" id="step3"><span class="n">3</span><span id="t_step3">Подтверждение</span></div>
         </div>
-        <div class="hint" id="t_hint">Без ввода времени вручную</div>
+        <div class="hint" id="t_hint">максимально понятно</div>
       </div>
 
       <div class="bd">
+
+        <!-- INTRO -->
         <div class="notice" id="introBox">
-          <b id="t_fast">⚡ Самый простой стиль</b><br/>
-          <span id="t_intro1">Ты выбираешь длительность —</span><br/>
-          <span id="t_intro2">а сайт показывает только свободные старты.</span><br/>
-          <span id="t_intro3">Никаких Start/End.</span>
+          <b id="t_fast">🎮 Бронирование быстро и понятно</b><br/>
+          <span id="t_intro1">1) Войди в аккаунт (1 раз)</span><br/>
+          <span id="t_intro2">2) Выбери ПК (можно несколько)</span><br/>
+          <span id="t_intro3">3) Выбери готовый слот и нажми “Забронировать”</span>
+
           <div class="btns">
-            <button class="primary" id="startBtn">▶ <span id="t_start">Начать</span></button>
+            <button class="primary" id="loginBtn">🔑 <span id="t_login">Войти / Регистрация</span></button>
+            <button class="primary" id="startBtn">▶ <span id="t_start">Начать бронирование</span></button>
             <button class="ghost" id="viewMyBtn">👤 <span id="t_my">Мои брони</span></button>
+          </div>
+
+          <div class="notice" style="margin-top:10px;">
+            <b id="t_tip1">Подсказка:</b>
+            <span id="t_tip2">Слоты показывают “свободно/занято” сразу — не надо вручную крутить время.</span>
           </div>
         </div>
 
@@ -357,52 +413,60 @@
         <div id="step1Box" class="hide">
           <div class="row">
             <div>
-              <label id="t_nickLabel">Твой ник</label>
-              <input id="nick" type="text" placeholder="например: KiraLite" />
-            </div>
-            <div>
               <label id="t_dateLabel">Дата</label>
               <input id="date" type="date" />
+            </div>
+            <div>
+              <label id="t_noteLabel">Комментарий (опционально)</label>
+              <input id="note" type="text" placeholder="например: CS2 / Турнир" />
             </div>
           </div>
 
           <div class="hint" id="t_pickpc">Выбери 1 или несколько ПК:</div>
-          <div id="pcGrid" class="pcgrid"></div>
+
+          <div class="chipsSelected">
+            <div style="width:100%; color:var(--muted); font-size:12px; margin-bottom:6px;">
+              <span id="t_selected">Выбрано ПК</span>: <b id="selectedCount">0</b>
+            </div>
+            <div id="selectedChips" style="display:flex; gap:8px; flex-wrap:wrap;"></div>
+          </div>
 
           <div class="btns">
             <button class="primary" id="toStep2Btn">➡ <span id="t_next">Далее</span></button>
             <button class="ghost" id="clearPcBtn">✖ <span id="t_clear">Очистить</span></button>
           </div>
+
+          <div id="pcGrid" class="pcgrid" aria-label="Список ПК"></div>
         </div>
 
         <!-- STEP 2 -->
         <div id="step2Box" class="hide">
-          <div class="notice">
-            <b id="t_step2Title">Выбери длительность</b><br/>
-            <span class="hint" id="t_step2Desc">Потом выбери свободное время старта (кнопки ниже).</span>
-          </div>
-
-          <div class="chipbar" id="durChips"></div>
-
-          <div class="notice" style="margin-top:10px;">
-            <b id="t_pickStart">Выбери старт</b><br/>
-            <span class="hint" id="t_pickStartHint">Показываются только свободные старты (шаг 15 минут).</span>
-          </div>
-
-          <div class="slotGrid" id="slotGrid"></div>
-
-          <div class="row" style="margin-top:10px;">
-            <div>
-              <label id="t_noteLabel">Комментарий (опционально)</label>
-              <input id="note" type="text" placeholder="например: CS2 / Турнир" />
-            </div>
+          <div class="row">
             <div>
               <label id="t_priceLabel">Цена (GEL/час)</label>
               <input id="price" type="number" min="0" step="0.5" value="5" />
             </div>
+            <div>
+              <label id="t_slotLen">Длительность слота</label>
+              <select id="slotLen">
+                <option value="60">60 минут</option>
+                <option value="90">90 минут</option>
+                <option value="120">120 минут</option>
+                <option value="180">180 минут</option>
+              </select>
+            </div>
           </div>
 
-          <div class="notice" id="rangePreview">—</div>
+          <div class="slotToolbar">
+            <button class="ghost mini" id="prevSlotsBtn">⬅ <span id="t_prev">Раньше</span></button>
+            <span class="pill"><span id="t_window">Окно</span>: <strong id="slotWindowPill">—</strong></span>
+            <button class="ghost mini" id="nextSlotsBtn"><span id="t_nextWin">Позже</span> ➡</button>
+            <button class="ghost mini" id="toggleOnlyFreeBtn">✅ <span id="t_onlyFree">Только свободные</span></button>
+          </div>
+
+          <div class="notice" id="slotHintBox" style="margin-top:10px;"></div>
+
+          <div id="slotGrid" class="slotGrid" aria-label="Слоты"></div>
 
           <div class="btns">
             <button class="ghost" id="backTo1Btn">⬅ <span id="t_back">Назад</span></button>
@@ -421,6 +485,11 @@
 
           <div class="notice" id="msg" style="margin-top:10px;" aria-live="polite">OK</div>
 
+          <div class="btns" style="margin-top:10px;">
+            <button class="ghost" id="showMyInlineBtn">👤 <span id="t_my2">Мои брони</span></button>
+            <button class="ghost" id="copyShareBtn">🔗 <span id="t_copyShare">Скопировать</span></button>
+          </div>
+
           <div class="notice" style="margin-top:10px;">
             <b id="t_qrTitle">QR брони</b><br/>
             <div style="display:flex; gap:12px; align-items:center; flex-wrap:wrap; margin-top:10px;">
@@ -428,49 +497,81 @@
               <div class="hint" id="qrHint">QR обновится после создания брони.</div>
             </div>
           </div>
-
-          <div class="btns" style="margin-top:10px;">
-            <button class="ghost" id="showMyInlineBtn">👤 <span id="t_my2">Мои брони</span></button>
-            <button class="ghost" id="copyShareBtn">🔗 <span id="t_copyShare">Скопировать бронь</span></button>
-          </div>
         </div>
 
         <!-- MY BOOKINGS -->
         <div id="myBox" class="hide" style="margin-top:12px;">
           <div class="hd" style="border:1px solid var(--line); border-radius:16px; margin-top:10px;">
             <h2 style="margin:0;font-size:14px;" id="t_myTitle">Мои брони</h2>
-            <div class="hint" id="t_myHint">Показывается по нику</div>
+            <div class="hint" id="t_myHint">показывается по аккаунту</div>
           </div>
           <div class="bd" style="border:1px solid var(--line); border-radius:16px; border-top:none;">
-            <div class="row">
-              <div>
-                <label id="t_myNick">Ник</label>
-                <input id="myNickInput" type="text" placeholder="введи ник" />
-              </div>
-              <div style="display:flex; align-items:end; gap:10px; flex-wrap:wrap;">
-                <button class="primary" id="mySearchBtn">🔎 <span id="t_show">Показать</span></button>
-                <button class="ghost" id="myCloseBtn">✖ <span id="t_close">Закрыть</span></button>
-              </div>
+            <div class="btns">
+              <button class="ghost" id="myCloseBtn">✖ <span id="t_close">Закрыть</span></button>
+              <button class="ghost" id="myRefreshBtn">🔄 <span id="t_refresh">Обновить</span></button>
             </div>
 
-            <table class="table">
+            <table class="table" role="table" aria-label="Мои брони">
               <thead>
                 <tr>
                   <th style="width:160px" id="t_colDate">Дата</th>
                   <th style="width:160px" id="t_colTime">Время</th>
-                  <th style="width:120px" id="t_colPc">ПК</th>
+                  <th style="width:140px" id="t_colPc">ПК</th>
                   <th id="t_colNote">Комментарий</th>
                   <th style="width:110px" id="t_colCost">Стоимость</th>
-                  <th style="width:140px" id="t_colCancel">Отмена</th>
+                  <th style="width:160px" id="t_colCancel">Отмена</th>
                 </tr>
               </thead>
               <tbody id="myTable"></tbody>
             </table>
+
+            <div class="hint" style="margin-top:10px;" id="t_myCancelHint">
+              Отменить можно только свои брони. Админ может отменять любые.
+            </div>
           </div>
         </div>
 
-        <div class="hint" style="margin-top:12px;">
-          <span class="kbd">Esc</span> — вернуться на старт
+        <!-- ADMIN -->
+        <div id="adminBox" class="hide" style="margin-top:12px;">
+          <div class="hd" style="border:1px solid var(--line); border-radius:16px; margin-top:10px;">
+            <h2 style="margin:0;font-size:14px;">Admin</h2>
+            <div class="hint" id="t_adminHint">только для управления</div>
+          </div>
+          <div class="bd" style="border:1px solid var(--line); border-radius:16px; border-top:none;">
+            <div class="row">
+              <div>
+                <label id="t_search">Поиск (email/ПК)</label>
+                <input id="search" type="text" placeholder="поиск" />
+              </div>
+              <div style="display:flex; align-items:end; gap:10px; flex-wrap:wrap;">
+                <button class="ghost" id="clearFilterBtn">Сброс</button>
+                <button class="danger" id="wipeBtn">Стереть всё (DEV)</button>
+              </div>
+            </div>
+
+            <table class="table" role="table" aria-label="Все брони (admin)">
+              <thead>
+                <tr>
+                  <th style="width:160px" id="t_colDate2">Дата</th>
+                  <th style="width:160px" id="t_colTime2">Время</th>
+                  <th style="width:140px" id="t_colPc2">ПК</th>
+                  <th id="t_colNick2">Пользователь</th>
+                  <th style="width:110px" id="t_colCost2">Стоимость</th>
+                  <th style="width:170px" id="t_colAct2">Действия</th>
+                </tr>
+              </thead>
+              <tbody id="bookTable"></tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="footerbar">
+          <div><span class="kbd">Esc</span> — <span id="t_esc">вернуться на старт</span></div>
+          <div style="display:flex; gap:10px; flex-wrap:wrap;">
+            <button class="mini ghost" id="openAdminBtn">🔐 Admin</button>
+            <button class="mini ghost" id="exitAdminBtn">🚪 Exit</button>
+            <button class="mini ghost" id="logoutBtn">🚫 <span id="t_logout">Logout</span></button>
+          </div>
         </div>
 
       </div>
@@ -479,248 +580,346 @@
     <!-- RIGHT -->
     <div class="card" id="rightSide">
       <div class="hd">
-        <h2 id="t_sideTitle">Как это работает</h2>
-        <div class="hint" id="t_sideHint">максимально понятно</div>
+        <h2 id="t_sideTitle">Подсказка</h2>
+        <div class="hint" id="t_sideHint">чтобы игрок понял сразу</div>
       </div>
       <div class="bd">
         <div class="notice" id="helpBox"></div>
 
         <div style="height:12px"></div>
         <div class="notice" id="rulesBox"></div>
+
+        <div style="height:12px"></div>
+        <div class="notice">
+          <b id="t_settingsTitle">Настройки</b><br/>
+          <span class="hint" id="t_settingsDesc">
+            Всё настраивается в начале JS (ПК, часы, цены, админы).
+          </span>
+        </div>
       </div>
     </div>
   </div>
 </div>
 
-<script>
+<!-- AUTH MODAL -->
+<div class="modalBack" id="authBack">
+  <div class="modal" role="dialog" aria-modal="true">
+    <div class="mh">
+      <div>
+        <b id="t_authTitle">Аккаунт</b><div class="mut" id="t_authSub">Один раз зарегистрируйся — и брони будут общие для всех</div>
+      </div>
+      <button class="mini ghost" id="authCloseBtn">✖</button>
+    </div>
+    <div class="mb">
+      <div class="row">
+        <div>
+          <label id="t_email">Email</label>
+          <input id="authEmail" type="email" placeholder="email@example.com" />
+        </div>
+        <div>
+          <label id="t_pass">Password</label>
+          <input id="authPass" type="password" placeholder="******" />
+        </div>
+      </div>
+      <div class="row">
+        <div>
+          <label id="t_displayName">Ник (опционально)</label>
+          <input id="authNick" type="text" placeholder="KiraLite" />
+        </div>
+        <div>
+          <label id="t_authMsgLbl">Статус</label>
+          <div class="notice" id="authMsg">—</div>
+        </div>
+      </div>
+      <div class="btns">
+        <button class="primary" id="doLoginBtn">🔑 <span id="t_doLogin">Войти</span></button>
+        <button class="ghost" id="doRegisterBtn">✨ <span id="t_doRegister">Регистрация</span></button>
+        <button class="ghost" id="doResetBtn">📧 <span id="t_doReset">Сброс пароля</span></button>
+      </div>
+      <div class="mut" style="margin-top:10px;">
+        DEV: если Auth не включен в Firebase, вход не заработает.
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Firebase (CDN modules) -->
+<script type="module">
 (() => {
   // =========================
-  // CONFIG
+  // FIREBASE CONFIG — ВСТАВЬ СЮДА СВОЙ firebaseConfig
+  // =========================
+  const firebaseConfig = {
+    // ВСТАВЬ СЮДА ТВОЙ ОБЪЕКТ:
+    // apiKey: "...",
+    // authDomain: "...",
+    // projectId: "...",
+    // storageBucket: "...",
+    // messagingSenderId: "...",
+    // appId: "...",
+  };
+
+  // Firebase modules (официальный вариант "CDN + type=module") :contentReference[oaicite:1]{index=1}
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/12.8.0/firebase-app.js";
+  import {
+    getAuth, onAuthStateChanged,
+    signInWithEmailAndPassword,
+    createUserWithEmailAndPassword,
+    sendPasswordResetEmail,
+    updateProfile,
+    signOut
+  } from "https://www.gstatic.com/firebasejs/12.8.0/firebase-auth.js";
+
+  import {
+    getFirestore, collection, addDoc, deleteDoc, doc,
+    query, where, orderBy, limit, getDocs, onSnapshot,
+    serverTimestamp, writeBatch
+  } from "https://www.gstatic.com/firebasejs/12.8.0/firebase-firestore.js";
+
+  // =========================
+  // APP CONFIG
   // =========================
   const PCs = ["Bishop","Godzilla","Elf","Kadita","Orc","Lancelot","Fantomas","Soultaker","Pudge","Kratos"];
 
-  const STORAGE_KEY = "sg_bookings_v4_slots";
   const LANG_KEY = "sg_lang";
-  const NICK_KEY = "sg_nick";
+  const ONLY_FREE_KEY = "sg_only_free";
+  const SLOT_LEN_KEY = "sg_slot_len";
+  const SLOT_WIN_KEY = "sg_slot_win";
+
+  // Рабочие часы (если клуб не 24/7)
+  const WORKING_HOURS_ENABLED = true; // false если 24/7
+  const WORK_START = "10:00";
+  const WORK_END = "03:00"; // может быть следующий день
 
   const MIN_BOOK_MINUTES = 30;
   const MAX_BOOK_HOURS = 8;
   const MAX_DAYS_AHEAD = 14;
 
-  // шаг кнопок стартов (15 минут — идеально)
-  const START_STEP_MIN = 15;
+  // Слоты: окно слотов (сколько часов показываем за раз)
+  const DEFAULT_SLOT_WINDOW_HOURS = 4;   // показываем 4 часа слотов
+  const SLOT_STEP_MINUTES = 15;          // шаг сетки (слоты стартуют каждые 15 мин)
 
-  // Рабочие часы (если 24/7 → выключи)
-  const WORKING_HOURS_ENABLED = true;
-  const WORK_START = "10:00";
-  const WORK_END = "03:00"; // может быть на следующий день
-
-  // Длительности (быстро и понятно)
-  const DURATIONS = [30, 60, 90, 120, 180, 240]; // minutes
+  // Админы по email (просто добавь свои)
+  const ADMIN_EMAILS = [
+    "admin@sakompiutere.ge"
+  ];
 
   // =========================
-  // i18n (коротко, без перегруза)
+  // i18n
   // =========================
   const i18n = {
     ru: {
       title:"Sakompiutere Gaming — Booking",
-      sub:"Выбери ПК → выбери длительность → выбери старт",
-      today:"Сегодня", bookings:"Броней",
-      s1:"ПК", s2:"Длительность + старт", s3:"Готово",
-      hint:"Без ввода времени вручную",
-      fast:"⚡ Самый простой стиль",
-      intro1:"Ты выбираешь длительность —",
-      intro2:"а сайт показывает только свободные старты.",
-      intro3:"Никаких Start/End.",
-      start:"Начать",
+      sub:"Выбери ПК → выбери слот → подтвердить",
+      user:"Аккаунт", today:"Сегодня", bookings:"Броней",
+      step1:"Компьютеры", step2:"Слот", step3:"Подтверждение",
+      hint:"максимально понятно",
+      fast:"🎮 Бронирование быстро и понятно",
+      intro1:"1) Войди в аккаунт (1 раз)",
+      intro2:"2) Выбери ПК (можно несколько)",
+      intro3:"3) Выбери готовый слот и нажми “Забронировать”",
+      start:"Начать бронирование",
       my:"Мои брони",
-      nick:"Твой ник",
-      date:"Дата",
+      login:"Войти / Регистрация",
+      tip1:"Подсказка:", tip2:"Слоты показывают “свободно/занято” сразу — не надо вручную крутить время.",
+      dateLabel:"Дата",
+      noteLabel:"Комментарий (опционально)",
       pickpc:"Выбери 1 или несколько ПК:",
-      next:"Далее",
-      clear:"Очистить",
+      next:"Далее", clear:"Очистить",
+      selected:"Выбрано ПК",
+      priceLabel:"Цена (GEL/час)",
+      slotLen:"Длительность слота",
+      prev:"Раньше", nextWin:"Позже", window:"Окно",
+      onlyFree:"Только свободные",
+      slotHint:"Выбери удобный слот. Если хоть один выбранный ПК занят — слот будет красный.",
       back:"Назад",
-      step2Title:"Выбери длительность",
-      step2Desc:"Потом выбери свободное время старта (кнопки ниже).",
-      pickStart:"Выбери старт",
-      pickStartHint:"Показываются только свободные старты (шаг 15 минут).",
-      note:"Комментарий (опционально)",
-      price:"Цена (GEL/час)",
-      next2:"Далее",
-      back2:"Назад",
       bookNow:"Забронировать",
-      my2:"Мои брони",
-      copyShare:"Скопировать бронь",
+      copied:"Скопировано в буфер.",
+      copyFail:"Не смог скопировать — выдели и скопируй вручную.",
+      myTitle:"Мои брони", myHint:"показывается по аккаунту",
+      close:"Закрыть", refresh:"Обновить",
+      colDate:"Дата", colTime:"Время", colPc:"ПК", colNote:"Комментарий", colCost:"Стоимость", colCancel:"Отмена",
+      myCancelHint:"Отменить можно только свои брони. Админ может отменять любые.",
+      sideTitle:"Подсказка", sideHint:"чтобы игрок понял сразу",
+      help:
+`✅ Как пользоваться:
+1) Нажми “Войти / Регистрация” (один раз)
+2) Нажми “Начать бронирование”
+3) Выбери ПК (можно несколько)
+4) Выбери слот (зелёный — ок)
+5) Нажми “Забронировать”
+
+👤 “Мои брони” — всё хранится в облаке Firebase.`,
+      rules:"Правила",
+      rule1:"Нельзя пересекать брони на одном ПК",
+      rule2:`Минимум ${MIN_BOOK_MINUTES} минут, максимум ${MAX_BOOK_HOURS} часов`,
+      rule3:`Можно бронировать максимум на ${MAX_DAYS_AHEAD} дней вперёд`,
+      rule4on:`Рабочие часы: ${WORK_START} → ${WORK_END}`,
+      rule4off:"Рабочие часы: 24/7",
+      esc:"вернуться на старт",
+      adminHint:"только для управления",
+      search:"Поиск (email/ПК)",
+      colUser:"Пользователь",
+      colAct:"Действия",
+      msgLoginNeed:"Сначала войди в аккаунт.",
+      msgPickPc:"Выбери хотя бы 1 ПК.",
+      msgPickSlot:"Выбери слот.",
+      msgTooFar:"Слишком далеко. Выбери дату ближе.",
+      msgPast:"Нельзя бронировать в прошлом.",
+      msgHours:"Вне рабочих часов клуба.",
+      msgOverlap:"Пересечение на ПК",
+      msgCreated:"Готово! Создано броней",
+      msgNoMy:"Нет броней",
+      promptAdmin:"Admin доступ есть только у админ-аккаунта.",
       qrTitle:"QR брони",
       qrHint:"QR обновится после создания брони.",
-      myTitle:"Мои брони",
-      myHint:"Показывается по нику",
-      myNick:"Ник",
-      show:"Показать",
-      close:"Закрыть",
-      colDate:"Дата",
-      colTime:"Время",
-      colPc:"ПК",
-      colNote:"Комментарий",
-      colCost:"Стоимость",
-      colCancel:"Отмена",
-      help:
-`✅ Новая логика времени:
-1) Выбери ПК и дату
-2) Выбери длительность
-3) Выбери свободный старт (кнопки)
-Готово.
-
-Это намного проще, чем Start/End.`,
-      rulesTitle:"Правила",
-      rule1:"Нельзя пересекать брони на одном ПК",
-      rule2:`Мин ${MIN_BOOK_MINUTES} минут, макс ${MAX_BOOK_HOURS} часов`,
-      rule3:`Вперёд: максимум ${MAX_DAYS_AHEAD} дней`,
-      rule4on:`Часы клуба: ${WORK_START} → ${WORK_END}`,
-      rule4off:"Часы клуба: 24/7",
-      errNick:"Введи ник.",
-      errPc:"Выбери хотя бы 1 ПК.",
-      errDate:"Выбери дату.",
-      errDur:"Выбери длительность.",
-      errStart:"Выбери старт.",
-      errPast:"Нельзя бронировать в прошлом.",
-      errTooFar:"Слишком далеко. Выбери дату ближе.",
-      errNoSlots:"Под эту длительность нет свободных стартов. Попробуй другую длительность/дату.",
-      created:"Готово! Создано броней",
-      copied:"Скопировано.",
-      copyFail:"Не смог скопировать — скопируй вручную."
+      logout:"Logout",
+      authTitle:"Аккаунт",
+      authSub:"Один раз зарегистрируйся — и брони будут общие для всех",
+      email:"Email", pass:"Password", displayName:"Ник (опционально)",
+      doLogin:"Войти", doRegister:"Регистрация", doReset:"Сброс пароля",
     },
     en: {
       title:"Sakompiutere Gaming — Booking",
-      sub:"Pick PCs → duration → pick start",
-      today:"Today", bookings:"Bookings",
-      s1:"PCs", s2:"Duration + start", s3:"Done",
-      hint:"No manual time input",
-      fast:"⚡ Simplest style",
-      intro1:"You pick duration —",
-      intro2:"the site shows only free start times.",
-      intro3:"No Start/End fields.",
-      start:"Start",
+      sub:"Pick PC → pick slot → confirm",
+      user:"Account", today:"Today", bookings:"Bookings",
+      step1:"PCs", step2:"Slot", step3:"Confirm",
+      hint:"super clear",
+      fast:"🎮 Fast & clear booking",
+      intro1:"1) Login (one time)",
+      intro2:"2) Pick PCs (multi-select)",
+      intro3:"3) Pick a ready slot and tap “Book”",
+      start:"Start booking",
       my:"My bookings",
-      nick:"Nickname",
-      date:"Date",
-      pickpc:"Pick 1 or more PCs:",
-      next:"Next",
-      clear:"Clear",
+      login:"Login / Register",
+      tip1:"Tip:", tip2:"Slots show free/busy instantly — no manual time juggling.",
+      dateLabel:"Date",
+      noteLabel:"Note (optional)",
+      pickpc:"Pick 1 or multiple PCs:",
+      next:"Next", clear:"Clear",
+      selected:"Selected PCs",
+      priceLabel:"Price (GEL/hour)",
+      slotLen:"Slot length",
+      prev:"Earlier", nextWin:"Later", window:"Window",
+      onlyFree:"Only free",
+      slotHint:"Pick a slot. If any selected PC is busy, slot becomes red.",
       back:"Back",
-      step2Title:"Pick duration",
-      step2Desc:"Then pick a free start time (buttons).",
-      pickStart:"Pick start",
-      pickStartHint:"Only free starts shown (15-min step).",
-      note:"Note (optional)",
-      price:"Price (GEL/hour)",
-      next2:"Next",
-      back2:"Back",
-      bookNow:"Book",
-      my2:"My bookings",
-      copyShare:"Copy booking",
+      bookNow:"Book now",
+      copied:"Copied to clipboard.",
+      copyFail:"Copy failed — select and copy manually.",
+      myTitle:"My bookings", myHint:"shown by account",
+      close:"Close", refresh:"Refresh",
+      colDate:"Date", colTime:"Time", colPc:"PC", colNote:"Note", colCost:"Cost", colCancel:"Cancel",
+      myCancelHint:"You can cancel only your bookings. Admin can cancel any.",
+      sideTitle:"Hint", sideHint:"so users understand fast",
+      help:
+`✅ How to use:
+1) Tap “Login / Register” (one time)
+2) Tap “Start booking”
+3) Pick PCs (multi-select)
+4) Pick a slot (green is OK)
+5) Tap “Book”
+
+👤 “My bookings” — everything is stored in Firebase cloud.`,
+      rules:"Rules",
+      rule1:"No overlaps on the same PC",
+      rule2:`Min ${MIN_BOOK_MINUTES} min, max ${MAX_BOOK_HOURS} hours`,
+      rule3:`Max booking ahead: ${MAX_DAYS_AHEAD} days`,
+      rule4on:`Working hours: ${WORK_START} → ${WORK_END}`,
+      rule4off:"Working hours: 24/7",
+      esc:"back to start",
+      adminHint:"management only",
+      search:"Search (email/PC)",
+      colUser:"User",
+      colAct:"Actions",
+      msgLoginNeed:"Please login first.",
+      msgPickPc:"Select at least 1 PC.",
+      msgPickSlot:"Select a slot.",
+      msgTooFar:"Too far ahead. Choose a closer date.",
+      msgPast:"You can’t book in the past.",
+      msgHours:"Outside working hours.",
+      msgOverlap:"Overlap on PC",
+      msgCreated:"Done! Bookings created",
+      msgNoMy:"No bookings",
+      promptAdmin:"Admin access is only for admin accounts.",
       qrTitle:"Booking QR",
       qrHint:"QR updates after booking.",
-      myTitle:"My bookings",
-      myHint:"By nickname",
-      myNick:"Nickname",
-      show:"Show",
-      close:"Close",
-      colDate:"Date",
-      colTime:"Time",
-      colPc:"PC",
-      colNote:"Note",
-      colCost:"Cost",
-      colCancel:"Cancel",
-      help:
-`✅ New time logic:
-1) Pick PCs + date
-2) Pick duration
-3) Pick a free start time
-Done.`,
-      rulesTitle:"Rules",
-      rule1:"No overlaps on same PC",
-      rule2:`Min ${MIN_BOOK_MINUTES} min, max ${MAX_BOOK_HOURS} h`,
-      rule3:`Ahead: max ${MAX_DAYS_AHEAD} days`,
-      rule4on:`Club hours: ${WORK_START} → ${WORK_END}`,
-      rule4off:"Club hours: 24/7",
-      errNick:"Enter nickname.",
-      errPc:"Select at least 1 PC.",
-      errDate:"Select date.",
-      errDur:"Select duration.",
-      errStart:"Select start time.",
-      errPast:"No booking in the past.",
-      errTooFar:"Too far ahead. Pick a closer date.",
-      errNoSlots:"No free start times for this duration. Try another duration/date.",
-      created:"Done! Bookings created",
-      copied:"Copied.",
-      copyFail:"Copy failed — copy manually."
+      logout:"Logout",
+      authTitle:"Account",
+      authSub:"Register once — bookings are shared for everyone",
+      email:"Email", pass:"Password", displayName:"Nickname (optional)",
+      doLogin:"Login", doRegister:"Register", doReset:"Reset password",
     },
     ka: {
       title:"Sakompiutere Gaming — Booking",
-      sub:"PC-ები → ხანგრძლივობა → დაწყება",
-      today:"დღეს", bookings:"ჯავშნები",
-      s1:"PC", s2:"ხანგრძლივობა + დაწყება", s3:"მზადაა",
-      hint:"დრო ხელით არ შეგყავს",
-      fast:"⚡ ყველაზე მარტივი",
-      intro1:"შენ ირჩევ ხანგრძლივობას —",
-      intro2:"საიტი გაჩვენებს მხოლოდ თავისუფალ დაწყებებს.",
-      intro3:"Start/End არ არის.",
+      sub:"აირჩიე PC → აირჩიე სლოტი → დაადასტურე",
+      user:"ანგარიში", today:"დღეს", bookings:"ჯავშნები",
+      step1:"კომპიუტერები", step2:"სლოტი", step3:"დადასტურება",
+      hint:"მარტივად და ნათლად",
+      fast:"🎮 სწრაფი და გასაგები ჯავშანი",
+      intro1:"1) შესვლა (ერთხელ)",
+      intro2:"2) აირჩიე PC-ები (შეიძლება რამდენიმე)",
+      intro3:"3) აირჩიე მზა სლოტი და დააჭირე “დაჯავშნა”",
       start:"დაწყება",
       my:"ჩემი ჯავშნები",
-      nick:"ნიკი",
-      date:"თარიღი",
-      pickpc:"აირჩიე 1 ან მეტი PC:",
-      next:"შემდეგი",
-      clear:"გასუფთავება",
+      login:"შესვლა / რეგისტრაცია",
+      tip1:"მინიშნება:", tip2:"სლოტები დაუყოვნებლივ აჩვენებს თავისუფალია/დაკავებულია.",
+      dateLabel:"თარიღი",
+      noteLabel:"შენიშვნა (არასავალდებულო)",
+      pickpc:"აირჩიე 1 ან რამდენიმე PC:",
+      next:"შემდეგი", clear:"გასუფთავება",
+      selected:"არჩეული PC",
+      priceLabel:"ფასი (GEL/საათი)",
+      slotLen:"სლოტის ხანგრძლივობა",
+      prev:"ადრე", nextWin:"მოგვიანებით", window:"ფანჯარა",
+      onlyFree:"მხოლოდ თავისუფალი",
+      slotHint:"აირჩიე სლოტი. თუ რომელიმე PC დაკავებულია — სლოტი წითელია.",
       back:"უკან",
-      step2Title:"აირჩიე ხანგრძლივობა",
-      step2Desc:"შემდეგ აირჩიე თავისუფალი დაწყება (ღილაკები).",
-      pickStart:"აირჩიე დაწყება",
-      pickStartHint:"მხოლოდ თავისუფალი დაწყებები (15 წთ ნაბიჯი).",
-      note:"შენიშვნა (optional)",
-      price:"ფასი (GEL/საათი)",
-      next2:"შემდეგი",
-      back2:"უკან",
       bookNow:"დაჯავშნა",
-      my2:"ჩემი ჯავშნები",
-      copyShare:"კოპირება",
-      qrTitle:"QR",
-      qrHint:"QR განახლდება ჯავშნის შემდეგ.",
-      myTitle:"ჩემი ჯავშნები",
-      myHint:"ნიკით",
-      myNick:"ნიკი",
-      show:"ჩვენება",
-      close:"დახურვა",
-      colDate:"თარიღი",
-      colTime:"დრო",
-      colPc:"PC",
-      colNote:"შენიშვნა",
-      colCost:"ფასი",
-      colCancel:"გაუქმება",
+      copied:"კოპირებულია.",
+      copyFail:"კოპირება ვერ მოხერხდა — ხელით დააკოპირე.",
+      myTitle:"ჩემი ჯავშნები", myHint:"ანგარიშით ჩანს",
+      close:"დახურვა", refresh:"განახლება",
+      colDate:"თარიღი", colTime:"დრო", colPc:"PC", colNote:"შენიშვნა", colCost:"ფასი", colCancel:"გაუქმება",
+      myCancelHint:"შენ შეგიძლია გააუქმო მხოლოდ შენი. ადმინს შეუძლია ყველა.",
+      sideTitle:"მინიშნება", sideHint:"სწრაფად გასაგებად",
       help:
-`✅ ახალი ლოგიკა:
-1) აირჩიე PC და თარიღი
-2) აირჩიე ხანგრძლივობა
-3) აირჩიე თავისუფალი დაწყება
-მზადაა.`,
-      rulesTitle:"წესები",
+`✅ გამოყენება:
+1) დააჭირე “შესვლა / რეგისტრაცია” (ერთხელ)
+2) დააჭირე “დაწყება”
+3) აირჩიე PC-ები
+4) აირჩიე სლოტი (მწვანე — OK)
+5) დააჭირე “დაჯავშნა”
+
+👤 “ჩემი ჯავშნები” — ყველაფერი ინახება Firebase-ში.`,
+      rules:"წესები",
       rule1:"ერთ PC-ზე გადაკვეთა არ შეიძლება",
       rule2:`მინ ${MIN_BOOK_MINUTES} წთ, მაქს ${MAX_BOOK_HOURS} სთ`,
-      rule3:`წინასწარ: მაქს ${MAX_DAYS_AHEAD} დღე`,
-      rule4on:`საათები: ${WORK_START} → ${WORK_END}`,
-      rule4off:"საათები: 24/7",
-      errNick:"შეიყვანე ნიკი.",
-      errPc:"აირჩიე მინიმუმ 1 PC.",
-      errDate:"აირჩიე თარიღი.",
-      errDur:"აირჩიე ხანგრძლივობა.",
-      errStart:"აირჩიე დაწყება.",
-      errPast:"წარსულში ჯავშანი არ შეიძლება.",
-      errTooFar:"ძალიან შორსაა.",
-      errNoSlots:"ამ ხანგრძლივობაზე თავისუფალი დაწყება არ არის. სცადე სხვა.",
-      created:"მზადაა! შექმნილია",
-      copied:"კოპირებულია.",
-      copyFail:"ვერ დაკოპირდა — ხელით დაკოპირე."
+      rule3:`მაქს წინასწარ: ${MAX_DAYS_AHEAD} დღე`,
+      rule4on:`სამუშაო საათები: ${WORK_START} → ${WORK_END}`,
+      rule4off:"სამუშაო საათები: 24/7",
+      esc:"დაბრუნება დასაწყისზე",
+      adminHint:"მხოლოდ მართვა",
+      search:"ძებნა (email/PC)",
+      colUser:"მომხმარებელი",
+      colAct:"ქმედება",
+      msgLoginNeed:"ჯერ შედი ანგარიშში.",
+      msgPickPc:"აირჩიე მინიმუმ 1 PC.",
+      msgPickSlot:"აირჩიე სლოტი.",
+      msgTooFar:"ძალიან შორსაა. აირჩიე ახლო თარიღი.",
+      msgPast:"წარსულში დაჯავშნა არ შეიძლება.",
+      msgHours:"სამუშაო საათებს გარეთაა.",
+      msgOverlap:"გადაკვეთა PC-ზე",
+      msgCreated:"მზადაა! შექმნილია ჯავშნები",
+      msgNoMy:"ჯავშანი არ არის",
+      promptAdmin:"Admin მხოლოდ admin-ანგარიშებისთვისაა.",
+      qrTitle:"QR ჯავშანი",
+      qrHint:"QR განახლდება ჯავშნის შემდეგ.",
+      logout:"Logout",
+      authTitle:"ანგარიში",
+      authSub:"ერთხელ დარეგისტრირდი — და ჯავშნები საერთო იქნება",
+      email:"Email", pass:"Password", displayName:"ნიკი (არასავალდებულო)",
+      doLogin:"შესვლა", doRegister:"რეგისტრაცია", doReset:"პაროლის შეცვლა",
     }
   };
 
@@ -730,99 +929,128 @@ Done.`,
   const $ = (id) => document.getElementById(id);
   const pad2 = (n)=>String(n).padStart(2,"0");
   const toISODate = (d)=>`${d.getFullYear()}-${pad2(d.getMonth()+1)}-${pad2(d.getDate())}`;
-  const parseDateISO = (iso)=>{ const [y,m,d]=iso.split("-").map(Number); return new Date(y, m-1, d, 0,0,0,0); };
-  const minutesFromTime = (t)=>{ const [h,m]=t.split(":").map(Number); return h*60+m; };
-  const timeFromMinutes = (min)=>{ min=((min%1440)+1440)%1440; const h=Math.floor(min/60), m=min%60; return `${pad2(h)}:${pad2(m)}`; };
-  const addDays = (dateObj, days)=>{ const d=new Date(dateObj); d.setDate(d.getDate()+days); return d; };
+  const parseISODate = (iso)=>{ const [y,m,d]=iso.split("-").map(Number); return new Date(y, m-1, d, 0,0,0,0); };
+  const minutesFrom = (t)=>{ const [h,m]=t.split(":").map(Number); return h*60+m; };
+  const timeFromMin = (min)=>{ min=Math.max(0,Math.min(1440,min)); const h=Math.floor(min/60), m=min%60; return `${pad2(h)}:${pad2(m)}`; };
+  const clamp = (n,a,b)=>Math.max(a,Math.min(b,n));
   const money = (n)=>`${Number(n||0).toFixed(2)} GEL`;
-  const calcPriceGel = (pricePerHour, mins)=>Math.round((Number(pricePerHour)*(mins/60))*2)/2;
-
-  function escapeHtml(s){
-    return String(s ?? "")
-      .replaceAll("&","&amp;")
-      .replaceAll("<","&lt;")
-      .replaceAll(">","&gt;")
-      .replaceAll('"',"&quot;")
-      .replaceAll("'","&#039;");
-  }
+  const addDays = (d, days)=>{ const x=new Date(d); x.setDate(x.getDate()+days); return x; };
+  const escapeHtml = (s)=>String(s ?? "")
+    .replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;")
+    .replaceAll('"',"&quot;").replaceAll("'","&#039;");
 
   function intersects(a1,a2,b1,b2){
     return Math.max(a1.getTime(), b1.getTime()) < Math.min(a2.getTime(), b2.getTime());
   }
+  function minutesBetween(a,b){ return Math.round((b - a)/60000); }
+  function calcPriceGel(pricePerHour, mins){
+    return Math.round((Number(pricePerHour)*(mins/60))*2)/2; // шаг 0.5
+  }
+
+  // working hours window
+  function withinWorkingHours(startMin, endMin){
+    if(!WORKING_HOURS_ENABLED) return true;
+    const ws = minutesFrom(WORK_START);
+    const we = minutesFrom(WORK_END);
+    const within = (m) => {
+      if(we > ws) return m >= ws && m <= we;
+      return (m >= ws && m <= 1440) || (m >= 0 && m <= we);
+    };
+    return within(startMin) && within(endMin);
+  }
 
   // =========================
-  // Storage
+  // Init Firebase
   // =========================
-  function loadBookings(){
-    try{
-      const raw = localStorage.getItem(STORAGE_KEY);
-      const arr = raw ? JSON.parse(raw) : [];
-      return Array.isArray(arr) ? arr : [];
-    }catch(e){ return []; }
+  let app, auth, db;
+  let firebaseOk = true;
+  try{
+    app = initializeApp(firebaseConfig);
+    auth = getAuth(app);
+    db = getFirestore(app);
+  }catch(e){
+    firebaseOk = false;
+    console.warn("Firebase init failed:", e);
   }
-  function saveBookings(arr){ localStorage.setItem(STORAGE_KEY, JSON.stringify(arr)); }
 
   // =========================
   // State
   // =========================
   let lang = localStorage.getItem(LANG_KEY) || "ru";
-  if(!i18n[lang]) lang="ru";
+  if(!i18n[lang]) lang = "ru";
 
-  let bookings = loadBookings();
+  let onlyFree = localStorage.getItem(ONLY_FREE_KEY) === "1";
   let selectedPCs = new Set();
-  let selectedDurMin = null;
-  let selectedStartMinAbs = null; // minutes from window start (absolute within the day-window)
-  let computedWindow = null; // {day0, winStartAbsDate, winEndAbsDate, winStartMin, winEndMin, spansMidnight}
+
+  let slotLen = Number(localStorage.getItem(SLOT_LEN_KEY) || "60");
+  let slotWinHours = Number(localStorage.getItem(SLOT_WIN_KEY) || String(DEFAULT_SLOT_WINDOW_HOURS));
+
+  let slotWindowStartMin = null;  // динамически
+  let selectedSlot = null; // {startStr,endStr,startAbs,endAbs,spansMidnight}
+
+  let currentUser = null;
+  let isAdmin = false;
+
+  // cached bookings list from Firestore
+  let bookings = []; // {id, uid, email, pcs[], dateStart, start, end, spansMidnight, note, totalGel, perPcGel, createdAt}
+
+  // Realtime listener unsubscribe
+  let unsubBookings = null;
 
   // =========================
-  // i18n
+  // i18n apply
   // =========================
-  function t(k){ return i18n[lang][k] ?? i18n.ru[k] ?? k; }
+  function t(k){ return i18n[lang][k] ?? i18n["ru"][k] ?? k; }
+
   function applyLang(){
     $("t_title").textContent = t("title");
     $("t_sub").textContent = t("sub");
+    $("t_user").textContent = t("user");
     $("t_today").textContent = t("today");
     $("t_bookings").textContent = t("bookings");
 
-    $("t_step1").textContent = t("s1");
-    $("t_step2").textContent = t("s2");
-    $("t_step3").textContent = t("s3");
+    $("t_step1").textContent = t("step1");
+    $("t_step2").textContent = t("step2");
+    $("t_step3").textContent = t("step3");
     $("t_hint").textContent = t("hint");
 
     $("t_fast").textContent = t("fast");
     $("t_intro1").textContent = t("intro1");
     $("t_intro2").textContent = t("intro2");
     $("t_intro3").textContent = t("intro3");
+
     $("t_start").textContent = t("start");
     $("t_my").textContent = t("my");
     $("t_my2").textContent = t("my");
+    $("t_login").textContent = t("login");
 
-    $("t_nickLabel").textContent = t("nick");
-    $("t_dateLabel").textContent = t("date");
+    $("t_tip1").textContent = t("tip1");
+    $("t_tip2").textContent = t("tip2");
+
+    $("t_dateLabel").textContent = t("dateLabel");
+    $("t_noteLabel").textContent = t("noteLabel");
     $("t_pickpc").textContent = t("pickpc");
     $("t_next").textContent = t("next");
+    $("t_next2").textContent = t("next");
     $("t_clear").textContent = t("clear");
+    $("t_selected").textContent = t("selected");
 
-    $("t_step2Title").textContent = t("step2Title");
-    $("t_step2Desc").textContent = t("step2Desc");
-    $("t_pickStart").textContent = t("pickStart");
-    $("t_pickStartHint").textContent = t("pickStartHint");
+    $("t_priceLabel").textContent = t("priceLabel");
+    $("t_slotLen").textContent = t("slotLen");
+    $("t_prev").textContent = t("prev");
+    $("t_nextWin").textContent = t("nextWin");
+    $("t_window").textContent = t("window");
+    $("t_onlyFree").textContent = t("onlyFree");
+    $("slotHintBox").textContent = t("slotHint");
 
-    $("t_noteLabel").textContent = t("note");
-    $("t_priceLabel").textContent = t("price");
     $("t_back").textContent = t("back");
-    $("t_next2").textContent = t("next2");
-    $("t_back2").textContent = t("back2");
+    $("t_back2").textContent = t("back");
     $("t_bookNow").textContent = t("bookNow");
-    $("t_copyShare").textContent = t("copyShare");
-    $("t_qrTitle").textContent = t("qrTitle");
-    $("qrHint").textContent = t("qrHint");
 
     $("t_myTitle").textContent = t("myTitle");
     $("t_myHint").textContent = t("myHint");
-    $("t_myNick").textContent = t("myNick");
-    $("t_show").textContent = t("show");
     $("t_close").textContent = t("close");
+    $("t_refresh").textContent = t("refresh");
 
     $("t_colDate").textContent = t("colDate");
     $("t_colTime").textContent = t("colTime");
@@ -830,22 +1058,50 @@ Done.`,
     $("t_colNote").textContent = t("colNote");
     $("t_colCost").textContent = t("colCost");
     $("t_colCancel").textContent = t("colCancel");
+    $("t_myCancelHint").textContent = t("myCancelHint");
 
-    $("t_sideTitle").textContent = "Hint";
-    $("t_sideHint").textContent = "";
+    $("t_sideTitle").textContent = t("sideTitle");
+    $("t_sideHint").textContent = t("sideHint");
     $("helpBox").textContent = t("help");
 
     $("rulesBox").innerHTML = `
-      <b>${t("rulesTitle")}</b><br/>
+      <b>${t("rules")}</b><br/>
       • ${t("rule1")}<br/>
       • ${t("rule2")}<br/>
       • ${t("rule3")}<br/>
       • ${WORKING_HOURS_ENABLED ? t("rule4on") : t("rule4off")}
     `;
 
+    $("t_esc").textContent = t("esc");
+    $("t_adminHint").textContent = t("adminHint");
+    $("t_search").textContent = t("search");
+
+    $("t_colDate2").textContent = t("colDate");
+    $("t_colTime2").textContent = t("colTime");
+    $("t_colPc2").textContent = t("colPc");
+    $("t_colNick2").textContent = t("colUser");
+    $("t_colCost2").textContent = t("colCost");
+    $("t_colAct2").textContent = t("colAct");
+
+    $("t_qrTitle").textContent = t("qrTitle");
+    $("qrHint").textContent = t("qrHint");
+
+    $("t_logout").textContent = t("logout");
+
+    $("t_authTitle").textContent = t("authTitle");
+    $("t_authSub").textContent = t("authSub");
+    $("t_email").textContent = t("email");
+    $("t_pass").textContent = t("pass");
+    $("t_displayName").textContent = t("displayName");
+    $("t_doLogin").textContent = t("doLogin");
+    $("t_doRegister").textContent = t("doRegister");
+    $("t_doReset").textContent = t("doReset");
+
     $("lang_ru").classList.toggle("active", lang==="ru");
     $("lang_en").classList.toggle("active", lang==="en");
     $("lang_ka").classList.toggle("active", lang==="ka");
+
+    $("toggleOnlyFreeBtn").classList.toggle("primary", onlyFree);
   }
 
   // =========================
@@ -869,7 +1125,6 @@ Done.`,
     $("step2").classList.remove("active");
     $("step3").classList.remove("active");
   }
-
   function setMsg(text, kind="info"){
     const el = $("msg");
     el.textContent = text;
@@ -886,359 +1141,278 @@ Done.`,
   function renderPills(){
     $("countPill").textContent = String(bookings.length);
     $("todayPill").textContent = new Date().toLocaleDateString(undefined, {year:"numeric", month:"2-digit", day:"2-digit"});
+    $("userPill").textContent = currentUser
+      ? (currentUser.displayName ? currentUser.displayName : (currentUser.email || "user"))
+      : "—";
   }
 
   // =========================
-  // Booking time window (club hours) -> absolute window [winStartAbsDate, winEndAbsDate)
+  // Selection PCs
   // =========================
-  function computeWindowForDate(dateISO){
-    const day0 = parseDateISO(dateISO);
-    if(!WORKING_HOURS_ENABLED){
-      const winStartAbsDate = new Date(day0.getFullYear(), day0.getMonth(), day0.getDate(), 0,0,0,0);
-      const winEndAbsDate = addDays(winStartAbsDate, 1);
-      return { day0, winStartAbsDate, winEndAbsDate, spansMidnight:false, winStartMin:0, winEndMin:1440 };
-    }
-
-    const ws = minutesFromTime(WORK_START);
-    const we = minutesFromTime(WORK_END);
-
-    const winStartAbsDate = new Date(day0.getFullYear(), day0.getMonth(), day0.getDate(), Math.floor(ws/60), ws%60, 0,0);
-
-    let spansMidnight = false;
-    let winEndAbsDate;
-    if(we > ws){
-      winEndAbsDate = new Date(day0.getFullYear(), day0.getMonth(), day0.getDate(), Math.floor(we/60), we%60, 0,0);
-    }else{
-      spansMidnight = true;
-      const day1 = addDays(day0, 1);
-      winEndAbsDate = new Date(day1.getFullYear(), day1.getMonth(), day1.getDate(), Math.floor(we/60), we%60, 0,0);
-    }
-
-    const winStartMin = ws;
-    const winEndMin = spansMidnight ? (1440 + we) : we;
-
-    return { day0, winStartAbsDate, winEndAbsDate, spansMidnight, winStartMin, winEndMin };
-  }
-
-  // =========================
-  // Stored booking -> absolute range
-  // =========================
-  function bookingToAbs(b){
-    const dateISO = b.dateStart || b.date || "";
-    const d0 = parseDateISO(dateISO);
-    const sMin = minutesFromTime(b.start);
-    const eMin = minutesFromTime(b.end);
-
-    const startAbs = new Date(d0.getFullYear(), d0.getMonth(), d0.getDate(), Math.floor(sMin/60), sMin%60, 0,0);
-
-    const span = b.spansMidnight || (eMin <= sMin);
-    let endAbs;
-    if(!span){
-      endAbs = new Date(d0.getFullYear(), d0.getMonth(), d0.getDate(), Math.floor(eMin/60), eMin%60, 0,0);
-    }else{
-      const d1 = addDays(d0, 1);
-      endAbs = new Date(d1.getFullYear(), d1.getMonth(), d1.getDate(), Math.floor(eMin/60), eMin%60, 0,0);
-    }
-    return { startAbs, endAbs };
-  }
-
-  function hasConflictForAllSelected(startAbs, endAbs){
-    for(const pc of selectedPCs){
-      for(const b of bookings){
-        if(b.pc !== pc) continue;
-        const br = bookingToAbs(b);
-        if(intersects(startAbs, endAbs, br.startAbs, br.endAbs)){
-          return true;
-        }
-      }
-    }
-    return false;
-  }
-
-  // =========================
-  // Generate free start slots
-  // =========================
-  function roundUpToStep(min, step){
-    return Math.ceil(min / step) * step;
-  }
-
-  function buildSlots(){
-    const grid = $("slotGrid");
-    grid.innerHTML = "";
-    selectedStartMinAbs = null;
-
-    const dateISO = $("date").value;
-    if(!dateISO || !selectedDurMin || selectedPCs.size===0){
-      grid.innerHTML = `<div class="hint">—</div>`;
-      $("rangePreview").textContent = "—";
+  function renderSelected(){
+    $("selectedCount").textContent = String(selectedPCs.size);
+    const chips = $("selectedChips");
+    chips.innerHTML = "";
+    if(selectedPCs.size===0){
+      chips.innerHTML = `<span class="hint">—</span>`;
       return;
     }
-
-    computedWindow = computeWindowForDate(dateISO);
-
-    // current time limit if today
-    const now = new Date();
-    const todayISO = toISODate(now);
-    let minStartAllowedAbsMin = computedWindow.winStartMin;
-
-    if(dateISO === todayISO){
-      // convert current time to "window minutes space"
-      const curMin = now.getHours()*60 + now.getMinutes();
-      // if window spans midnight and we're after midnight (same day0), curMin is fine
-      // we only ensure start >= now (in absolute)
-      minStartAllowedAbsMin = Math.max(computedWindow.winStartMin, curMin);
-    }
-
-    // start/end in "extended minutes" space
-    const step = START_STEP_MIN;
-    const startMin = roundUpToStep(minStartAllowedAbsMin, step);
-    const lastStart = computedWindow.winEndMin - selectedDurMin; // inclusive upper bound for start
-
-    const slots = [];
-    for(let m = startMin; m <= lastStart; m += step){
-      // convert m (extended minutes from day0 00:00) to absolute Date
-      const day0 = parseDateISO(dateISO);
-      const absStart = new Date(day0.getTime() + (m * 60000));
-      const absEnd = new Date(absStart.getTime() + (selectedDurMin * 60000));
-
-      // must be within window absolute
-      if(absStart < computedWindow.winStartAbsDate) continue;
-      if(absEnd > computedWindow.winEndAbsDate) continue;
-
-      // must not be in the past absolute
-      if(absStart.getTime() < now.getTime()) continue;
-
-      if(!hasConflictForAllSelected(absStart, absEnd)){
-        slots.push({m, absStart, absEnd});
-      }
-    }
-
-    if(!slots.length){
-      grid.innerHTML = `<div class="notice" style="grid-column:1/-1;">${t("errNoSlots")}</div>`;
-      $("rangePreview").textContent = "—";
-      return;
-    }
-
-    for(const s of slots){
-      const btn = document.createElement("div");
-      btn.className = "slot";
-      btn.textContent = timeFromMinutes(s.m);
-      btn.addEventListener("click", ()=>{
-        document.querySelectorAll(".slot").forEach(x=>x.classList.remove("active"));
-        btn.classList.add("active");
-        selectedStartMinAbs = s.m;
-        renderRangePreview();
+    for(const pc of Array.from(selectedPCs)){
+      const ch = document.createElement("div");
+      ch.className = "pcchip";
+      ch.innerHTML = `${pc} <span class="x">×</span>`;
+      ch.addEventListener("click", () => {
+        selectedPCs.delete(pc);
+        renderSelected();
+        renderPCGrid();
+        rebuildSlots();
+        renderSummary();
       });
-      grid.appendChild(btn);
-    }
-
-    // auto-select first slot to be extra fast
-    const first = slots[0];
-    selectedStartMinAbs = first.m;
-    grid.querySelector(".slot")?.classList.add("active");
-    renderRangePreview();
-  }
-
-  function renderRangePreview(){
-    if(!computedWindow || selectedStartMinAbs == null || !selectedDurMin){
-      $("rangePreview").textContent = "—";
-      return;
-    }
-    const dateISO = $("date").value;
-    const day0 = parseDateISO(dateISO);
-    const startAbs = new Date(day0.getTime() + selectedStartMinAbs*60000);
-    const endAbs = new Date(startAbs.getTime() + selectedDurMin*60000);
-
-    const startStr = `${pad2(startAbs.getHours())}:${pad2(startAbs.getMinutes())}`;
-    const endStr = `${pad2(endAbs.getHours())}:${pad2(endAbs.getMinutes())}`;
-    const endISO = toISODate(endAbs);
-    const over = endISO !== dateISO;
-
-    const pcs = Array.from(selectedPCs).join(", ");
-    $("rangePreview").textContent =
-      `ПК: ${pcs} | ${dateISO} ${startStr} → ${endStr}${over ? " (+1)" : ""} | ${selectedDurMin} min`;
-  }
-
-  function renderDurations(){
-    const bar = $("durChips");
-    bar.innerHTML = "";
-    for(const m of DURATIONS){
-      const chip = document.createElement("div");
-      chip.className = "chip";
-      chip.textContent = m < 60 ? `${m}m` : (m%60===0 ? `${m/60}h` : `${Math.floor(m/60)}h ${m%60}m`);
-      chip.addEventListener("click", ()=>{
-        document.querySelectorAll("#durChips .chip").forEach(x=>x.classList.remove("active"));
-        chip.classList.add("active");
-        selectedDurMin = m;
-        buildSlots();
-      });
-      bar.appendChild(chip);
+      chips.appendChild(ch);
     }
   }
 
-  // =========================
-  // PCs render
-  // =========================
-  function renderPCs(){
+  function renderPCGrid(){
     const grid = $("pcGrid");
     grid.innerHTML = "";
     for(const pc of PCs){
       const div = document.createElement("div");
-      div.className = "pc" + (selectedPCs.has(pc) ? " selected" : "");
+      div.className = "pc";
+      if(selectedPCs.has(pc)) div.classList.add("selected");
       div.innerHTML = `
         <div class="check">✓</div>
         <div class="name">${pc}</div>
-        <div class="meta"><span class="tag"><span class="dot warn"></span>select</span></div>
+        <div class="meta">
+          <span class="tag"><span class="dot good"></span>${selectedPCs.has(pc) ? "Selected" : "Tap"}</span>
+          <span class="mut">—</span>
+        </div>
       `;
-      div.addEventListener("click", ()=>{
-        if(selectedPCs.has(pc)) selectedPCs.delete(pc);
-        else selectedPCs.add(pc);
-        renderPCs();
-        // rebuild slots because availability depends on ALL selected PCs
-        buildSlots();
+      div.addEventListener("click", () => {
+        if(selectedPCs.has(pc)) selectedPCs.delete(pc); else selectedPCs.add(pc);
+        renderSelected();
+        renderPCGrid();
+        rebuildSlots();
+        renderSummary();
       });
       grid.appendChild(div);
     }
   }
 
   // =========================
-  // Summary + create
+  // Booking range helpers
   // =========================
-  function getSelectedRange(){
-    const dateISO = $("date").value;
-    if(!dateISO || selectedStartMinAbs==null || !selectedDurMin) return null;
-    const day0 = parseDateISO(dateISO);
-    const startAbs = new Date(day0.getTime() + selectedStartMinAbs*60000);
-    const endAbs = new Date(startAbs.getTime() + selectedDurMin*60000);
-    const startStr = `${pad2(startAbs.getHours())}:${pad2(startAbs.getMinutes())}`;
-    const endStr = `${pad2(endAbs.getHours())}:${pad2(endAbs.getMinutes())}`;
-    const spansMidnight = toISODate(endAbs) !== dateISO;
-    return { dateISO, startAbs, endAbs, startStr, endStr, spansMidnight };
+  function makeAbsRange(dateISO, startStr, endStr){
+    const d0 = parseISODate(dateISO);
+    const sMin = minutesFrom(startStr);
+    const eMin = minutesFrom(endStr);
+    const startAbs = new Date(d0.getFullYear(), d0.getMonth(), d0.getDate(), Math.floor(sMin/60), sMin%60, 0, 0);
+    let spansMidnight = false;
+    let endAbs;
+    if(eMin > sMin){
+      endAbs = new Date(d0.getFullYear(), d0.getMonth(), d0.getDate(), Math.floor(eMin/60), eMin%60, 0, 0);
+    }else{
+      spansMidnight = true;
+      const d1 = addDays(d0, 1);
+      endAbs = new Date(d1.getFullYear(), d1.getMonth(), d1.getDate(), Math.floor(eMin/60), eMin%60, 0, 0);
+    }
+    return {dateStartISO: dateISO, startStr, endStr, startAbs, endAbs, spansMidnight};
   }
 
-  function renderSummary(){
-    const nick = ($("nick").value||"").trim();
-    const note = ($("note").value||"").trim();
-    const pricePerHour = Number($("price").value||5);
-    const pcs = Array.from(selectedPCs);
-
-    const r = getSelectedRange();
-    let when = "—";
-    let perPc = 0;
-    let total = 0;
-
-    if(r){
-      const mins = Math.round((r.endAbs - r.startAbs)/60000);
-      perPc = calcPriceGel(pricePerHour, mins);
-      total = perPc * pcs.length;
-      const endISO = toISODate(r.endAbs);
-      when = r.spansMidnight ? `${r.dateISO} ${r.startStr} → ${endISO} ${r.endStr}` : `${r.dateISO} ${r.startStr} → ${r.endStr}`;
-    }
-
-    $("summaryBox").innerHTML = `
-      <b>${t("s3")}</b><br/>
-      • ${t("nick")}: <b>${escapeHtml(nick||"—")}</b><br/>
-      • ${t("colPc")}: <b>${escapeHtml(pcs.length?pcs.join(", "):"—")}</b><br/>
-      • ${t("colTime")}: <b>${escapeHtml(when)}</b><br/>
-      • ${t("colCost")} (per PC): <b>${money(perPc)}</b><br/>
-      • ${t("colCost")} total: <b>${money(total)}</b><br/>
-      ${note ? ("• "+t("colNote")+": <b>"+escapeHtml(note)+"</b><br/>") : ""}
-    `;
+  function bookingToAbs(b){
+    const dateISO = b.dateStart;
+    return makeAbsRange(dateISO, b.start, b.end);
   }
 
-  function createBooking(){
-    const nick = ($("nick").value||"").trim();
-    if(!nick){ setMsg(t("errNick"),"bad"); return; }
-    if(selectedPCs.size===0){ setMsg(t("errPc"),"bad"); return; }
-    const dateISO = $("date").value;
-    if(!dateISO){ setMsg(t("errDate"),"bad"); return; }
-    const r = getSelectedRange();
-    if(!selectedDurMin){ setMsg(t("errDur"),"bad"); return; }
-    if(!r){ setMsg(t("errStart"),"bad"); return; }
-
-    // check max ahead
-    const d0 = parseDateISO(dateISO);
-    const today0 = parseDateISO(toISODate(new Date()));
-    const diffDays = Math.round((d0 - today0)/86400000);
-    if(diffDays > MAX_DAYS_AHEAD){ setMsg(t("errTooFar"),"bad"); return; }
-
-    // no past
-    if(r.startAbs.getTime() < Date.now()){ setMsg(t("errPast"),"bad"); return; }
-
-    // conflicts (double-check)
-    if(hasConflictForAllSelected(r.startAbs, r.endAbs)){
-      setMsg(t("errNoSlots"),"bad");
-      return;
+  function conflictForPcInRange(pc, range){
+    // conflict if any booking contains this pc
+    for(const b of bookings){
+      if(!b.pcs || !Array.isArray(b.pcs)) continue;
+      if(!b.pcs.includes(pc)) continue;
+      const br = bookingToAbs(b);
+      if(intersects(range.startAbs, range.endAbs, br.startAbs, br.endAbs)) return b;
     }
+    return null;
+  }
 
-    const note = ($("note").value||"").trim();
-    const pricePerHour = Number($("price").value||5);
-    const mins = Math.round((r.endAbs - r.startAbs)/60000);
-    const perPc = calcPriceGel(pricePerHour, mins);
-
-    const created = [];
+  function anyConflictForSelection(range){
     for(const pc of selectedPCs){
-      created.push({
-        id: (crypto.randomUUID ? crypto.randomUUID() : String(Date.now()) + "_" + Math.random().toString(16).slice(2)),
-        nick,
-        pc,
-        dateStart: dateISO,
-        start: r.startStr,
-        end: r.endStr,
-        spansMidnight: r.spansMidnight,
-        note,
-        pricePerHour,
-        totalGel: perPc,
-        createdAt: new Date().toISOString()
-      });
+      const c = conflictForPcInRange(pc, range);
+      if(c) return {pc, booking:c};
     }
-
-    bookings = bookings.concat(created);
-    saveBookings(bookings);
-    renderPills();
-
-    setMsg(`${t("created")}: ${created.length}`, "good");
-    renderMyTable(nick);
-
-    const payload = buildShareText({ nick, pcs:Array.from(selectedPCs), r, note, perPc, total: perPc*selectedPCs.size });
-    renderQR(payload);
+    return null;
   }
 
-  function buildShareText({nick, pcs, r, note, perPc, total}){
-    const endISO = toISODate(r.endAbs);
-    const when = r.spansMidnight
-      ? `${r.dateISO} ${r.startStr} → ${endISO} ${r.endStr}`
-      : `${r.dateISO} ${r.startStr} → ${r.endStr}`;
+  // =========================
+  // Slots building (new logic)
+  // =========================
+  function computeSlotWindowBase(){
+    // start from "now rounded" if date is today; else default to WORK_START
+    const dateISO = $("date").value;
+    const d0 = parseISODate(dateISO);
+    const todayISO = toISODate(new Date());
+
+    let baseMin;
+    if(dateISO === todayISO){
+      const now = new Date();
+      baseMin = now.getHours()*60 + now.getMinutes();
+      baseMin = Math.ceil(baseMin / SLOT_STEP_MINUTES) * SLOT_STEP_MINUTES;
+    }else{
+      baseMin = minutesFrom(WORK_START);
+    }
+
+    // clamp base inside working window roughly (if enabled)
+    baseMin = clamp(baseMin, 0, 1440 - SLOT_STEP_MINUTES);
+    return baseMin;
+  }
+
+  function rebuildSlots(forceKeepSelected=false){
+    const dateISO = $("date").value;
+    if(!dateISO) return;
+
+    if(slotWindowStartMin === null) slotWindowStartMin = computeSlotWindowBase();
+
+    // if selected slot went out of window and not forced, clear
+    if(!forceKeepSelected) selectedSlot = null;
+
+    const startMin = slotWindowStartMin;
+    const endMin = startMin + slotWinHours*60;
+
+    $("slotWindowPill").textContent = `${timeFromMin(startMin)} → ${timeFromMin(Math.min(endMin, 1440))}`;
+
+    const grid = $("slotGrid");
+    grid.innerHTML = "";
+
+    const len = Number($("slotLen").value || slotLen);
+    const pricePerHour = Number($("price").value || 5);
+
+    // build slots from startMin to endMin-len, step SLOT_STEP_MINUTES
+    for(let m = startMin; m + len <= Math.min(endMin, 1440); m += SLOT_STEP_MINUTES){
+      const sStr = timeFromMin(m);
+      const eStr = timeFromMin(m + len);
+
+      // working hours check (end time is local endStr)
+      if(!withinWorkingHours(m, m+len)){
+        // mark disabled by skipping
+        continue;
+      }
+
+      const range = makeAbsRange(dateISO, sStr, eStr);
+
+      // past check
+      const now = new Date();
+      const inPast = range.startAbs.getTime() < now.getTime();
+
+      // conflict check for selection
+      let conflict = null;
+      if(selectedPCs.size > 0){
+        conflict = anyConflictForSelection(range);
+      }
+
+      // determine status
+      let isFree = !conflict && !inPast;
+      if(onlyFree && !isFree) continue;
+
+      const mins = minutesBetween(range.startAbs, range.endAbs);
+      const perPc = calcPriceGel(pricePerHour, mins);
+      const total = perPc * selectedPCs.size;
+
+      const div = document.createElement("div");
+      div.className = "slot " + (isFree ? "free" : "busy");
+      if(selectedSlot && selectedSlot.startStr === sStr && selectedSlot.endStr === eStr) div.classList.add("selected");
+
+      div.innerHTML = `
+        <div class="t1">${escapeHtml(sStr)} → ${escapeHtml(eStr)}</div>
+        <div class="t2">
+          <span class="badge ${isFree ? "ok" : "bad"}">${isFree ? "FREE" : "BUSY"}</span>
+          <span class="mut">${selectedPCs.size ? ("PCs: " + selectedPCs.size) : "Select PCs"}</span>
+          <span class="mut">${selectedPCs.size ? ("Total: " + money(total)) : ""}</span>
+        </div>
+      `;
+
+      div.addEventListener("click", () => {
+        if(!currentUser){
+          alert(t("msgLoginNeed"));
+          return;
+        }
+        if(selectedPCs.size===0){
+          alert(t("msgPickPc"));
+          return;
+        }
+        if(inPast){
+          alert(t("msgPast"));
+          return;
+        }
+        if(conflict){
+          alert(`${t("msgOverlap")} ${conflict.pc}: ${conflict.booking.start}→${conflict.booking.end}`);
+          return;
+        }
+        selectedSlot = range;
+        rebuildSlots(true);
+        renderSummary();
+      });
+
+      grid.appendChild(div);
+    }
+
+    $("slotHintBox").textContent = t("slotHint");
+  }
+
+  // =========================
+  // Summary + QR + share
+  // =========================
+  function buildShareText(booking){
+    const pcs = booking.pcs.join(", ");
+    const when = booking.spansMidnight
+      ? `${booking.dateStart} ${booking.start} → ${addDays(parseISODate(booking.dateStart),1).toISOString().slice(0,10)} ${booking.end}`
+      : `${booking.dateStart} ${booking.start} → ${booking.end}`;
 
     return [
       "Sakompiutere Booking",
-      `Nick: ${nick}`,
-      `PCs: ${pcs.join(", ")}`,
+      `User: ${booking.email || booking.uid}`,
+      `PCs: ${pcs}`,
       `Time: ${when}`,
-      note ? `Note: ${note}` : null,
-      `Cost per PC: ${money(perPc)}`,
-      `Total: ${money(total)}`
+      booking.note ? `Note: ${booking.note}` : null,
+      `Cost per PC: ${money(booking.perPcGel)}`,
+      `Total: ${money(booking.totalGel)}`
     ].filter(Boolean).join("\n");
   }
 
-  async function copyShare(){
-    const nick = ($("nick").value||"").trim();
-    const r = getSelectedRange();
-    if(!nick || !r || selectedPCs.size===0 || !selectedDurMin){
-      setMsg("Fill booking first.", "bad");
+  function renderQR(text){
+    const canvas = $("qrCanvas");
+    if(!window.QRCode || !QRCode.toCanvas){
+      const ctx = canvas.getContext("2d");
+      ctx.clearRect(0,0,canvas.width,canvas.height);
+      ctx.fillStyle="#fff"; ctx.fillRect(0,0,canvas.width,canvas.height);
+      ctx.fillStyle="#111"; ctx.font="12px sans-serif";
+      ctx.fillText("QR lib not loaded", 20, 80);
       return;
     }
-    const note = ($("note").value||"").trim();
-    const mins = Math.round((r.endAbs - r.startAbs)/60000);
+    QRCode.toCanvas(canvas, text, { width: 160, margin: 1 }, () => {});
+  }
+
+  async function copyShare(){
+    if(!selectedSlot || selectedPCs.size===0 || !currentUser){
+      setMsg(t("msgPickSlot"), "bad");
+      return;
+    }
+    const mins = minutesBetween(selectedSlot.startAbs, selectedSlot.endAbs);
     const perPc = calcPriceGel(Number($("price").value||5), mins);
-    const text = buildShareText({
-      nick,
-      pcs:Array.from(selectedPCs),
-      r,
-      note,
-      perPc,
-      total: perPc*selectedPCs.size
-    });
+    const total = perPc * selectedPCs.size;
+
+    const temp = {
+      uid: currentUser.uid,
+      email: currentUser.email,
+      dateStart: selectedSlot.dateStartISO,
+      start: selectedSlot.startStr,
+      end: selectedSlot.endStr,
+      spansMidnight: selectedSlot.spansMidnight,
+      pcs: Array.from(selectedPCs),
+      note: ($("note").value||"").trim(),
+      perPcGel: perPc,
+      totalGel: total,
+    };
+    const text = buildShareText(temp);
+
     try{
       await navigator.clipboard.writeText(text);
       setMsg(t("copied"), "good");
@@ -1247,53 +1421,180 @@ Done.`,
     }
   }
 
-  function renderQR(text){
-    const canvas = $("qrCanvas");
-    if(!window.QRCode || !QRCode.toCanvas){
-      const ctx = canvas.getContext("2d");
-      ctx.clearRect(0,0,canvas.width,canvas.height);
-      ctx.fillStyle = "#ffffff";
-      ctx.fillRect(0,0,canvas.width,canvas.height);
-      ctx.fillStyle = "#111111";
-      ctx.font = "12px sans-serif";
-      ctx.fillText("QR lib not loaded", 20, 80);
+  function renderSummary(){
+    const note = ($("note").value || "").trim();
+    const pcs = Array.from(selectedPCs);
+    const pricePerHour = Number($("price").value || 5);
+
+    let perPc=0, total=0, when="—", dur="—";
+    if(selectedSlot){
+      const mins = minutesBetween(selectedSlot.startAbs, selectedSlot.endAbs);
+      perPc = calcPriceGel(pricePerHour, mins);
+      total = perPc * pcs.length;
+      dur = `${mins} min`;
+      when = selectedSlot.spansMidnight
+        ? `${selectedSlot.dateStartISO} ${selectedSlot.startStr} → ${addDays(parseISODate(selectedSlot.dateStartISO),1).toISOString().slice(0,10)} ${selectedSlot.endStr}`
+        : `${selectedSlot.dateStartISO} ${selectedSlot.startStr} → ${selectedSlot.endStr}`;
+    }
+
+    $("summaryBox").innerHTML = `
+      <b>${t("step3")}</b><br/>
+      • ${t("user")}: <b>${escapeHtml(currentUser ? (currentUser.email || currentUser.uid) : "—")}</b><br/>
+      • ${t("colTime")}: <b>${escapeHtml(when)}</b> <span class="hint">(${dur})</span><br/>
+      • ${t("selected")}: <b>${pcs.length}</b><br/>
+      • PCs: <b>${escapeHtml(pcs.length ? pcs.join(", ") : "—")}</b><br/>
+      • ${t("colCost")} (per PC): <b>${money(perPc)}</b><br/>
+      • ${t("colCost")} total: <b>${money(total)}</b><br/>
+      ${note ? ("• "+t("colNote")+": <b>"+escapeHtml(note)+"</b><br/>") : ""}
+    `;
+  }
+
+  // =========================
+  // Firestore: live bookings
+  // =========================
+  function dateRangeForListener(dateISO){
+    // listen for selected date only (+ optional next day if spans midnight exists)
+    // for simplicity: we listen all bookings with dateStart == dateISO
+    return dateISO;
+  }
+
+  function startBookingsListener(){
+    if(!firebaseOk || !db) return;
+    if(unsubBookings) unsubBookings();
+
+    const dateISO = $("date").value;
+    const qDate = dateRangeForListener(dateISO);
+
+    const qy = query(
+      collection(db, "bookings"),
+      where("dateStart", "==", qDate),
+      orderBy("start", "asc"),
+      limit(500)
+    );
+
+    unsubBookings = onSnapshot(qy, (snap) => {
+      bookings = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+      renderPills();
+      if($("step2Box") && !$("step2Box").classList.contains("hide")) rebuildSlots(true);
+      renderMyTable();
+      renderAdminTable();
+    }, (err) => {
+      console.warn("onSnapshot error:", err);
+    });
+  }
+
+  // =========================
+  // Create booking (Firestore)
+  // =========================
+  async function createBooking(){
+    if(!currentUser){
+      setMsg(t("msgLoginNeed"), "bad");
       return;
     }
-    QRCode.toCanvas(canvas, text, { width: 160, margin: 1 }, () => {});
+    if(selectedPCs.size===0){
+      setMsg(t("msgPickPc"), "bad");
+      return;
+    }
+    if(!selectedSlot){
+      setMsg(t("msgPickSlot"), "bad");
+      return;
+    }
+
+    // validate date ahead
+    const d0 = parseISODate(selectedSlot.dateStartISO);
+    const today0 = parseISODate(toISODate(new Date()));
+    const diffDays = Math.round((d0 - today0)/86400000);
+    if(diffDays > MAX_DAYS_AHEAD){
+      setMsg(t("msgTooFar"), "bad");
+      return;
+    }
+
+    // past check
+    if(selectedSlot.startAbs.getTime() < new Date().getTime()){
+      setMsg(t("msgPast"), "bad");
+      return;
+    }
+
+    // duration check
+    const mins = minutesBetween(selectedSlot.startAbs, selectedSlot.endAbs);
+    if(mins < MIN_BOOK_MINUTES || mins > MAX_BOOK_HOURS*60){
+      setMsg("Invalid duration", "bad");
+      return;
+    }
+
+    // conflicts check (fresh)
+    const conflict = anyConflictForSelection(selectedSlot);
+    if(conflict){
+      setMsg(`${t("msgOverlap")} ${conflict.pc}`, "bad");
+      return;
+    }
+
+    const pricePerHour = Number($("price").value || 5);
+    const perPc = calcPriceGel(pricePerHour, mins);
+    const total = perPc * selectedPCs.size;
+
+    const payload = {
+      uid: currentUser.uid,
+      email: currentUser.email || "",
+      displayName: currentUser.displayName || "",
+      pcs: Array.from(selectedPCs),
+      dateStart: selectedSlot.dateStartISO,
+      start: selectedSlot.startStr,
+      end: selectedSlot.endStr,
+      spansMidnight: selectedSlot.spansMidnight,
+      note: ($("note").value||"").trim(),
+      pricePerHour,
+      perPcGel: perPc,
+      totalGel: total,
+      createdAt: serverTimestamp()
+    };
+
+    try{
+      const ref = await addDoc(collection(db, "bookings"), payload);
+      setMsg(`${t("msgCreated")}: 1`, "good");
+
+      // QR for this booking
+      const shareText = buildShareText({ ...payload, id: ref.id });
+      renderQR(shareText);
+
+      // move to my bookings view
+      renderMyTable();
+      renderAdminTable();
+    }catch(e){
+      console.error(e);
+      setMsg("Firestore error (check rules).", "bad");
+    }
   }
 
   // =========================
-  // My bookings
+  // My bookings (by uid)
   // =========================
-  function bookingTimeLabel(b){
-    const span = b.spansMidnight || (minutesFromTime(b.end) <= minutesFromTime(b.start));
-    return span ? `${b.start} → ${b.end} (+1)` : `${b.start} → ${b.end}`;
-  }
-
-  function renderMyTable(nick){
+  function renderMyTable(){
     const tbody = $("myTable");
     tbody.innerHTML = "";
-    const q = (nick || "").trim();
-    if(!q){
-      tbody.innerHTML = `<tr><td colspan="6" style="color:var(--muted)">—</td></tr>`;
+
+    if(!currentUser){
+      tbody.innerHTML = `<tr><td colspan="6" style="color:var(--muted)">Login required</td></tr>`;
       return;
     }
 
     const list = bookings
-      .filter(b => (b.nick||"").trim().toLowerCase() === q.toLowerCase())
-      .sort((a,b)=> ((a.dateStart||a.date)+a.start+a.pc).localeCompare((b.dateStart||b.date)+b.start+b.pc));
+      .filter(b => b.uid === currentUser.uid)
+      .sort((a,b)=> (a.dateStart+a.start).localeCompare(b.dateStart+b.start));
 
     if(!list.length){
-      tbody.innerHTML = `<tr><td colspan="6" style="color:var(--muted)">—</td></tr>`;
+      tbody.innerHTML = `<tr><td colspan="6" style="color:var(--muted)">${t("msgNoMy")}</td></tr>`;
       return;
     }
 
     for(const b of list){
+      const timeStr = `${b.start} → ${b.end}${b.spansMidnight ? " (+1)" : ""}`;
+      const pcsStr = (b.pcs||[]).join(", ");
       const tr = document.createElement("tr");
       tr.innerHTML = `
-        <td>${escapeHtml(b.dateStart || b.date)}</td>
-        <td>${escapeHtml(bookingTimeLabel(b))}</td>
-        <td><b>${escapeHtml(b.pc)}</b></td>
+        <td>${escapeHtml(b.dateStart)}</td>
+        <td>${escapeHtml(timeStr)}</td>
+        <td><b>${escapeHtml(pcsStr)}</b></td>
         <td style="color:var(--muted)">${escapeHtml(b.note || "")}</td>
         <td>${money(b.totalGel)}</td>
         <td><button class="mini danger" data-id="${b.id}">Cancel</button></td>
@@ -1302,121 +1603,318 @@ Done.`,
     }
 
     tbody.querySelectorAll("button[data-id]").forEach(btn=>{
-      btn.addEventListener("click", ()=>{
+      btn.addEventListener("click", async ()=>{
         const id = btn.getAttribute("data-id");
-        const b = bookings.find(x=>x.id===id);
-        if(!b) return;
-
-        if(!confirm(`Cancel booking?\n${b.nick} • ${b.pc}\n${b.dateStart||b.date} ${bookingTimeLabel(b)}`)) return;
-        bookings = bookings.filter(x=>x.id!==id);
-        saveBookings(bookings);
-        renderPills();
-        renderMyTable($("myNickInput").value);
-        buildSlots();
+        if(!confirm(`Cancel booking?`)) return;
+        try{
+          await deleteDoc(doc(db, "bookings", id));
+        }catch(e){
+          console.error(e);
+          alert("Delete error (rules?)");
+        }
       });
     });
   }
 
-  function openMyBox(prefillNick){
-    $("myBox").classList.remove("hide");
-    $("myNickInput").value = prefillNick || localStorage.getItem(NICK_KEY) || $("nick").value || "";
-    renderMyTable($("myNickInput").value);
-    $("myBox").scrollIntoView({behavior:"smooth", block:"start"});
+  // =========================
+  // Admin
+  // =========================
+  function updateAdminFlag(){
+    const email = (currentUser && currentUser.email) ? currentUser.email.toLowerCase() : "";
+    isAdmin = !!email && ADMIN_EMAILS.map(x=>x.toLowerCase()).includes(email);
+    $("adminBox").classList.toggle("hide", !isAdmin);
   }
-  function closeMyBox(){ $("myBox").classList.add("hide"); }
+
+  function renderAdminTable(){
+    $("adminBox").classList.toggle("hide", !isAdmin);
+    const tbody = $("bookTable");
+    tbody.innerHTML = "";
+    if(!isAdmin) return;
+
+    const q = ($("search").value||"").trim().toLowerCase();
+    const list = bookings
+      .filter(b => !q || (b.email||"").toLowerCase().includes(q) || (b.pcs||[]).join(",").toLowerCase().includes(q))
+      .sort((a,b)=> (a.dateStart+a.start).localeCompare(b.dateStart+b.start));
+
+    for(const b of list){
+      const timeStr = `${b.start} → ${b.end}${b.spansMidnight ? " (+1)" : ""}`;
+      const pcsStr = (b.pcs||[]).join(", ");
+      const tr = document.createElement("tr");
+      tr.innerHTML = `
+        <td>${escapeHtml(b.dateStart)}</td>
+        <td>${escapeHtml(timeStr)}</td>
+        <td><b>${escapeHtml(pcsStr)}</b></td>
+        <td><b>${escapeHtml(b.email || b.uid)}</b></td>
+        <td>${money(b.totalGel)}</td>
+        <td><button class="mini danger" data-id="${b.id}">Delete</button></td>
+      `;
+      tbody.appendChild(tr);
+    }
+
+    tbody.querySelectorAll("button[data-id]").forEach(btn=>{
+      btn.addEventListener("click", async ()=>{
+        const id = btn.getAttribute("data-id");
+        if(!confirm("Delete booking?")) return;
+        await deleteDoc(doc(db, "bookings", id));
+      });
+    });
+  }
+
+  async function wipeAllDev(){
+    if(!isAdmin) return;
+    if(!confirm("DEV WIPE: Delete ALL bookings in this date view?")) return;
+
+    // delete only current loaded bookings (dateStart == selected date)
+    try{
+      const batch = writeBatch(db);
+      for(const b of bookings){
+        batch.delete(doc(db, "bookings", b.id));
+      }
+      await batch.commit();
+    }catch(e){
+      console.error(e);
+      alert("Wipe error (rules?)");
+    }
+  }
 
   // =========================
-  // Validation for navigation
+  // Auth modal
   // =========================
-  function validateStep1(){
-    const nick = ($("nick").value||"").trim();
-    if(!nick) return {ok:false, msg:t("errNick")};
-    if(!$("date").value) return {ok:false, msg:t("errDate")};
-    if(selectedPCs.size===0) return {ok:false, msg:t("errPc")};
+  function openAuth(){
+    $("authBack").classList.add("show");
+    $("authMsg").textContent = firebaseOk ? "—" : "Firebase config missing / wrong";
+  }
+  function closeAuth(){
+    $("authBack").classList.remove("show");
+  }
+  function setAuthMsg(s){ $("authMsg").textContent = s; }
 
-    localStorage.setItem(NICK_KEY, nick);
-    return {ok:true};
+  async function doLogin(){
+    if(!firebaseOk) return setAuthMsg("Firebase init failed.");
+    const email = ($("authEmail").value||"").trim();
+    const pass = ($("authPass").value||"").trim();
+    if(!email || !pass) return setAuthMsg("Fill email + password");
+    try{
+      await signInWithEmailAndPassword(auth, email, pass);
+      setAuthMsg("OK");
+      closeAuth();
+    }catch(e){
+      console.error(e);
+      setAuthMsg(e.code || "login error");
+    }
+  }
+
+  async function doRegister(){
+    if(!firebaseOk) return setAuthMsg("Firebase init failed.");
+    const email = ($("authEmail").value||"").trim();
+    const pass = ($("authPass").value||"").trim();
+    const nick = ($("authNick").value||"").trim();
+    if(!email || !pass) return setAuthMsg("Fill email + password");
+    try{
+      const cred = await createUserWithEmailAndPassword(auth, email, pass);
+      if(nick){
+        await updateProfile(cred.user, { displayName: nick });
+      }
+      setAuthMsg("Registered OK");
+      closeAuth();
+    }catch(e){
+      console.error(e);
+      setAuthMsg(e.code || "register error");
+    }
+  }
+
+  async function doReset(){
+    if(!firebaseOk) return setAuthMsg("Firebase init failed.");
+    const email = ($("authEmail").value||"").trim();
+    if(!email) return setAuthMsg("Enter email");
+    try{
+      await sendPasswordResetEmail(auth, email);
+      setAuthMsg("Reset email sent");
+    }catch(e){
+      console.error(e);
+      setAuthMsg(e.code || "reset error");
+    }
   }
 
   // =========================
   // Boot
   // =========================
   function boot(){
-    // defaults
     const now = new Date();
-    $("date").value = toISODate(now);
     $("todayPill").textContent = now.toLocaleDateString(undefined, {year:"numeric", month:"2-digit", day:"2-digit"});
+    $("date").value = toISODate(now);
 
-    const savedNick = localStorage.getItem(NICK_KEY) || "";
-    if(savedNick) $("nick").value = savedNick;
+    // restore settings
+    $("slotLen").value = String(slotLen);
+    $("toggleOnlyFreeBtn").classList.toggle("primary", onlyFree);
 
-    renderPills();
+    // apply language
     applyLang();
-    renderPCs();
-    renderDurations();
-    buildSlots();
+
+    // initial UI
+    renderPCGrid();
+    renderSelected();
+
+    slotWindowStartMin = computeSlotWindowBase();
+    rebuildSlots();
+
+    renderSummary();
     showIntro();
 
-    // language
+    // language buttons
     $("lang_ru").onclick = () => { lang="ru"; localStorage.setItem(LANG_KEY,lang); applyLang(); renderSummary(); };
     $("lang_en").onclick = () => { lang="en"; localStorage.setItem(LANG_KEY,lang); applyLang(); renderSummary(); };
     $("lang_ka").onclick = () => { lang="ka"; localStorage.setItem(LANG_KEY,lang); applyLang(); renderSummary(); };
 
-    // intro
-    $("startBtn").onclick = () => setStep(1);
-    $("viewMyBtn").onclick = () => openMyBox($("nick").value);
+    // intro buttons
+    $("startBtn").onclick = () => {
+      if(!currentUser){ alert(t("msgLoginNeed")); return; }
+      setStep(1);
+    };
+    $("viewMyBtn").onclick = () => {
+      $("myBox").classList.remove("hide");
+      renderMyTable();
+      $("myBox").scrollIntoView({behavior:"smooth", block:"start"});
+    };
+    $("loginBtn").onclick = openAuth;
+
+    // auth modal
+    $("authCloseBtn").onclick = closeAuth;
+    $("authBack").addEventListener("click", (e)=>{ if(e.target === $("authBack")) closeAuth(); });
+    $("doLoginBtn").onclick = doLogin;
+    $("doRegisterBtn").onclick = doRegister;
+    $("doResetBtn").onclick = doReset;
 
     // step1
-    $("clearPcBtn").onclick = () => { selectedPCs.clear(); renderPCs(); buildSlots(); };
-    $("date").addEventListener("change", ()=>buildSlots());
-    $("nick").addEventListener("input", ()=>localStorage.setItem(NICK_KEY, ($("nick").value||"").trim()));
+    $("clearPcBtn").onclick = () => { selectedPCs.clear(); renderSelected(); renderPCGrid(); rebuildSlots(); renderSummary(); };
 
     $("toStep2Btn").onclick = () => {
-      const v = validateStep1();
-      if(!v.ok){ alert(v.msg); return; }
+      if(!currentUser){ alert(t("msgLoginNeed")); return; }
+      if(selectedPCs.size===0){ alert(t("msgPickPc")); return; }
       setStep(2);
-
-      // auto pick first duration for speed
-      if(!selectedDurMin){
-        const firstChip = document.querySelector("#durChips .chip");
-        firstChip?.click();
-      }else{
-        buildSlots();
-      }
+      rebuildSlots();
+      renderSummary();
     };
 
-    // step2
+    $("date").addEventListener("change", ()=>{
+      slotWindowStartMin = computeSlotWindowBase();
+      selectedSlot = null;
+      rebuildSlots();
+      startBookingsListener();
+      renderSummary();
+    });
+
+    $("note").addEventListener("input", ()=>renderSummary());
+    $("price").addEventListener("input", ()=>{ rebuildSlots(true); renderSummary(); });
+
+    $("slotLen").addEventListener("change", ()=>{
+      slotLen = Number($("slotLen").value || 60);
+      localStorage.setItem(SLOT_LEN_KEY, String(slotLen));
+      selectedSlot = null;
+      rebuildSlots();
+      renderSummary();
+    });
+
+    $("toggleOnlyFreeBtn").onclick = () => {
+      onlyFree = !onlyFree;
+      localStorage.setItem(ONLY_FREE_KEY, onlyFree ? "1":"0");
+      $("toggleOnlyFreeBtn").classList.toggle("primary", onlyFree);
+      rebuildSlots(true);
+    };
+
+    $("prevSlotsBtn").onclick = () => {
+      slotWindowStartMin = clamp((slotWindowStartMin ?? 0) - slotWinHours*60, 0, 1440 - SLOT_STEP_MINUTES);
+      selectedSlot = null;
+      rebuildSlots();
+      renderSummary();
+    };
+    $("nextSlotsBtn").onclick = () => {
+      slotWindowStartMin = clamp((slotWindowStartMin ?? 0) + slotWinHours*60, 0, 1440 - SLOT_STEP_MINUTES);
+      selectedSlot = null;
+      rebuildSlots();
+      renderSummary();
+    };
+
+    // step2 -> step3
     $("backTo1Btn").onclick = () => setStep(1);
     $("toStep3Btn").onclick = () => {
-      const v = validateStep1();
-      if(!v.ok){ alert(v.msg); return; }
-      if(!selectedDurMin){ alert(t("errDur")); return; }
-      if(selectedStartMinAbs == null){ alert(t("errStart")); return; }
+      if(!currentUser){ alert(t("msgLoginNeed")); return; }
+      if(selectedPCs.size===0){ alert(t("msgPickPc")); return; }
+      if(!selectedSlot){ alert(t("msgPickSlot")); return; }
       setStep(3);
       renderSummary();
-      setMsg("OK","info");
+      setMsg("OK", "info");
     };
 
-    // step3
+    // step3 actions
     $("backTo2Btn").onclick = () => setStep(2);
-    $("createBtn").onclick = () => { createBooking(); renderSummary(); };
-    $("showMyInlineBtn").onclick = () => openMyBox($("nick").value);
+    $("createBtn").onclick = createBooking;
     $("copyShareBtn").onclick = copyShare;
+    $("showMyInlineBtn").onclick = () => {
+      $("myBox").classList.remove("hide");
+      renderMyTable();
+      $("myBox").scrollIntoView({behavior:"smooth", block:"start"});
+    };
 
     // my box
-    $("mySearchBtn").onclick = () => renderMyTable($("myNickInput").value);
-    $("myCloseBtn").onclick = closeMyBox;
+    $("myCloseBtn").onclick = () => $("myBox").classList.add("hide");
+    $("myRefreshBtn").onclick = () => renderMyTable();
 
-    // live preview when note/price change
-    $("note").addEventListener("input", ()=>{ if(!$("step3Box").classList.contains("hide")) renderSummary(); });
-    $("price").addEventListener("input", ()=>{ if(!$("step3Box").classList.contains("hide")) renderSummary(); });
+    // admin buttons
+    $("openAdminBtn").onclick = () => {
+      if(!currentUser){ alert(t("msgLoginNeed")); return; }
+      if(!isAdmin){ alert(t("promptAdmin")); return; }
+      $("adminBox").classList.remove("hide");
+      $("adminBox").scrollIntoView({behavior:"smooth", block:"start"});
+    };
+    $("exitAdminBtn").onclick = () => $("adminBox").classList.add("hide");
 
-    // Esc
-    document.addEventListener("keydown", (e)=>{ if(e.key==="Escape") showIntro(); });
+    $("search").addEventListener("input", renderAdminTable);
+    $("clearFilterBtn").onclick = () => { $("search").value=""; renderAdminTable(); };
+    $("wipeBtn").onclick = wipeAllDev;
+
+    $("logoutBtn").onclick = async () => {
+      if(!firebaseOk || !auth) return;
+      await signOut(auth);
+    };
+
+    // Esc back to intro
+    document.addEventListener("keydown", (e)=>{ if(e.key === "Escape") showIntro(); });
+
+    // Auth state
+    if(firebaseOk && auth){
+      onAuthStateChanged(auth, (u) => {
+        currentUser = u;
+        updateAdminFlag();
+        renderPills();
+
+        $("logoutBtn").style.display = u ? "inline-block" : "none";
+        $("exitAdminBtn").style.display = isAdmin ? "inline-block" : "none";
+
+        // start listener only when logged in (optional). We can listen without login too,
+        // but you asked for shared registrations, so keep it clean.
+        if(u){
+          startBookingsListener();
+        }else{
+          bookings = [];
+          renderPills();
+          renderMyTable();
+          renderAdminTable();
+          if(unsubBookings){ unsubBookings(); unsubBookings = null; }
+        }
+      });
+    }else{
+      // no firebase - keep in intro
+      setMsg("Firebase config missing", "bad");
+    }
   }
 
   boot();
 })();
+</script>
+
+<script>
+/* non-module part: language buttons need IDs exist already, keep empty */
 </script>
 </body>
 </html>
