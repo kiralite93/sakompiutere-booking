@@ -1,0 +1,908 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Sakompiutere Gaming — Booking</title>
+  <meta name="theme-color" content="#0b1020" />
+  <style>
+    :root{
+      --bg:#070a12;
+      --card:#0b1020;
+      --muted:#9aa4bf;
+      --text:#eaf0ff;
+      --line:rgba(255,255,255,.08);
+      --accent:#6ee7ff;
+      --accent2:#a78bfa;
+      --good:#34d399;
+      --bad:#fb7185;
+      --warn:#fbbf24;
+      --shadow:0 20px 60px rgba(0,0,0,.55);
+      --r:18px;
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, "Noto Sans", "Apple Color Emoji", "Segoe UI Emoji";
+      background:
+        radial-gradient(1200px 800px at 20% -10%, rgba(110,231,255,.12), transparent 60%),
+        radial-gradient(900px 700px at 80% 10%, rgba(167,139,250,.14), transparent 60%),
+        radial-gradient(800px 700px at 40% 120%, rgba(52,211,153,.10), transparent 60%),
+        var(--bg);
+      color:var(--text);
+    }
+    .wrap{max-width:1180px; margin:0 auto; padding:24px;}
+    header{
+      display:flex; gap:14px; align-items:center; justify-content:space-between;
+      padding:14px 16px; border:1px solid var(--line); border-radius:var(--r);
+      background:linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,.02));
+      box-shadow: var(--shadow);
+      position:sticky; top:14px; z-index:10;
+      backdrop-filter: blur(10px);
+    }
+    .brand{display:flex; gap:12px; align-items:center;}
+    .logo{
+      width:42px; height:42px; border-radius:14px;
+      background: radial-gradient(circle at 30% 20%, rgba(110,231,255,.9), rgba(167,139,250,.8) 40%, rgba(0,0,0,0) 72%),
+                  linear-gradient(180deg, rgba(255,255,255,.12), rgba(255,255,255,.02));
+      border:1px solid var(--line);
+      box-shadow: 0 12px 30px rgba(0,0,0,.4);
+    }
+    .brand h1{margin:0; font-size:16px; letter-spacing:.4px}
+    .brand .sub{margin:0; color:var(--muted); font-size:12px}
+    .pillbar{display:flex; gap:8px; flex-wrap:wrap; justify-content:flex-end;}
+    .pill{
+      padding:8px 10px; border-radius:999px; border:1px solid var(--line);
+      background:rgba(255,255,255,.03);
+      color:var(--muted); font-size:12px;
+    }
+    .pill strong{color:var(--text); font-weight:700}
+    .grid{
+      display:grid;
+      grid-template-columns: 1.25fr .75fr;
+      gap:18px;
+      margin-top:18px;
+    }
+    @media (max-width: 980px){
+      .grid{grid-template-columns:1fr; }
+      header{position:static;}
+    }
+    .card{
+      border:1px solid var(--line);
+      border-radius:var(--r);
+      background: linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,.02));
+      box-shadow: var(--shadow);
+      overflow:hidden;
+    }
+    .card .hd{
+      padding:14px 16px;
+      display:flex; align-items:center; justify-content:space-between; gap:10px;
+      border-bottom:1px solid var(--line);
+    }
+    .hd h2{margin:0; font-size:14px}
+    .hd .hint{color:var(--muted); font-size:12px}
+    .card .bd{padding:14px 16px}
+    .row{display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:10px;}
+    @media (max-width:520px){ .row{grid-template-columns:1fr;} }
+    label{display:block; font-size:12px; color:var(--muted); margin:0 0 6px}
+    input, select, textarea{
+      width:100%;
+      padding:11px 12px;
+      border-radius:14px;
+      border:1px solid var(--line);
+      background:rgba(0,0,0,.25);
+      color:var(--text);
+      outline:none;
+    }
+    input:focus, select:focus, textarea:focus{border-color: rgba(110,231,255,.6); box-shadow:0 0 0 3px rgba(110,231,255,.12)}
+    textarea{min-height:92px; resize:vertical}
+    .btns{display:flex; gap:10px; flex-wrap:wrap; margin-top:10px}
+    button{
+      border:1px solid var(--line);
+      background:rgba(255,255,255,.04);
+      color:var(--text);
+      padding:10px 12px;
+      border-radius:14px;
+      cursor:pointer;
+      font-weight:700;
+      letter-spacing:.2px;
+    }
+    button:hover{border-color: rgba(110,231,255,.5)}
+    .primary{
+      border-color: rgba(110,231,255,.55);
+      background: linear-gradient(180deg, rgba(110,231,255,.18), rgba(167,139,250,.10));
+    }
+    .danger{border-color: rgba(251,113,133,.6); background: rgba(251,113,133,.12)}
+    .ghost{background:transparent}
+    .mini{padding:6px 10px; border-radius:12px; font-size:12px; font-weight:700}
+    .tag{
+      display:inline-flex; gap:8px; align-items:center;
+      padding:7px 10px; border-radius:999px;
+      border:1px solid var(--line); background:rgba(0,0,0,.25);
+      font-size:12px; color:var(--muted);
+    }
+    .dot{width:8px; height:8px; border-radius:999px; background: var(--muted)}
+    .dot.good{background:var(--good)}
+    .dot.bad{background:var(--bad)}
+    .dot.warn{background:var(--warn)}
+    .table{
+      width:100%;
+      border-collapse:separate;
+      border-spacing:0;
+      overflow:hidden;
+      border:1px solid var(--line);
+      border-radius:16px;
+    }
+    .table th, .table td{
+      padding:10px 10px;
+      border-bottom:1px solid var(--line);
+      vertical-align:top;
+      font-size:12px;
+    }
+    .table th{color:var(--muted); font-weight:700; text-align:left; background:rgba(255,255,255,.03)}
+    .table tr:last-child td{border-bottom:none}
+    .pcgrid{
+      display:grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap:10px;
+      margin-top:10px;
+    }
+    @media (max-width: 980px){ .pcgrid{grid-template-columns: repeat(2, 1fr);} }
+    .pc{
+      padding:12px 12px;
+      border:1px solid var(--line);
+      border-radius:16px;
+      background:rgba(0,0,0,.22);
+      cursor:pointer;
+      transition: transform .08s ease, border-color .12s ease;
+      user-select:none;
+    }
+    .pc:hover{transform: translateY(-1px); border-color: rgba(110,231,255,.4)}
+    .pc .name{font-weight:900; letter-spacing:.3px}
+    .pc .meta{margin-top:6px; color:var(--muted); font-size:12px; display:flex; gap:10px; align-items:center; flex-wrap:wrap}
+    .pc.active{
+      border-color: rgba(110,231,255,.75);
+      box-shadow: 0 0 0 3px rgba(110,231,255,.10);
+    }
+    .muted{color:var(--muted)}
+    .notice{
+      border:1px dashed rgba(110,231,255,.35);
+      background: rgba(110,231,255,.06);
+      padding:10px 12px;
+      border-radius:16px;
+      color: var(--text);
+      font-size:12px;
+      line-height:1.35;
+    }
+    .small{font-size:12px}
+    .split{display:flex; gap:10px; flex-wrap:wrap; justify-content:space-between; align-items:center}
+    .right{display:flex; gap:10px; flex-wrap:wrap; align-items:center; justify-content:flex-end}
+    .kbd{
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      padding:2px 6px;
+      border:1px solid var(--line);
+      border-radius:8px;
+      background:rgba(0,0,0,.25);
+      color:var(--muted);
+      font-size:12px;
+    }
+  </style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="brand">
+      <div class="logo" aria-hidden="true"></div>
+      <div>
+        <h1>Sakompiutere Gaming — Booking</h1>
+        <p class="sub">10 ПК • свободные интервалы • анти-пересечения • экспорт/импорт</p>
+      </div>
+    </div>
+    <div class="pillbar">
+      <div class="pill">Цена: <strong id="pricePill">5 GEL/час</strong></div>
+      <div class="pill">Сегодня: <strong id="todayPill">—</strong></div>
+      <div class="pill">Броней: <strong id="countPill">0</strong></div>
+    </div>
+  </header>
+
+  <div class="grid">
+    <!-- LEFT -->
+    <div class="card">
+      <div class="hd">
+        <h2>ПК и статус</h2>
+        <div class="hint">кликни ПК → он подставится в форму</div>
+      </div>
+      <div class="bd">
+        <div class="split">
+          <div class="notice">
+            <b>Как работает хранение:</b> сейчас брони сохраняются <b>на этом устройстве</b> (localStorage).
+            Для переноса используй <b>Export</b>/<b>Import</b> справа.
+          </div>
+          <div class="right small">
+            <span class="tag"><span class="dot good"></span>свободно</span>
+            <span class="tag"><span class="dot warn"></span>есть брони</span>
+          </div>
+        </div>
+
+        <div id="pcGrid" class="pcgrid" aria-label="Список ПК"></div>
+
+        <div style="margin-top:14px;">
+          <div class="split">
+            <h2 style="margin:0;font-size:14px;">Все брони</h2>
+            <div class="right">
+              <input id="search" type="text" placeholder="поиск по нику / ПК" style="max-width:260px;">
+              <button class="mini ghost" id="clearFilterBtn">Сброс</button>
+            </div>
+          </div>
+          <div style="height:10px"></div>
+          <table class="table" role="table" aria-label="Таблица броней">
+            <thead>
+              <tr>
+                <th style="width:140px">Дата</th>
+                <th style="width:120px">Время</th>
+                <th style="width:120px">ПК</th>
+                <th>Ник</th>
+                <th style="width:110px">Стоимость</th>
+                <th style="width:140px">Действия</th>
+              </tr>
+            </thead>
+            <tbody id="bookTable"></tbody>
+          </table>
+          <div class="muted small" style="margin-top:10px;">
+            Пересечения запрещены: нельзя забронировать тот же ПК на пересекающийся интервал.
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- RIGHT -->
+    <div class="card">
+      <div class="hd">
+        <h2>Новая бронь</h2>
+        <div class="hint">заполни → “Создать”</div>
+      </div>
+      <div class="bd">
+        <div class="row">
+          <div>
+            <label>Ник (как в клубе)</label>
+            <input id="nick" type="text" placeholder="например: KiraLite" />
+          </div>
+          <div>
+            <label>ПК</label>
+            <select id="pcSelect"></select>
+          </div>
+        </div>
+
+        <div class="row">
+          <div>
+            <label>Дата</label>
+            <input id="date" type="date" />
+          </div>
+          <div>
+            <label>Начало</label>
+            <input id="start" type="time" />
+          </div>
+        </div>
+
+        <div class="row">
+          <div>
+            <label>Конец</label>
+            <input id="end" type="time" />
+          </div>
+          <div>
+            <label>Мин. длительность</label>
+            <select id="minDuration">
+              <option value="30">30 минут</option>
+              <option value=".partial" disabled>────────</option>
+              <option value="60">60 минут</option>
+              <option value="90">90 минут</option>
+              <option value="120">120 минут</option>
+              <option value="180">180 минут</option>
+              <option value="240">240 минут</option>
+              <option value="480">480 минут (8ч)</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="row">
+          <div>
+            <label>Комментарий (опционально)</label>
+            <input id="note" type="text" placeholder="например: CS2 турнир / VIP" />
+          </div>
+          <div>
+            <label>Цена (GEL/час)</label>
+            <input id="price" type="number" min="0" step="0.5" value="5" />
+          </div>
+        </div>
+
+        <div class="btns">
+          <button class="primary" id="createBtn">Создать бронь</button>
+          <button id="myBtn">Показать “Мои”</button>
+          <button class="danger" id="wipeBtn" title="Удалит все брони на этом устройстве">Стереть всё</button>
+        </div>
+
+        <div style="height:14px"></div>
+        <div class="notice" id="msg" aria-live="polite">Готово. Выбери ПК и задай интервал.</div>
+
+        <div style="height:18px"></div>
+        <div class="card" style="box-shadow:none; background:rgba(0,0,0,.18);">
+          <div class="hd">
+            <h2>Sync (Export/Import)</h2>
+            <div class="hint">перенос между устройствами</div>
+          </div>
+          <div class="bd">
+            <div class="btns">
+              <button id="exportBtn">Export JSON</button>
+              <button id="copyBtn">Copy</button>
+              <button id="importBtn">Import JSON</button>
+            </div>
+            <label style="margin-top:10px;">Данные (JSON)</label>
+            <textarea id="syncBox" placeholder="Нажми Export → скопируй → вставь на другом устройстве → Import"></textarea>
+
+            <div class="muted small" style="margin-top:10px; line-height:1.35;">
+              Для “настоящей” синхронизации между всеми устройствами нужен облачный backend (Firebase/Supabase).
+              Если скажешь — сделаю версию с облаком и логином.
+            </div>
+          </div>
+        </div>
+
+        <div style="height:18px"></div>
+        <div class="muted small">
+          Подсказка: если нужно бронирование “через ночь” (например 23:00 → 02:00), скажи — включу режим “следующий день”.
+          Сейчас сделано строго в пределах одной даты — проще и без багов.
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+(() => {
+  // ====== CONFIG ======
+  const PCs = [
+    // Left Side
+    "Bishop","Godzilla","Elf","Kadita","Orc",
+    // Right Side
+    "Lancelot","Fantomas","Soultaker","Pudge","Kratos"
+  ];
+
+  const STORAGE_KEY = "sg_bookings_v1";
+
+  // ====== HELPERS ======
+  const $ = (id) => document.getElementById(id);
+
+  function pad2(n){ return String(n).padStart(2,"0"); }
+
+  function toLocalISODate(d){
+    const yyyy = d.getFullYear();
+    const mm = pad2(d.getMonth()+1);
+    const dd = pad2(d.getDate());
+    return `${yyyy}-${mm}-${dd}`;
+  }
+
+  function minutesFromTimeStr(t){
+    // "HH:MM"
+    const [h,m] = t.split(":").map(Number);
+    return h*60 + m;
+  }
+
+  function timeStrFromMinutes(min){
+    min = Math.max(0, Math.min(24*60, min));
+    const h = Math.floor(min/60);
+    const m = min % 60;
+    return `${pad2(h)}:${pad2(m)}`;
+  }
+
+  function clamp(n, a, b){ return Math.max(a, Math.min(b, n)); }
+
+  function money(n){
+    const x = Number(n || 0);
+    return `${x.toFixed(2)} GEL`;
+  }
+
+  function durationMinutes(startMin, endMin){
+    return endMin - startMin;
+  }
+
+  function calcPriceGel(pricePerHour, mins){
+    const hours = mins / 60;
+    const total = Number(pricePerHour) * hours;
+    // округлим до 0.5 GEL удобно
+    return Math.round(total * 2) / 2;
+  }
+
+  function nowPills(){
+    const d = new Date();
+    $("todayPill").textContent = d.toLocaleDateString(undefined, {year:"numeric", month:"2-digit", day:"2-digit"});
+  }
+
+  function setMsg(text, kind="info"){
+    const el = $("msg");
+    el.textContent = text;
+    el.style.borderColor =
+      kind==="good" ? "rgba(52,211,153,.45)" :
+      kind==="bad" ? "rgba(251,113,133,.55)" :
+      "rgba(110,231,255,.35)";
+    el.style.background =
+      kind==="good" ? "rgba(52,211,153,.08)" :
+      kind==="bad" ? "rgba(251,113,133,.08)" :
+      "rgba(110,231,255,.06)";
+  }
+
+  // ====== DATA ======
+  function loadBookings(){
+    try{
+      const raw = localStorage.getItem(STORAGE_KEY);
+      if(!raw) return [];
+      const arr = JSON.parse(raw);
+      if(!Array.isArray(arr)) return [];
+      return arr;
+    }catch(e){
+      return [];
+    }
+  }
+
+  function saveBookings(arr){
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(arr));
+  }
+
+  // booking shape:
+  // { id, nick, pc, date, start, end, note, pricePerHour, totalGel, createdAt }
+  let bookings = loadBookings();
+
+  // ====== UI INIT ======
+  function initSelect(){
+    const sel = $("pcSelect");
+    sel.innerHTML = PCs.map(p => `<option value="${p}">${p}</option>`).join("");
+  }
+
+  function initDefaults(){
+    nowPills();
+
+    // defaults
+    const today = new Date();
+    $("date").value = toLocalISODate(today);
+
+    const startMin = clamp(today.getHours()*60 + (Math.ceil(today.getMinutes()/5)*5), 0, 23*60+55);
+    $("start").value = timeStrFromMinutes(startMin);
+    $("end").value = timeStrFromMinutes(clamp(startMin + 60, 0, 24*60));
+
+    // min duration just a helper; we also auto-fix end time if too short
+    $("minDuration").value = "30";
+
+    $("pricePill").textContent = `${Number($("price").value || 5)} GEL/час`;
+  }
+
+  function renderPCGrid(){
+    const pcGrid = $("pcGrid");
+    pcGrid.innerHTML = "";
+
+    const byPc = new Map();
+    for(const pc of PCs) byPc.set(pc, []);
+
+    for(const b of bookings){
+      if(byPc.has(b.pc)) byPc.get(b.pc).push(b);
+    }
+
+    const today = $("date").value;
+    const now = new Date();
+    const nowMin = now.getHours()*60 + now.getMinutes();
+
+    PCs.forEach(pc => {
+      const list = byPc.get(pc) || [];
+      const todayList = list.filter(x => x.date === today).sort((a,b)=>a.start.localeCompare(b.start));
+
+      let statusDot = "good";
+      let statusText = "Свободно";
+      if(todayList.length){
+        statusDot = "warn";
+        statusText = `${todayList.length} бронь(и)`;
+        // if right now is inside any booking
+        for(const b of todayList){
+          const s = minutesFromTimeStr(b.start);
+          const e = minutesFromTimeStr(b.end);
+          if(nowMin >= s && nowMin < e && b.date === toLocalISODate(now)){
+            statusDot = "bad";
+            statusText = "Сейчас занято";
+            break;
+          }
+        }
+      }
+
+      const div = document.createElement("div");
+      div.className = "pc";
+      div.setAttribute("data-pc", pc);
+      div.innerHTML = `
+        <div class="name">${pc}</div>
+        <div class="meta">
+          <span class="tag"><span class="dot ${statusDot}"></span>${statusText}</span>
+          <span class="muted">${todayList.length ? `Ближайшая: ${todayList[0].start}` : "—"}</span>
+        </div>
+      `;
+      div.addEventListener("click", () => {
+        selectPC(pc);
+      });
+      pcGrid.appendChild(div);
+    });
+
+    highlightActivePC($("pcSelect").value);
+  }
+
+  function highlightActivePC(pc){
+    document.querySelectorAll(".pc").forEach(el => {
+      el.classList.toggle("active", el.getAttribute("data-pc") === pc);
+    });
+  }
+
+  function renderTable(){
+    const tbody = $("bookTable");
+    tbody.innerHTML = "";
+
+    const q = ($("search").value || "").trim().toLowerCase();
+    const filtered = bookings
+      .filter(b => !q || (b.nick||"").toLowerCase().includes(q) || (b.pc||"").toLowerCase().includes(q))
+      .sort((a,b) => (a.date+a.start).localeCompare(b.date+b.start));
+
+    for(const b of filtered){
+      const tr = document.createElement("tr");
+      tr.innerHTML = `
+        <td>${b.date}</td>
+        <td>${b.start} → ${b.end}</td>
+        <td><b>${b.pc}</b></td>
+        <td>
+          <div><b>${escapeHtml(b.nick)}</b></div>
+          <div class="muted small">${escapeHtml(b.note || "")}</div>
+        </td>
+        <td>${money(b.totalGel)}</td>
+        <td>
+          <button class="mini" data-act="edit" data-id="${b.id}">Изм.</button>
+          <button class="mini danger" data-act="del" data-id="${b.id}">Удал.</button>
+        </td>
+      `;
+      tbody.appendChild(tr);
+    }
+
+    $("countPill").textContent = String(bookings.length);
+
+    tbody.querySelectorAll("button[data-act]").forEach(btn => {
+      btn.addEventListener("click", () => {
+        const id = btn.getAttribute("data-id");
+        const act = btn.getAttribute("data-act");
+        if(act === "del") delBooking(id);
+        if(act === "edit") editBooking(id);
+      });
+    });
+  }
+
+  function escapeHtml(s){
+    return String(s ?? "")
+      .replaceAll("&","&amp;")
+      .replaceAll("<","&lt;")
+      .replaceAll(">","&gt;")
+      .replaceAll('"',"&quot;")
+      .replaceAll("'","&#039;");
+  }
+
+  function selectPC(pc){
+    $("pcSelect").value = pc;
+    highlightActivePC(pc);
+    setMsg(`Выбран ПК: ${pc}`, "info");
+  }
+
+  // ====== VALIDATION ======
+  function normalizeAndAutoFixTimes(){
+    const minDur = Number($("minDuration").value || 30);
+
+    const startStr = $("start").value;
+    const endStr = $("end").value;
+    if(!startStr || !endStr) return;
+
+    let s = minutesFromTimeStr(startStr);
+    let e = minutesFromTimeStr(endStr);
+
+    // auto fix if end <= start
+    if(e <= s) e = clamp(s + minDur, 0, 24*60);
+
+    // ensure min duration
+    if(e - s < minDur) e = clamp(s + minDur, 0, 24*60);
+
+    $("end").value = timeStrFromMinutes(e);
+  }
+
+  function overlaps(pc, date, sMin, eMin, ignoreId=null){
+    // overlap if same pc+date and intervals intersect
+    for(const b of bookings){
+      if(ignoreId && b.id === ignoreId) continue;
+      if(b.pc !== pc || b.date !== date) continue;
+      const bs = minutesFromTimeStr(b.start);
+      const be = minutesFromTimeStr(b.end);
+      const intersect = Math.max(sMin, bs) < Math.min(eMin, be);
+      if(intersect) return b;
+    }
+    return null;
+  }
+
+  // ====== CRUD ======
+  function createBooking(){
+    normalizeAndAutoFixTimes();
+
+    const nick = ($("nick").value || "").trim();
+    const pc = $("pcSelect").value;
+    const date = $("date").value;
+    const start = $("start").value;
+    const end = $("end").value;
+    const note = ($("note").value || "").trim();
+    const pricePerHour = Number($("price").value || 5);
+
+    if(!nick){ setMsg("Введи ник.", "bad"); return; }
+    if(!date){ setMsg("Выбери дату.", "bad"); return; }
+    if(!start || !end){ setMsg("Выбери время начала и конца.", "bad"); return; }
+
+    const sMin = minutesFromTimeStr(start);
+    const eMin = minutesFromTimeStr(end);
+
+    if(eMin <= sMin){ setMsg("Конец должен быть позже начала.", "bad"); return; }
+
+    const mins = durationMinutes(sMin, eMin);
+    if(mins < 30){ setMsg("Минимум 30 минут.", "bad"); return; }
+    if(mins > 8*60){ setMsg("Максимум 8 часов (можно увеличить позже).", "bad"); return; }
+
+    const conflict = overlaps(pc, date, sMin, eMin);
+    if(conflict){
+      setMsg(`Пересечение! Уже есть бронь: ${conflict.start}→${conflict.end} (${conflict.nick}).`, "bad");
+      return;
+    }
+
+    const totalGel = calcPriceGel(pricePerHour, mins);
+
+    const b = {
+      id: crypto.randomUUID ? crypto.randomUUID() : String(Date.now()) + "_" + Math.random().toString(16).slice(2),
+      nick, pc, date, start, end, note,
+      pricePerHour,
+      totalGel,
+      createdAt: new Date().toISOString()
+    };
+
+    bookings.push(b);
+    saveBookings(bookings);
+
+    setMsg(`Готово: ${nick} • ${pc} • ${date} ${start}→${end} • ${money(totalGel)}`, "good");
+
+    renderAll();
+  }
+
+  function delBooking(id){
+    const b = bookings.find(x=>x.id===id);
+    if(!b) return;
+    if(!confirm(`Удалить бронь?\n${b.nick} • ${b.pc}\n${b.date} ${b.start}→${b.end}`)) return;
+
+    bookings = bookings.filter(x=>x.id!==id);
+    saveBookings(bookings);
+    setMsg("Бронь удалена.", "good");
+    renderAll();
+  }
+
+  function editBooking(id){
+    const b = bookings.find(x=>x.id===id);
+    if(!b) return;
+
+    // Load into form
+    $("nick").value = b.nick;
+    $("pcSelect").value = b.pc;
+    $("date").value = b.date;
+    $("start").value = b.start;
+    $("end").value = b.end;
+    $("note").value = b.note || "";
+    $("price").value = b.pricePerHour ?? 5;
+
+    highlightActivePC(b.pc);
+
+    // Switch create button into "save edit"
+    const createBtn = $("createBtn");
+    createBtn.textContent = "Сохранить изменения";
+    createBtn.classList.add("primary");
+
+    createBtn.onclick = () => {
+      normalizeAndAutoFixTimes();
+
+      const nick = ($("nick").value || "").trim();
+      const pc = $("pcSelect").value;
+      const date = $("date").value;
+      const start = $("start").value;
+      const end = $("end").value;
+      const note = ($("note").value || "").trim();
+      const pricePerHour = Number($("price").value || 5);
+
+      if(!nick){ setMsg("Введи ник.", "bad"); return; }
+      if(!date){ setMsg("Выбери дату.", "bad"); return; }
+      if(!start || !end){ setMsg("Выбери время.", "bad"); return; }
+
+      const sMin = minutesFromTimeStr(start);
+      const eMin = minutesFromTimeStr(end);
+
+      if(eMin <= sMin){ setMsg("Конец должен быть позже начала.", "bad"); return; }
+
+      const mins = durationMinutes(sMin, eMin);
+      if(mins < 30){ setMsg("Минимум 30 минут.", "bad"); return; }
+      if(mins > 8*60){ setMsg("Максимум 8 часов.", "bad"); return; }
+
+      const conflict = overlaps(pc, date, sMin, eMin, id);
+      if(conflict){
+        setMsg(`Пересечение! Уже есть бронь: ${conflict.start}→${conflict.end} (${conflict.nick}).`, "bad");
+        return;
+      }
+
+      b.nick = nick; b.pc = pc; b.date = date; b.start = start; b.end = end; b.note = note;
+      b.pricePerHour = pricePerHour;
+      b.totalGel = calcPriceGel(pricePerHour, mins);
+
+      saveBookings(bookings);
+      setMsg("Изменения сохранены.", "good");
+
+      // restore create mode
+      restoreCreateMode();
+      renderAll();
+    };
+
+    setMsg("Режим редактирования: измени поля и нажми “Сохранить изменения”.", "info");
+  }
+
+  function restoreCreateMode(){
+    const createBtn = $("createBtn");
+    createBtn.textContent = "Создать бронь";
+    createBtn.onclick = createBooking;
+  }
+
+  function wipeAll(){
+    if(!confirm("Точно стереть ВСЕ брони на этом устройстве?")) return;
+    bookings = [];
+    saveBookings(bookings);
+    setMsg("Все брони стерты.", "good");
+    renderAll();
+  }
+
+  // ====== "MY" FILTER ======
+  function showMy(){
+    const nick = ($("nick").value || "").trim();
+    if(!nick){ setMsg("Введи ник, чтобы показать “Мои”.", "bad"); return; }
+    $("search").value = nick;
+    renderTable();
+    setMsg(`Показаны брони по нику: ${nick}`, "info");
+  }
+
+  // ====== EXPORT/IMPORT ======
+  function exportJson(){
+    const data = {
+      v: 1,
+      exportedAt: new Date().toISOString(),
+      bookings
+    };
+    $("syncBox").value = JSON.stringify(data, null, 2);
+    setMsg("Export готов. Нажми Copy и перенеси на другое устройство.", "good");
+  }
+
+  async function copyJson(){
+    const txt = $("syncBox").value.trim();
+    if(!txt){ setMsg("Сначала нажми Export.", "bad"); return; }
+    try{
+      await navigator.clipboard.writeText(txt);
+      setMsg("Скопировано в буфер.", "good");
+    }catch(e){
+      setMsg("Не смог скопировать. Скопируй вручную (Ctrl+C).", "bad");
+    }
+  }
+
+  function importJson(){
+    const txt = $("syncBox").value.trim();
+    if(!txt){ setMsg("Вставь JSON и нажми Import.", "bad"); return; }
+
+    try{
+      const parsed = JSON.parse(txt);
+      const arr = parsed?.bookings;
+      if(!Array.isArray(arr)) throw new Error("bad shape");
+
+      // basic sanitize + remove invalid
+      const cleaned = [];
+      for(const b of arr){
+        if(!b || typeof b !== "object") continue;
+        if(!PCs.includes(b.pc)) continue;
+        if(!b.date || !b.start || !b.end || !b.nick) continue;
+        cleaned.push({
+          id: b.id || (crypto.randomUUID ? crypto.randomUUID() : String(Date.now()) + "_" + Math.random().toString(16).slice(2)),
+          nick: String(b.nick).slice(0, 40),
+          pc: b.pc,
+          date: b.date,
+          start: b.start,
+          end: b.end,
+          note: (b.note || "").toString().slice(0, 80),
+          pricePerHour: Number(b.pricePerHour || 5),
+          totalGel: Number(b.totalGel || 0),
+          createdAt: b.createdAt || new Date().toISOString()
+        });
+      }
+
+      // merge: keep newest by id
+      const map = new Map(bookings.map(x => [x.id, x]));
+      for(const b of cleaned) map.set(b.id, b);
+      bookings = Array.from(map.values());
+
+      saveBookings(bookings);
+      setMsg(`Import готов: теперь броней ${bookings.length}.`, "good");
+      renderAll();
+    }catch(e){
+      setMsg("Ошибка импорта: JSON неправильный или повреждён.", "bad");
+    }
+  }
+
+  // ====== RENDER ======
+  function renderAll(){
+    $("pricePill").textContent = `${Number($("price").value || 5)} GEL/час`;
+    renderPCGrid();
+    renderTable();
+  }
+
+  // ====== EVENTS ======
+  function wireEvents(){
+    $("createBtn").onclick = createBooking;
+    $("wipeBtn").onclick = wipeAll;
+    $("myBtn").onclick = showMy;
+
+    $("exportBtn").onclick = exportJson;
+    $("copyBtn").onclick = copyJson;
+    $("importBtn").onclick = importJson;
+
+    $("clearFilterBtn").onclick = () => {
+      $("search").value = "";
+      renderTable();
+      setMsg("Фильтр сброшен.", "info");
+    };
+
+    $("search").addEventListener("input", () => renderTable());
+
+    $("pcSelect").addEventListener("change", () => {
+      highlightActivePC($("pcSelect").value);
+    });
+
+    $("date").addEventListener("change", () => {
+      renderPCGrid();
+    });
+
+    $("start").addEventListener("change", normalizeAndAutoFixTimes);
+    $("end").addEventListener("change", normalizeAndAutoFixTimes);
+    $("minDuration").addEventListener("change", normalizeAndAutoFixTimes);
+
+    $("price").addEventListener("input", () => {
+      $("pricePill").textContent = `${Number($("price").value || 5)} GEL/час`;
+    });
+
+    // reset edit mode when user presses Escape
+    document.addEventListener("keydown", (e) => {
+      if(e.key === "Escape"){
+        restoreCreateMode();
+        setMsg("Режим создания.", "info");
+      }
+    });
+  }
+
+  // ====== BOOT ======
+  function boot(){
+    initSelect();
+    initDefaults();
+    wireEvents();
+    restoreCreateMode();
+    renderAll();
+
+    // initial active pc
+    selectPC($("pcSelect").value);
+
+    // show if we already have bookings
+    if(bookings.length){
+      setMsg(`Загружено броней: ${bookings.length}.`, "info");
+    }
+  }
+
+  boot();
+})();
+</script>
+</body>
+</html>
