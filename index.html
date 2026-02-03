@@ -5,6 +5,8 @@
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Sakompiutere Gaming — Booking</title>
   <meta name="theme-color" content="#0b1020" />
+  <!-- QR generator (tiny CDN). If it fails to load, site still works (QR just won’t show). -->
+  <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.3/build/qrcode.min.js"></script>
   <style>
     :root{
       --bg:#070a12;
@@ -56,7 +58,7 @@
       background:rgba(255,255,255,.03);
       color:var(--muted); font-size:12px;
     }
-    .pill strong{color:var(--text); font-weight:800}
+    .pill strong{color:var(--text); font-weight:900}
     .lang{
       display:flex; gap:6px;
       padding:6px; border-radius:999px;
@@ -69,7 +71,7 @@
       background:transparent;
       color:var(--muted);
       cursor:pointer;
-      font-weight:800;
+      font-weight:900;
       font-size:12px;
     }
     .lang button.active{
@@ -77,7 +79,6 @@
       background: rgba(110,231,255,.10);
       color: var(--text);
     }
-
     .grid{
       display:grid;
       grid-template-columns: 1.15fr .85fr;
@@ -88,7 +89,6 @@
       .grid{grid-template-columns:1fr;}
       header{position:static;}
     }
-
     .card{
       border:1px solid var(--line);
       border-radius:var(--r);
@@ -105,9 +105,7 @@
     .hint{color:var(--muted); font-size:12px}
     .bd{padding:14px 16px}
 
-    .stepper{
-      display:flex; gap:10px; flex-wrap:wrap; align-items:center;
-    }
+    .stepper{display:flex; gap:10px; flex-wrap:wrap; align-items:center;}
     .step{
       display:flex; gap:10px; align-items:center;
       padding:8px 10px;
@@ -124,7 +122,7 @@
       border:1px solid var(--line);
       background:rgba(255,255,255,.03);
       color:var(--muted);
-      font-weight:900;
+      font-weight:1000;
     }
     .step.active{
       border-color: rgba(110,231,255,.55);
@@ -141,6 +139,7 @@
       font-size:12px;
       line-height:1.35;
     }
+
     .btns{display:flex; gap:10px; flex-wrap:wrap; margin-top:10px}
     button{
       border:1px solid var(--line);
@@ -149,7 +148,7 @@
       padding:10px 12px;
       border-radius:14px;
       cursor:pointer;
-      font-weight:900;
+      font-weight:1000;
       letter-spacing:.2px;
     }
     button:hover{border-color: rgba(110,231,255,.5)}
@@ -159,10 +158,10 @@
     }
     .ghost{background:transparent}
     .danger{border-color: rgba(251,113,133,.6); background: rgba(251,113,133,.10)}
-    .mini{padding:6px 10px; border-radius:12px; font-size:12px; font-weight:900}
+    .mini{padding:6px 10px; border-radius:12px; font-size:12px; font-weight:1000}
 
     label{display:block; font-size:12px; color:var(--muted); margin:0 0 6px}
-    input, select{
+    input{
       width:100%;
       padding:11px 12px;
       border-radius:14px;
@@ -171,7 +170,7 @@
       color:var(--text);
       outline:none;
     }
-    input:focus, select:focus{border-color: rgba(110,231,255,.6); box-shadow:0 0 0 3px rgba(110,231,255,.12)}
+    input:focus{border-color: rgba(110,231,255,.6); box-shadow:0 0 0 3px rgba(110,231,255,.12)}
     .row{display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:10px;}
     @media (max-width:520px){ .row{grid-template-columns:1fr;} }
 
@@ -192,10 +191,10 @@
       transition: transform .08s ease, border-color .12s ease, box-shadow .12s ease;
       user-select:none;
       position:relative;
-      min-height:76px;
+      min-height:78px;
     }
     .pc:hover{transform: translateY(-1px); border-color: rgba(110,231,255,.4)}
-    .pc .name{font-weight:1000; letter-spacing:.3px}
+    .pc .name{font-weight:1100; letter-spacing:.3px}
     .pc .meta{margin-top:6px; color:var(--muted); font-size:12px; display:flex; gap:10px; align-items:center; flex-wrap:wrap}
     .tag{
       display:inline-flex; gap:8px; align-items:center;
@@ -219,7 +218,7 @@
       background: rgba(0,0,0,.35);
       display:grid; place-items:center;
       color: transparent;
-      font-weight:1000;
+      font-weight:1100;
       font-size:12px;
     }
     .pc.selected .check{
@@ -228,18 +227,47 @@
       color: var(--text);
     }
 
+    /* Availability highlight */
+    .pc.freeForRange{border-color: rgba(52,211,153,.55);}
+    .pc.busyForRange{border-color: rgba(251,113,133,.65);}
+    .pc.busyForRange .tag{border-color: rgba(251,113,133,.35); color: rgba(251,113,133,.95);}
+    .pc.freeForRange .tag{border-color: rgba(52,211,153,.35); color: rgba(52,211,153,.95);}
+
     .chipbar{display:flex; gap:8px; flex-wrap:wrap; margin-top:10px}
     .chip{
       padding:9px 10px; border-radius:999px;
       border:1px solid var(--line);
       background:rgba(0,0,0,.22);
       cursor:pointer;
-      font-weight:1000;
+      font-weight:1100;
       font-size:12px;
     }
     .chip.active{
       border-color: rgba(110,231,255,.6);
       background: rgba(110,231,255,.10);
+    }
+    .chipsSelected{
+      display:flex; gap:8px; flex-wrap:wrap; margin-top:10px;
+      padding:10px; border-radius:16px; border:1px solid var(--line);
+      background:rgba(0,0,0,.18);
+    }
+    .pcchip{
+      display:inline-flex; align-items:center; gap:8px;
+      padding:7px 10px; border-radius:999px;
+      border:1px solid rgba(110,231,255,.30);
+      background: rgba(110,231,255,.08);
+      font-size:12px;
+      font-weight:1000;
+      cursor:pointer;
+      user-select:none;
+    }
+    .pcchip .x{
+      width:18px; height:18px; border-radius:999px;
+      border:1px solid rgba(255,255,255,.12);
+      display:grid; place-items:center;
+      color: var(--muted);
+      background: rgba(0,0,0,.20);
+      font-weight:1100;
     }
 
     .table{
@@ -257,9 +285,37 @@
       vertical-align:top;
       font-size:12px;
     }
-    .table th{color:var(--muted); font-weight:900; text-align:left; background:rgba(255,255,255,.03)}
+    .table th{color:var(--muted); font-weight:1100; text-align:left; background:rgba(255,255,255,.03)}
     .table tr:last-child td{border-bottom:none}
 
+    .cards{
+      display:grid;
+      grid-template-columns:1fr;
+      gap:10px;
+      margin-top:10px;
+    }
+    .bcard{
+      border:1px solid var(--line);
+      border-radius:16px;
+      background: rgba(0,0,0,.18);
+      padding:12px;
+      display:flex;
+      justify-content:space-between;
+      gap:10px;
+      align-items:flex-start;
+    }
+    .bcard .left{display:flex; flex-direction:column; gap:4px;}
+    .bcard .top{display:flex; gap:8px; flex-wrap:wrap; align-items:center;}
+    .badge{
+      padding:6px 10px; border-radius:999px;
+      border:1px solid var(--line);
+      background: rgba(0,0,0,.20);
+      font-size:12px;
+      font-weight:1100;
+    }
+    .badge.ok{border-color: rgba(52,211,153,.35); color: rgba(52,211,153,.95)}
+    .badge.warn{border-color: rgba(251,191,36,.35); color: rgba(251,191,36,.95)}
+    .bcard .mut{color:var(--muted); font-size:12px}
     .footerbar{
       display:flex; justify-content:space-between; gap:10px; flex-wrap:wrap;
       margin-top:12px;
@@ -276,6 +332,15 @@
       font-size:12px;
     }
     .hide{display:none !important;}
+
+    /* Print support */
+    @media print{
+      header, #rightSide, #openAdminBtn, #exitAdminBtn, #introBox, #step1Box, #step2Box, #step3Box, #myBox { display:none !important; }
+      body{ background:#fff !important; color:#000 !important; }
+      .card{ box-shadow:none !important; background:#fff !important; border:1px solid #ddd !important; }
+      .wrap{ max-width:100% !important; }
+      .bcard{ border:1px solid #ddd !important; }
+    }
   </style>
 </head>
 <body>
@@ -321,7 +386,21 @@
           <div class="btns">
             <button class="primary" id="startBtn">▶ <span id="t_start">Начать бронирование</span></button>
             <button class="ghost" id="viewMyBtn">👤 <span id="t_my">Мои брони</span></button>
+            <button class="ghost" id="todayBtn">📅 <span id="t_todayBtn">Сегодня</span></button>
           </div>
+        </div>
+
+        <!-- TODAY VIEW -->
+        <div id="todayBox" class="hide">
+          <div class="notice">
+            <b id="t_todayTitle">📅 Сегодня</b><br/>
+            <span id="t_todayDesc">Здесь показаны брони на сегодня (удобно администратору и пользователю).</span>
+          </div>
+          <div class="btns">
+            <button class="ghost" id="todayBackBtn">⬅ <span id="t_back">Назад</span></button>
+            <button class="ghost" id="printTodayBtn">🖨 <span id="t_print">Печать</span></button>
+          </div>
+          <div id="todayCards" class="cards"></div>
         </div>
 
         <!-- STEP 1 -->
@@ -338,7 +417,13 @@
           </div>
 
           <div class="hint" id="t_pickpc">Выбери 1 или несколько ПК (кликай карточки):</div>
-          <div id="pcGrid" class="pcgrid" aria-label="Список ПК"></div>
+
+          <div class="chipsSelected">
+            <div style="width:100%; color:var(--muted); font-size:12px; margin-bottom:6px;">
+              <span id="t_selected">Выбрано ПК</span>: <b id="selectedCount">0</b>
+            </div>
+            <div id="selectedChips" style="display:flex; gap:8px; flex-wrap:wrap;"></div>
+          </div>
 
           <div class="btns">
             <button class="primary" id="toStep2Btn">➡ <span id="t_next">Далее</span></button>
@@ -346,9 +431,11 @@
           </div>
 
           <div class="notice" style="margin-top:10px;">
-            <span id="t_selected">Выбрано ПК</span>: <b id="selectedCount">0</b>
-            <span id="t_selectedList">— список</span>: <b id="selectedList">—</b>
+            <b id="t_tipAvail">Подсказка:</b>
+            <span id="t_tipAvail2">На следующем шаге ПК подсветятся “свободно/занято” именно под выбранное время.</span>
           </div>
+
+          <div id="pcGrid" class="pcgrid" aria-label="Список ПК"></div>
         </div>
 
         <!-- STEP 2 -->
@@ -373,6 +460,11 @@
             <div class="chip" data-min="240">4h</div>
           </div>
 
+          <div class="btns" style="margin-top:10px">
+            <button class="ghost mini" id="toggleOnlyFreeBtn">✅ <span id="t_onlyFree">Показывать только свободные</span></button>
+            <span class="pill"><span id="t_crossMidnight">Через ночь</span>: <strong id="crossMidnightPill">—</strong></span>
+          </div>
+
           <div class="row" style="margin-top:10px;">
             <div>
               <label id="t_noteLabel">Комментарий (опционально)</label>
@@ -383,6 +475,8 @@
               <input id="price" type="number" min="0" step="0.5" value="5" />
             </div>
           </div>
+
+          <div class="notice" id="availabilityHintBox"></div>
 
           <div class="btns">
             <button class="ghost" id="backTo1Btn">⬅ <span id="t_back">Назад</span></button>
@@ -399,12 +493,26 @@
             <button class="primary" id="createBtn">✅ <span id="t_bookNow">Забронировать</span></button>
           </div>
 
-          <div class="notice" id="msg" style="margin-top:10px;" aria-live="polite">
-            OK
+          <div class="notice" id="msg" style="margin-top:10px;" aria-live="polite">OK</div>
+
+          <div class="notice" id="nextStepsBox" style="margin-top:10px;">
+            <b id="t_nextStepsTitle">Что дальше?</b><br/>
+            <span id="t_nextSteps1">✅ Подойди к администратору и назови свой ник.</span><br/>
+            <span id="t_nextSteps2">⏰ Рекомендуем прийти за 5 минут до начала.</span><br/>
+            <span id="t_nextSteps3">💳 Оплата — на месте (онлайн добавим позже).</span>
           </div>
 
           <div class="btns" style="margin-top:10px;">
             <button class="ghost" id="showMyInlineBtn">👤 <span id="t_my2">Мои брони</span></button>
+            <button class="ghost" id="copyShareBtn">🔗 <span id="t_copyShare">Скопировать бронь</span></button>
+          </div>
+
+          <div class="notice" style="margin-top:10px;">
+            <b id="t_qrTitle">QR брони</b><br/>
+            <div style="display:flex; gap:12px; align-items:center; flex-wrap:wrap; margin-top:10px;">
+              <canvas id="qrCanvas" width="160" height="160" style="background:#fff;border-radius:12px;border:1px solid rgba(255,255,255,.08)"></canvas>
+              <div class="hint" id="qrHint">QR обновится после создания брони. Если QR не появился — всё равно ок, сайт работает.</div>
+            </div>
           </div>
         </div>
 
@@ -420,7 +528,7 @@
                 <label id="t_myNick">Ник</label>
                 <input id="myNickInput" type="text" placeholder="введи ник" />
               </div>
-              <div style="display:flex; align-items:end; gap:10px;">
+              <div style="display:flex; align-items:end; gap:10px; flex-wrap:wrap;">
                 <button class="primary" id="mySearchBtn">🔎 <span id="t_show">Показать</span></button>
                 <button class="ghost" id="myCloseBtn">✖ <span id="t_close">Закрыть</span></button>
               </div>
@@ -429,15 +537,20 @@
             <table class="table" role="table" aria-label="Мои брони">
               <thead>
                 <tr>
-                  <th style="width:140px" id="t_colDate">Дата</th>
-                  <th style="width:140px" id="t_colTime">Время</th>
+                  <th style="width:160px" id="t_colDate">Дата</th>
+                  <th style="width:160px" id="t_colTime">Время</th>
                   <th style="width:120px" id="t_colPc">ПК</th>
                   <th id="t_colNote">Комментарий</th>
                   <th style="width:110px" id="t_colCost">Стоимость</th>
+                  <th style="width:140px" id="t_colCancel">Отмена</th>
                 </tr>
               </thead>
               <tbody id="myTable"></tbody>
             </table>
+
+            <div class="hint" style="margin-top:10px;" id="t_myCancelHint">
+              Отменить можно только свои брони (по нику). Админ может отменять любые.
+            </div>
           </div>
         </div>
 
@@ -453,8 +566,9 @@
                 <label id="t_search">Поиск (ник/ПК)</label>
                 <input id="search" type="text" placeholder="поиск" />
               </div>
-              <div style="display:flex; align-items:end; gap:10px;">
+              <div style="display:flex; align-items:end; gap:10px; flex-wrap:wrap;">
                 <button class="ghost" id="clearFilterBtn">Сброс</button>
+                <button class="ghost" id="printTodayAdminBtn">🖨 <span id="t_print2">Печать “Сегодня”</span></button>
                 <button class="danger" id="wipeBtn">Стереть всё</button>
               </div>
             </div>
@@ -462,8 +576,8 @@
             <table class="table" role="table" aria-label="Все брони (admin)">
               <thead>
                 <tr>
-                  <th style="width:140px" id="t_colDate2">Дата</th>
-                  <th style="width:140px" id="t_colTime2">Время</th>
+                  <th style="width:160px" id="t_colDate2">Дата</th>
+                  <th style="width:160px" id="t_colTime2">Время</th>
                   <th style="width:120px" id="t_colPc2">ПК</th>
                   <th id="t_colNick2">Ник</th>
                   <th style="width:110px" id="t_colCost2">Стоимость</th>
@@ -476,20 +590,18 @@
         </div>
 
         <div class="footerbar">
-          <div>
-            <span class="kbd">Esc</span> — <span id="t_esc">вернуться к созданию</span>
-          </div>
+          <div><span class="kbd">Esc</span> — <span id="t_esc">вернуться на старт</span></div>
           <div style="display:flex; gap:10px; flex-wrap:wrap;">
             <button class="mini ghost" id="openAdminBtn">🔐 Admin</button>
-            <button class="mini ghost" id="exitAdminBtn" class="hide">🚪 Exit</button>
+            <button class="mini ghost" id="exitAdminBtn">🚪 Exit</button>
           </div>
         </div>
 
       </div>
     </div>
 
-    <!-- RIGHT: small helper + status -->
-    <div class="card">
+    <!-- RIGHT -->
+    <div class="card" id="rightSide">
       <div class="hd">
         <h2 id="t_sideTitle">Подсказка</h2>
         <div class="hint" id="t_sideHint">чтобы игрок понял сразу</div>
@@ -498,11 +610,14 @@
         <div class="notice" id="helpBox"></div>
 
         <div style="height:12px"></div>
+        <div class="notice" id="rulesBox"></div>
+
+        <div style="height:12px"></div>
         <div class="notice">
-          <b id="t_rules">Правила</b><br/>
-          • <span id="t_rule1">Нельзя пересекать брони на одном ПК</span><br/>
-          • <span id="t_rule2">Минимум 30 минут, максимум 8 часов</span><br/>
-          • <span id="t_rule3">Сейчас данные хранятся локально (потом добавим облако)</span>
+          <b id="t_settingsTitle">Настройки (в коде)</b><br/>
+          <span class="hint" id="t_settingsDesc">
+            Если клуб 24/7 — отключи рабочие часы. Всё настраивается в начале JS.
+          </span>
         </div>
       </div>
     </div>
@@ -511,14 +626,32 @@
 
 <script>
 (() => {
-  // ====== CONFIG ======
+  // =========================
+  // CONFIG (тут меняешь правила под клуб)
+  // =========================
   const PCs = ["Bishop","Godzilla","Elf","Kadita","Orc","Lancelot","Fantomas","Soultaker","Pudge","Kratos"];
-  const STORAGE_KEY = "sg_bookings_v2";
+
+  const STORAGE_KEY = "sg_bookings_v3";
   const LANG_KEY = "sg_lang";
   const ADMIN_KEY = "sg_admin";
-  const ADMIN_PASSWORD = "1234"; // <-- поменяй на свой
+  const NICK_KEY = "sg_nick";
+  const ONLY_FREE_KEY = "sg_only_free";
 
-  // ====== i18n ======
+  const ADMIN_PASSWORD = "1234"; // ← поменяй
+
+  const MIN_BOOK_MINUTES = 30;
+  const MAX_BOOK_HOURS = 8;
+  const MAX_DAYS_AHEAD = 14;   // максимум брони вперёд
+  const ARRIVE_MIN_BEFORE = 5; // текст “приди за 5 минут”
+
+  // Рабочие часы (если клуб не 24/7)
+  const WORKING_HOURS_ENABLED = true; // ← поставь false если 24/7
+  const WORK_START = "10:00";         // открытие
+  const WORK_END = "03:00";           // закрытие (может быть на следующий день)
+
+  // =========================
+  // i18n
+  // =========================
   const i18n = {
     ru: {
       title:"Sakompiutere Gaming — Booking",
@@ -532,16 +665,23 @@
       intro3:"3) Подтверди и готово",
       start:"Начать бронирование",
       my:"Мои брони",
+      todayBtn:"Сегодня",
+      todayTitle:"📅 Сегодня",
+      todayDesc:"Здесь показаны брони на сегодня (удобно администратору и пользователю).",
+      print:"Печать",
       nickLabel:"Твой ник",
       dateLabel:"Дата",
       pickpc:"Выбери 1 или несколько ПК (кликай карточки):",
       next:"Далее",
       clear:"Очистить выбор",
       selected:"Выбрано ПК",
-      selectedList:"— список",
+      tipAvail:"Подсказка:",
+      tipAvail2:"На следующем шаге ПК подсветятся “свободно/занято” именно под выбранное время.",
       startLabel:"Начало",
       endLabel:"Конец",
       durationHint:"Быстрая длительность:",
+      onlyFree:"Показывать только свободные",
+      crossMidnight:"Через ночь",
       noteLabel:"Комментарий (опционально)",
       priceLabel:"Цена (GEL/час)",
       back:"Назад",
@@ -556,6 +696,8 @@
       colPc:"ПК",
       colNote:"Комментарий",
       colCost:"Стоимость",
+      colCancel:"Отмена",
+      myCancelHint:"Отменить можно только свои брони (по нику). Админ может отменять любые.",
       sideTitle:"Подсказка",
       sideHint:"чтобы игрок понял сразу",
       help:
@@ -565,19 +707,26 @@
 3) Выбери время и длительность
 4) Нажми “Забронировать”
 
-👤 “Мои брони” — чтобы посмотреть свои записи.`,
+👤 “Мои брони” — чтобы посмотреть/отменить свои записи.`,
       rules:"Правила",
       rule1:"Нельзя пересекать брони на одном ПК",
-      rule2:"Минимум 30 минут, максимум 8 часов",
-      rule3:"Сейчас данные хранятся локально (потом добавим облако)",
-      esc:"вернуться к созданию",
+      rule2:`Минимум ${MIN_BOOK_MINUTES} минут, максимум ${MAX_BOOK_HOURS} часов`,
+      rule3:`Можно бронировать максимум на ${MAX_DAYS_AHEAD} дней вперёд`,
+      rule4on:`Рабочие часы: ${WORK_START} → ${WORK_END}`,
+      rule4off:"Рабочие часы: 24/7",
+      esc:"вернуться на старт",
       adminHint:"Только для управления",
       search:"Поиск (ник/ПК)",
       colNick2:"Ник",
       colAct2:"Действия",
+      print2:"Печать “Сегодня”",
       msgPickPc:"Выбери хотя бы 1 ПК.",
       msgNick:"Введи ник.",
       msgTime:"Выбери время начала и конца.",
+      msgPast:"Нельзя бронировать в прошлом.",
+      msgTooFar:"Слишком далеко. Выбери дату ближе.",
+      msgDur:"Неверная длительность.",
+      msgHours:"Вне рабочих часов клуба.",
       msgOverlap:"Пересечение на ПК",
       msgCreated:"Готово! Создано броней",
       msgNoMy:"Нет броней по нику",
@@ -585,8 +734,19 @@
       msgAdminOff:"Admin выключен.",
       promptAdmin:"Введи админ-пароль:",
       wrongPass:"Неверный пароль.",
-      confirmWipe:"Точно стереть ВСЕ брони на этом устройстве?"
+      confirmWipe:"Точно стереть ВСЕ брони на этом устройстве?",
+      nextStepsTitle:"Что дальше?",
+      nextSteps1:"✅ Подойди к администратору и назови свой ник.",
+      nextSteps2:`⏰ Рекомендуем прийти за ${ARRIVE_MIN_BEFORE} минут до начала.`,
+      nextSteps3:"💳 Оплата — на месте (онлайн добавим позже).",
+      copyShare:"Скопировать бронь",
+      copied:"Скопировано в буфер.",
+      copyFail:"Не смог скопировать — выдели и скопируй вручную.",
+      qrTitle:"QR брони",
+      qrHint:"QR обновится после создания брони. Если QR не появился — всё равно ок.",
+      availHint:"Сейчас ПК подсвечены по выбранному интервалу: зелёный — свободен, красный — занят."
     },
+
     en: {
       title:"Sakompiutere Gaming — Booking",
       sub:"Pick PC → pick time → confirm",
@@ -599,16 +759,23 @@
       intro3:"3) Confirm — done",
       start:"Start booking",
       my:"My bookings",
+      todayBtn:"Today",
+      todayTitle:"📅 Today",
+      todayDesc:"Today bookings (useful for admin and users).",
+      print:"Print",
       nickLabel:"Your nickname",
       dateLabel:"Date",
       pickpc:"Select 1 or multiple PCs (click cards):",
       next:"Next",
       clear:"Clear selection",
       selected:"Selected PCs",
-      selectedList:"— list",
+      tipAvail:"Tip:",
+      tipAvail2:"Next step will highlight PCs as free/busy for your chosen time.",
       startLabel:"Start",
       endLabel:"End",
       durationHint:"Quick duration:",
+      onlyFree:"Show only free",
+      crossMidnight:"Overnight",
       noteLabel:"Note (optional)",
       priceLabel:"Price (GEL/hour)",
       back:"Back",
@@ -623,6 +790,8 @@
       colPc:"PC",
       colNote:"Note",
       colCost:"Cost",
+      colCancel:"Cancel",
+      myCancelHint:"You can cancel only your bookings (by nickname). Admin can cancel any.",
       sideTitle:"Hint",
       sideHint:"so users understand fast",
       help:
@@ -632,19 +801,26 @@
 3) Pick time & duration
 4) Tap “Book now”
 
-👤 “My bookings” shows your records.`,
+👤 “My bookings” to view/cancel your records.`,
       rules:"Rules",
       rule1:"No overlaps on the same PC",
-      rule2:"Min 30 min, max 8 hours",
-      rule3:"Now it’s local storage (cloud later)",
-      esc:"back to create mode",
+      rule2:`Min ${MIN_BOOK_MINUTES} min, max ${MAX_BOOK_HOURS} hours`,
+      rule3:`Max booking ahead: ${MAX_DAYS_AHEAD} days`,
+      rule4on:`Working hours: ${WORK_START} → ${WORK_END}`,
+      rule4off:"Working hours: 24/7",
+      esc:"back to start",
       adminHint:"Management only",
       search:"Search (nick/PC)",
       colNick2:"Nick",
       colAct2:"Actions",
+      print2:"Print “Today”",
       msgPickPc:"Select at least 1 PC.",
       msgNick:"Enter your nickname.",
       msgTime:"Pick start and end time.",
+      msgPast:"You can’t book in the past.",
+      msgTooFar:"Too far ahead. Choose a closer date.",
+      msgDur:"Invalid duration.",
+      msgHours:"Outside working hours.",
       msgOverlap:"Overlap on PC",
       msgCreated:"Done! Bookings created",
       msgNoMy:"No bookings for nickname",
@@ -652,8 +828,19 @@
       msgAdminOff:"Admin disabled.",
       promptAdmin:"Enter admin password:",
       wrongPass:"Wrong password.",
-      confirmWipe:"Delete ALL bookings on this device?"
+      confirmWipe:"Delete ALL bookings on this device?",
+      nextStepsTitle:"What’s next?",
+      nextSteps1:"✅ Tell admin your nickname.",
+      nextSteps2:`⏰ Please come ${ARRIVE_MIN_BEFORE} minutes earlier.`,
+      nextSteps3:"💳 Pay on site (online later).",
+      copyShare:"Copy booking",
+      copied:"Copied to clipboard.",
+      copyFail:"Copy failed — select and copy manually.",
+      qrTitle:"Booking QR",
+      qrHint:"QR updates after booking. If not visible — it’s OK.",
+      availHint:"PCs are highlighted for your selected time: green — free, red — busy."
     },
+
     ka: {
       title:"Sakompiutere Gaming — Booking",
       sub:"აირჩიე PC → აირჩიე დრო → დაადასტურე",
@@ -666,16 +853,23 @@
       intro3:"3) დაადასტურე — მზადაა",
       start:"დაწყება",
       my:"ჩემი ჯავშნები",
+      todayBtn:"დღეს",
+      todayTitle:"📅 დღეს",
+      todayDesc:"დღევანდელი ჯავშნები (ადმინისთვის და მომხმარებლისთვის).",
+      print:"ბეჭდვა",
       nickLabel:"ნიკი",
       dateLabel:"თარიღი",
       pickpc:"აირჩიე 1 ან რამდენიმე PC (დააკლიკე):",
       next:"შემდეგი",
       clear:"გასუფთავება",
       selected:"არჩეული PC",
-      selectedList:"— სია",
+      tipAvail:"მინიშნება:",
+      tipAvail2:"შემდეგ ნაბიჯზე PC-ები მონიშნული იქნება თავისუფალი/დაკავებული თქვენს დროზე.",
       startLabel:"დაწყება",
       endLabel:"დასრულება",
       durationHint:"სწრაფი ხანგრძლივობა:",
+      onlyFree:"მხოლოდ თავისუფალი",
+      crossMidnight:"ღამით გადასვლა",
       noteLabel:"შენიშვნა (არასავალდებულო)",
       priceLabel:"ფასი (GEL/საათი)",
       back:"უკან",
@@ -690,6 +884,8 @@
       colPc:"PC",
       colNote:"შენიშვნა",
       colCost:"ფასი",
+      colCancel:"გაუქმება",
+      myCancelHint:"შეგიძლია გააუქმო მხოლოდ შენი ჯავშანი (ნიკით). ადმინს შეუძლია ყველა.",
       sideTitle:"მინიშნება",
       sideHint:"რომ სწრაფად გაიგონ",
       help:
@@ -699,19 +895,26 @@
 3) აირჩიე დრო და ხანგრძლივობა
 4) დააჭირე “დაჯავშნა”
 
-👤 “ჩემი ჯავშნები” — შენი ჩანაწერებია.`,
+👤 “ჩემი ჯავშნები” — ნახვა/გაუქმება.`,
       rules:"წესები",
       rule1:"ერთ PC-ზე გადაკვეთა არ შეიძლება",
-      rule2:"მინ 30 წთ, მაქს 8 საათი",
-      rule3:"ახლა ინახება ლოკალურად (შემდეგ ღრუბელი)",
-      esc:"დაბრუნება შექმნაზე",
+      rule2:`მინ ${MIN_BOOK_MINUTES} წთ, მაქს ${MAX_BOOK_HOURS} სთ`,
+      rule3:`მაქს წინასწარ: ${MAX_DAYS_AHEAD} დღე`,
+      rule4on:`სამუშაო საათები: ${WORK_START} → ${WORK_END}`,
+      rule4off:"სამუშაო საათები: 24/7",
+      esc:"დაბრუნება დასაწყისზე",
       adminHint:"მხოლოდ მართვა",
       search:"ძებნა (ნიკი/PC)",
       colNick2:"ნიკი",
       colAct2:"ქმედება",
+      print2:"ბეჭდვა “დღეს”",
       msgPickPc:"აირჩიე მინიმუმ 1 PC.",
       msgNick:"შეიყვანე ნიკი.",
       msgTime:"აირჩიე დაწყება და დასრულება.",
+      msgPast:"წარსულში დაჯავშნა არ შეიძლება.",
+      msgTooFar:"ძალიან შორსაა. აირჩიე ახლო თარიღი.",
+      msgDur:"არასწორი ხანგრძლივობა.",
+      msgHours:"სამუშაო საათებს გარეთაა.",
       msgOverlap:"გადაკვეთა PC-ზე",
       msgCreated:"მზადაა! შექმნილია ჯავშნები",
       msgNoMy:"ამ ნიკზე ჯავშანი არ არის",
@@ -719,20 +922,180 @@
       msgAdminOff:"Admin გამორთულია.",
       promptAdmin:"შეიყვანე admin პაროლი:",
       wrongPass:"არასწორი პაროლი.",
-      confirmWipe:"წაშალო ყველა ჯავშანი ამ მოწყობილობაზე?"
+      confirmWipe:"წაშალო ყველა ჯავშანი ამ მოწყობილობაზე?",
+      nextStepsTitle:"შემდეგ რა?",
+      nextSteps1:"✅ უთხარი ადმინს შენი ნიკი.",
+      nextSteps2:`⏰ მოდი ${ARRIVE_MIN_BEFORE} წუთით ადრე.`,
+      nextSteps3:"💳 გადახდა ადგილზე (ონლაინ შემდეგ).",
+      copyShare:"ჯავშნის კოპირება",
+      copied:"კოპირებულია.",
+      copyFail:"კოპირება ვერ მოხერხდა — ხელით დააკოპირე.",
+      qrTitle:"QR ჯავშანი",
+      qrHint:"QR განახლდება ჯავშნის შემდეგ. თუ არ ჩანს — ok.",
+      availHint:"PC-ები მონიშნულია თქვენს დროზე: მწვანე — თავისუფალი, წითელი — დაკავებული."
     }
   };
 
-  // ====== HELPERS ======
+  // =========================
+  // Helpers
+  // =========================
   const $ = (id) => document.getElementById(id);
-  const pad2 = (n) => String(n).padStart(2,"0");
-  const toLocalISODate = (d) => `${d.getFullYear()}-${pad2(d.getMonth()+1)}-${pad2(d.getDate())}`;
-  const minutesFromTimeStr = (t) => { const [h,m]=t.split(":").map(Number); return h*60+m; };
-  const timeStrFromMinutes = (min) => { min=Math.max(0,Math.min(1440,min)); const h=Math.floor(min/60), m=min%60; return `${pad2(h)}:${pad2(m)}`; };
-  const clamp = (n,a,b)=>Math.max(a,Math.min(b,n));
+  const pad2 = (n)=>String(n).padStart(2,"0");
+  const toLocalISODate = (d)=>`${d.getFullYear()}-${pad2(d.getMonth()+1)}-${pad2(d.getDate())}`;
+  const parseDateISO = (iso)=>{ const [y,m,d]=iso.split("-").map(Number); return new Date(y, m-1, d, 0,0,0,0); };
+  const minutesFromTimeStr = (t)=>{ const [h,m]=t.split(":").map(Number); return h*60+m; };
+  const timeStrFromMinutes = (min)=>{ min=Math.max(0,Math.min(1440,min)); const h=Math.floor(min/60), m=min%60; return `${pad2(h)}:${pad2(m)}`; };
   const money = (n)=>`${Number(n||0).toFixed(2)} GEL`;
+  const clamp = (n,a,b)=>Math.max(a,Math.min(b,n));
   const calcPriceGel = (pricePerHour, mins)=>Math.round((Number(pricePerHour)*(mins/60))*2)/2;
+  const addDays = (dateObj, days)=>{ const d=new Date(dateObj); d.setDate(d.getDate()+days); return d; };
 
+  function escapeHtml(s){
+    return String(s ?? "")
+      .replaceAll("&","&amp;")
+      .replaceAll("<","&lt;")
+      .replaceAll(">","&gt;")
+      .replaceAll('"',"&quot;")
+      .replaceAll("'","&#039;");
+  }
+
+  // =========================
+  // Storage
+  // =========================
+  function loadBookings(){
+    try{
+      const raw = localStorage.getItem(STORAGE_KEY);
+      const arr = raw ? JSON.parse(raw) : [];
+      return Array.isArray(arr) ? arr : [];
+    }catch(e){ return []; }
+  }
+  function saveBookings(arr){ localStorage.setItem(STORAGE_KEY, JSON.stringify(arr)); }
+
+  // =========================
+  // State
+  // =========================
+  let lang = localStorage.getItem(LANG_KEY) || "ru";
+  if(!i18n[lang]) lang = "ru";
+
+  let isAdmin = localStorage.getItem(ADMIN_KEY) === "1";
+  let onlyFree = localStorage.getItem(ONLY_FREE_KEY) === "1";
+  let selectedPCs = new Set();
+
+  let bookings = loadBookings();
+
+  // =========================
+  // i18n apply
+  // =========================
+  function t(k){ return i18n[lang][k] ?? i18n["ru"][k] ?? k; }
+
+  function applyLang(){
+    $("t_title").textContent = t("title");
+    $("t_sub").textContent = t("sub");
+    $("t_today").textContent = t("today");
+    $("t_bookings").textContent = t("bookings");
+
+    $("t_step1").textContent = t("step1");
+    $("t_step2").textContent = t("step2");
+    $("t_step3").textContent = t("step3");
+    $("t_hint").textContent = t("hint");
+
+    $("t_fast").textContent = t("fast");
+    $("t_intro1").textContent = t("intro1");
+    $("t_intro2").textContent = t("intro2");
+    $("t_intro3").textContent = t("intro3");
+    $("t_start").textContent = t("start");
+    $("t_my").textContent = t("my");
+    $("t_my2").textContent = t("my");
+    $("t_todayBtn").textContent = t("todayBtn");
+
+    $("t_todayTitle").textContent = t("todayTitle");
+    $("t_todayDesc").textContent = t("todayDesc");
+    $("t_print").textContent = t("print");
+    $("t_print2").textContent = t("print2");
+
+    $("t_nickLabel").textContent = t("nickLabel");
+    $("t_dateLabel").textContent = t("dateLabel");
+    $("t_pickpc").textContent = t("pickpc");
+    $("t_next").textContent = t("next");
+    $("t_next2").textContent = t("next");
+    $("t_clear").textContent = t("clear");
+    $("t_selected").textContent = t("selected");
+    $("t_tipAvail").textContent = t("tipAvail");
+    $("t_tipAvail2").textContent = t("tipAvail2");
+
+    $("t_startLabel").textContent = t("startLabel");
+    $("t_endLabel").textContent = t("endLabel");
+    $("t_durationHint").textContent = t("durationHint");
+    $("t_onlyFree").textContent = t("onlyFree");
+    $("t_crossMidnight").textContent = t("crossMidnight");
+
+    $("t_noteLabel").textContent = t("noteLabel");
+    $("t_priceLabel").textContent = t("priceLabel");
+    $("t_back").textContent = t("back");
+    $("t_back2").textContent = t("back");
+
+    $("t_bookNow").textContent = t("bookNow");
+
+    $("t_myTitle").textContent = t("myTitle");
+    $("t_myHint").textContent = t("myHint");
+    $("t_myNick").textContent = t("myNick");
+    $("t_show").textContent = t("show");
+    $("t_close").textContent = t("close");
+
+    $("t_colDate").textContent = t("colDate");
+    $("t_colTime").textContent = t("colTime");
+    $("t_colPc").textContent = t("colPc");
+    $("t_colNote").textContent = t("colNote");
+    $("t_colCost").textContent = t("colCost");
+    $("t_colCancel").textContent = t("colCancel");
+    $("t_myCancelHint").textContent = t("myCancelHint");
+
+    $("t_sideTitle").textContent = t("sideTitle");
+    $("t_sideHint").textContent = t("sideHint");
+    $("helpBox").textContent = t("help");
+
+    $("rulesBox").innerHTML = `
+      <b>${t("rules")}</b><br/>
+      • ${t("rule1")}<br/>
+      • ${t("rule2")}<br/>
+      • ${t("rule3")}<br/>
+      • ${WORKING_HOURS_ENABLED ? t("rule4on") : t("rule4off")}
+    `;
+
+    $("t_settingsTitle").textContent = "Settings";
+    $("t_settingsDesc").textContent = "Change config at top of JS.";
+
+    $("t_esc").textContent = t("esc");
+    $("t_adminHint").textContent = t("adminHint");
+    $("t_search").textContent = t("search");
+
+    $("t_colDate2").textContent = t("colDate");
+    $("t_colTime2").textContent = t("colTime");
+    $("t_colPc2").textContent = t("colPc");
+    $("t_colNick2").textContent = t("colNick2");
+    $("t_colCost2").textContent = t("colCost");
+    $("t_colAct2").textContent = t("colAct2");
+
+    $("t_nextStepsTitle").textContent = t("nextStepsTitle");
+    $("t_nextSteps1").textContent = t("nextSteps1");
+    $("t_nextSteps2").textContent = t("nextSteps2");
+    $("t_nextSteps3").textContent = t("nextSteps3");
+    $("t_copyShare").textContent = t("copyShare");
+    $("t_qrTitle").textContent = t("qrTitle");
+    $("qrHint").textContent = t("qrHint");
+
+    // Language buttons
+    $("lang_ru").classList.toggle("active", lang==="ru");
+    $("lang_en").classList.toggle("active", lang==="en");
+    $("lang_ka").classList.toggle("active", lang==="ka");
+
+    // Only free button visual
+    $("toggleOnlyFreeBtn").classList.toggle("primary", onlyFree);
+  }
+
+  // =========================
+  // Flow / UI
+  // =========================
   function setStep(n){
     $("step1").classList.toggle("active", n===1);
     $("step2").classList.toggle("active", n===2);
@@ -741,6 +1104,30 @@
     $("step2Box").classList.toggle("hide", n!==2);
     $("step3Box").classList.toggle("hide", n!==3);
     $("introBox").classList.add("hide");
+    $("todayBox").classList.add("hide");
+  }
+
+  function showIntro(){
+    $("introBox").classList.remove("hide");
+    $("step1Box").classList.add("hide");
+    $("step2Box").classList.add("hide");
+    $("step3Box").classList.add("hide");
+    $("todayBox").classList.add("hide");
+    $("step1").classList.remove("active");
+    $("step2").classList.remove("active");
+    $("step3").classList.remove("active");
+  }
+
+  function showToday(){
+    $("todayBox").classList.remove("hide");
+    $("introBox").classList.add("hide");
+    $("step1Box").classList.add("hide");
+    $("step2Box").classList.add("hide");
+    $("step3Box").classList.add("hide");
+    $("step1").classList.remove("active");
+    $("step2").classList.remove("active");
+    $("step3").classList.remove("active");
+    renderTodayCards();
   }
 
   function setMsg(text, kind="info"){
@@ -756,157 +1143,33 @@
       "rgba(110,231,255,.06)";
   }
 
-  // ====== STATE ======
-  let lang = localStorage.getItem(LANG_KEY) || "ru";
-  if(!i18n[lang]) lang = "ru";
-
-  let isAdmin = localStorage.getItem(ADMIN_KEY) === "1";
-  let selectedPCs = new Set();
-
-  // booking shape:
-  // { id, nick, pc, date, start, end, note, pricePerHour, totalGel, createdAt }
-  function loadBookings(){
-    try{
-      const raw = localStorage.getItem(STORAGE_KEY);
-      const arr = raw ? JSON.parse(raw) : [];
-      return Array.isArray(arr) ? arr : [];
-    }catch(e){ return []; }
-  }
-  function saveBookings(arr){ localStorage.setItem(STORAGE_KEY, JSON.stringify(arr)); }
-
-  let bookings = loadBookings();
-
-  // ====== i18n apply ======
-  function t(k){ return i18n[lang][k] ?? i18n["ru"][k] ?? k; }
-  function applyLang(){
-    $("t_title").textContent = t("title");
-    $("t_sub").textContent = t("sub");
-    $("t_today").textContent = t("today");
-    $("t_bookings").textContent = t("bookings");
-    $("t_step1").textContent = t("step1");
-    $("t_step2").textContent = t("step2");
-    $("t_step3").textContent = t("step3");
-    $("t_hint").textContent = t("hint");
-    $("t_fast").textContent = t("fast");
-    $("t_intro1").textContent = t("intro1");
-    $("t_intro2").textContent = t("intro2");
-    $("t_intro3").textContent = t("intro3");
-    $("t_start").textContent = t("start");
-    $("t_my").textContent = t("my");
-    $("t_nickLabel").textContent = t("nickLabel");
-    $("t_dateLabel").textContent = t("dateLabel");
-    $("t_pickpc").textContent = t("pickpc");
-    $("t_next").textContent = t("next");
-    $("t_clear").textContent = t("clear");
-    $("t_selected").textContent = t("selected");
-    $("t_selectedList").textContent = t("selectedList");
-    $("t_startLabel").textContent = t("startLabel");
-    $("t_endLabel").textContent = t("endLabel");
-    $("t_durationHint").textContent = t("durationHint");
-    $("t_noteLabel").textContent = t("noteLabel");
-    $("t_priceLabel").textContent = t("priceLabel");
-    $("t_back").textContent = t("back");
-    $("t_back2").textContent = t("back");
-    $("t_next2").textContent = t("next");
-    $("t_bookNow").textContent = t("bookNow");
-    $("t_my2").textContent = t("my");
-    $("t_myTitle").textContent = t("myTitle");
-    $("t_myHint").textContent = t("myHint");
-    $("t_myNick").textContent = t("myNick");
-    $("t_show").textContent = t("show");
-    $("t_close").textContent = t("close");
-    $("t_colDate").textContent = t("colDate");
-    $("t_colTime").textContent = t("colTime");
-    $("t_colPc").textContent = t("colPc");
-    $("t_colNote").textContent = t("colNote");
-    $("t_colCost").textContent = t("colCost");
-
-    $("t_sideTitle").textContent = t("sideTitle");
-    $("t_sideHint").textContent = t("sideHint");
-    $("helpBox").textContent = t("help");
-
-    $("t_rules").textContent = t("rules");
-    $("t_rule1").textContent = t("rule1");
-    $("t_rule2").textContent = t("rule2");
-    $("t_rule3").textContent = t("rule3");
-    $("t_esc").textContent = t("esc");
-
-    $("t_adminHint").textContent = t("adminHint");
-    $("t_search").textContent = t("search");
-    $("t_colDate2").textContent = t("colDate");
-    $("t_colTime2").textContent = t("colTime");
-    $("t_colPc2").textContent = t("colPc");
-    $("t_colNick2").textContent = t("colNick2");
-    $("t_colCost2").textContent = t("colCost");
-    $("t_colAct2").textContent = t("colAct2");
-
-    // lang buttons
-    $("lang_ru").classList.toggle("active", lang==="ru");
-    $("lang_en").classList.toggle("active", lang==="en");
-    $("lang_ka").classList.toggle("active", lang==="ka");
-  }
-
-  // ====== UI render ======
   function renderPills(){
     $("countPill").textContent = String(bookings.length);
     $("todayPill").textContent = new Date().toLocaleDateString(undefined, {year:"numeric", month:"2-digit", day:"2-digit"});
   }
 
-  function pcStatusFor(pc, date){
-    const list = bookings.filter(b=>b.pc===pc && b.date===date).sort((a,b)=>a.start.localeCompare(b.start));
-    if(!list.length) return {dot:"good", text:"Free", next:"—"};
-    // busy now?
-    const now = new Date();
-    const isToday = date === toLocalISODate(now);
-    let dot="warn", text=`${list.length}`;
-    if(isToday){
-      const nowMin = now.getHours()*60 + now.getMinutes();
-      for(const b of list){
-        const s=minutesFromTimeStr(b.start), e=minutesFromTimeStr(b.end);
-        if(nowMin>=s && nowMin<e){ dot="bad"; text="Busy"; break; }
-      }
+  function renderSelected(){
+    $("selectedCount").textContent = String(selectedPCs.size);
+
+    const chips = $("selectedChips");
+    chips.innerHTML = "";
+    if(selectedPCs.size===0){
+      chips.innerHTML = `<span class="hint">—</span>`;
+      return;
     }
-    return {dot, text, next: list[0].start};
-  }
-
-  function renderPCGrid(){
-    const grid = $("pcGrid");
-    grid.innerHTML = "";
-    const date = $("date").value;
-
-    for(const pc of PCs){
-      const st = pcStatusFor(pc, date);
-      const div = document.createElement("div");
-      div.className = "pc";
-      if(selectedPCs.has(pc)) div.classList.add("selected");
-      div.setAttribute("data-pc", pc);
-      div.innerHTML = `
-        <div class="check">✓</div>
-        <div class="name">${pc}</div>
-        <div class="meta">
-          <span class="tag"><span class="dot ${st.dot}"></span>${st.dot==="good" ? "Free" : (st.dot==="bad" ? "Busy" : "Booked")}</span>
-          <span>${st.next==="—" ? "—" : ("Next: "+st.next)}</span>
-        </div>
-      `;
-      div.addEventListener("click", () => {
-        if(selectedPCs.has(pc)) selectedPCs.delete(pc);
-        else selectedPCs.add(pc);
+    for(const pc of Array.from(selectedPCs)){
+      const ch = document.createElement("div");
+      ch.className = "pcchip";
+      ch.innerHTML = `${pc} <span class="x">×</span>`;
+      ch.addEventListener("click", () => {
+        selectedPCs.delete(pc);
         renderSelected();
         renderPCGrid();
+        updateAvailabilityUI();
+        renderSummary();
       });
-      grid.appendChild(div);
+      chips.appendChild(ch);
     }
-  }
-
-  function renderSelected(){
-    const arr = Array.from(selectedPCs);
-    $("selectedCount").textContent = String(arr.length);
-    $("selectedList").textContent = arr.length ? arr.join(", ") : "—";
-  }
-
-  function normalizeEndByChip(mins){
-    const s = minutesFromTimeStr($("start").value);
-    $("end").value = timeStrFromMinutes(clamp(s + mins, 0, 1440));
   }
 
   function renderDurationChips(activeMin=null){
@@ -916,174 +1179,541 @@
     });
   }
 
-  function overlaps(pc, date, sMin, eMin, ignoreId=null){
+  function normalizeEndByChip(mins){
+    const s = minutesFromTimeStr($("start").value);
+    $("end").value = timeStrFromMinutes(clamp(s + mins, 0, 1440));
+  }
+
+  // =========================
+  // Booking time as absolute range (support overnight)
+  // =========================
+  function getRangeFromInputs(){
+    const dateStartISO = $("date").value;
+    const startStr = $("start").value;
+    const endStr = $("end").value;
+    if(!dateStartISO || !startStr || !endStr) return null;
+
+    const startMin = minutesFromTimeStr(startStr);
+    const endMin = minutesFromTimeStr(endStr);
+
+    const d0 = parseDateISO(dateStartISO);
+    const startAbs = new Date(d0.getFullYear(), d0.getMonth(), d0.getDate(), Math.floor(startMin/60), startMin%60, 0, 0);
+
+    let spansMidnight = false;
+    let endAbs;
+    if(endMin > startMin){
+      endAbs = new Date(d0.getFullYear(), d0.getMonth(), d0.getDate(), Math.floor(endMin/60), endMin%60, 0, 0);
+    }else{
+      // overnight to next day
+      spansMidnight = true;
+      const d1 = addDays(d0, 1);
+      endAbs = new Date(d1.getFullYear(), d1.getMonth(), d1.getDate(), Math.floor(endMin/60), endMin%60, 0, 0);
+    }
+    return { dateStartISO, startStr, endStr, startAbs, endAbs, spansMidnight };
+  }
+
+  function minutesBetween(a,b){ return Math.round((b - a)/60000); }
+
+  // =========================
+  // Working hours check (supports overnight hours)
+  // =========================
+  function isWithinWorkingHours(range){
+    if(!WORKING_HOURS_ENABLED) return true;
+
+    const ws = minutesFromTimeStr(WORK_START);
+    const we = minutesFromTimeStr(WORK_END);
+
+    // Working window can cross midnight.
+    // We validate that BOTH start and end are inside the open window.
+    const startMin = minutesFromTimeStr(range.startStr);
+    const endMin = minutesFromTimeStr(range.endStr);
+
+    const within = (m) => {
+      if(we > ws){
+        return m >= ws && m <= we;
+      }else{
+        // window crosses midnight, e.g. 10:00 -> 03:00 means open from 10:00..24:00 and 00:00..03:00
+        return (m >= ws && m <= 1440) || (m >= 0 && m <= we);
+      }
+    };
+
+    // If booking spans midnight, still check each endpoint by its local time component.
+    return within(startMin) && within(endMin);
+  }
+
+  // =========================
+  // Convert stored booking to absolute range
+  // =========================
+  function bookingToAbs(b){
+    // b: {dateStart, start, end, spansMidnight, ...} (we keep compatibility with old)
+    const dateISO = b.dateStart || b.date || "";
+    const d0 = parseDateISO(dateISO);
+    const sMin = minutesFromTimeStr(b.start);
+    const eMin = minutesFromTimeStr(b.end);
+
+    const startAbs = new Date(d0.getFullYear(), d0.getMonth(), d0.getDate(), Math.floor(sMin/60), sMin%60, 0, 0);
+
+    let endAbs;
+    const span = b.spansMidnight || (eMin <= sMin);
+    if(!span){
+      endAbs = new Date(d0.getFullYear(), d0.getMonth(), d0.getDate(), Math.floor(eMin/60), eMin%60, 0, 0);
+    }else{
+      const d1 = addDays(d0, 1);
+      endAbs = new Date(d1.getFullYear(), d1.getMonth(), d1.getDate(), Math.floor(eMin/60), eMin%60, 0, 0);
+    }
+    return { startAbs, endAbs };
+  }
+
+  function intersects(a1,a2,b1,b2){
+    return Math.max(a1.getTime(), b1.getTime()) < Math.min(a2.getTime(), b2.getTime());
+  }
+
+  // =========================
+  // Availability per PC for current selected range
+  // =========================
+  function firstConflictForPC(pc, range){
     for(const b of bookings){
-      if(ignoreId && b.id===ignoreId) continue;
-      if(b.pc!==pc || b.date!==date) continue;
-      const bs=minutesFromTimeStr(b.start), be=minutesFromTimeStr(b.end);
-      if(Math.max(sMin, bs) < Math.min(eMin, be)) return b;
+      if(b.pc !== pc) continue;
+      const br = bookingToAbs(b);
+      if(intersects(range.startAbs, range.endAbs, br.startAbs, br.endAbs)){
+        return b;
+      }
     }
     return null;
   }
 
-  function createMultiBooking(){
-    const nick = ($("nick").value || "").trim();
+  function renderPCGrid(){
+    const grid = $("pcGrid");
+    grid.innerHTML = "";
+
+    const range = getRangeFromInputs(); // may be null on step1
     const date = $("date").value;
-    const start = $("start").value;
-    const end = $("end").value;
-    const note = ($("note").value || "").trim();
-    const pricePerHour = Number($("price").value || 5);
 
-    if(!nick) return setMsg(t("msgNick"), "bad");
-    if(selectedPCs.size===0) return setMsg(t("msgPickPc"), "bad");
-    if(!date || !start || !end) return setMsg(t("msgTime"), "bad");
+    for(const pc of PCs){
+      let dot = "good";
+      let label = "Free";
+      let detail = "—";
 
-    const sMin = minutesFromTimeStr(start);
-    const eMin = minutesFromTimeStr(end);
-    const mins = eMin - sMin;
+      // if we have time range, show exact free/busy
+      if(range){
+        const c = firstConflictForPC(pc, range);
+        if(c){
+          dot = "bad";
+          label = "Busy";
+          detail = `Busy: ${c.start}→${c.end}${(c.spansMidnight || (minutesFromTimeStr(c.end)<=minutesFromTimeStr(c.start))) ? " (+1)" : ""}`;
+        }else{
+          dot = "good";
+          label = "Free";
+          detail = "Free for selected time";
+        }
+      }else{
+        // fallback day-based info
+        const dayList = bookings
+          .filter(b => b.pc===pc && (b.dateStart||b.date)===date)
+          .sort((a,b)=>a.start.localeCompare(b.start));
+        if(dayList.length){
+          dot = "warn";
+          label = "Booked";
+          detail = `Next: ${dayList[0].start}`;
+        }
+      }
 
-    if(mins < 30) return setMsg("Min 30 minutes.", "bad");
-    if(mins > 8*60) return setMsg("Max 8 hours.", "bad");
-    if(eMin <= sMin) return setMsg(t("msgTime"), "bad");
+      // Only free filter
+      if(onlyFree && range){
+        const c = firstConflictForPC(pc, range);
+        if(c) continue;
+      }
 
-    // check conflicts for all selected PCs (atomic)
-    const conflicts = [];
+      const div = document.createElement("div");
+      div.className = "pc";
+      if(selectedPCs.has(pc)) div.classList.add("selected");
+      div.setAttribute("data-pc", pc);
+
+      if(range){
+        const c = firstConflictForPC(pc, range);
+        if(c) div.classList.add("busyForRange");
+        else div.classList.add("freeForRange");
+      }
+
+      div.innerHTML = `
+        <div class="check">✓</div>
+        <div class="name">${pc}</div>
+        <div class="meta">
+          <span class="tag"><span class="dot ${dot}"></span>${label}</span>
+          <span class="mut">${detail}</span>
+        </div>
+      `;
+
+      div.addEventListener("click", () => {
+        if(selectedPCs.has(pc)) selectedPCs.delete(pc);
+        else selectedPCs.add(pc);
+        renderSelected();
+        renderPCGrid();
+        renderSummary();
+      });
+
+      grid.appendChild(div);
+    }
+  }
+
+  function updateAvailabilityUI(){
+    const range = getRangeFromInputs();
+    $("crossMidnightPill").textContent = range ? (range.spansMidnight ? "YES" : "NO") : "—";
+    $("availabilityHintBox").textContent = t("availHint");
+    renderPCGrid();
+  }
+
+  // =========================
+  // Validation rules
+  // =========================
+  function validateBeforeNext(){
+    const nick = ($("nick").value||"").trim();
+    if(!nick) return {ok:false, msg:t("msgNick")};
+    if(selectedPCs.size===0) return {ok:false, msg:t("msgPickPc")};
+
+    // date range
+    const dateISO = $("date").value;
+    if(!dateISO) return {ok:false, msg:t("msgTime")};
+
+    const d0 = parseDateISO(dateISO);
+    const today0 = parseDateISO(toLocalISODate(new Date()));
+    const diffDays = Math.round((d0 - today0)/86400000);
+    if(diffDays > MAX_DAYS_AHEAD) return {ok:false, msg:t("msgTooFar")};
+
+    // store nick
+    localStorage.setItem(NICK_KEY, nick);
+
+    return {ok:true};
+  }
+
+  function validateBeforeCreate(){
+    const range = getRangeFromInputs();
+    if(!range) return {ok:false, msg:t("msgTime")};
+
+    const mins = minutesBetween(range.startAbs, range.endAbs);
+    if(mins < MIN_BOOK_MINUTES || mins > MAX_BOOK_HOURS*60) return {ok:false, msg:t("msgDur")};
+
+    // cannot book in past
+    const now = new Date();
+    if(range.startAbs.getTime() < now.getTime()) return {ok:false, msg:t("msgPast")};
+
+    // working hours check
+    if(!isWithinWorkingHours(range)) return {ok:false, msg:t("msgHours")};
+
+    // conflicts check for all selected PCs
     for(const pc of selectedPCs){
-      const c = overlaps(pc, date, sMin, eMin);
-      if(c) conflicts.push({pc, c});
+      const c = firstConflictForPC(pc, range);
+      if(c){
+        return {ok:false, msg:`${t("msgOverlap")} ${pc}: ${c.start}→${c.end} (${c.nick})`};
+      }
     }
-    if(conflicts.length){
-      const first = conflicts[0];
-      return setMsg(`${t("msgOverlap")} ${first.pc}: ${first.c.start}→${first.c.end} (${first.c.nick})`, "bad");
+    return {ok:true, range};
+  }
+
+  // =========================
+  // Create bookings (multi-PC)
+  // =========================
+  function createMultiBooking(){
+    const v = validateBeforeCreate();
+    if(!v.ok){
+      setMsg(v.msg, "bad");
+      return;
     }
+    const range = v.range;
 
-    const totalGel = calcPriceGel(pricePerHour, mins);
+    const nick = ($("nick").value||"").trim();
+    const note = ($("note").value||"").trim();
+    const pricePerHour = Number($("price").value || 5);
+    const mins = minutesBetween(range.startAbs, range.endAbs);
+    const perPc = calcPriceGel(pricePerHour, mins);
 
-    // create one booking per pc
     const created = [];
     for(const pc of selectedPCs){
       created.push({
         id: (crypto.randomUUID ? crypto.randomUUID() : String(Date.now()) + "_" + Math.random().toString(16).slice(2)),
-        nick, pc, date, start, end, note,
+        nick,
+        pc,
+        dateStart: range.dateStartISO,
+        start: range.startStr,
+        end: range.endStr,
+        spansMidnight: range.spansMidnight,
+        note,
         pricePerHour,
-        totalGel,
+        totalGel: perPc,
         createdAt: new Date().toISOString()
       });
     }
 
     bookings = bookings.concat(created);
     saveBookings(bookings);
-
-    setMsg(`${t("msgCreated")}: ${created.length}`, "good");
     renderPills();
-    renderPCGrid();
     renderAdminTable();
+    setMsg(`${t("msgCreated")}: ${created.length}`, "good");
     renderMyTable(nick);
-
-    // keep user at step 3 but show updated summary
     renderSummary();
+    renderTodayCards();
+
+    // Generate QR for this booking set (share payload)
+    const payload = buildShareText({ nick, pcs:Array.from(selectedPCs), range, note, perPc, total: perPc*selectedPCs.size });
+    renderQR(payload);
+
+    // copy-friendly success
+    $("qrHint").textContent = t("qrHint");
   }
 
+  function buildShareText({nick, pcs, range, note, perPc, total}){
+    const when = range.spansMidnight
+      ? `${range.dateStartISO} ${range.startStr} → ${addDays(parseDateISO(range.dateStartISO),1).toISOString().slice(0,10)} ${range.endStr}`
+      : `${range.dateStartISO} ${range.startStr} → ${range.endStr}`;
+
+    return [
+      "Sakompiutere Booking",
+      `Nick: ${nick}`,
+      `PCs: ${pcs.join(", ")}`,
+      `Time: ${when}`,
+      note ? `Note: ${note}` : null,
+      `Cost per PC: ${money(perPc)}`,
+      `Total: ${money(total)}`
+    ].filter(Boolean).join("\n");
+  }
+
+  async function copyShare(){
+    const range = getRangeFromInputs();
+    const nick = ($("nick").value||"").trim();
+    const note = ($("note").value||"").trim();
+    if(!range || !nick || selectedPCs.size===0){
+      setMsg("Fill booking first.", "bad");
+      return;
+    }
+    const mins = minutesBetween(range.startAbs, range.endAbs);
+    const perPc = calcPriceGel(Number($("price").value||5), mins);
+    const text = buildShareText({
+      nick,
+      pcs:Array.from(selectedPCs),
+      range,
+      note,
+      perPc,
+      total: perPc*selectedPCs.size
+    });
+
+    try{
+      await navigator.clipboard.writeText(text);
+      setMsg(t("copied"), "good");
+    }catch(e){
+      setMsg(t("copyFail"), "bad");
+    }
+  }
+
+  function renderQR(text){
+    const canvas = $("qrCanvas");
+    if(!window.QRCode || !QRCode.toCanvas){
+      // fallback: clear canvas
+      const ctx = canvas.getContext("2d");
+      ctx.clearRect(0,0,canvas.width,canvas.height);
+      const g = ctx;
+      g.fillStyle = "#ffffff";
+      g.fillRect(0,0,canvas.width,canvas.height);
+      g.fillStyle = "#111111";
+      g.font = "12px sans-serif";
+      g.fillText("QR lib not loaded", 20, 80);
+      return;
+    }
+    QRCode.toCanvas(canvas, text, { width: 160, margin: 1 }, (err) => {
+      if(err){
+        const ctx = canvas.getContext("2d");
+        ctx.clearRect(0,0,canvas.width,canvas.height);
+      }
+    });
+  }
+
+  // =========================
+  // Summary
+  // =========================
   function renderSummary(){
     const nick = ($("nick").value || "").trim();
-    const date = $("date").value;
-    const start = $("start").value;
-    const end = $("end").value;
+    const range = getRangeFromInputs();
     const note = ($("note").value || "").trim();
     const pricePerHour = Number($("price").value || 5);
-
-    const sMin = minutesFromTimeStr(start);
-    const eMin = minutesFromTimeStr(end);
-    const mins = eMin - sMin;
     const pcs = Array.from(selectedPCs);
-    const perPc = (mins>0) ? calcPriceGel(pricePerHour, mins) : 0;
-    const total = perPc * pcs.length;
+
+    let perPc=0, total=0, when="—", dur="—";
+    if(range){
+      const mins = minutesBetween(range.startAbs, range.endAbs);
+      perPc = calcPriceGel(pricePerHour, mins);
+      total = perPc * pcs.length;
+      dur = `${mins} min`;
+      when = range.spansMidnight
+        ? `${range.dateStartISO} ${range.startStr} → ${addDays(parseDateISO(range.dateStartISO),1).toISOString().slice(0,10)} ${range.endStr}`
+        : `${range.dateStartISO} ${range.startStr} → ${range.endStr}`;
+    }
 
     $("summaryBox").innerHTML = `
       <b>${t("step3")}</b><br/>
-      • ${t("nickLabel")}: <b>${nick || "—"}</b><br/>
-      • ${t("dateLabel")}: <b>${date || "—"}</b><br/>
-      • ${t("colTime")}: <b>${start || "—"} → ${end || "—"}</b><br/>
+      • ${t("nickLabel")}: <b>${escapeHtml(nick || "—")}</b><br/>
+      • ${t("colTime")}: <b>${escapeHtml(when)}</b> <span class="hint">(${dur})</span><br/>
       • ${t("selected")}: <b>${pcs.length}</b><br/>
-      • PCs: <b>${pcs.length ? pcs.join(", ") : "—"}</b><br/>
+      • PCs: <b>${escapeHtml(pcs.length ? pcs.join(", ") : "—")}</b><br/>
       • ${t("colCost")} (per PC): <b>${money(perPc)}</b><br/>
       • ${t("colCost")} total: <b>${money(total)}</b><br/>
-      ${note ? ("• "+t("noteLabel")+": <b>"+note+"</b><br/>") : ""}
+      ${note ? ("• "+t("colNote")+": <b>"+escapeHtml(note)+"</b><br/>") : ""}
     `;
   }
 
-  // ====== My bookings ======
+  // =========================
+  // Today cards
+  // =========================
+  function renderTodayCards(){
+    const box = $("todayCards");
+    if(!box) return;
+    const todayISO = toLocalISODate(new Date());
+
+    const list = bookings
+      .filter(b => (b.dateStart||b.date) === todayISO)
+      .sort((a,b)=> (a.start+a.pc).localeCompare(b.start+b.pc));
+
+    box.innerHTML = "";
+    if(!list.length){
+      box.innerHTML = `<div class="notice">—</div>`;
+      return;
+    }
+
+    for(const b of list){
+      const span = b.spansMidnight || (minutesFromTimeStr(b.end)<=minutesFromTimeStr(b.start));
+      const timeStr = span ? `${b.start} → ${b.end} (+1)` : `${b.start} → ${b.end}`;
+
+      const card = document.createElement("div");
+      card.className = "bcard";
+      card.innerHTML = `
+        <div class="left">
+          <div class="top">
+            <span class="badge ok">${escapeHtml(b.pc)}</span>
+            <span class="badge">${escapeHtml(timeStr)}</span>
+          </div>
+          <div><b>${escapeHtml(b.nick)}</b></div>
+          <div class="mut">${escapeHtml(b.note || "")}</div>
+        </div>
+        <div style="text-align:right;">
+          <div class="mut">${money(b.totalGel)}</div>
+        </div>
+      `;
+      box.appendChild(card);
+    }
+  }
+
+  // =========================
+  // My bookings + cancel own
+  // =========================
   function renderMyTable(nick){
     const tbody = $("myTable");
     tbody.innerHTML = "";
     const q = (nick || "").trim();
     if(!q){
-      tbody.innerHTML = `<tr><td colspan="5" style="color:var(--muted)">—</td></tr>`;
+      tbody.innerHTML = `<tr><td colspan="6" style="color:var(--muted)">—</td></tr>`;
       return;
     }
+
     const list = bookings
       .filter(b => (b.nick||"").trim().toLowerCase() === q.toLowerCase())
-      .sort((a,b)=> (a.date+a.start+a.pc).localeCompare(b.date+b.start+b.pc));
+      .sort((a,b)=> ((a.dateStart||a.date)+a.start+a.pc).localeCompare((b.dateStart||b.date)+b.start+b.pc));
 
     if(!list.length){
-      tbody.innerHTML = `<tr><td colspan="5" style="color:var(--muted)">${t("msgNoMy")}: <b>${q}</b></td></tr>`;
+      tbody.innerHTML = `<tr><td colspan="6" style="color:var(--muted)">${t("msgNoMy")}: <b>${escapeHtml(q)}</b></td></tr>`;
       return;
     }
 
     for(const b of list){
+      const span = b.spansMidnight || (minutesFromTimeStr(b.end)<=minutesFromTimeStr(b.start));
+      const timeStr = span ? `${b.start} → ${b.end} (+1)` : `${b.start} → ${b.end}`;
+
       const tr = document.createElement("tr");
       tr.innerHTML = `
-        <td>${b.date}</td>
-        <td>${b.start} → ${b.end}</td>
-        <td><b>${b.pc}</b></td>
-        <td style="color:var(--muted)">${b.note || ""}</td>
-        <td>${money(b.totalGel)}</td>
-      `;
-      tbody.appendChild(tr);
-    }
-  }
-
-  // ====== Admin ======
-  function renderAdminTable(){
-    const box = $("adminBox");
-    box.classList.toggle("hide", !isAdmin);
-
-    const tbody = $("bookTable");
-    tbody.innerHTML = "";
-    if(!isAdmin) return;
-
-    const q = ($("search").value || "").trim().toLowerCase();
-    const list = bookings
-      .filter(b => !q || (b.nick||"").toLowerCase().includes(q) || (b.pc||"").toLowerCase().includes(q))
-      .sort((a,b)=> (a.date+a.start+a.pc).localeCompare(b.date+b.start+b.pc));
-
-    for(const b of list){
-      const tr = document.createElement("tr");
-      tr.innerHTML = `
-        <td>${b.date}</td>
-        <td>${b.start} → ${b.end}</td>
-        <td><b>${b.pc}</b></td>
-        <td><b>${b.nick}</b></td>
+        <td>${escapeHtml(b.dateStart || b.date)}</td>
+        <td>${escapeHtml(timeStr)}</td>
+        <td><b>${escapeHtml(b.pc)}</b></td>
+        <td style="color:var(--muted)">${escapeHtml(b.note || "")}</td>
         <td>${money(b.totalGel)}</td>
         <td>
-          <button class="mini danger" data-act="del" data-id="${b.id}">Delete</button>
+          <button class="mini danger" data-id="${b.id}">Cancel</button>
         </td>
       `;
       tbody.appendChild(tr);
     }
 
-    tbody.querySelectorAll("button[data-act='del']").forEach(btn=>{
-      btn.addEventListener("click", () => {
+    tbody.querySelectorAll("button[data-id]").forEach(btn=>{
+      btn.addEventListener("click", ()=>{
         const id = btn.getAttribute("data-id");
         const b = bookings.find(x=>x.id===id);
         if(!b) return;
-        if(!confirm(`Delete booking?\n${b.nick} • ${b.pc}\n${b.date} ${b.start}→${b.end}`)) return;
+
+        // only cancel own (by nickname) unless admin
+        const currentNick = ($("myNickInput").value || "").trim().toLowerCase();
+        if(!isAdmin && (b.nick||"").trim().toLowerCase() !== currentNick){
+          alert("You can cancel only your bookings.");
+          return;
+        }
+        if(!confirm(`Cancel booking?\n${b.nick} • ${b.pc}\n${b.dateStart||b.date} ${b.start}→${b.end}`)) return;
         bookings = bookings.filter(x=>x.id!==id);
         saveBookings(bookings);
         renderPills();
-        renderPCGrid();
+        renderMyTable($("myNickInput").value);
         renderAdminTable();
-        setMsg("Deleted.", "good");
+        updateAvailabilityUI();
+        renderTodayCards();
+      });
+    });
+  }
+
+  function openMyBox(prefillNick){
+    $("myBox").classList.remove("hide");
+    $("myNickInput").value = prefillNick || localStorage.getItem(NICK_KEY) || $("nick").value || "";
+    renderMyTable($("myNickInput").value);
+    $("myBox").scrollIntoView({behavior:"smooth", block:"start"});
+  }
+  function closeMyBox(){ $("myBox").classList.add("hide"); }
+
+  // =========================
+  // Admin
+  // =========================
+  function renderAdminTable(){
+    $("adminBox").classList.toggle("hide", !isAdmin);
+
+    const tbody = $("bookTable");
+    tbody.innerHTML = "";
+    if(!isAdmin) return;
+
+    const q = ($("search").value||"").trim().toLowerCase();
+    const list = bookings
+      .filter(b => !q || (b.nick||"").toLowerCase().includes(q) || (b.pc||"").toLowerCase().includes(q))
+      .sort((a,b)=> ((a.dateStart||a.date)+a.start+a.pc).localeCompare((b.dateStart||b.date)+b.start+b.pc));
+
+    for(const b of list){
+      const span = b.spansMidnight || (minutesFromTimeStr(b.end)<=minutesFromTimeStr(b.start));
+      const timeStr = span ? `${b.start} → ${b.end} (+1)` : `${b.start} → ${b.end}`;
+
+      const tr = document.createElement("tr");
+      tr.innerHTML = `
+        <td>${escapeHtml(b.dateStart || b.date)}</td>
+        <td>${escapeHtml(timeStr)}</td>
+        <td><b>${escapeHtml(b.pc)}</b></td>
+        <td><b>${escapeHtml(b.nick)}</b></td>
+        <td>${money(b.totalGel)}</td>
+        <td><button class="mini danger" data-id="${b.id}">Delete</button></td>
+      `;
+      tbody.appendChild(tr);
+    }
+
+    tbody.querySelectorAll("button[data-id]").forEach(btn=>{
+      btn.addEventListener("click", ()=>{
+        const id = btn.getAttribute("data-id");
+        const b = bookings.find(x=>x.id===id);
+        if(!b) return;
+        if(!confirm(`Delete booking?\n${b.nick} • ${b.pc}\n${b.dateStart||b.date} ${b.start}→${b.end}`)) return;
+        bookings = bookings.filter(x=>x.id!==id);
+        saveBookings(bookings);
+        renderPills();
+        renderAdminTable();
+        updateAvailabilityUI();
+        renderTodayCards();
       });
     });
   }
@@ -1101,57 +1731,68 @@
     renderAdminTable();
   }
 
-  // ====== FLOW actions ======
-  function openMyBox(prefillNick){
-    $("myBox").classList.remove("hide");
-    $("myNickInput").value = prefillNick || $("nick").value || "";
-    renderMyTable($("myNickInput").value);
-    // scroll a bit for mobile
-    $("myBox").scrollIntoView({behavior:"smooth", block:"start"});
-  }
-  function closeMyBox(){ $("myBox").classList.add("hide"); }
-
-  // ====== BOOT ======
+  // =========================
+  // Boot + events
+  // =========================
   function boot(){
     // defaults
-    const d = new Date();
-    $("todayPill").textContent = d.toLocaleDateString(undefined, {year:"numeric", month:"2-digit", day:"2-digit"});
-    $("date").value = toLocalISODate(d);
+    const now = new Date();
+    $("todayPill").textContent = now.toLocaleDateString(undefined, {year:"numeric", month:"2-digit", day:"2-digit"});
+    $("date").value = toLocalISODate(now);
 
-    const startMin = clamp(d.getHours()*60 + (Math.ceil(d.getMinutes()/5)*5), 0, 23*60+55);
+    // default time: round to 5 minutes
+    const startMin = clamp(now.getHours()*60 + (Math.ceil(now.getMinutes()/5)*5), 0, 23*60+55);
     $("start").value = timeStrFromMinutes(startMin);
     $("end").value = timeStrFromMinutes(clamp(startMin + 60, 0, 1440));
+
+    // restore nick
+    const savedNick = localStorage.getItem(NICK_KEY) || "";
+    if(savedNick) $("nick").value = savedNick;
 
     renderPills();
     applyLang();
     renderSelected();
-    renderPCGrid();
+    updateAvailabilityUI();
     renderAdminTable();
+    renderTodayCards();
 
-    // events: language
-    $("lang_ru").onclick = () => { lang="ru"; localStorage.setItem(LANG_KEY,lang); applyLang(); renderSummary(); };
-    $("lang_en").onclick = () => { lang="en"; localStorage.setItem(LANG_KEY,lang); applyLang(); renderSummary(); };
-    $("lang_ka").onclick = () => { lang="ka"; localStorage.setItem(LANG_KEY,lang); applyLang(); renderSummary(); };
+    // language buttons
+    $("lang_ru").onclick = () => { lang="ru"; localStorage.setItem(LANG_KEY,lang); applyLang(); renderSummary(); updateAvailabilityUI(); };
+    $("lang_en").onclick = () => { lang="en"; localStorage.setItem(LANG_KEY,lang); applyLang(); renderSummary(); updateAvailabilityUI(); };
+    $("lang_ka").onclick = () => { lang="ka"; localStorage.setItem(LANG_KEY,lang); applyLang(); renderSummary(); updateAvailabilityUI(); };
 
-    // start flow
-    $("startBtn").onclick = () => { setStep(1); };
+    // intro buttons
+    $("startBtn").onclick = () => setStep(1);
     $("viewMyBtn").onclick = () => openMyBox($("nick").value);
+    $("todayBtn").onclick = () => showToday();
 
-    // step 1 buttons
-    $("clearPcBtn").onclick = () => { selectedPCs.clear(); renderSelected(); renderPCGrid(); };
+    // today view
+    $("todayBackBtn").onclick = () => showIntro();
+    $("printTodayBtn").onclick = () => window.print();
+
+    // step1
+    $("clearPcBtn").onclick = () => { selectedPCs.clear(); renderSelected(); updateAvailabilityUI(); renderSummary(); };
+
     $("toStep2Btn").onclick = () => {
-      const nick = ($("nick").value||"").trim();
-      if(!nick) return alert(t("msgNick"));
-      if(selectedPCs.size===0) return alert(t("msgPickPc"));
+      const v = validateBeforeNext();
+      if(!v.ok){ alert(v.msg); return; }
       setStep(2);
-      // preselect 1h chip visually
+      // suggest 1h
       renderDurationChips(60);
       normalizeEndByChip(60);
+      updateAvailabilityUI();
       renderSummary();
     };
 
-    // date change affects status
-    $("date").addEventListener("change", () => renderPCGrid());
+    $("nick").addEventListener("input", ()=>{
+      localStorage.setItem(NICK_KEY, ($("nick").value||"").trim());
+    });
+
+    $("date").addEventListener("change", ()=>{
+      // if date too far ahead warn but not block until creation
+      updateAvailabilityUI();
+      renderTodayCards();
+    });
 
     // duration chips
     document.querySelectorAll("#durChips .chip").forEach(ch=>{
@@ -1159,28 +1800,48 @@
         const mins = Number(ch.getAttribute("data-min"));
         renderDurationChips(mins);
         normalizeEndByChip(mins);
+        updateAvailabilityUI();
         renderSummary();
       });
     });
 
     // manual time changes
-    $("start").addEventListener("change", () => { renderDurationChips(null); renderSummary(); });
-    $("end").addEventListener("change", () => { renderDurationChips(null); renderSummary(); });
-    $("price").addEventListener("input", () => { renderSummary(); });
+    $("start").addEventListener("change", ()=>{
+      renderDurationChips(null);
+      updateAvailabilityUI();
+      renderSummary();
+    });
+    $("end").addEventListener("change", ()=>{
+      renderDurationChips(null);
+      updateAvailabilityUI();
+      renderSummary();
+    });
 
-    // step 2 navigation
+    $("price").addEventListener("input", ()=>renderSummary());
+    $("note").addEventListener("input", ()=>renderSummary());
+
+    $("toggleOnlyFreeBtn").onclick = () => {
+      onlyFree = !onlyFree;
+      localStorage.setItem(ONLY_FREE_KEY, onlyFree ? "1":"0");
+      $("toggleOnlyFreeBtn").classList.toggle("primary", onlyFree);
+      updateAvailabilityUI();
+    };
+
+    // step2 nav
     $("backTo1Btn").onclick = () => setStep(1);
     $("toStep3Btn").onclick = () => {
-      if(selectedPCs.size===0) return alert(t("msgPickPc"));
+      const v = validateBeforeNext();
+      if(!v.ok){ alert(v.msg); return; }
       setStep(3);
       renderSummary();
       setMsg("OK", "info");
     };
 
-    // step 3 actions
+    // step3 nav
     $("backTo2Btn").onclick = () => setStep(2);
     $("createBtn").onclick = createMultiBooking;
     $("showMyInlineBtn").onclick = () => openMyBox($("nick").value);
+    $("copyShareBtn").onclick = copyShare;
 
     // my box
     $("mySearchBtn").onclick = () => renderMyTable($("myNickInput").value);
@@ -1195,9 +1856,12 @@
       else alert(t("wrongPass"));
     };
     $("exitAdminBtn").onclick = () => adminOff();
+    $("exitAdminBtn").style.display = isAdmin ? "inline-block" : "none";
 
+    // admin events
     $("search").addEventListener("input", renderAdminTable);
     $("clearFilterBtn").onclick = () => { $("search").value=""; renderAdminTable(); };
+    $("printTodayAdminBtn").onclick = () => { renderTodayCards(); window.print(); };
     $("wipeBtn").onclick = () => {
       if(!confirm(t("confirmWipe"))) return;
       bookings = [];
@@ -1205,29 +1869,21 @@
       selectedPCs.clear();
       renderSelected();
       renderPills();
-      renderPCGrid();
+      updateAvailabilityUI();
       renderAdminTable();
+      renderTodayCards();
       setMsg("Wiped.", "good");
     };
 
-    // show/hide admin exit button
-    const adminWatcher = setInterval(()=>{
-      $("exitAdminBtn").style.display = isAdmin ? "inline-block" : "none";
-    }, 300);
-
-    // Esc: back to intro (simple)
+    // Esc back to intro
     document.addEventListener("keydown", (e)=>{
-      if(e.key === "Escape"){
-        // back to intro
-        $("introBox").classList.remove("hide");
-        $("step1Box").classList.add("hide");
-        $("step2Box").classList.add("hide");
-        $("step3Box").classList.add("hide");
-        $("step1").classList.remove("active");
-        $("step2").classList.remove("active");
-        $("step3").classList.remove("active");
-      }
+      if(e.key === "Escape") showIntro();
     });
+
+    // initial cross-midnight pill + availability hint
+    updateAvailabilityUI();
+    renderSummary();
+    showIntro();
   }
 
   boot();
