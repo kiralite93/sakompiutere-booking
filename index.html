@@ -5,7 +5,6 @@
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
   <title>Sakompiutere Gaming — Booking</title>
   <meta name="theme-color" content="#0b1020" />
-  <link rel="icon" href="data:," />
 
   <!-- Firebase v9 COMPAT -->
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
@@ -26,6 +25,8 @@
       --warn:#fbbf24;
       --shadow:0 20px 60px rgba(0,0,0,.55);
       --r:18px;
+      --pad: 18px;
+      --gap: 18px;
     }
     *{box-sizing:border-box}
     html,body{height:100%}
@@ -34,29 +35,14 @@
       font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial;
       color:var(--text);
       background:
-        radial-gradient(1200px 800px at 20% -10%, rgba(110,231,255,.14), transparent 60%),
-        radial-gradient(900px 700px at 80% 10%, rgba(167,139,250,.16), transparent 60%),
-        radial-gradient(800px 700px at 40% 120%, rgba(52,211,153,.12), transparent 60%),
+        radial-gradient(1200px 800px at 20% -10%, rgba(110,231,255,.12), transparent 60%),
+        radial-gradient(900px 700px at 80% 10%, rgba(167,139,250,.14), transparent 60%),
+        radial-gradient(800px 700px at 40% 120%, rgba(52,211,153,.10), transparent 60%),
         var(--bg);
       overflow-x:hidden;
     }
-    .wrap{max-width:1180px; margin:0 auto; padding:18px;}
 
-    .bgGlow{
-      position:fixed; inset:-30%;
-      background:
-        radial-gradient(600px 400px at 20% 30%, rgba(110,231,255,.08), transparent 60%),
-        radial-gradient(700px 450px at 75% 25%, rgba(167,139,250,.10), transparent 60%),
-        radial-gradient(650px 420px at 55% 80%, rgba(52,211,153,.07), transparent 60%);
-      animation: drift 14s ease-in-out infinite alternate;
-      pointer-events:none;
-      z-index:-1;
-      opacity:.9;
-    }
-    @keyframes drift{
-      0%{ transform: translate3d(-10px,-8px,0) scale(1.02); }
-      100%{ transform: translate3d(14px,10px,0) scale(1.05); }
-    }
+    .wrap{max-width:1180px; margin:0 auto; padding:var(--pad);}
 
     header{
       display:flex; gap:14px; align-items:center; justify-content:space-between;
@@ -65,53 +51,48 @@
       box-shadow: var(--shadow);
       position:sticky; top:14px; z-index:20;
       backdrop-filter: blur(10px);
-      animation: headIn .45s cubic-bezier(.2,.8,.2,1) both;
     }
-    @keyframes headIn{from{transform:translateY(-12px);opacity:0}to{transform:translateY(0);opacity:1}}
 
-    .brand{display:flex; gap:12px; align-items:center;}
-    .logo{
-      width:42px; height:42px; border-radius:14px;
+    .brand{display:flex; gap:12px; align-items:center; min-width:0;}
+    .logo-wrap{
+      width:46px;height:46px;border-radius:16px;
+      display:grid;place-items:center;flex:0 0 auto;
+      border:1px solid rgba(255,255,255,.08);
       background:
-        radial-gradient(circle at 30% 20%, rgba(110,231,255,.95), rgba(167,139,250,.85) 40%, rgba(0,0,0,0) 72%),
-        linear-gradient(180deg, rgba(255,255,255,.14), rgba(255,255,255,.02));
-      border:1px solid var(--line);
-      box-shadow: 0 12px 30px rgba(0,0,0,.4);
-      position:relative; overflow:hidden;
-      animation: float 3.6s ease-in-out infinite;
+        radial-gradient(circle at 30% 20%, rgba(255,193,7,.22), rgba(255,193,7,.06) 60%, transparent 72%),
+        linear-gradient(180deg, rgba(255,255,255,.05), rgba(0,0,0,.12));
+      box-shadow: 0 12px 30px rgba(0,0,0,.4), 0 0 0 1px rgba(255,193,7,.12) inset;
+      animation: logoFloat 6s ease-in-out infinite;
     }
-    @keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-2px)}}
-    .logo:after{
-      content:"";
-      position:absolute; inset:-70%;
-      background: linear-gradient(90deg, transparent, rgba(255,255,255,.20), transparent);
-      transform: rotate(20deg) translateX(-70%);
-      animation: shine 5.5s ease-in-out infinite;
+    .logo-symbol{
+      width:34px;height:auto;user-select:none;-webkit-user-drag:none;
+      mix-blend-mode: screen;
+      filter: drop-shadow(0 0 6px rgba(255,193,7,.55)) drop-shadow(0 0 18px rgba(255,193,7,.22));
+      animation: logoPulse 3.4s ease-in-out infinite;
     }
-    @keyframes shine{
-      0%,70%{transform:rotate(20deg) translateX(-75%);opacity:0}
-      80%{opacity:1}
-      100%{transform:rotate(20deg) translateX(75%);opacity:0}
-    }
+    @keyframes logoFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-4px)}}
+    @keyframes logoPulse{0%,100%{transform:scale(1);opacity:.95}50%{transform:scale(1.06);opacity:1}}
 
-    .brand h1{margin:0; font-size:16px; letter-spacing:.35px}
-    .brand .sub{margin:0; color:var(--muted); font-size:12px}
+    .brandText{min-width:0}
+    .brand h1{margin:0;font-size:16px;letter-spacing:.35px;line-height:1.2;word-break:break-word}
+    .brand .sub{margin:4px 0 0;color:var(--muted);font-size:12px;line-height:1.25;word-break:break-word}
 
     .rightbar{display:flex; gap:10px; flex-wrap:wrap; justify-content:flex-end; align-items:center;}
     .pill{
       padding:8px 10px; border-radius:999px; border:1px solid var(--line);
       background:rgba(255,255,255,.03);
       color:var(--muted); font-size:12px;
+      max-width: 340px;
+      line-height:1.25;
       display:flex; gap:8px; align-items:center;
     }
     .pill strong{color:var(--text); font-weight:950}
 
-    .dot{width:8px;height:8px;border-radius:999px;background:rgba(255,255,255,.22)}
-    .dot.ok{
-      background: rgba(52,211,153,.95);
-      box-shadow: 0 0 0 0 rgba(52,211,153,.40);
-      animation: pulse 1.8s ease-out infinite;
+    .dot{
+      width:8px; height:8px; border-radius:999px;
+      background:rgba(255,255,255,.22);
     }
+    .dot.ok{ background: rgba(52,211,153,.95); box-shadow:0 0 0 0 rgba(52,211,153,.35); animation:pulse 1.8s ease-out infinite; }
     .dot.err{ background: rgba(251,113,133,.95); }
     @keyframes pulse{
       0%{ box-shadow:0 0 0 0 rgba(52,211,153,.35); }
@@ -124,6 +105,7 @@
       padding:6px; border-radius:999px;
       border:1px solid var(--line);
       background:rgba(0,0,0,.22);
+      flex:0 0 auto;
     }
     .lang button{
       padding:7px 10px; border-radius:999px;
@@ -134,8 +116,9 @@
       font-weight:950;
       font-size:12px;
       transition: transform .12s ease, background .12s ease, border-color .12s ease;
+      touch-action: manipulation;
     }
-    .lang button:hover{ transform: translateY(-1px); }
+    .lang button:active{transform: scale(.98)}
     .lang button.active{
       border-color: rgba(110,231,255,.55);
       background: rgba(110,231,255,.10);
@@ -145,16 +128,9 @@
     .grid{
       display:grid;
       grid-template-columns: 1.15fr .85fr;
-      gap:18px;
+      gap: var(--gap);
       margin-top:16px;
-      animation: fadeUp .35s ease both;
     }
-    @keyframes fadeUp{from{transform:translateY(10px);opacity:0}to{transform:translateY(0);opacity:1}}
-    @media (max-width: 980px){
-      .grid{grid-template-columns:1fr;}
-      header{position:static;}
-    }
-
     .card{
       border:1px solid var(--line);
       border-radius:var(--r);
@@ -164,12 +140,12 @@
     }
     .hd{
       padding:14px 16px;
-      display:flex; align-items:center; justify-content:space-between; gap:10px;
+      display:flex; align-items:flex-start; justify-content:space-between; gap:10px;
       border-bottom:1px solid var(--line);
       background: rgba(0,0,0,.10);
     }
-    .hd h2{margin:0; font-size:14px}
-    .hint{color:var(--muted); font-size:12px}
+    .hd h2{margin:0;font-size:14px}
+    .hint{color:var(--muted); font-size:12px; line-height:1.25; text-align:right; max-width:55%;}
     .bd{padding:14px 16px}
 
     .notice{
@@ -179,61 +155,36 @@
       border-radius:16px;
       font-size:12px;
       line-height:1.4;
-      transition: transform .12s ease, border-color .2s ease, background .2s ease;
+      word-break: break-word;
     }
-    .notice:hover{transform:translateY(-1px);border-color:rgba(110,231,255,.50);background:rgba(110,231,255,.075)}
 
     .btns{display:flex; gap:10px; flex-wrap:wrap; margin-top:10px}
     button{
       border:1px solid var(--line);
       background:rgba(255,255,255,.04);
       color:var(--text);
-      padding:10px 12px;
+      padding:11px 12px;
       border-radius:14px;
       cursor:pointer;
       font-weight:1000;
       letter-spacing:.2px;
-      transition: transform .10s ease, border-color .12s ease, background .12s ease, box-shadow .12s ease, opacity .12s ease;
-      position:relative;
-      overflow:hidden;
+      transition: transform .12s ease, border-color .12s ease, background .12s ease, box-shadow .12s ease, opacity .12s ease;
+      touch-action: manipulation;
     }
-    button:before{
-      content:"";
-      position:absolute; inset:-40% -40%;
-      background: radial-gradient(240px 120px at 20% 30%, rgba(110,231,255,.16), transparent 55%);
-      opacity:0;
-      transition: opacity .2s ease;
-      pointer-events:none;
-    }
-    button:hover:before{opacity:1}
-    button:hover{border-color: rgba(110,231,255,.5); transform: translateY(-1px)}
-    button:active{transform: translateY(0) scale(.99)}
+    button:hover{border-color: rgba(110,231,255,.5)}
+    button:active{transform: scale(.985)}
     button[disabled]{opacity:.55; cursor:not-allowed; transform:none}
 
     .primary{
       border-color: rgba(110,231,255,.55);
       background: linear-gradient(180deg, rgba(110,231,255,.18), rgba(167,139,250,.10));
-      box-shadow: 0 0 0 0 rgba(110,231,255,0);
     }
-    .primary:hover{ box-shadow: 0 0 0 3px rgba(110,231,255,.10); }
-
+    .primary:hover{box-shadow: 0 0 0 3px rgba(110,231,255,.10)}
     .ghost{background:transparent}
     .danger{border-color: rgba(251,113,133,.6); background: rgba(251,113,133,.10)}
-    .mini{padding:6px 10px; border-radius:12px; font-size:12px; font-weight:1000}
-    .chipmini{
-      display:inline-flex; gap:8px; align-items:center;
-      padding:6px 10px;
-      border:1px solid var(--line);
-      border-radius:999px;
-      background:rgba(0,0,0,.18);
-      color:var(--muted);
-      font-size:12px;
-      transition: transform .12s ease, border-color .12s ease;
-    }
-    .chipmini:hover{ transform: translateY(-1px); border-color: rgba(110,231,255,.35); }
-    .chipmini b{color:var(--text)}
+    .mini{padding:7px 10px; border-radius:12px; font-size:12px; font-weight:1000}
 
-    label{display:block; font-size:12px; color:var(--muted); margin:0 0 6px}
+    label{display:block;font-size:12px;color:var(--muted);margin:0 0 6px}
     input, select{
       width:100%;
       padding:11px 12px;
@@ -242,12 +193,11 @@
       background:rgba(0,0,0,.25);
       color:var(--text);
       outline:none;
-      transition: border-color .12s ease, box-shadow .12s ease, transform .12s ease;
+      transition: box-shadow .12s ease, border-color .12s ease;
     }
     input:focus, select:focus{border-color: rgba(110,231,255,.6); box-shadow:0 0 0 3px rgba(110,231,255,.12)}
-    input:hover, select:hover{ transform: translateY(-1px); }
-    .row{display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:10px;}
-    @media (max-width:520px){ .row{grid-template-columns:1fr;} }
+    .row{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px;}
+    .mut{color:var(--muted); font-size:12px}
 
     .pcgrid{
       display:grid;
@@ -255,8 +205,6 @@
       gap:10px;
       margin-top:10px;
     }
-    @media (max-width: 980px){ .pcgrid{grid-template-columns: repeat(2, 1fr);} }
-
     .pc{
       padding:12px 12px;
       border:1px solid var(--line);
@@ -267,19 +215,9 @@
       user-select:none;
       position:relative;
       min-height:74px;
-      overflow:hidden;
-    }
-    .pc:before{
-      content:"";
-      position:absolute; inset:0;
-      background: radial-gradient(600px 220px at -20% 0%, rgba(110,231,255,.16), transparent 62%);
-      opacity:0;
-      transition: opacity .2s ease;
-      pointer-events:none;
     }
     .pc:hover{transform: translateY(-1px); border-color: rgba(110,231,255,.4)}
-    .pc:hover:before{opacity:1}
-    .pc .name{font-weight:1100; letter-spacing:.25px}
+    .pc .name{font-weight:1100; letter-spacing:.3px}
     .pc .meta{margin-top:6px; color:var(--muted); font-size:12px}
     .pc.selected{
       border-color: rgba(110,231,255,.75);
@@ -294,24 +232,21 @@
       color: transparent;
       font-weight:1100;
       font-size:12px;
-      transition: transform .12s ease, background .12s ease, border-color .12s ease, color .12s ease;
     }
     .pc.selected .check{
       border-color: rgba(110,231,255,.75);
       background: rgba(110,231,255,.14);
       color: var(--text);
-      transform: scale(1.06);
     }
 
+    /* Time picker (buttons) */
     .timeBox{
       margin-top:10px;
       border:1px solid rgba(255,255,255,.08);
       background: rgba(0,0,0,.16);
       border-radius:18px;
       padding:12px;
-      transition: transform .12s ease, border-color .2s ease;
     }
-    .timeBox:hover{ transform: translateY(-1px); border-color: rgba(110,231,255,.28); }
     .timeTop{
       display:flex; justify-content:space-between; align-items:center; gap:10px;
       margin-bottom:10px;
@@ -321,39 +256,34 @@
       font-weight:1100; font-size:13px;
       display:flex; gap:10px; align-items:center;
     }
+    .picked{
+      display:inline-flex; gap:8px; align-items:center;
+      padding:6px 10px;
+      border:1px solid var(--line);
+      border-radius:999px;
+      background:rgba(0,0,0,.18);
+      color:var(--muted);
+      font-size:12px;
+    }
+    .picked b{color:var(--text)}
     .timeList{
       display:grid;
       grid-template-columns: repeat(5, 1fr);
       gap:8px;
       margin-top:10px;
     }
-    @media (max-width:980px){ .timeList{grid-template-columns: repeat(3, 1fr);} }
-    @media (max-width:520px){ .timeList{grid-template-columns: repeat(2, 1fr);} }
-
     .tbtn{
       padding:10px 10px;
       border-radius:14px;
       border:1px solid var(--line);
       background: rgba(255,255,255,.03);
       cursor:pointer;
-      transition: transform .10s ease, border-color .12s ease, box-shadow .12s ease, filter .12s ease;
+      transition: transform .10s ease, border-color .12s ease, box-shadow .12s ease, opacity .12s ease;
       font-weight:1100;
       text-align:center;
       user-select:none;
-      position:relative;
-      overflow:hidden;
-      animation: inSlots .22s ease both;
+      line-height:1.15;
     }
-    @keyframes inSlots{from{transform:translateY(6px);opacity:0}to{transform:translateY(0);opacity:1}}
-    .tbtn:after{
-      content:"";
-      position:absolute; inset:-40% -40%;
-      background: radial-gradient(220px 120px at 20% 20%, rgba(110,231,255,.12), transparent 55%);
-      opacity:0;
-      transition: opacity .2s ease;
-      pointer-events:none;
-    }
-    .tbtn:hover:after{opacity:1}
     .tbtn:hover{transform: translateY(-1px); border-color: rgba(110,231,255,.5)}
     .tbtn.busy{
       cursor:not-allowed;
@@ -362,7 +292,11 @@
       background: rgba(251,113,133,.06);
       color: rgba(251,113,133,.9);
       transform:none !important;
-      filter: grayscale(.1);
+    }
+    .tbtn.past{
+      cursor:not-allowed;
+      opacity:.55;
+      transform:none !important;
     }
     .tbtn.active{
       border-color: rgba(110,231,255,.75);
@@ -370,22 +304,36 @@
       background: rgba(110,231,255,.08);
     }
 
+    .tablewrap{
+      overflow-x:auto;
+      -webkit-overflow-scrolling: touch;
+      border-radius:16px;
+      margin-top:10px;
+      border:1px solid var(--line);
+      background: rgba(0,0,0,.18);
+    }
     table{
       width:100%;
       border-collapse:separate;
       border-spacing:0;
-      overflow:hidden;
-      border:1px solid var(--line);
-      border-radius:16px;
-      margin-top:10px;
+      min-width: 560px;
     }
     th, td{
       padding:10px 10px;
       border-bottom:1px solid var(--line);
       vertical-align:top;
       font-size:12px;
+      white-space:nowrap;
     }
-    th{color:var(--muted); font-weight:1100; text-align:left; background:rgba(255,255,255,.03)}
+    th{
+      color:var(--muted);
+      font-weight:1100;
+      text-align:left;
+      background:rgba(255,255,255,.03);
+      position: sticky;
+      top: 0;
+      z-index: 1;
+    }
     tr:last-child td{border-bottom:none}
 
     .footerbar{
@@ -405,12 +353,7 @@
     }
     .hide{display:none !important;}
 
-    .panel{ animation: panelIn .22s ease both; }
-    @keyframes panelIn{from{transform:translateY(8px);opacity:0}to{transform:translateY(0);opacity:1}}
-
-    .toastIn{ animation: toast .25s ease both; }
-    @keyframes toast{from{transform:translateY(6px);opacity:0}to{transform:translateY(0);opacity:1}}
-
+    /* Modal */
     .backdrop{
       position:fixed; inset:0;
       background:rgba(0,0,0,.58);
@@ -420,8 +363,7 @@
       padding:16px;
       z-index:999;
     }
-    .backdrop.show{display:flex; animation: fade .18s ease both;}
-    @keyframes fade{ from{opacity:0} to{opacity:1} }
+    .backdrop.show{display:flex;}
     .modal{
       width:min(560px, 100%);
       border:1px solid var(--line);
@@ -429,108 +371,21 @@
       background: linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.02));
       box-shadow: var(--shadow);
       overflow:hidden;
-      animation: pop .22s ease both;
-      transform-origin: 50% 20%;
+      animation: modalIn .18s ease-out both;
     }
-    @keyframes pop{from{transform:translateY(12px) scale(.98);opacity:0}to{transform:translateY(0) scale(1);opacity:1}}
+    @keyframes modalIn{from{opacity:0;transform:translateY(8px) scale(.985)}to{opacity:1;transform:translateY(0) scale(1)}}
     .mh{
       padding:14px 16px;
-      display:flex; justify-content:space-between; align-items:center; gap:10px;
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:10px;
       border-bottom:1px solid var(--line);
       background: rgba(0,0,0,.14);
     }
     .mb{padding:14px 16px}
-    .mut{color:var(--muted); font-size:12px}
-    .linkbtn{
-      border:1px solid var(--line);
-      background:transparent;
-      color:var(--muted);
-      border-radius:999px;
-      padding:8px 10px;
-      font-size:12px;
-      cursor:pointer;
-    }
-    .linkbtn:hover{ color:var(--text); border-color: rgba(110,231,255,.35); }
 
-    .slider{
-      border:1px solid var(--line);
-      border-radius:18px;
-      background: linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.02));
-      box-shadow: 0 18px 55px rgba(0,0,0,.45);
-      overflow:hidden;
-    }
-    .sliderTop{
-      display:flex; justify-content:space-between; align-items:center;
-      padding:12px 14px;
-      border-bottom:1px solid var(--line);
-      background: rgba(0,0,0,.16);
-    }
-    .badge{
-      padding:6px 10px;
-      border-radius:999px;
-      border:1px solid var(--line);
-      background: rgba(255,255,255,.03);
-      color: var(--muted);
-      font-size:12px;
-      font-weight:1100;
-      transition: transform .12s ease;
-    }
-    .badge:hover{ transform: translateY(-1px); }
-    .slides{ position:relative; height: 260px; overflow:hidden; }
-    .slide{
-      position:absolute; inset:0;
-      padding:16px 16px 14px;
-      opacity:0; transform: translateX(14px);
-      transition: opacity .35s ease, transform .35s ease;
-      pointer-events:none;
-    }
-    .slide.active{ opacity:1; transform: translateX(0); pointer-events:auto; }
-    .sIcon{
-      width:44px; height:44px; border-radius:16px;
-      border:1px solid var(--line);
-      background:
-        radial-gradient(circle at 20% 15%, rgba(110,231,255,.35), transparent 60%),
-        radial-gradient(circle at 80% 20%, rgba(167,139,250,.28), transparent 60%),
-        rgba(0,0,0,.20);
-      display:grid; place-items:center;
-      font-size:20px;
-      margin-bottom:10px;
-      box-shadow: 0 10px 30px rgba(0,0,0,.35);
-      animation: bob 2.8s ease-in-out infinite;
-    }
-    @keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-2px)}}
-    .sH{ margin:0; font-size:14px; letter-spacing:.2px; font-weight:1200; }
-    .sP{ margin:8px 0 0; color: var(--muted); font-size:12px; line-height:1.5; }
-    .sList{
-      margin:10px 0 0; padding:0; list-style:none;
-      display:grid; gap:8px;
-    }
-    .sList li{
-      display:flex; gap:10px; align-items:flex-start;
-      padding:10px 10px;
-      border-radius:14px;
-      border:1px solid rgba(255,255,255,.06);
-      background: rgba(0,0,0,.18);
-      transition: transform .12s ease, border-color .12s ease;
-    }
-    .sList li:hover{ transform: translateY(-1px); border-color: rgba(110,231,255,.22); }
-    .sliderBot{
-      display:flex; justify-content:space-between; align-items:center; gap:10px;
-      padding:12px 14px;
-      border-top:1px solid var(--line);
-      background: rgba(0,0,0,.14);
-    }
-    .dots{display:flex; gap:8px; align-items:center;}
-    .sdot{
-      width:8px; height:8px; border-radius:999px;
-      background: rgba(255,255,255,.18);
-      border:1px solid rgba(255,255,255,.10);
-      transition: transform .2s ease, background .2s ease;
-      cursor:pointer;
-    }
-    .sdot.on{ background: rgba(110,231,255,.75); transform: scale(1.25); }
-    .navBtn{ padding:8px 10px; border-radius:12px; font-size:12px; }
-
+    /* Success */
     .successBackdrop{
       position:fixed; inset:0;
       background: rgba(0,0,0,.68);
@@ -540,7 +395,7 @@
       padding:16px;
       z-index:1000;
     }
-    .successBackdrop.show{display:flex; animation: fade .18s ease both;}
+    .successBackdrop.show{display:flex;}
     .successCard{
       width:min(560px, 100%);
       border:1px solid var(--line);
@@ -549,7 +404,6 @@
       box-shadow: var(--shadow);
       overflow:hidden;
       position:relative;
-      animation: pop .22s ease both;
     }
     .confetti{position:absolute; inset:0; pointer-events:none; overflow:hidden;}
     .confetti i{
@@ -560,14 +414,15 @@
       transform: translateY(-20px) rotate(0deg);
       animation: fall 900ms linear forwards;
     }
-    @keyframes fall{to{transform: translateY(520px) rotate(260deg); opacity:0.95;}}
+    @keyframes fall{
+      to{ transform: translateY(520px) rotate(260deg); opacity:0.95; }
+    }
     .successTop{
       padding:14px 16px;
       border-bottom:1px solid var(--line);
       display:flex; justify-content:space-between; align-items:center; gap:10px;
       background: rgba(0,0,0,.16);
     }
-    .successTop b{font-size:14px}
     .successBody{ padding:16px; }
     .bigCheck{
       width:62px; height:62px; border-radius:22px;
@@ -577,9 +432,7 @@
       font-size:28px;
       margin-bottom:12px;
       box-shadow: 0 18px 45px rgba(0,0,0,.35);
-      animation: checkPop .45s cubic-bezier(.2,.8,.2,1) both;
     }
-    @keyframes checkPop{0%{transform:scale(.8);opacity:0}60%{transform:scale(1.08);opacity:1}100%{transform:scale(1);opacity:1}}
     .successInfo{
       border:1px solid rgba(255,255,255,.08);
       background: rgba(0,0,0,.18);
@@ -592,22 +445,38 @@
     .successInfo b{color: var(--text)}
     .successActions{display:flex; gap:10px; flex-wrap:wrap; margin-top:12px;}
 
-    @media (prefers-reduced-motion: reduce){
-      *{ animation:none !important; transition:none !important; }
+    @media (max-width: 980px){
+      .grid{grid-template-columns:1fr;}
+      header{position:static;}
+      .hint{max-width:100%; text-align:left;}
+      .timeList{grid-template-columns: repeat(3, 1fr);}
+      .pcgrid{grid-template-columns: repeat(2, 1fr);}
+    }
+    @media (max-width: 560px){
+      :root{ --pad: 12px; --gap: 12px; }
+      header{flex-direction: column; align-items: stretch; gap: 10px; padding: 12px;}
+      .rightbar{width:100%; justify-content: stretch; gap:8px;}
+      .lang{width:100%; justify-content:space-between;}
+      .pill{width:100%; max-width:100%; border-radius:14px;}
+      .row{grid-template-columns:1fr;}
+      button{width:100%;}
+      .btns{gap:8px}
+      .tablewrap table{min-width:640px;}
+      .timeList{grid-template-columns: repeat(2, 1fr);}
     }
   </style>
 </head>
 
 <body>
-<div class="bgGlow" aria-hidden="true"></div>
-
 <div class="wrap">
   <header>
     <div class="brand">
-      <div class="logo" aria-hidden="true"></div>
-      <div>
+      <div class="logo-wrap" aria-hidden="true">
+        <img class="logo-symbol" src="logo-symbol.png" alt="Sakompiutere logo" onerror="this.style.display='none'">
+      </div>
+      <div class="brandText">
         <h1 id="t_title">Sakompiutere Gaming — Booking</h1>
-        <p class="sub" id="t_sub">Выбери ПК → дату → время → подтвердить</p>
+        <p class="sub" id="t_sub">ПК → Дата/длительность → Время → Готово</p>
       </div>
     </div>
 
@@ -632,7 +501,7 @@
     <div class="card">
       <div class="hd">
         <h2 id="t_main">Бронирование</h2>
-        <div class="hint" id="hintTop">Онлайн база через Firebase</div>
+        <div class="hint" id="hintTop">Общая база (Firebase)</div>
       </div>
 
       <div class="bd">
@@ -647,15 +516,23 @@
           <div class="notice" style="margin-top:10px" id="authMsg">—</div>
         </div>
 
-        <!-- FORM -->
+        <!-- FLOW -->
+        <div class="notice" style="margin-top:12px" id="flowHelp">
+          <b id="t_flowTitle">Быстро</b><br/>
+          <span id="t_flow1">1) Войди</span> ·
+          <span id="t_flow2">2) Выбери ПК</span> ·
+          <span id="t_flow3">3) Дату + длительность</span> ·
+          <span id="t_flow4">4) Время → Забронировать</span>
+        </div>
+
         <div style="margin-top:12px">
           <div class="row">
             <div>
-              <label id="t_nickLabel">Твой ник (в клубе)</label>
+              <label id="t_nickLabel">Ник (в клубе)</label>
               <input id="nick" type="text" placeholder="например: KiraLite" />
             </div>
             <div>
-              <label id="t_dateLabel">Дата (рабочий день)</label>
+              <label id="t_dateLabel">Дата (клубный день)</label>
               <input id="date" type="date" />
             </div>
           </div>
@@ -669,10 +546,12 @@
                 <option value="120">2h</option>
                 <option value="180">3h</option>
                 <option value="240">4h</option>
+                <option value="300">5h</option>
+                <option value="360">6h</option>
               </select>
             </div>
             <div>
-              <label id="t_noteLabel">Комментарий (опционально)</label>
+              <label id="t_noteLabel">Комментарий (опц.)</label>
               <input id="note" type="text" placeholder="CS2 / Турнир" />
             </div>
           </div>
@@ -683,21 +562,19 @@
           <!-- TIME PICKER -->
           <div class="timeBox">
             <div class="timeTop">
-              <div class="title">⏱ <span id="t_timeTitle">Выбор времени</span></div>
-              <div class="chipmini" id="pickedSummary"><b>—</b></div>
+              <div class="title">⏱ <span id="t_timeTitle">Время</span></div>
+              <div class="picked" id="pickedSummary"><b>—</b></div>
             </div>
-
             <div class="btns" style="margin-top:0">
               <button class="ghost mini" id="nextFreeBtn" type="button">⚡ <span id="t_nextFree">Следующий свободный</span></button>
               <button class="ghost mini" id="refreshBtn" type="button">🔄 <span id="t_refresh">Обновить</span></button>
             </div>
-
             <div class="timeList" id="timeList"></div>
             <div class="mut" style="margin-top:10px" id="timeHint">Выбери ПК + дату + длительность — появятся доступные старты.</div>
           </div>
 
           <div class="btns" style="margin-top:12px">
-            <button class="primary" id="createBtn" type="button">✅ <span id="t_bookNow">Забронировать</span></button>
+            <button class="primary" id="createBtn" type="button" disabled>✅ <span id="t_bookNow">Забронировать</span></button>
             <button class="ghost" id="myBtn" type="button">👤 <span id="t_my">Мои брони</span></button>
             <button class="ghost" id="todayBtn" type="button">📅 <span id="t_today">Сегодня</span></button>
           </div>
@@ -705,77 +582,108 @@
           <div class="notice" style="margin-top:10px" id="msgBox">—</div>
         </div>
 
-        <!-- MY BOOKINGS -->
-        <div id="myBox" class="hide panel" style="margin-top:14px">
+        <!-- MY -->
+        <div id="myBox" class="hide" style="margin-top:14px">
           <div class="btns">
             <button class="ghost" id="closeMyBtn" type="button">✖ <span id="t_close">Закрыть</span></button>
           </div>
-          <table>
-            <thead>
-              <tr>
-                <th id="t_colDate">День</th>
-                <th id="t_colTime">Время</th>
-                <th id="t_colPc">ПК</th>
-                <th id="t_colNote">Комментарий</th>
-                <th id="t_colAct">Действия</th>
-              </tr>
-            </thead>
-            <tbody id="myTable"></tbody>
-          </table>
+          <div class="tablewrap">
+            <table>
+              <thead>
+                <tr>
+                  <th id="t_colDate">Дата</th>
+                  <th id="t_colTime">Время</th>
+                  <th id="t_colPc">ПК</th>
+                  <th id="t_colNote">Комментарий</th>
+                  <th id="t_colAct">Действия</th>
+                </tr>
+              </thead>
+              <tbody id="myTable"></tbody>
+            </table>
+          </div>
         </div>
 
         <!-- TODAY -->
-        <div id="todayBox" class="hide panel" style="margin-top:14px">
+        <div id="todayBox" class="hide" style="margin-top:14px">
           <div class="btns">
             <button class="ghost" id="closeTodayBtn" type="button">✖ <span id="t_close2">Закрыть</span></button>
           </div>
-          <table>
-            <thead>
-              <tr>
-                <th id="t_colTime2">Время</th>
-                <th id="t_colPc2">ПК</th>
-                <th id="t_colNick2">Ник</th>
-                <th id="t_colNote2">Комментарий</th>
-              </tr>
-            </thead>
-            <tbody id="todayTable"></tbody>
-          </table>
+          <div class="tablewrap">
+            <table>
+              <thead>
+                <tr>
+                  <th id="t_colTime2">Время</th>
+                  <th id="t_colPc2">ПК</th>
+                  <th id="t_colNick2">Ник</th>
+                  <th id="t_colNote2">Комментарий</th>
+                </tr>
+              </thead>
+              <tbody id="todayTable"></tbody>
+            </table>
+          </div>
         </div>
 
         <!-- ADMIN -->
-        <div id="adminBox" class="hide panel" style="margin-top:14px">
+        <div id="adminBox" class="hide" style="margin-top:14px">
           <div class="notice">
-            <b id="t_adminTitle">Admin</b> — <span id="t_adminDesc">управление бронями (realtime)</span>
+            <b>Admin</b> — полный список броней
             <div class="row" style="margin-top:10px">
               <div>
-                <label id="t_adminDateLabel">Дата (рабочий день)</label>
-                <input id="adminDate" type="date" />
+                <label>Режим</label>
+                <select id="adminMode">
+                  <option value="today">Сегодня</option>
+                  <option value="date">Выбранная дата</option>
+                </select>
               </div>
               <div>
-                <label id="t_adminSearchLabel">Поиск (ник/ПК/email)</label>
-                <input id="adminSearch" type="text" placeholder="search" />
+                <label>Дата</label>
+                <input id="adminDate" type="date" />
               </div>
             </div>
-            <div class="btns">
-              <button class="ghost" id="refreshAdminBtn" type="button">🔄 <span id="t_refresh2">Refresh</span></button>
-              <button class="danger" id="adminCloseBtn" type="button">🚪 <span id="t_closeAdmin">Close admin</span></button>
+
+            <div class="row">
+              <div>
+                <label>Поиск</label>
+                <input id="adminSearch" type="text" placeholder="ник / pc / email" />
+              </div>
+              <div>
+                <label>Лимит</label>
+                <select id="adminLimit">
+                  <option value="50">50</option>
+                  <option value="100" selected>100</option>
+                  <option value="200">200</option>
+                </select>
+              </div>
             </div>
+
+            <div class="btns">
+              <button class="ghost" id="refreshAdminBtn" type="button">🔄 Обновить</button>
+              <button class="danger" id="adminCloseBtn" type="button">🚪 Закрыть админ</button>
+            </div>
+            <div class="mut" id="adminHint" style="margin-top:8px">—</div>
           </div>
 
-          <table>
-            <thead>
-              <tr>
-                <th id="t_a_day">День</th><th id="t_a_time">Время</th><th id="t_a_pc">ПК</th><th id="t_a_nick">Ник</th><th id="t_a_user">User</th><th id="t_a_action">Action</th>
-              </tr>
-            </thead>
-            <tbody id="adminTable"></tbody>
-          </table>
+          <div class="tablewrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Дата</th>
+                  <th>Время</th>
+                  <th>ПК</th>
+                  <th>Ник</th>
+                  <th>User</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody id="adminTable"></tbody>
+            </table>
+          </div>
         </div>
 
         <div class="footerbar">
-          <div><span class="kbd">Esc</span> — <span id="t_esc">закрыть окна</span></div>
+          <div><span class="kbd">Esc</span> — закрыть окна</div>
           <div class="btns" style="margin:0">
-            <button class="mini ghost" id="openAdminBtn" type="button">🔐 <span id="t_adminBtn">Admin</span></button>
+            <button class="mini ghost" id="openAdminBtn" type="button">🔐 Admin</button>
           </div>
         </div>
 
@@ -785,79 +693,25 @@
     <!-- RIGHT -->
     <div class="card">
       <div class="hd">
-        <h2 id="t_side">Подсказка</h2>
-        <div class="hint" id="t_side2">как игроку понять сразу</div>
+        <h2 id="t_sideTitle">Подсказка</h2>
+        <div class="hint" id="t_sideHint">для игроков</div>
       </div>
       <div class="bd">
-        <div class="slider" id="onboard">
-          <div class="sliderTop">
-            <div style="display:flex; gap:10px; align-items:center; font-weight:1100">
-              <span id="s_title">Как бронировать</span>
-              <span class="badge" id="s_step">Шаг 1/4</span>
-            </div>
-            <span class="badge" id="s_mode">Live</span>
-          </div>
-
-          <div class="slides">
-            <div class="slide active" data-i="0">
-              <div class="sIcon">🔑</div>
-              <p class="sH" id="s0_h">Вход</p>
-              <p class="sP" id="s0_p">Войди или зарегистрируйся — иначе бронирование не создаётся.</p>
-              <ul class="sList">
-                <li><span>•</span><div id="s0_l1"><b>Login</b> защищает твои брони</div></li>
-                <li><span>•</span><div id="s0_l2">Появится раздел <b>“Мои брони”</b></div></li>
-              </ul>
-            </div>
-
-            <div class="slide" data-i="1">
-              <div class="sIcon">🖥️</div>
-              <p class="sH" id="s1_h">Выбор ПК</p>
-              <p class="sP" id="s1_p">Можно выбрать сразу несколько ПК — время проверится по всем.</p>
-              <ul class="sList">
-                <li><span>•</span><div id="s1_l1">Нажми ПК — он <b>подсветится</b></div></li>
-                <li><span>•</span><div id="s1_l2">Повторный клик — <b>снять</b></div></li>
-              </ul>
-            </div>
-
-            <div class="slide" data-i="2">
-              <div class="sIcon">⏱</div>
-              <p class="sH" id="s2_h">Время</p>
-              <p class="sP" id="s2_p">Выбирай доступный старт. Показаны только реально свободные варианты.</p>
-              <ul class="sList">
-                <li><span>•</span><div id="s2_l1">Кнопка <b>“Следующий свободный”</b></div></li>
-                <li><span>•</span><div id="s2_l2">Ночь помечается <b>🌙(+1)</b></div></li>
-              </ul>
-            </div>
-
-            <div class="slide" data-i="3">
-              <div class="sIcon">✅</div>
-              <p class="sH" id="s3_h">Готово</p>
-              <p class="sP" id="s3_p">Нажми “Забронировать” — покажется успех + детали + быстрые кнопки.</p>
-              <ul class="sList">
-                <li><span>•</span><div id="s3_l1"><b>Мои брони</b> — просмотр/отмена</div></li>
-                <li><span>•</span><div id="s3_l2"><b>Admin</b> видит брони в реальном времени</div></li>
-              </ul>
-            </div>
-          </div>
-
-          <div class="sliderBot">
-            <div class="dots" id="sdots"></div>
-            <div class="btns" style="margin:0">
-              <button class="navBtn ghost" type="button" id="prevSlide">←</button>
-              <button class="navBtn primary" type="button" id="nextSlide">→</button>
-            </div>
-          </div>
-        </div>
-
+        <div class="notice" id="helpBox">✅ Войти → ПК → Дата/длительность → Время → Забронировать.</div>
         <div style="height:12px"></div>
-
-        <div class="notice">
-          <b>Важно</b><br/>
-          Firebase работает только на <b>http(s)</b>. На <b>file:///</b> авторизация/база могут блокироваться браузером.
+        <div class="notice" id="rulesBox">
+          <b id="t_important">Важно</b><br/>
+          • На одном ПК нельзя пересечения<br/>
+          • Ночные слоты отмечены (+1)<br/>
+          • Firebase работает только на <b>http(s)</b> (не file:///)
+        </div>
+        <div style="height:12px"></div>
+        <div class="notice" id="adblockBox">
+          <b>Если в Console видишь</b> <span class="kbd">ERR_BLOCKED_BY_CLIENT</span> — значит блокировщик рекламы всё ещё режет Firestore.
+          Отключи блокировку для сайта.
         </div>
       </div>
     </div>
-
   </div>
 </div>
 
@@ -885,7 +739,7 @@
       <div class="btns">
         <button class="primary" id="doLoginBtn" type="button"><span id="t_login2">Войти</span></button>
         <button class="ghost" id="doRegisterBtn" type="button"><span id="t_register2">Регистрация</span></button>
-        <button class="linkbtn" id="forgotBtn" type="button"><span id="t_forgot">Забыли пароль?</span></button>
+        <button class="ghost" id="forgotBtn" type="button">🔁 <span id="t_forgot">Забыли пароль?</span></button>
       </div>
       <div class="notice" style="margin-top:10px" id="authModalMsg">—</div>
     </div>
@@ -934,7 +788,7 @@
 
   const WORKING_HOURS_ENABLED = true;
   const WORK_START = "10:00";
-  const WORK_END   = "03:00";
+  const WORK_END = "03:00"; // crosses midnight
 
   const ADMIN_EMAILS = [
     "adjarelispeak@gmail.com",
@@ -944,279 +798,269 @@
   // =========================
   // HELPERS
   // =========================
-  const $ = (id) => document.getElementById(id);
+  const $ = (id)=>document.getElementById(id);
   const pad2 = (n)=>String(n).padStart(2,"0");
   const toISODate = (d)=>`${d.getFullYear()}-${pad2(d.getMonth()+1)}-${pad2(d.getDate())}`;
-  const parseISODate = (iso)=>{ const [y,m,d]=iso.split("-").map(Number); return new Date(y,m-1,d,0,0,0,0); };
+  const parseISODate = (iso)=>{ const [y,m,dd]=iso.split("-").map(Number); return new Date(y,m-1,dd,0,0,0,0); };
   const minutesFromHHMM = (t)=>{ const [h,m]=t.split(":").map(Number); return h*60+m; };
   const hhmmFromMinutes = (min)=>{ min=((min%1440)+1440)%1440; const h=Math.floor(min/60), m=min%60; return `${pad2(h)}:${pad2(m)}`; };
-  const addDays = (dateObj, days) => new Date(dateObj.getTime() + days*24*60*60*1000);
+  const addDays = (d, days)=>{ const x=new Date(d); x.setDate(x.getDate()+days); return x; };
 
   function escapeHtml(s){
     return String(s ?? "")
       .replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;")
       .replaceAll('"',"&quot;").replaceAll("'","&#039;");
   }
+  function overlapsMs(a1,a2,b1,b2){ return Math.max(a1,b1) < Math.min(a2,b2); }
+
+  function setCloud(text, ok=true){
+    $("cloudPill").textContent = text;
+    const dot = $("cloudDot");
+    dot.classList.remove("ok","err");
+    dot.classList.add(ok ? "ok" : "err");
+  }
+
+  function setMsg(html, kind="info"){
+    const el = $("msgBox");
+    el.innerHTML = html;
+    el.style.borderColor =
+      kind==="good" ? "rgba(52,211,153,.45)" :
+      kind==="bad" ? "rgba(251,113,133,.55)" :
+      kind==="warn" ? "rgba(251,191,36,.55)" :
+      "rgba(110,231,255,.35)";
+    el.style.background =
+      kind==="good" ? "rgba(52,211,153,.08)" :
+      kind==="bad" ? "rgba(251,113,133,.08)" :
+      kind==="warn" ? "rgba(251,191,36,.10)" :
+      "rgba(110,231,255,.06)";
+  }
+
+  function show(el){ el.classList.remove("hide"); }
+  function hide(el){ el.classList.add("hide"); }
+  function openModal(){ $("authBackdrop").classList.add("show"); }
+  function closeModal(){ $("authBackdrop").classList.remove("show"); }
+
+  function isPermissionError(e){
+    const msg = String(e?.message || e || "");
+    return msg.toLowerCase().includes("permission") || msg.includes("PERMISSION_DENIED") || msg.includes("Missing or insufficient permissions");
+  }
+  function isBlockedByClient(e){
+    const msg = String(e?.message || e || "");
+    return msg.includes("ERR_BLOCKED_BY_CLIENT");
+  }
 
   // =========================
-  // i18n (full)
+  // i18n (UI text only)
   // =========================
   const LANG_KEY = "sg_lang";
   let lang = localStorage.getItem(LANG_KEY) || "ru";
 
-  const i18n = {
+  const T = {
     ru: {
-      title: "Sakompiutere Gaming — Booking",
-      sub: "Выбери ПК → дату → время → подтвердить",
-      user: "Пользователь",
-      status: "Статус",
-      main: "Бронирование",
-      hintTop: "Онлайн база через Firebase",
-      authTitle: "Аккаунт",
-      authDesc: "Чтобы бронировать — нужно войти.",
-      login: "Войти",
-      register: "Регистрация",
-      logout: "Выйти",
-      nickLabel: "Твой ник (в клубе)",
-      dateLabel: "Дата (рабочий день)",
-      duration: "Длительность",
-      noteLabel: "Комментарий (опционально)",
-      pickpc: "Выбери ПК (можно несколько):",
-      timeTitle: "Выбор времени",
-      nextFree: "Следующий свободный",
-      refresh: "Обновить",
-      timeHintIdle: "Выбери ПК + дату + длительность — появятся доступные старты.",
-      timeHintPick: "Выбери старт (показываются реальные свободные варианты).",
-      bookNow: "Забронировать",
-      my: "Мои брони",
-      today: "Сегодня",
-      close: "Закрыть",
-      colDay: "День",
-      colTime: "Время",
-      colPc: "ПК",
-      colNote: "Комментарий",
-      colAct: "Действия",
-      esc: "закрыть окна",
-      adminBtn: "Admin",
-      adminTitle: "Admin",
-      adminDesc: "управление бронями (realtime)",
-      adminDateLabel: "Дата (рабочий день)",
-      adminSearchLabel: "Поиск (ник/ПК/email)",
-      closeAdmin: "Close admin",
-      tableA: { day:"День", time:"Время", pc:"ПК", nick:"Ник", user:"User", action:"Action" },
-      modalTitle: "Войти / Регистрация",
-      modalSub: "Email + пароль",
-      email:"Email",
-      pass:"Password",
+      title:"Sakompiutere Gaming — Booking",
+      sub:"ПК → Дата/длительность → Время → Готово",
+      user:"Пользователь",
+      status:"Статус",
+      main:"Бронирование",
+      hintTop:"Общая база (Firebase)",
+      authTitle:"Аккаунт",
+      authDesc:"Чтобы бронировать — нужно войти.",
+      login:"Войти",
+      register:"Регистрация",
+      logout:"Выйти",
+      flowTitle:"Быстро",
+      flow1:"1) Войди",
+      flow2:"2) Выбери ПК",
+      flow3:"3) Дату + длительность",
+      flow4:"4) Время → Забронировать",
+      nickLabel:"Ник (в клубе)",
+      dateLabel:"Дата (клубный день)",
+      duration:"Длительность",
+      noteLabel:"Комментарий (опц.)",
+      pickpc:"Выбери ПК (можно несколько):",
+      timeTitle:"Время",
+      nextFree:"Следующий свободный",
+      refresh:"Обновить",
+      timeHintIdle:"Выбери ПК + дату + длительность — появятся доступные старты.",
+      timeHintPick:"Выбери старт (✅ свободно / ⛔ занято).",
+      bookNow:"Забронировать",
+      my:"Мои брони",
+      today:"Сегодня",
+      close:"Закрыть",
+      colDate:"Дата",
+      colTime:"Время",
+      colPc:"ПК",
+      colNote:"Комментарий",
+      colAct:"Действия",
+      sideTitle:"Подсказка",
+      sideHint:"для игроков",
+      important:"Важно",
+      authModal:"Войти / Регистрация",
+      authModal2:"Email + пароль",
       forgot:"Забыли пароль?",
-      login2:"Войти",
-      register2:"Регистрация",
-      s_title:"Как бронировать",
-      s0:{h:"Вход", p:"Войди или зарегистрируйся — иначе бронирование не создаётся.", l1:"<b>Login</b> защищает твои брони", l2:"Появится раздел <b>“Мои брони”</b>"},
-      s1:{h:"Выбор ПК", p:"Можно выбрать сразу несколько ПК — время проверится по всем.", l1:"Нажми ПК — он <b>подсветится</b>", l2:"Повторный клик — <b>снять</b>"},
-      s2:{h:"Время", p:"Выбирай доступный старт. Показаны только реально свободные варианты.", l1:"Кнопка <b>“Следующий свободный”</b>", l2:"Ночь помечается <b>🌙(+1)</b>"},
-      s3:{h:"Готово", p:"Нажми “Забронировать” — покажется успех + детали + быстрые кнопки.", l1:"<b>Мои брони</b> — просмотр/отмена", l2:"<b>Admin</b> видит брони в реальном времени"},
-      msg: {
-        welcome:"Войди, выбери ПК и время — и бронируй ✅",
+      succTitle:"✅ Успешно забронировано",
+      succMy:"Мои брони",
+      succAgain:"Забронировать ещё",
+      msg:{
+        needHttps:"Firebase работает только на http(s). Открой сайт через хостинг (Firebase Hosting / Vercel / Netlify).",
         loginFirst:"Сначала войди.",
         enterNick:"Введи ник.",
         pickDate:"Выбери дату.",
         pickPc:"Выбери ПК.",
-        pickTime:"Выбери время.",
+        pickTime:"Выбери свободное время.",
         past:"Нельзя бронировать в прошлом.",
+        loading:"Загружаю брони…",
         creating:"Создаю бронь…",
-        ok:"✅ Бронь создана!",
-        nextFreeNone:"Свободного времени нет 😕",
-        refreshed:"Обновлено.",
-        rulesDenied:"Firestore permission denied. Нужно обновить Firestore Rules в Firebase Console.",
-        blockedByClient:"Запросы к Firestore блокируются расширением (uBlock/AdBlock/Brave Shields). Отключи блокировку для сайта или открой в инкогнито без расширений.",
-        fsError:"Firestore error. Открой Console (F12) и пришли 1 красную строку.",
-        selected:"Выбрано время: ",
-        cancelOk:"Отменено.",
-        delOk:"Удалено.",
-        notAdmin:"Ты не админ. Добавь email в ADMIN_EMAILS."
-      },
-      succ:{ title:"✅ Успешно забронировано", my:"Мои брони", again:"Забронировать ещё", hintAdmin:"Админ увидит бронь в разделе Admin (если есть права)." },
-      cancelConfirm:"Cancel booking?",
-      deleteConfirm:"Delete booking?",
-      loginErr:"Введите email+password",
-      resetSent:"Письмо для сброса пароля отправлено ✅",
-      loginOK:"OK",
-      created:"Created!"
+        ok:"🎉 Успешно! Бронь создана.",
+        overlap:"⛔ Этот слот уже заняли. Выбери другой.",
+        rules:"⛔ Нет прав (Firestore Rules).",
+        blocked:"⛔ Запросы блокируются расширением (ERR_BLOCKED_BY_CLIENT). Отключи AdBlock/Brave Shields.",
+        generic:"Ошибка. Открой Console (F12) и пришли одну красную строку.",
+        canceled:"Отменено.",
+        deleted:"Удалено.",
+        notAdmin:"Ты не админ (ADMIN_EMAILS)."
+      }
     },
-
     en: {
-      title: "Sakompiutere Gaming — Booking",
-      sub: "Pick PC → date → time → confirm",
-      user: "User",
-      status: "Status",
-      main: "Booking",
-      hintTop: "Live database via Firebase",
-      authTitle: "Account",
-      authDesc: "Login required to book.",
-      login: "Login",
-      register: "Register",
-      logout: "Logout",
-      nickLabel: "Your nickname (club)",
-      dateLabel: "Date (work day)",
-      duration: "Duration",
-      noteLabel: "Note (optional)",
-      pickpc: "Select PCs (multi-select):",
-      timeTitle: "Pick time",
-      nextFree: "Next available",
-      refresh: "Refresh",
-      timeHintIdle: "Pick PCs + date + duration — available starts will appear.",
-      timeHintPick: "Pick a start time (only real free options are shown).",
-      bookNow: "Book now",
-      my: "My bookings",
-      today: "Today",
-      close: "Close",
-      colDay: "Day",
-      colTime: "Time",
-      colPc: "PC",
-      colNote: "Note",
-      colAct: "Actions",
-      esc: "close panels",
-      adminBtn: "Admin",
-      adminTitle: "Admin",
-      adminDesc: "manage bookings (realtime)",
-      adminDateLabel: "Date (work day)",
-      adminSearchLabel: "Search (nick/PC/email)",
-      closeAdmin: "Close admin",
-      tableA: { day:"Day", time:"Time", pc:"PC", nick:"Nick", user:"User", action:"Action" },
-      modalTitle: "Login / Register",
-      modalSub: "Email + password",
-      email:"Email",
-      pass:"Password",
+      title:"Sakompiutere Gaming — Booking",
+      sub:"PC → Date/Duration → Time → Done",
+      user:"User",
+      status:"Status",
+      main:"Booking",
+      hintTop:"Shared database (Firebase)",
+      authTitle:"Account",
+      authDesc:"Login required to book.",
+      login:"Login",
+      register:"Register",
+      logout:"Logout",
+      flowTitle:"Quick",
+      flow1:"1) Login",
+      flow2:"2) Pick PCs",
+      flow3:"3) Date + duration",
+      flow4:"4) Time → Book",
+      nickLabel:"Nickname (club)",
+      dateLabel:"Date (club day)",
+      duration:"Duration",
+      noteLabel:"Note (optional)",
+      pickpc:"Pick PCs (multi-select):",
+      timeTitle:"Time",
+      nextFree:"Next free",
+      refresh:"Refresh",
+      timeHintIdle:"Pick PCs + date + duration — available start times will appear.",
+      timeHintPick:"Pick a start time (✅ free / ⛔ busy).",
+      bookNow:"Book now",
+      my:"My bookings",
+      today:"Today",
+      close:"Close",
+      colDate:"Date",
+      colTime:"Time",
+      colPc:"PC",
+      colNote:"Note",
+      colAct:"Actions",
+      sideTitle:"Help",
+      sideHint:"for players",
+      important:"Important",
+      authModal:"Login / Register",
+      authModal2:"Email + password",
       forgot:"Forgot password?",
-      login2:"Login",
-      register2:"Register",
-      s_title:"How to book",
-      s0:{h:"Login", p:"Login or register — otherwise booking can’t be created.", l1:"<b>Login</b> protects your bookings", l2:"You’ll see <b>“My bookings”</b>"},
-      s1:{h:"Pick PCs", p:"You can select multiple PCs — time checks all selected.", l1:"Tap a PC — it becomes <b>selected</b>", l2:"Tap again — <b>unselect</b>"},
-      s2:{h:"Pick time", p:"Choose an available start. Only real free options are shown.", l1:"Use <b>“Next available”</b>", l2:"Night is marked <b>🌙(+1)</b>"},
-      s3:{h:"Done", p:"Press “Book now” — success screen + details + quick actions.", l1:"<b>My bookings</b> — view/cancel", l2:"<b>Admin</b> sees bookings in realtime"},
-      msg: {
-        welcome:"Login, pick PCs & time — then book ✅",
+      succTitle:"✅ Booking successful",
+      succMy:"My bookings",
+      succAgain:"Book again",
+      msg:{
+        needHttps:"Firebase works only on http(s). Open via hosting (Firebase Hosting / Vercel / Netlify).",
         loginFirst:"Please login first.",
-        enterNick:"Enter your nickname.",
+        enterNick:"Enter nickname.",
         pickDate:"Pick a date.",
         pickPc:"Pick PCs.",
-        pickTime:"Pick a time.",
+        pickTime:"Pick a free time.",
         past:"Cannot book in the past.",
+        loading:"Loading bookings…",
         creating:"Creating booking…",
-        ok:"✅ Booking created!",
-        nextFreeNone:"No free time 😕",
-        refreshed:"Refreshed.",
-        rulesDenied:"Firestore permission denied. Update Firestore Rules in Firebase Console.",
-        blockedByClient:"Firestore requests are blocked by an extension (uBlock/AdBlock/Brave Shields). Disable blocking for this site or use Incognito without extensions.",
-        fsError:"Firestore error. Open Console (F12) and send 1 red line.",
-        selected:"Selected time: ",
-        cancelOk:"Canceled.",
-        delOk:"Deleted.",
-        notAdmin:"You are not admin. Add your email to ADMIN_EMAILS."
-      },
-      succ:{ title:"✅ Booking successful", my:"My bookings", again:"Book again", hintAdmin:"Admin will see it in Admin panel (if allowed)." },
-      cancelConfirm:"Cancel booking?",
-      deleteConfirm:"Delete booking?",
-      loginErr:"Enter email+password",
-      resetSent:"Password reset email sent ✅",
-      loginOK:"OK",
-      created:"Created!"
+        ok:"🎉 Success! Booking created.",
+        overlap:"⛔ Slot already taken. Pick another.",
+        rules:"⛔ No permission (Firestore Rules).",
+        blocked:"⛔ Requests are blocked by extension (ERR_BLOCKED_BY_CLIENT). Disable AdBlock/Brave Shields.",
+        generic:"Error. Open Console (F12) and send one red line.",
+        canceled:"Canceled.",
+        deleted:"Deleted.",
+        notAdmin:"You are not admin (ADMIN_EMAILS)."
+      }
     },
-
     ka: {
-      title: "Sakompiutere Gaming — Booking",
-      sub: "აირჩიე PC → თარიღი → დრო → დაადასტურე",
-      user: "მომხმარებელი",
-      status: "სტატუსი",
-      main: "ჯავშანი",
-      hintTop: "ონლაინ ბაზა Firebase-ით",
-      authTitle: "აქაუნთი",
-      authDesc: "ჯავშნისთვის საჭიროა შესვლა.",
-      login: "შესვლა",
-      register: "რეგისტრაცია",
-      logout: "გასვლა",
-      nickLabel: "ნიკი (კლუბში)",
-      dateLabel: "თარიღი (სამუშაო დღე)",
-      duration: "ხანგრძლივობა",
-      noteLabel: "შენიშვნა (არასავალდებულო)",
-      pickpc: "აირჩიე PC-ები (შეიძლება რამდენიმე):",
-      timeTitle: "დროის არჩევა",
-      nextFree: "შემდეგი თავისუფალი",
-      refresh: "განახლება",
-      timeHintIdle: "აირჩიე PC + თარიღი + ხანგრძლივობა — გამოჩნდება თავისუფალი სტარტები.",
-      timeHintPick: "აირჩიე დაწყება (ნაჩვენებია მხოლოდ რეალურად თავისუფალი ვარიანტები).",
-      bookNow: "დაჯავშნა",
-      my: "ჩემი ჯავშნები",
-      today: "დღეს",
-      close: "დახურვა",
-      colDay: "დღე",
-      colTime: "დრო",
-      colPc: "PC",
-      colNote: "შენიშვნა",
-      colAct: "ქმედება",
-      esc: "ფანჯრების დახურვა",
-      adminBtn: "Admin",
-      adminTitle: "Admin",
-      adminDesc: "ჯავშნების მართვა (realtime)",
-      adminDateLabel: "თარიღი (სამუშაო დღე)",
-      adminSearchLabel: "ძიება (ნიკი/PC/email)",
-      closeAdmin: "Close admin",
-      tableA: { day:"დღე", time:"დრო", pc:"PC", nick:"ნიკი", user:"User", action:"Action" },
-      modalTitle: "შესვლა / რეგისტრაცია",
-      modalSub: "Email + პაროლი",
-      email:"Email",
-      pass:"Password",
-      forgot:"დაგავიწყდა პაროლი?",
-      login2:"შესვლა",
-      register2:"რეგისტრაცია",
-      s_title:"როგორ დავჯავშნო",
-      s0:{h:"შესვლა", p:"შედი ან დარეგისტრირდი — სხვა შემთხვევაში ჯავშანი არ შეიქმნება.", l1:"<b>Login</b> იცავს შენს ჯავშნებს", l2:"გამოჩნდება <b>“ჩემი ჯავშნები”</b>"},
-      s1:{h:"PC-ების არჩევა", p:"შეგიძლია რამდენიმე PC — დრო შემოწმდება ყველა არჩეულზე.", l1:"დააჭირე PC-ს — <b>აირჩევა</b>", l2:"მეორედ — <b>გაუქმდება</b>"},
-      s2:{h:"დრო", p:"აირჩიე თავისუფალი დაწყება. ნაჩვენებია მხოლოდ რეალურად თავისუფალი ვარიანტები.", l1:"გამოიყენე <b>“შემდეგი თავისუფალი”</b>", l2:"ღამე აღნიშნულია <b>🌙(+1)</b>"},
-      s3:{h:"მზადაა", p:"დააჭირე “დაჯავშნა” — გამოჩნდება წარმატება + დეტალები + სწრაფი ქმედებები.", l1:"<b>ჩემი ჯავშნები</b> — ნახვა/გაუქმება", l2:"<b>Admin</b> ხედავს realtime-ში"},
-      msg: {
-        welcome:"შედი, აირჩიე PC და დრო — და შემდეგ დაჯავშნე ✅",
+      title:"Sakompiutere Gaming — Booking",
+      sub:"PC → თარიღი/ხანგრძლივობა → დრო → მზადაა",
+      user:"მომხმარებელი",
+      status:"სტატუსი",
+      main:"ჯავშანი",
+      hintTop:"საერთო ბაზა (Firebase)",
+      authTitle:"აქაუნთი",
+      authDesc:"ჯავშნისთვის საჭიროა შესვლა.",
+      login:"შესვლა",
+      register:"რეგისტრაცია",
+      logout:"გასვლა",
+      flowTitle:"სწრაფად",
+      flow1:"1) შედი",
+      flow2:"2) აირჩიე PC",
+      flow3:"3) თარიღი + ხანგრძლივობა",
+      flow4:"4) დრო → დაჯავშნა",
+      nickLabel:"ნიკი (კლუბში)",
+      dateLabel:"თარიღი (კლუბის დღე)",
+      duration:"ხანგრძლივობა",
+      noteLabel:"შენიშვნა (არასავალდ.)",
+      pickpc:"აირჩიე PC-ები (რამდენიმე შეიძლება):",
+      timeTitle:"დრო",
+      nextFree:"შემდეგი თავისუფალი",
+      refresh:"განახლება",
+      timeHintIdle:"აირჩიე PC + თარიღი + ხანგრძლივობა — გამოჩნდება დროები.",
+      timeHintPick:"აირჩიე დაწყება (✅ თავისუფალი / ⛔ დაკავებული).",
+      bookNow:"დაჯავშნა",
+      my:"ჩემი ჯავშნები",
+      today:"დღეს",
+      close:"დახურვა",
+      colDate:"თარიღი",
+      colTime:"დრო",
+      colPc:"PC",
+      colNote:"შენიშვნა",
+      colAct:"ქმედება",
+      sideTitle:"დახმარება",
+      sideHint:"მოთამაშეებისთვის",
+      important:"მნიშვნელოვანია",
+      authModal:"შესვლა / რეგისტრაცია",
+      authModal2:"Email + პაროლი",
+      forgot:"პაროლი დაგავიწყდა?",
+      succTitle:"✅ ჯავშანი წარმატებულია",
+      succMy:"ჩემი ჯავშნები",
+      succAgain:"კიდევ დაჯავშნა",
+      msg:{
+        needHttps:"Firebase მუშაობს მხოლოდ http(s)-ზე. გახსენი ჰოსტინგით (Firebase Hosting / Vercel / Netlify).",
         loginFirst:"ჯერ შედი.",
         enterNick:"შეიყვანე ნიკი.",
         pickDate:"აირჩიე თარიღი.",
         pickPc:"აირჩიე PC.",
-        pickTime:"აირჩიე დრო.",
+        pickTime:"აირჩიე თავისუფალი დრო.",
         past:"წარსულში დაჯავშნა არ შეიძლება.",
+        loading:"ვტვირთავ ჯავშნებს…",
         creating:"ვქმნი ჯავშანს…",
-        ok:"✅ ჯავშანი შეიქმნა!",
-        nextFreeNone:"თავისუფალი დრო არ არის 😕",
-        refreshed:"განახლდა.",
-        rulesDenied:"Firestore permission denied. განაახლე Firestore Rules Firebase Console-ში.",
-        blockedByClient:"Firestore-ის მოთხოვნებს ბლოკავს გაფართოება (uBlock/AdBlock/Brave Shields). გამორთე ბლოკი ამ საიტზე ან გახსენი ინკოგნიტო რეჟიმში გაფართოებების გარეშე.",
-        fsError:"Firestore error. გახსენი Console (F12) და გამომიგზავნე 1 წითელი ხაზი.",
-        selected:"არჩეული დრო: ",
-        cancelOk:"გაუქმდა.",
-        delOk:"წაიშალა.",
-        notAdmin:"Admin არ ხარ. დაამატე email ADMIN_EMAILS-ში."
-      },
-      succ:{ title:"✅ ჯავშანი წარმატებულია", my:"ჩემი ჯავშნები", again:"კიდევ დაჯავშნა", hintAdmin:"Admin ნახავს Admin პანელში (თუ აქვს უფლება)." },
-      cancelConfirm:"Cancel booking?",
-      deleteConfirm:"Delete booking?",
-      loginErr:"შეიყვანე email+password",
-      resetSent:"პაროლის აღდგენის წერილი გაიგზავნა ✅",
-      loginOK:"OK",
-      created:"Created!"
+        ok:"🎉 წარმატება! ჯავშანი შეიქმნა.",
+        overlap:"⛔ დრო დაკავებულია. აირჩიე სხვა.",
+        rules:"⛔ წვდომა არ არის (Firestore Rules).",
+        blocked:"⛔ მოთხოვნები ბლოკდება (ERR_BLOCKED_BY_CLIENT). გამორთე AdBlock/Brave Shields.",
+        generic:"შეცდომა. გახსენი Console (F12) და გამომიგზავნე 1 წითელი ხაზი.",
+        canceled:"გაუქმდა.",
+        deleted:"წაიშალა.",
+        notAdmin:"Admin არ ხარ (ADMIN_EMAILS)."
+      }
     }
   };
 
-  function tr(path){
-    const parts = path.split(".");
-    let obj = i18n[lang] || i18n.ru;
+  function tr(key){
+    const dict = T[lang] || T.ru;
+    const parts = key.split(".");
+    let cur = dict;
     for(const p of parts){
-      obj = (obj && obj[p] != null) ? obj[p] : null;
+      cur = (cur && cur[p]!=null) ? cur[p] : null;
     }
-    if(obj == null){
-      obj = i18n.ru;
-      for(const p of parts){ obj = (obj && obj[p] != null) ? obj[p] : null; }
-    }
-    return obj == null ? path : obj;
+    return cur == null ? (T.ru?.[key] ?? key) : cur;
   }
 
   function applyLang(){
@@ -1234,6 +1078,12 @@
     $("t_register").textContent = tr("register");
     $("t_logout").textContent = tr("logout");
 
+    $("t_flowTitle").textContent = tr("flowTitle");
+    $("t_flow1").textContent = tr("flow1");
+    $("t_flow2").textContent = tr("flow2");
+    $("t_flow3").textContent = tr("flow3");
+    $("t_flow4").textContent = tr("flow4");
+
     $("t_nickLabel").textContent = tr("nickLabel");
     $("t_dateLabel").textContent = tr("dateLabel");
     $("t_duration").textContent = tr("duration");
@@ -1250,139 +1100,31 @@
     $("t_close").textContent = tr("close");
     $("t_close2").textContent = tr("close");
 
-    $("t_colDate").textContent = tr("colDay");
+    $("t_colDate").textContent = tr("colDate");
     $("t_colTime").textContent = tr("colTime");
     $("t_colPc").textContent = tr("colPc");
     $("t_colNote").textContent = tr("colNote");
     $("t_colAct").textContent = tr("colAct");
 
-    $("t_esc").textContent = tr("esc");
-    $("t_adminBtn").textContent = tr("adminBtn");
+    $("t_sideTitle").textContent = tr("sideTitle");
+    $("t_sideHint").textContent = tr("sideHint");
+    $("t_important").textContent = tr("important");
 
-    $("t_adminTitle").textContent = tr("adminTitle");
-    $("t_adminDesc").textContent = tr("adminDesc");
-    $("t_adminDateLabel").textContent = tr("adminDateLabel");
-    $("t_adminSearchLabel").textContent = tr("adminSearchLabel");
-    $("t_refresh2").textContent = tr("refresh");
-    $("t_closeAdmin").textContent = tr("closeAdmin");
-
-    $("t_a_day").textContent = tr("tableA.day");
-    $("t_a_time").textContent = tr("tableA.time");
-    $("t_a_pc").textContent = tr("tableA.pc");
-    $("t_a_nick").textContent = tr("tableA.nick");
-    $("t_a_user").textContent = tr("tableA.user");
-    $("t_a_action").textContent = tr("tableA.action");
-
-    $("t_authModal").textContent = tr("modalTitle");
-    $("t_authModal2").textContent = tr("modalSub");
-    $("t_email").textContent = tr("email");
-    $("t_pass").textContent = tr("pass");
+    $("t_authModal").textContent = tr("authModal");
+    $("t_authModal2").textContent = tr("authModal2");
     $("t_forgot").textContent = tr("forgot");
-    $("t_login2").textContent = tr("login2");
-    $("t_register2").textContent = tr("register2");
+    $("t_login2").textContent = tr("login");
+    $("t_register2").textContent = tr("register");
 
-    $("t_succMy").textContent = tr("succ.my");
-    $("t_succAgain").textContent = tr("succ.again");
-    $("succTitle").textContent = tr("succ.title");
-
-    $("t_side").textContent = tr("s_title");
-    $("t_side2").textContent = (lang==="en" ? "quick steps" : lang==="ka" ? "სწრაფი ნაბიჯები" : "быстрые шаги");
-
-    $("s_title").textContent = tr("s_title");
-    $("s0_h").textContent = tr("s0.h"); $("s0_p").textContent = tr("s0.p");
-    $("s0_l1").innerHTML = tr("s0.l1"); $("s0_l2").innerHTML = tr("s0.l2");
-
-    $("s1_h").textContent = tr("s1.h"); $("s1_p").textContent = tr("s1.p");
-    $("s1_l1").innerHTML = tr("s1.l1"); $("s1_l2").innerHTML = tr("s1.l2");
-
-    $("s2_h").textContent = tr("s2.h"); $("s2_p").textContent = tr("s2.p");
-    $("s2_l1").innerHTML = tr("s2.l1"); $("s2_l2").innerHTML = tr("s2.l2");
-
-    $("s3_h").textContent = tr("s3.h"); $("s3_p").textContent = tr("s3.p");
-    $("s3_l1").innerHTML = tr("s3.l1"); $("s3_l2").innerHTML = tr("s3.l2");
+    $("succTitle").textContent = tr("succTitle");
+    $("t_succMy").textContent = tr("succMy");
+    $("t_succAgain").textContent = tr("succAgain");
 
     $("lang_ru").classList.toggle("active", lang==="ru");
     $("lang_en").classList.toggle("active", lang==="en");
     $("lang_ka").classList.toggle("active", lang==="ka");
 
     updateTimeHint();
-  }
-
-  // =========================
-  // UI helpers
-  // =========================
-  function setCloud(text, ok=true){
-    $("cloudPill").textContent = text;
-    const dot = $("cloudDot");
-    dot.classList.remove("ok","err");
-    dot.classList.add(ok ? "ok" : "err");
-  }
-
-  function setToast(text, kind="info"){
-    const el = $("msgBox");
-    el.classList.remove("toastIn"); void el.offsetWidth; el.classList.add("toastIn");
-    el.textContent = text;
-
-    el.style.borderColor =
-      kind==="good" ? "rgba(52,211,153,.45)" :
-      kind==="bad"  ? "rgba(251,113,133,.55)" :
-      kind==="warn" ? "rgba(251,191,36,.55)" :
-      "rgba(110,231,255,.35)";
-
-    el.style.background =
-      kind==="good" ? "rgba(52,211,153,.08)" :
-      kind==="bad"  ? "rgba(251,113,133,.08)" :
-      kind==="warn" ? "rgba(251,191,36,.08)" :
-      "rgba(110,231,255,.06)";
-  }
-
-  function show(el){ el.classList.remove("hide"); }
-  function hide(el){ el.classList.add("hide"); }
-  function openModal(){ $("authBackdrop").classList.add("show"); }
-  function closeModal(){ $("authBackdrop").classList.remove("show"); }
-
-  // =========================
-  // time logic (night shift)
-  // =========================
-  function isCrossMidnight(){
-    if(!WORKING_HOURS_ENABLED) return false;
-    const ws = minutesFromHHMM(WORK_START);
-    const we = minutesFromHHMM(WORK_END);
-    return we <= ws;
-  }
-
-  function slotStartAbs(dateKey, startMin){
-    const base = parseISODate(dateKey);
-    let d = new Date(base.getFullYear(), base.getMonth(), base.getDate(), Math.floor(startMin/60), startMin%60, 0, 0);
-    if(isCrossMidnight()){
-      const ws = minutesFromHHMM(WORK_START);
-      if(startMin < ws) d = addDays(d, 1);
-    }
-    return d;
-  }
-  function slotEndAbs(dateKey, endMin){
-    const base = parseISODate(dateKey);
-    let d = new Date(base.getFullYear(), base.getMonth(), base.getDate(), Math.floor(endMin/60), endMin%60, 0, 0);
-    if(isCrossMidnight()){
-      const ws = minutesFromHHMM(WORK_START);
-      if(endMin <= ws) d = addDays(d, 1);
-    }
-    return d;
-  }
-
-  function overlapsAbs(aStart, aEnd, bStart, bEnd){
-    return Math.max(aStart, bStart) < Math.min(aEnd, bEnd);
-  }
-
-  function workingWindowSegments(){
-    const ws = minutesFromHHMM(WORK_START);
-    const we = minutesFromHHMM(WORK_END);
-    if(!WORKING_HOURS_ENABLED) return [{a:0,b:1440, night:false}];
-    if(we > ws) return [{a:ws,b:we, night:false}];
-    return [
-      {a:ws,b:1440, night:false},
-      {a:0,b:we, night:true}
-    ];
   }
 
   // =========================
@@ -1400,49 +1142,42 @@
   }catch(e){
     console.error(e);
     setCloud("ERROR", false);
-    setToast("Firebase init error. Open Console (F12).", "bad");
+    setMsg("Firebase init error. Open Console (F12).", "bad");
     return;
   }
 
   // =========================
-  // STATE
+  // TIME / SLOTS (club day window)
+  // =========================
+  const wsMin = minutesFromHHMM(WORK_START);
+  const weMin = minutesFromHHMM(WORK_END);
+  const crossesMidnight = WORKING_HOURS_ENABLED && (weMin <= wsMin);
+
+  function segments(){
+    if(!WORKING_HOURS_ENABLED) return [{a:0,b:1440,nextDay:false}];
+    if(!crossesMidnight) return [{a:wsMin,b:weMin,nextDay:false}];
+    return [
+      {a:wsMin,b:1440,nextDay:false},
+      {a:0,b:weMin,nextDay:true},
+    ];
+  }
+
+  function dateTimeFromBase(baseDateISO, minutes, nextDay){
+    const base = parseISODate(baseDateISO);
+    const actual = nextDay ? addDays(base, 1) : base;
+    return new Date(actual.getFullYear(), actual.getMonth(), actual.getDate(),
+      Math.floor(minutes/60), minutes%60, 0, 0);
+  }
+
+  // =========================
+  // UI STATE
   // =========================
   let selectedPCs = new Set();
-  let selectedStart = null; // {startMin,endMin,startAtMs,endAtMs,label,night}
-  let cachedBookings = [];
-  let unsubDateRealtime = null;
-  let unsubAdminRealtime = null;
+  let selectedSlot = null; // {startMin,endMin,nextDay,label,startAtMs,endAtMs}
+  let cachedDayBookings = []; // bookings for selected baseDate
+  let unsubRealtime = null;
 
-  // =========================
-  // FIRESTORE error handling
-  // =========================
-  function detectBlockedByClient(err){
-    const msg = String(err && (err.message || err.code || err) || "");
-    // "Failed to fetch" часто при блокировке, а в Network видно ERR_BLOCKED_BY_CLIENT
-    return msg.includes("Failed to fetch") || msg.toLowerCase().includes("blocked") || msg.toLowerCase().includes("network");
-  }
-
-  function handleFirestoreErr(err){
-    console.error(err);
-    const msg = String(err && (err.message||err.code||err) || "");
-    if(msg.toLowerCase().includes("permission") || msg.includes("PERMISSION_DENIED")){
-      setCloud("RULES", false);
-      setToast(tr("msg.rulesDenied"), "bad");
-      return;
-    }
-    if(detectBlockedByClient(err)){
-      setCloud("BLOCK", false);
-      setToast(tr("msg.blockedByClient"), "bad");
-      return;
-    }
-    setCloud("ERR", false);
-    setToast(tr("msg.fsError"), "bad");
-  }
-
-  // =========================
-  // PC grid
-  // =========================
-  function renderPCGrid(){
+  function renderPCs(){
     const grid = $("pcGrid");
     grid.innerHTML = "";
     for(const pc of PCs){
@@ -1456,132 +1191,80 @@
       div.addEventListener("click", ()=>{
         if(selectedPCs.has(pc)) selectedPCs.delete(pc);
         else selectedPCs.add(pc);
-        renderPCGrid();
-        rebuildTimeList();
-        sliderGo(1);
+        renderPCs();
+        rebuildSlots();
       });
       grid.appendChild(div);
     }
   }
 
-  // =========================
-  // REALTIME loading (date + prev day)
-  // =========================
-  async function startRealtimeForDate(dateKey){
-    if(unsubDateRealtime) { try{unsubDateRealtime();}catch(e){} unsubDateRealtime=null; }
-    if(!dateKey) return;
-
-    const prevKey = toISODate(addDays(parseISODate(dateKey), -1));
-    const col = db.collection("bookings");
-
-    const q1 = col.where("dateKey","==",dateKey);
-    const q2 = col.where("dateKey","==",prevKey);
-
-    let list1 = [], list2 = [];
-
-    const apply = ()=>{
-      cachedBookings = [...list1, ...list2].map(b=>({
-        ...b,
-        startAtMs: Number(b.startAtMs||0),
-        endAtMs: Number(b.endAtMs||0),
-        pc: String(b.pc||"")
-      }));
-      rebuildTimeList();
-    };
-
-    const u1 = q1.onSnapshot((snap)=>{
-      list1 = snap.docs.map(d=>({id:d.id, ...d.data()}));
-      apply();
-      setCloud("LIVE", true);
-    }, handleFirestoreErr);
-
-    const u2 = q2.onSnapshot((snap)=>{
-      list2 = snap.docs.map(d=>({id:d.id, ...d.data()}));
-      apply();
-      setCloud("LIVE", true);
-    }, handleFirestoreErr);
-
-    unsubDateRealtime = ()=>{ try{u1();}catch(e){} try{u2();}catch(e){} };
+  function updateTimeHint(){
+    const baseDate = $("date").value;
+    const dur = Number($("duration").value || 60);
+    if(!baseDate || !dur || selectedPCs.size===0){
+      $("timeHint").textContent = tr("timeHintIdle");
+    }else{
+      $("timeHint").textContent = tr("timeHintPick");
+    }
   }
 
-  // =========================
-  // TIME PICKER
-  // =========================
-  function isBusyForPCs(slot){
-    for(const b of cachedBookings){
-      if(!selectedPCs.has(b.pc)) continue;
-      if(overlapsAbs(slot.startAtMs, slot.endAtMs, b.startAtMs, b.endAtMs)) return true;
+  function slotBusyMs(startAtMs, endAtMs){
+    for(const b of cachedDayBookings){
+      if(!selectedPCs.has(String(b.pc||""))) continue;
+      const bs = Number(b.startAtMs||0);
+      const be = Number(b.endAtMs||0);
+      if(overlapsMs(startAtMs,endAtMs,bs,be)) return true;
     }
     return false;
   }
 
-  function labelShort(sl){
-    const start = hhmmFromMinutes(sl.startMin);
-    return sl.night ? `${start} 🌙` : start;
-  }
-
-  function updateTimeHint(){
-    const dateKey = $("date").value;
-    const dur = Number($("duration").value||60);
-    if(!dateKey || selectedPCs.size===0 || !dur) $("timeHint").textContent = tr("timeHintIdle");
-    else $("timeHint").textContent = tr("timeHintPick");
-  }
-
-  function rebuildTimeList(){
-    const listEl = $("timeList");
-    listEl.innerHTML = "";
-    selectedStart = null;
-
-    const dateKey = $("date").value;
-    const dur = Number($("duration").value||60);
-
+  function rebuildSlots(){
+    const list = $("timeList");
+    list.innerHTML = "";
+    selectedSlot = null;
     $("pickedSummary").innerHTML = `<b>—</b>`;
     $("createBtn").disabled = true;
 
-    if(!dateKey || selectedPCs.size===0){
+    const baseDate = $("date").value;
+    const dur = Number($("duration").value || 60);
+    if(!baseDate || selectedPCs.size===0){
       updateTimeHint();
       return;
     }
 
-    const segs = workingWindowSegments();
-    const slots = [];
+    const nowMs = Date.now();
+    for(const seg of segments()){
+      for(let s=seg.a; s+dur<=seg.b; s+=SLOT_STEP_MIN){
+        const e = s+dur;
+        const startAt = dateTimeFromBase(baseDate, s, seg.nextDay);
+        const endAt   = dateTimeFromBase(baseDate, e, seg.nextDay);
+        const startAtMs = startAt.getTime();
+        const endAtMs = endAt.getTime();
 
-    for(const seg of segs){
-      for(let s = seg.a; s + dur <= seg.b; s += SLOT_STEP_MIN){
-        const e = s + dur;
-        const startAt = slotStartAbs(dateKey, s).getTime();
-        const endAt = slotEndAbs(dateKey, e).getTime();
-        const label = seg.night
-          ? `${hhmmFromMinutes(s)} → ${hhmmFromMinutes(e)}  🌙(+1)`
-          : `${hhmmFromMinutes(s)} → ${hhmmFromMinutes(e)}`;
-        slots.push({startMin:s,endMin:e,startAtMs:startAt,endAtMs:endAt,label,night:!!seg.night});
+        const label = `${hhmmFromMinutes(s)} → ${hhmmFromMinutes(e)}${seg.nextDay ? " (+1)" : ""}`;
+        const busy = slotBusyMs(startAtMs, endAtMs);
+        const past = startAtMs < nowMs;
+
+        const btn = document.createElement("div");
+        btn.className = "tbtn" + (busy ? " busy" : "") + (past ? " past" : "");
+        btn.textContent = busy ? `⛔ ${label}` : past ? `— ${label}` : `✅ ${label}`;
+
+        btn.addEventListener("click", ()=>{
+          if(busy || past) return;
+          selectedSlot = {startMin:s,endMin:e,nextDay:seg.nextDay,label,startAtMs,endAtMs};
+
+          [...list.children].forEach(x=>x.classList.remove("active"));
+          btn.classList.add("active");
+
+          $("pickedSummary").innerHTML =
+            `<b>${escapeHtml(label)}</b> • ${escapeHtml(Array.from(selectedPCs).join(", "))}`;
+
+          $("createBtn").disabled = false;
+          setMsg(`${escapeHtml(tr("msg.pickTime"))}<br/><b>${escapeHtml(label)}</b>`, "info");
+        });
+
+        list.appendChild(btn);
       }
-    }
-
-    const now = Date.now();
-    for(const sl of slots){
-      const busy = isBusyForPCs(sl);
-      const past = sl.startAtMs < now;
-
-      const div = document.createElement("div");
-      div.className = "tbtn" + (busy || past ? " busy" : "");
-      div.textContent = busy ? `⛔ ${labelShort(sl)}` : past ? `— ${labelShort(sl)}` : `✅ ${labelShort(sl)}`;
-
-      div.addEventListener("click", ()=>{
-        if(busy || past) return;
-        selectedStart = sl;
-
-        [...listEl.children].forEach(x=>x.classList.remove("active"));
-        div.classList.add("active");
-
-        $("pickedSummary").innerHTML = `<b>${escapeHtml(sl.label)}</b> • ${lang==="en" ? "PCs" : lang==="ka" ? "PC-ები" : "ПК"}: <b>${escapeHtml(Array.from(selectedPCs).join(", "))}</b>`;
-        $("createBtn").disabled = false;
-
-        sliderGo(2);
-        setToast(tr("msg.selected") + sl.label, "info");
-      });
-
-      listEl.appendChild(div);
     }
 
     updateTimeHint();
@@ -1589,26 +1272,66 @@
 
   function pickNextFree(){
     const btns = [...$("timeList").querySelectorAll(".tbtn")];
-    const first = btns.find(b=>!b.classList.contains("busy"));
+    const first = btns.find(b => !b.classList.contains("busy") && !b.classList.contains("past"));
     if(first){ first.click(); return true; }
     return false;
   }
 
   // =========================
-  // PROFILE (NO serverTimestamp)
+  // REALTIME (by baseDate)
   // =========================
-  async function upsertProfileNick(uid, nick){
-    const safeNick = (nick || "").trim().slice(0, 32);
-    if(!safeNick) return;
-    await db.collection("users").doc(String(uid)).set({
-      nick: safeNick,
-      updatedAtMs: Date.now()
-    }, { merge:true });
+  function stopRealtime(){
+    if(unsubRealtime){ try{unsubRealtime();}catch(e){} unsubRealtime=null; }
   }
 
-  async function loadProfileNick(uid){
+  function startRealtime(baseDateISO){
+    stopRealtime();
+    if(!baseDateISO) return;
+
+    setMsg(tr("msg.loading"), "info");
+
+    unsubRealtime = db.collection("bookings")
+      .where("baseDate","==", String(baseDateISO))
+      .onSnapshot((snap)=>{
+        cachedDayBookings = snap.docs.map(d=>({id:d.id, ...d.data()}));
+        setMsg("—", "info");
+        rebuildSlots();
+      }, (e)=>{
+        console.error(e);
+        cachedDayBookings = [];
+        rebuildSlots();
+
+        if(isBlockedByClient(e)) {
+          setCloud("BLOCK", false);
+          setMsg(tr("msg.blocked"), "bad");
+          return;
+        }
+
+        if(isPermissionError(e)){
+          setCloud("RULES", false);
+          setMsg(tr("msg.rules"), "bad");
+        }else{
+          setCloud("ERR", false);
+          setMsg(tr("msg.generic"), "bad");
+        }
+      });
+  }
+
+  // =========================
+  // PROFILE (primitives only)
+  // =========================
+  async function upsertNick(uid, nick){
+    const safe = String(nick||"").trim().slice(0,32);
+    if(!safe) return;
+    await db.collection("users").doc(String(uid)).set({
+      nick: safe,
+      updatedAtMs: Date.now()
+    }, {merge:true});
+  }
+
+  async function loadNick(uid){
     const doc = await db.collection("users").doc(String(uid)).get();
-    return doc.exists ? (doc.data().nick || "") : "";
+    return doc.exists ? String(doc.data().nick||"") : "";
   }
 
   function updateAuthUI(){
@@ -1616,25 +1339,14 @@
     $("openAuthBtn").classList.toggle("hide", !!currentUser);
     $("userPill").textContent = currentUser ? (currentUser.email || currentUser.uid.slice(0,6)) : "—";
 
-    isAdmin = !!(currentUser && ADMIN_EMAILS.includes(String(currentUser.email||"").toLowerCase()));
-    if(!isAdmin) {
-      hide($("adminBox"));
-      if(unsubAdminRealtime){ try{unsubAdminRealtime();}catch(e){} unsubAdminRealtime=null; }
-    }
+    const email = String(currentUser?.email || "").toLowerCase();
+    isAdmin = !!(currentUser && ADMIN_EMAILS.includes(email));
+    hide($("adminBox"));
   }
 
   // =========================
   // SUCCESS UI
   // =========================
-  function showSuccess(detailsHtml){
-    $("succInfo").innerHTML = detailsHtml;
-    $("successBackdrop").classList.add("show");
-    makeConfetti();
-  }
-  function closeSuccess(){
-    $("successBackdrop").classList.remove("show");
-    $("confetti").innerHTML = "";
-  }
   function makeConfetti(){
     const wrap = $("confetti");
     wrap.innerHTML = "";
@@ -1647,162 +1359,138 @@
     const count = 28;
     for(let i=0;i<count;i++){
       const el = document.createElement("i");
-      const left = Math.random()*100;
-      const delay = Math.random()*180;
-      const dur = 750 + Math.random()*550;
-      const w = 8 + Math.random()*10;
-      const h = 10 + Math.random()*18;
-      el.style.left = left+"%";
+      el.style.left = (Math.random()*100)+"%";
       el.style.top = (-10 - Math.random()*30) + "px";
-      el.style.width = w + "px";
-      el.style.height = h + "px";
+      el.style.width = (8 + Math.random()*10) + "px";
+      el.style.height = (10 + Math.random()*18) + "px";
       el.style.background = colors[Math.floor(Math.random()*colors.length)];
-      el.style.animationDelay = delay + "ms";
-      el.style.animationDuration = dur + "ms";
+      el.style.animationDelay = (Math.random()*180) + "ms";
+      el.style.animationDuration = (750 + Math.random()*550) + "ms";
       wrap.appendChild(el);
     }
     setTimeout(()=>{ wrap.innerHTML=""; }, 1400);
   }
 
-  // =========================
-  // BOOKING CREATE (FIXED: no locks, no transactions, primitives + batch)
-  // =========================
-  async function loadBookingsForDateKey(dateKey){
-    const prevKey = toISODate(addDays(parseISODate(dateKey), -1));
-    const col = db.collection("bookings");
-
-    const [s1, s2] = await Promise.all([
-      col.where("dateKey", "==", dateKey).get(),
-      col.where("dateKey", "==", prevKey).get()
-    ]);
-
-    return [...s1.docs, ...s2.docs].map(d => {
-      const b = d.data() || {};
-      return {
-        id: d.id,
-        ...b,
-        startAtMs: Number(b.startAtMs || 0),
-        endAtMs: Number(b.endAtMs || 0),
-        pc: String(b.pc || "")
-      };
-    });
+  function showSuccess(detailsHtml){
+    $("succInfo").innerHTML = detailsHtml;
+    $("successBackdrop").classList.add("show");
+    makeConfetti();
+  }
+  function closeSuccess(){
+    $("successBackdrop").classList.remove("show");
+    $("confetti").innerHTML = "";
   }
 
+  // =========================
+  // CREATE BOOKING (FIXED ✅)
+  // - NO FieldValue/serverTimestamp (was causing Pd object errors)
+  // - Uses selectedSlot ONLY (fixes null startAtMs error)
+  // - Transaction reads baseDate docs once (no composite index required)
+  // =========================
   async function createBooking(){
-    if(!currentUser){
-      setToast(tr("msg.loginFirst"), "bad");
-      sliderGo(0);
+    if(!currentUser){ setMsg(tr("msg.loginFirst"), "bad"); return; }
+
+    const nick = String(($("nick").value||"")).trim();
+    const baseDate = String($("date").value||"");
+    const note = String(($("note").value||"")).trim();
+
+    if(!nick){ setMsg(tr("msg.enterNick"), "bad"); return; }
+    if(!baseDate){ setMsg(tr("msg.pickDate"), "bad"); return; }
+    if(selectedPCs.size===0){ setMsg(tr("msg.pickPc"), "bad"); return; }
+    if(!selectedSlot){ setMsg(tr("msg.pickTime"), "bad"); return; }
+
+    const startAtMs = Number(selectedSlot.startAtMs||0);
+    const endAtMs   = Number(selectedSlot.endAtMs||0);
+    if(!startAtMs || !endAtMs){
+      setMsg("Внутренняя ошибка слота. Нажми время ещё раз.", "bad");
       return;
     }
-
-    const nick = ($("nick").value||"").trim();
-    const dateKey = $("date").value;
-    const note = ($("note").value||"").trim();
-
-    if(!nick){ setToast(tr("msg.enterNick"), "bad"); return; }
-    if(!dateKey){ setToast(tr("msg.pickDate"), "bad"); return; }
-    if(selectedPCs.size===0){ setToast(tr("msg.pickPc"), "bad"); sliderGo(1); return; }
-    if(!selectedStart){ setToast(tr("msg.pickTime"), "bad"); sliderGo(2); return; }
-    if(selectedStart.startAtMs < Date.now()){
-      setToast(tr("msg.past"), "bad");
-      return;
-    }
+    if(startAtMs < Date.now()){ setMsg(tr("msg.past"), "bad"); return; }
 
     const pcs = Array.from(selectedPCs);
+
     $("createBtn").disabled = true;
-    setToast(tr("msg.creating"), "info");
+    setMsg(tr("msg.creating"), "info");
 
     try{
-      await upsertProfileNick(currentUser.uid, nick);
+      try{ await upsertNick(currentUser.uid, nick); }catch(e){}
 
-      // Check overlaps on server data (day + prev day)
-      const dayBookings = await loadBookingsForDateKey(dateKey);
-      for(const pc of pcs){
-        for(const b of dayBookings){
-          if(b.pc !== pc) continue;
-          if(overlapsAbs(selectedStart.startAtMs, selectedStart.endAtMs, b.startAtMs, b.endAtMs)){
-            throw new Error("OVERLAP");
+      await db.runTransaction(async (tx)=>{
+        const q = db.collection("bookings").where("baseDate","==", baseDate);
+        const snap = await tx.get(q);
+        const all = snap.docs.map(d=>({id:d.id, ...d.data()}));
+
+        // check overlap for each selected PC
+        for(const pc of pcs){
+          for(const b of all){
+            if(String(b.pc||"") !== String(pc)) continue;
+            const bs = Number(b.startAtMs||0);
+            const be = Number(b.endAtMs||0);
+            if(overlapsMs(startAtMs,endAtMs,bs,be)){
+              throw new Error("OVERLAP");
+            }
           }
         }
-      }
 
-      // Create via batch
-      const batch = db.batch();
-      const nowMs = Date.now();
+        // create one doc per pc
+        for(const pc of pcs){
+          const ref = db.collection("bookings").doc();
+          tx.set(ref, {
+            uid: String(currentUser.uid),
+            userEmail: String(currentUser.email || ""),
+            nick: String(nick),
+            pc: String(pc),
+            baseDate: String(baseDate),
+            startMin: Number(selectedSlot.startMin),
+            endMin: Number(selectedSlot.endMin),
+            note: String(note || ""),
+            startAtMs: Number(startAtMs),
+            endAtMs: Number(endAtMs),
+            createdAtMs: Number(Date.now())
+          });
+        }
+      });
 
-      for(const pc of pcs){
-        const ref = db.collection("bookings").doc();
-        batch.set(ref, {
-          uid: String(currentUser.uid),
-          userEmail: String(currentUser.email || ""),
-          nick: String(nick),
-          pc: String(pc),
-          dateKey: String(dateKey),
-          startMin: Number(selectedStart.startMin),
-          endMin: Number(selectedStart.endMin),
-          startAtMs: Number(selectedStart.startAtMs),
-          endAtMs: Number(selectedStart.endAtMs),
-          note: String(note || ""),
-          createdAtMs: Number(nowMs)
-        });
-      }
+      const start = new Date(startAtMs);
+      const end = new Date(endAtMs);
+      const timeStr = `${pad2(start.getHours())}:${pad2(start.getMinutes())} → ${pad2(end.getHours())}:${pad2(end.getMinutes())}${selectedSlot.nextDay ? " (+1)" : ""}`;
 
-      await batch.commit();
+      setMsg(tr("msg.ok") + `<br/>ПК: <b>${escapeHtml(pcs.join(", "))}</b><br/>⏱ <b>${escapeHtml(timeStr)}</b>`, "good");
 
-      const start = new Date(selectedStart.startAtMs);
-      const end = new Date(selectedStart.endAtMs);
-      const timeStr = `${pad2(start.getHours())}:${pad2(start.getMinutes())} → ${pad2(end.getHours())}:${pad2(end.getMinutes())}`;
+      showSuccess(`
+        <div><b>${lang==="en"?"Nick":lang==="ka"?"ნიკი":"Ник"}:</b> ${escapeHtml(nick)}</div>
+        <div><b>${lang==="en"?"PCs":lang==="ka"?"PC-ები":"ПК"}:</b> ${escapeHtml(pcs.join(", "))}</div>
+        <div><b>${lang==="en"?"Day":lang==="ka"?"დღე":"День"}:</b> ${escapeHtml(baseDate)}</div>
+        <div><b>${lang==="en"?"Time":lang==="ka"?"დრო":"Время"}:</b> ${escapeHtml(timeStr)}</div>
+        <div><b>${lang==="en"?"Note":lang==="ka"?"შენიშვნა":"Комментарий"}:</b> ${escapeHtml(note || "—")}</div>
+      `);
 
-      const pcsLabel = (lang==="en" ? "PCs" : lang==="ka" ? "PC-ები" : "ПК");
-      const dayLabel = (lang==="en" ? "Day" : lang==="ka" ? "დღე" : "День");
-      const timeLabel = (lang==="en" ? "Time" : lang==="ka" ? "დრო" : "Время");
-      const nickLabel = (lang==="en" ? "Nick" : lang==="ka" ? "ნიკი" : "Ник");
-      const noteLabel = (lang==="en" ? "Note" : lang==="ka" ? "შენიშვნა" : "Комментарий");
-
-      const details = `
-        <div><b>${nickLabel}:</b> ${escapeHtml(nick)}</div>
-        <div><b>${pcsLabel}:</b> ${escapeHtml(pcs.join(", "))}</div>
-        <div><b>${dayLabel}:</b> ${escapeHtml(dateKey)} ${selectedStart.night ? " <span style='color:rgba(251,191,36,.9)'>🌙(+1)</span>" : ""}</div>
-        <div><b>${timeLabel}:</b> ${escapeHtml(timeStr)} ${selectedStart.night ? " <span style='color:rgba(251,191,36,.9)'>🌙</span>" : ""}</div>
-        <div><b>${noteLabel}:</b> ${escapeHtml(note || "—")}</div>
-        <div style="margin-top:8px; color:rgba(154,164,191,.95)">${escapeHtml(tr("succ.hintAdmin"))}</div>
-      `;
-
-      setToast(tr("msg.ok"), "good");
-      sliderGo(3);
-      showSuccess(details);
-
-      selectedStart = null;
+      // reset selection
+      selectedSlot = null;
       $("pickedSummary").innerHTML = `<b>—</b>`;
       $("createBtn").disabled = true;
 
     }catch(e){
-      if(String(e.message||"")==="OVERLAP"){
-        setToast(lang==="en" ? "⛔ Slot was taken. Pick another time."
-          : lang==="ka" ? "⛔ დრო დაკავებულია. აირჩიე სხვა."
-          : "⛔ Этот слот уже заняли. Выбери другое время.", "bad");
-      }else{
-        handleFirestoreErr(e);
-      }
+      console.error(e);
       $("createBtn").disabled = false;
+
+      if(String(e?.message||"") === "OVERLAP"){
+        setMsg(tr("msg.overlap"), "bad");
+      }else if(isBlockedByClient(e)){
+        setCloud("BLOCK", false);
+        setMsg(tr("msg.blocked"), "bad");
+      }else if(isPermissionError(e)){
+        setCloud("RULES", false);
+        setMsg(tr("msg.rules"), "bad");
+      }else{
+        setMsg(tr("msg.generic"), "bad");
+      }
     }
   }
 
   // =========================
-  // MY BOOKINGS
+  // LISTS
   // =========================
-  async function loadMyBookings(){
-    if(!currentUser) return [];
-    const snap = await db.collection("bookings").where("uid","==", String(currentUser.uid)).get();
-    return snap.docs.map(d => ({ id:d.id, ...d.data() }))
-      .map(b=>({ ...b, startAtMs:Number(b.startAtMs||0), endAtMs:Number(b.endAtMs||0) }))
-      .sort((a,b)=> (a.startAtMs - b.startAtMs) || String(a.pc).localeCompare(String(b.pc)));
-  }
-
-  async function deleteBookingDoc(b){
-    await db.collection("bookings").doc(String(b.id)).delete();
-  }
-
   async function renderMyBookings(){
     const tbody = $("myTable");
     tbody.innerHTML = "";
@@ -1810,80 +1498,79 @@
       tbody.innerHTML = `<tr><td colspan="5" style="color:var(--muted)">${lang==="en"?"Login first":lang==="ka"?"ჯერ შედი":"Сначала войди"}</td></tr>`;
       return;
     }
-    let list = [];
     try{
-      list = await loadMyBookings();
-    }catch(e){
-      handleFirestoreErr(e);
-      tbody.innerHTML = `<tr><td colspan="5" style="color:var(--muted)">—</td></tr>`;
-      return;
-    }
-    if(!list.length){
-      tbody.innerHTML = `<tr><td colspan="5" style="color:var(--muted)">—</td></tr>`;
-      return;
-    }
+      const snap = await db.collection("bookings").where("uid","==", String(currentUser.uid)).get();
+      let list = snap.docs.map(d=>({id:d.id, ...d.data()}));
+      list.sort((a,b)=>Number(a.startAtMs||0)-Number(b.startAtMs||0));
+      if(!list.length){
+        tbody.innerHTML = `<tr><td colspan="5" style="color:var(--muted)">—</td></tr>`;
+        return;
+      }
+      for(const b of list){
+        const start = new Date(Number(b.startAtMs||0));
+        const end = new Date(Number(b.endAtMs||0));
+        const timeStr = `${pad2(start.getHours())}:${pad2(start.getMinutes())} → ${pad2(end.getHours())}:${pad2(end.getMinutes())}`;
+        const trEl = document.createElement("tr");
+        trEl.innerHTML = `
+          <td>${escapeHtml(String(b.baseDate||""))}</td>
+          <td>${escapeHtml(timeStr)}</td>
+          <td><b>${escapeHtml(String(b.pc||""))}</b></td>
+          <td style="color:var(--muted)">${escapeHtml(String(b.note||""))}</td>
+          <td><button class="mini danger" type="button" data-id="${b.id}">${lang==="en"?"Cancel":lang==="ka"?"გაუქმება":"Cancel"}</button></td>
+        `;
+        tbody.appendChild(trEl);
+      }
 
-    for(const b of list){
-      const start = new Date(b.startAtMs);
-      const end = new Date(b.endAtMs);
-      const timeStr = `${pad2(start.getHours())}:${pad2(start.getMinutes())} → ${pad2(end.getHours())}:${pad2(end.getMinutes())}`;
-      const trEl = document.createElement("tr");
-      trEl.innerHTML = `
-        <td>${escapeHtml(b.dateKey || "")}</td>
-        <td>${escapeHtml(timeStr)}</td>
-        <td><b>${escapeHtml(String(b.pc||""))}</b></td>
-        <td style="color:var(--muted)">${escapeHtml(String(b.note||""))}</td>
-        <td><button class="mini danger" type="button">${lang==="en"?"Cancel":lang==="ka"?"გაუქმება":"Cancel"}</button></td>
-      `;
-      tbody.appendChild(trEl);
-
-      trEl.querySelector("button").addEventListener("click", async ()=>{
-        if(!confirm(tr("cancelConfirm"))) return;
-        try{
-          await deleteBookingDoc(b);
-          setToast(tr("msg.cancelOk"), "good");
-        }catch(e){
-          handleFirestoreErr(e);
-        }
+      tbody.querySelectorAll("button[data-id]").forEach(btn=>{
+        btn.addEventListener("click", async ()=>{
+          const id = btn.getAttribute("data-id");
+          if(!confirm(lang==="en"?"Cancel booking?":lang==="ka"?"გსურს გაუქმება?":"Отменить бронь?")) return;
+          try{
+            await db.collection("bookings").doc(id).delete();
+            await renderMyBookings();
+            rebuildSlots();
+            setMsg(tr("msg.canceled"), "good");
+          }catch(e){
+            console.error(e);
+            if(isBlockedByClient(e)) setMsg(tr("msg.blocked"), "bad");
+            else if(isPermissionError(e)) setMsg(tr("msg.rules"), "bad");
+            else setMsg(tr("msg.generic"), "bad");
+          }
+        });
       });
+
+    }catch(e){
+      console.error(e);
+      tbody.innerHTML = `<tr><td colspan="5" style="color:var(--muted)">Load error</td></tr>`;
     }
   }
 
-  // =========================
-  // TODAY
-  // =========================
   async function renderToday(){
     const tbody = $("todayTable");
     tbody.innerHTML = "";
-
-    const now = new Date();
-    const dayStart = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 0,0,0,0).getTime();
-    const dayEnd = dayStart + 24*60*60*1000;
-
+    const todayISO = toISODate(new Date());
+    const yISO = toISODate(addDays(new Date(), -1));
     try{
-      const todayKey = toISODate(now);
-      const yKey = toISODate(addDays(now, -1));
-
-      const [s1, s2] = await Promise.all([
-        db.collection("bookings").where("dateKey","==", todayKey).get(),
-        db.collection("bookings").where("dateKey","==", yKey).get(),
+      const [snapA, snapB] = await Promise.all([
+        db.collection("bookings").where("baseDate","==", todayISO).get(),
+        db.collection("bookings").where("baseDate","==", yISO).get(),
       ]);
 
-      let list = [
-        ...s1.docs.map(d=>({id:d.id, ...d.data()})),
-        ...s2.docs.map(d=>({id:d.id, ...d.data()})),
-      ].map(b=>({ ...b, startAtMs:Number(b.startAtMs||0), endAtMs:Number(b.endAtMs||0) }))
-       .filter(b => overlapsAbs(b.startAtMs, b.endAtMs, dayStart, dayEnd))
-       .sort((a,b)=> (a.startAtMs - b.startAtMs) || String(a.pc).localeCompare(String(b.pc)));
+      let list = [...snapA.docs, ...snapB.docs].map(d=>({id:d.id, ...d.data()}));
+      // show only bookings that START today (real date)
+      list = list.filter(b=>{
+        const ms = Number(b.startAtMs||0);
+        return ms && toISODate(new Date(ms)) === todayISO;
+      });
+      list.sort((a,b)=>Number(a.startAtMs||0)-Number(b.startAtMs||0));
 
       if(!list.length){
         tbody.innerHTML = `<tr><td colspan="4" style="color:var(--muted)">—</td></tr>`;
         return;
       }
-
       for(const b of list){
-        const start = new Date(b.startAtMs);
-        const end = new Date(b.endAtMs);
+        const start = new Date(Number(b.startAtMs||0));
+        const end = new Date(Number(b.endAtMs||0));
         const timeStr = `${pad2(start.getHours())}:${pad2(start.getMinutes())} → ${pad2(end.getHours())}:${pad2(end.getMinutes())}`;
         const trEl = document.createElement("tr");
         trEl.innerHTML = `
@@ -1895,137 +1582,125 @@
         tbody.appendChild(trEl);
       }
     }catch(e){
-      handleFirestoreErr(e);
-      tbody.innerHTML = `<tr><td colspan="4" style="color:var(--muted)">Firestore error</td></tr>`;
+      console.error(e);
+      if(isBlockedByClient(e)) tbody.innerHTML = `<tr><td colspan="4" style="color:var(--muted)">${escapeHtml(tr("msg.blocked"))}</td></tr>`;
+      else if(isPermissionError(e)) tbody.innerHTML = `<tr><td colspan="4" style="color:var(--muted)">${escapeHtml(tr("msg.rules"))}</td></tr>`;
+      else tbody.innerHTML = `<tr><td colspan="4" style="color:var(--muted)">Firestore error</td></tr>`;
     }
   }
 
-  // =========================
-  // ADMIN realtime
-  // =========================
-  function stopAdminRealtime(){
-    if(unsubAdminRealtime){ try{unsubAdminRealtime();}catch(e){} unsubAdminRealtime=null; }
-  }
-
-  function startAdminRealtime(){
-    stopAdminRealtime();
-    const dateKey = $("adminDate").value;
-    if(!dateKey) return;
-
-    unsubAdminRealtime = db.collection("bookings").where("dateKey","==", String(dateKey))
-      .onSnapshot((snap)=>{
-        const list = snap.docs.map(d=>({ id:d.id, ...d.data() }))
-          .map(b=>({ ...b, startAtMs:Number(b.startAtMs||0), endAtMs:Number(b.endAtMs||0) }))
-          .sort((a,b)=> (a.startAtMs - b.startAtMs) || String(a.pc).localeCompare(String(b.pc)));
-        renderAdminTable(list);
-        setCloud("LIVE", true);
-      }, handleFirestoreErr);
-  }
-
-  function renderAdminTable(list){
-    const q = ($("adminSearch").value||"").trim().toLowerCase();
-    let filtered = list;
-    if(q){
-      filtered = list.filter(b =>
-        String(b.nick||"").toLowerCase().includes(q) ||
-        String(b.pc||"").toLowerCase().includes(q) ||
-        String(b.userEmail||"").toLowerCase().includes(q)
-      );
-    }
-
+  async function renderAdmin(){
+    if(!isAdmin){ setMsg(tr("msg.notAdmin"), "bad"); return; }
     const tbody = $("adminTable");
     tbody.innerHTML = "";
-    if(!filtered.length){
-      tbody.innerHTML = `<tr><td colspan="6" style="color:var(--muted)">—</td></tr>`;
-      return;
-    }
 
-    for(const b of filtered){
-      const start = new Date(b.startAtMs);
-      const end = new Date(b.endAtMs);
-      const timeStr = `${pad2(start.getHours())}:${pad2(start.getMinutes())} → ${pad2(end.getHours())}:${pad2(end.getMinutes())}`;
+    const mode = $("adminMode").value;
+    const lim = Number($("adminLimit").value||100);
+    const q = String($("adminSearch").value||"").trim().toLowerCase();
+    const dateISO = String($("adminDate").value||"");
 
-      const trEl = document.createElement("tr");
-      trEl.innerHTML = `
-        <td>${escapeHtml(String(b.dateKey||""))}</td>
-        <td>${escapeHtml(timeStr)}</td>
-        <td><b>${escapeHtml(String(b.pc||""))}</b></td>
-        <td>${escapeHtml(String(b.nick||""))}</td>
-        <td style="color:var(--muted)">${escapeHtml(String(b.userEmail||""))}</td>
-        <td><button class="mini danger" type="button">${lang==="en"?"Delete":lang==="ka"?"წაშლა":"Delete"}</button></td>
-      `;
-      tbody.appendChild(trEl);
-
-      trEl.querySelector("button").addEventListener("click", async ()=>{
-        if(!confirm(tr("deleteConfirm"))) return;
-        try{
-          await deleteBookingDoc(b);
-          setToast(tr("msg.delOk"), "good");
-        }catch(e){
-          handleFirestoreErr(e);
+    try{
+      let list = [];
+      if(mode==="today"){
+        const todayISO = toISODate(new Date());
+        const yISO = toISODate(addDays(new Date(), -1));
+        const [snapA, snapB] = await Promise.all([
+          db.collection("bookings").where("baseDate","==", todayISO).get(),
+          db.collection("bookings").where("baseDate","==", yISO).get(),
+        ]);
+        list = [...snapA.docs, ...snapB.docs].map(d=>({id:d.id, ...d.data()}))
+          .filter(b=>{
+            const ms = Number(b.startAtMs||0);
+            return ms && toISODate(new Date(ms)) === todayISO;
+          });
+        $("adminHint").textContent = lang==="en" ? "Today (by real start date)." : lang==="ka" ? "დღეს (რეალური დაწყებით)." : "Сегодня (по реальной дате старта).";
+      }else{
+        if(!dateISO){
+          tbody.innerHTML = `<tr><td colspan="6" style="color:var(--muted)">Pick date</td></tr>`;
+          return;
         }
+        const snap = await db.collection("bookings").where("baseDate","==", dateISO).get();
+        list = snap.docs.map(d=>({id:d.id, ...d.data()}));
+        $("adminHint").textContent = lang==="en" ? "Selected club day (includes night +1)." : lang==="ka" ? "არჩეული კლუბის დღე (ღამე +1)." : "Выбранная клубная дата (включая ночные +1).";
+      }
+
+      if(q){
+        list = list.filter(b =>
+          String(b.nick||"").toLowerCase().includes(q) ||
+          String(b.pc||"").toLowerCase().includes(q) ||
+          String(b.userEmail||"").toLowerCase().includes(q)
+        );
+      }
+
+      list.sort((a,b)=>Number(a.startAtMs||0)-Number(b.startAtMs||0));
+      list = list.slice(0, lim);
+
+      if(!list.length){
+        tbody.innerHTML = `<tr><td colspan="6" style="color:var(--muted)">—</td></tr>`;
+        return;
+      }
+
+      for(const b of list){
+        const start = new Date(Number(b.startAtMs||0));
+        const end = new Date(Number(b.endAtMs||0));
+        const timeStr = `${pad2(start.getHours())}:${pad2(start.getMinutes())} → ${pad2(end.getHours())}:${pad2(end.getMinutes())}`;
+        const trEl = document.createElement("tr");
+        trEl.innerHTML = `
+          <td>${escapeHtml(String(b.baseDate||""))}</td>
+          <td>${escapeHtml(timeStr)}</td>
+          <td><b>${escapeHtml(String(b.pc||""))}</b></td>
+          <td>${escapeHtml(String(b.nick||""))}</td>
+          <td style="color:var(--muted)">${escapeHtml(String(b.userEmail||""))}</td>
+          <td><button class="mini danger" type="button" data-id="${b.id}">${lang==="en"?"Delete":lang==="ka"?"წაშლა":"Delete"}</button></td>
+        `;
+        tbody.appendChild(trEl);
+      }
+
+      tbody.querySelectorAll("button[data-id]").forEach(btn=>{
+        btn.addEventListener("click", async ()=>{
+          const id = btn.getAttribute("data-id");
+          if(!confirm(lang==="en"?"Delete booking?":lang==="ka"?"წავშალო ჯავშანი?":"Удалить бронь?")) return;
+          try{
+            await db.collection("bookings").doc(id).delete();
+            await renderAdmin();
+            rebuildSlots();
+            setMsg(tr("msg.deleted"), "good");
+          }catch(e){
+            console.error(e);
+            if(isBlockedByClient(e)) setMsg(tr("msg.blocked"), "bad");
+            else if(isPermissionError(e)) setMsg(tr("msg.rules"), "bad");
+            else setMsg(tr("msg.generic"), "bad");
+          }
+        });
       });
+
+    }catch(e){
+      console.error(e);
+      if(isBlockedByClient(e)) setMsg(tr("msg.blocked"), "bad");
+      else if(isPermissionError(e)) setMsg(tr("msg.rules"), "bad");
+      else setMsg(tr("msg.generic"), "bad");
     }
-  }
-
-  // =========================
-  // Slider
-  // =========================
-  let slideIndex = 0;
-  let slideTimer = null;
-
-  function sliderInit(){
-    const dots = $("sdots");
-    dots.innerHTML = "";
-    const slides = document.querySelectorAll(".slide");
-    slides.forEach((_, i)=>{
-      const d = document.createElement("div");
-      d.className = "sdot" + (i===0 ? " on" : "");
-      d.addEventListener("click", ()=> sliderGo(i));
-      dots.appendChild(d);
-    });
-
-    $("prevSlide").addEventListener("click", ()=> sliderGo(slideIndex-1));
-    $("nextSlide").addEventListener("click", ()=> sliderGo(slideIndex+1));
-
-    slideTimer = setInterval(()=> sliderGo(slideIndex+1), 6500);
-
-    $("onboard").addEventListener("mouseenter", ()=>{ if(slideTimer){ clearInterval(slideTimer); slideTimer=null; }});
-    $("onboard").addEventListener("mouseleave", ()=>{ if(!slideTimer) slideTimer=setInterval(()=> sliderGo(slideIndex+1), 6500); });
-
-    sliderGo(0);
-  }
-
-  function sliderGo(i){
-    const slides = document.querySelectorAll(".slide");
-    const n = slides.length;
-    slideIndex = (i % n + n) % n;
-    slides.forEach(s=>s.classList.remove("active"));
-    slides[slideIndex].classList.add("active");
-    [...$("sdots").children].forEach((d, idx)=> d.classList.toggle("on", idx===slideIndex));
-    $("s_step").textContent =
-      (lang==="en" ? `Step ${slideIndex+1}/${n}` : lang==="ka" ? `ნაბიჯი ${slideIndex+1}/${n}` : `Шаг ${slideIndex+1}/${n}`);
   }
 
   // =========================
   // EVENTS
   // =========================
-  function bindEvents(){
-    $("lang_ru").onclick = ()=>{ lang="ru"; localStorage.setItem(LANG_KEY,lang); applyLang(); };
-    $("lang_en").onclick = ()=>{ lang="en"; localStorage.setItem(LANG_KEY,lang); applyLang(); };
-    $("lang_ka").onclick = ()=>{ lang="ka"; localStorage.setItem(LANG_KEY,lang); applyLang(); };
+  function bind(){
+    $("lang_ru").onclick = ()=>{ lang="ru"; localStorage.setItem(LANG_KEY, lang); applyLang(); };
+    $("lang_en").onclick = ()=>{ lang="en"; localStorage.setItem(LANG_KEY, lang); applyLang(); };
+    $("lang_ka").onclick = ()=>{ lang="ka"; localStorage.setItem(LANG_KEY, lang); applyLang(); };
 
-    $("openAuthBtn").onclick = ()=>{ openModal(); sliderGo(0); };
+    $("openAuthBtn").onclick = openModal;
     $("authCloseBtn").onclick = closeModal;
     $("authBackdrop").onclick = (e)=>{ if(e.target === $("authBackdrop")) closeModal(); };
 
     $("doLoginBtn").onclick = async ()=>{
-      const email = ($("authEmail").value||"").trim();
-      const pass = ($("authPass").value||"").trim();
-      if(!email || !pass){ $("authModalMsg").textContent = tr("loginErr"); return; }
+      const email = String($("authEmail").value||"").trim();
+      const pass = String($("authPass").value||"").trim();
+      if(!email || !pass){ $("authModalMsg").textContent = "Введите email + пароль"; return; }
       try{
         await auth.signInWithEmailAndPassword(email, pass);
-        $("authModalMsg").textContent = tr("loginOK");
+        $("authModalMsg").textContent = "OK";
         closeModal();
       }catch(e){
         console.error(e);
@@ -2034,12 +1709,12 @@
     };
 
     $("doRegisterBtn").onclick = async ()=>{
-      const email = ($("authEmail").value||"").trim();
-      const pass = ($("authPass").value||"").trim();
-      if(!email || !pass){ $("authModalMsg").textContent = tr("loginErr"); return; }
+      const email = String($("authEmail").value||"").trim();
+      const pass = String($("authPass").value||"").trim();
+      if(!email || !pass){ $("authModalMsg").textContent = "Введите email + пароль"; return; }
       try{
         await auth.createUserWithEmailAndPassword(email, pass);
-        $("authModalMsg").textContent = tr("created");
+        $("authModalMsg").textContent = "Аккаунт создан!";
         closeModal();
       }catch(e){
         console.error(e);
@@ -2048,11 +1723,11 @@
     };
 
     $("forgotBtn").onclick = async ()=>{
-      const email = ($("authEmail").value||"").trim();
-      if(!email){ $("authModalMsg").textContent = tr("email"); return; }
+      const email = String($("authEmail").value||"").trim();
+      if(!email){ $("authModalMsg").textContent = "Введи email"; return; }
       try{
         await auth.sendPasswordResetEmail(email);
-        $("authModalMsg").textContent = tr("resetSent");
+        $("authModalMsg").textContent = "Письмо отправлено ✅";
       }catch(e){
         console.error(e);
         $("authModalMsg").textContent = e.message || "Reset error";
@@ -2061,24 +1736,24 @@
 
     $("logoutBtn").onclick = async ()=>{ try{ await auth.signOut(); }catch(e){} };
 
-    $("date").addEventListener("change", async ()=>{
-      const dateKey = $("date").value;
-      await startRealtimeForDate(dateKey);
-      rebuildTimeList();
-      sliderGo(2);
+    $("date").addEventListener("change", ()=>{
+      const baseDate = $("date").value;
+      startRealtime(baseDate);
+      rebuildSlots();
     });
+    $("duration").addEventListener("change", rebuildSlots);
 
-    $("duration").addEventListener("change", ()=>{ rebuildTimeList(); sliderGo(2); });
-
-    $("refreshBtn").onclick = async ()=>{
-      const dateKey = $("date").value;
-      await startRealtimeForDate(dateKey);
-      rebuildTimeList();
-      setToast(tr("msg.refreshed"), "good");
+    $("refreshBtn").onclick = ()=>{
+      const baseDate = $("date").value;
+      startRealtime(baseDate);
+      rebuildSlots();
+      setMsg("OK", "good");
     };
 
     $("nextFreeBtn").onclick = ()=>{
-      if(!pickNextFree()) setToast(tr("msg.nextFreeNone"), "warn");
+      if(!pickNextFree()){
+        setMsg(lang==="en"?"No free time 😕":lang==="ka"?"თავისუფალი დრო არ არის 😕":"Свободного времени нет 😕", "warn");
+      }
     };
 
     $("createBtn").onclick = createBooking;
@@ -2098,22 +1773,25 @@
     $("closeTodayBtn").onclick = ()=> hide($("todayBox"));
 
     $("openAdminBtn").onclick = async ()=>{
-      if(!currentUser){ setToast(tr("msg.loginFirst"), "bad"); return; }
-      if(!isAdmin){ setToast(tr("msg.notAdmin"), "bad"); return; }
-      hide($("myBox")); hide($("todayBox"));
-      show($("adminBox"));
+      if(!currentUser){ setMsg(tr("msg.loginFirst"), "bad"); return; }
+      if(!isAdmin){ setMsg(tr("msg.notAdmin"), "bad"); return; }
+      hide($("myBox")); hide($("todayBox")); show($("adminBox"));
       $("adminDate").value = $("adminDate").value || $("date").value;
-      startAdminRealtime();
+      await renderAdmin();
       $("adminBox").scrollIntoView({behavior:"smooth", block:"start"});
     };
-    $("adminCloseBtn").onclick = ()=>{
-      hide($("adminBox"));
-      stopAdminRealtime();
-    };
-    $("refreshAdminBtn").onclick = ()=> startAdminRealtime();
-    $("adminDate").addEventListener("change", ()=> startAdminRealtime());
-    $("adminSearch").addEventListener("input", ()=> startAdminRealtime());
 
+    $("adminCloseBtn").onclick = ()=> hide($("adminBox"));
+    $("refreshAdminBtn").onclick = renderAdmin;
+    $("adminDate").addEventListener("change", renderAdmin);
+    $("adminMode").addEventListener("change", renderAdmin);
+    $("adminLimit").addEventListener("change", renderAdmin);
+    $("adminSearch").addEventListener("input", ()=>{
+      clearTimeout(window.__admT);
+      window.__admT = setTimeout(renderAdmin, 160);
+    });
+
+    // success
     $("succClose").onclick = closeSuccess;
     $("successBackdrop").onclick = (e)=>{ if(e.target === $("successBackdrop")) closeSuccess(); };
     $("succMy").onclick = async ()=>{
@@ -2124,11 +1802,10 @@
     };
     $("succAgain").onclick = ()=>{
       closeSuccess();
-      selectedStart = null;
+      selectedSlot = null;
       $("pickedSummary").innerHTML = `<b>—</b>`;
-      rebuildTimeList();
-      setToast(lang==="en" ? "Pick a new time." : lang==="ka" ? "აირჩიე ახალი დრო." : "Выбери новое время.", "info");
-      sliderGo(2);
+      $("createBtn").disabled = true;
+      rebuildSlots();
       $("timeList").scrollIntoView({behavior:"smooth", block:"center"});
     };
 
@@ -2144,68 +1821,56 @@
   // =========================
   // BOOT
   // =========================
+  function ensureHttps(){
+    const proto = location.protocol;
+    if(proto === "file:"){
+      setCloud("NO-HTTPS", false);
+      setMsg(tr("msg.needHttps"), "warn");
+    }
+  }
+
   async function boot(){
     const now = new Date();
     $("date").value = toISODate(now);
     $("adminDate").value = toISODate(now);
 
-    if(!i18n[lang]) lang="ru";
+    if(!T[lang]) lang="ru";
     applyLang();
-    renderPCGrid();
-    sliderInit();
-    bindEvents();
+
+    renderPCs();
+    bind();
+    ensureHttps();
 
     const savedNick = localStorage.getItem("sg_nick") || "";
     if(savedNick) $("nick").value = savedNick;
-    $("nick").addEventListener("input", ()=> localStorage.setItem("sg_nick", ($("nick").value||"").trim()));
-
-    setToast(tr("msg.welcome"), "info");
-
-    // Quick connectivity probe (helps when Firestore is blocked by client)
-    try{
-      await db.collection("bookings").limit(1).get();
-      setCloud("OK", true);
-    }catch(e){
-      handleFirestoreErr(e);
-    }
+    $("nick").addEventListener("input", ()=> localStorage.setItem("sg_nick", String($("nick").value||"").trim()));
 
     auth.onAuthStateChanged(async (u)=>{
       currentUser = u || null;
       updateAuthUI();
 
       if(currentUser){
-        $("authMsg").textContent = `✅ Logged in: ${currentUser.email || currentUser.uid.slice(0,6)}`;
-        sliderGo(1);
+        $("authMsg").textContent = `✅ ${currentUser.email || currentUser.uid.slice(0,6)}`;
+        setMsg("OK", "info");
 
-        if(!($("nick").value||"").trim()){
+        if(!String($("nick").value||"").trim()){
           try{
-            const pn = await loadProfileNick(currentUser.uid);
+            const pn = await loadNick(currentUser.uid);
             if(pn) $("nick").value = pn;
           }catch(e){}
         }
-
-        await startRealtimeForDate($("date").value);
-        rebuildTimeList();
       }else{
         $("authMsg").textContent = "—";
-        setToast(tr("msg.loginFirst"), "info");
-        sliderGo(0);
-        if(unsubDateRealtime){ try{unsubDateRealtime();}catch(e){} unsubDateRealtime=null; }
-        stopAdminRealtime();
+        setMsg(tr("msg.loginFirst"), "info");
       }
+
+      // load bookings regardless of login (read rules decide)
+      startRealtime($("date").value);
+      rebuildSlots();
     });
   }
 
   boot();
-
-  // =========================
-  // Firestore Rules reminder:
-  // If you see PERMISSION_DENIED, update Rules in Firebase Console.
-  // You need at least:
-  // - read bookings for all
-  // - create bookings for signed in
-  // - delete own bookings (or admin)
-  // =========================
 })();
 </script>
 </body>
