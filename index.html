@@ -638,9 +638,9 @@
         <div style="height:12px"></div>
         <div class="notice" id="rulesBox"><b>Важно</b><br/>• На одном ПК нельзя пересечения<br/>• Ночные слоты отмечены (+1)</div>
         <div style="height:12px"></div>
-        <div class="notice">
+        <div class="notice" id="protoBox">
           <b>Важно</b><br/>
-          Firebase работает только на <b>http(s)</b>. На <b>file:///</b> авторизация/база блокируются браузером.
+          Firebase работает только на <b>http(s)</b>. На <b>file:///</b> авторизация/база часто блокируются браузером.
         </div>
       </div>
     </div>
@@ -704,6 +704,7 @@
   const WORK_START = "10:00";
   const WORK_END = "03:00"; // crosses midnight
 
+  // Admins by email
   const ADMIN_EMAILS = ["adjarelispeak@gmail.com"];
 
   // =========================
@@ -758,6 +759,12 @@
     return msg.includes("permission") || msg.includes("PERMISSION_DENIED") || msg.includes("Missing or insufficient permissions");
   }
 
+  function niceErr(e){
+    const code = String(e?.code || "");
+    const msg  = String(e?.message || e || "");
+    return `${escapeHtml(code ? (code + ": ") : "")}${escapeHtml(msg)}`;
+  }
+
   // =========================
   // FIREBASE INIT
   // =========================
@@ -794,8 +801,10 @@
   function dateTimeFromBase(baseDateISO, minutes, nextDay){
     const base = parseISODate(baseDateISO);
     const actual = nextDay ? addDays(base, 1) : base;
-    return new Date(actual.getFullYear(), actual.getMonth(), actual.getDate(),
-      Math.floor(minutes/60), minutes%60, 0, 0);
+    return new Date(
+      actual.getFullYear(), actual.getMonth(), actual.getDate(),
+      Math.floor(minutes/60), minutes%60, 0, 0
+    );
   }
 
   function overlaps(a1,a2,b1,b2){ return Math.max(a1,b1) < Math.min(a2,b2); }
@@ -806,6 +815,7 @@
   let selectedPCs = new Set();
   let selectedSlot = null;
   let cachedDayBookings = [];
+  let creating = false;
 
   function renderPCs(){
     const grid = $("pcGrid");
@@ -886,9 +896,9 @@
       console.error(e);
       cachedDayBookings = [];
       if(isPermissionError(e)){
-        setMsg("⛔ Нет доступа к базе. Проверь Firestore Rules (auth read/write).", "bad");
+        setMsg("⛔ Нет доступа к базе. Проверь Firestore Rules: разрешить read/write для auth пользователей.", "bad");
       }else{
-        setMsg("Ошибка загрузки броней. Открой Console (F12) и пришли одну красную строку.", "bad");
+        setMsg(`Ошибка загрузки броней.<br/><span class="mut">${niceErr(e)}</span>`, "bad");
       }
     }
     rebuildSlots();
@@ -922,9 +932,18 @@
   }
 
   // =========================
-  // CREATE BOOKING (ONLY PRIMITIVES) ✅
+  // ✅ CREATE BOOKING (FIXED)
+  // Причина твоей ошибки была в транзакции:
+  // tx.get(query) в compat часто не работает/ломается.
+  // Сделал надёжно: читаем данные обычными get() и пишем batch().
   // =========================
   async function createBooking(){
+    if(creating) return;
+    if(!db || !auth){ setMsg("Firebase не инициализировался (cloud=ERROR).", "bad"); return; }
+    if(location.protocol === "file:"){
+      setMsg("⛔ Открыто через file:///. Открой сайт через http(s) (Firebase часто блокируется).", "bad");
+      return;
+    }
     if(!currentUser){ setMsg("Сначала войди.", "bad"); return; }
 
     const nick = String(($("nick").value||"")).trim();
@@ -950,49 +969,49 @@
       return;
     }
 
+    creating = true;
+    $("createBtn").disabled = true;
     setMsg("Создаю бронь…", "info");
 
     try{
-      // save profile (safe primitives)
+      // сохранить ник в профиле (не критично)
       try{ await upsertNick(currentUser.uid, nick); }catch(e){}
 
-      await db.runTransaction(async (tx)=>{
-        // check overlap per pc
-        for(const pc of pcs){
-          const q = db.collection("bookings")
-            .where("baseDate","==", baseDate)
-            .where("pc","==", String(pc));
-          const snap = await tx.get(q);
-          snap.forEach(doc=>{
-            const b = doc.data();
-            const bs = Number(b.startMin||0);
-            const be = Number(b.endMin||0);
-            if(overlaps(startMin,endMin,bs,be)){
-              throw new Error("OVERLAP");
-            }
-          });
-        }
+      // 1) читаем брони на эту baseDate (один запрос) — потом проверяем пересечения по выбранным ПК
+      //    (Это быстрее и надёжнее, чем query в транзакции + возможные индексы)
+      const dayList = await loadBookingsForBaseDate(baseDate);
 
-        // create one doc per pc
-        for(const pc of pcs){
-          const ref = db.collection("bookings").doc();
-          tx.set(ref, {
-            uid: String(currentUser.uid),
-            userEmail: String(currentUser.email || ""),
-            nick: String(nick),
-            pc: String(pc),
-            baseDate: String(baseDate),
-            startMin: Number(startMin),
-            endMin: Number(endMin),
-            note: String(note || ""),
-
-            // ✅ only numbers
-            startAtMs: Number(startAt.getTime()),
-            endAtMs: Number(endAt.getTime()),
-            createdAtMs: Number(Date.now())
-          });
+      for(const pc of pcs){
+        for(const b of dayList){
+          if(String(b.pc) !== String(pc)) continue;
+          const bs = Number(b.startMin||0);
+          const be = Number(b.endMin||0);
+          if(overlaps(startMin, endMin, bs, be)){
+            throw Object.assign(new Error("OVERLAP"), {code:"OVERLAP"});
+          }
         }
-      });
+      }
+
+      // 2) batch write
+      const batch = db.batch();
+      const nowMs = Date.now();
+      for(const pc of pcs){
+        const ref = db.collection("bookings").doc();
+        batch.set(ref, {
+          uid: String(currentUser.uid),
+          userEmail: String(currentUser.email || ""),
+          nick: String(nick),
+          pc: String(pc),
+          baseDate: String(baseDate),
+          startMin: Number(startMin),
+          endMin: Number(endMin),
+          note: String(note || ""),
+          startAtMs: Number(startAt.getTime()),
+          endAtMs: Number(endAt.getTime()),
+          createdAtMs: Number(nowMs)
+        });
+      }
+      await batch.commit();
 
       setMsg(`🎉 <b>Успешно!</b><br/>ПК: <b>${escapeHtml(pcs.join(", "))}</b><br/>⏱ ${escapeHtml(selectedSlot.label)}`, "good");
       toast(`<b>Booking OK</b><div class="mut">${escapeHtml(pcs.join(", "))} · ${escapeHtml(selectedSlot.label)}</div>`);
@@ -1003,13 +1022,16 @@
 
     }catch(e){
       console.error(e);
-      if(String(e?.message||"") === "OVERLAP"){
+      if(String(e?.code||"") === "OVERLAP" || String(e?.message||"") === "OVERLAP"){
         setMsg("⛔ Этот слот уже заняли. Выбери другой.", "bad");
       }else if(isPermissionError(e)){
-        setMsg("⛔ Нет прав на запись. Проверь Firestore Rules (auth read/write).", "bad");
+        setMsg("⛔ Нет прав на запись. Проверь Firestore Rules (разрешить write для auth).", "bad");
       }else{
-        setMsg("Ошибка бронирования. Открой Console (F12) и пришли одну красную строку.", "bad");
+        setMsg(`Ошибка бронирования.<br/><span class="mut">${niceErr(e)}</span><br/><span class="mut">Открой Console (F12) и пришли одну красную строку.</span>`, "bad");
       }
+    }finally{
+      creating = false;
+      $("createBtn").disabled = false;
     }
   }
 
@@ -1066,7 +1088,7 @@
             setMsg("Отменено.", "good");
           }catch(e){
             console.error(e);
-            setMsg(isPermissionError(e) ? "Нет прав (Rules)." : "Не могу отменить.", "bad");
+            setMsg(isPermissionError(e) ? "Нет прав (Rules)." : `Не могу отменить.<br/><span class="mut">${niceErr(e)}</span>`, "bad");
           }
         });
       });
@@ -1182,20 +1204,29 @@
             setMsg("Удалено.", "good");
           }catch(e){
             console.error(e);
-            setMsg(isPermissionError(e) ? "Нет прав (Rules)." : "Не могу удалить.", "bad");
+            setMsg(isPermissionError(e) ? "Нет прав (Rules)." : `Не могу удалить.<br/><span class="mut">${niceErr(e)}</span>`, "bad");
           }
         });
       });
 
     }catch(e){
       console.error(e);
-      setMsg(isPermissionError(e) ? "⛔ Нет доступа. Проверь Firestore Rules." : "Admin error.", "bad");
+      setMsg(isPermissionError(e) ? "⛔ Нет доступа. Проверь Firestore Rules." : `Admin error.<br/><span class="mut">${niceErr(e)}</span>`, "bad");
     }
   }
 
   // =========================
   // EVENTS
   // =========================
+  function setLangUI(code){
+    document.documentElement.lang = code;
+    ["ru","en","ka"].forEach(x=>{
+      const b = $("lang_"+x);
+      if(b) b.classList.toggle("active", x===code);
+    });
+    localStorage.setItem("sg_lang", code);
+  }
+
   function bind(){
     $("openAuthBtn").onclick = openModal;
     $("authCloseBtn").onclick = closeModal;
@@ -1268,10 +1299,10 @@
       window.__admT = setTimeout(renderAdmin, 140);
     });
 
-    // very simple language toggles (kept minimal to avoid new bugs)
-    $("lang_ru").onclick = ()=>document.documentElement.lang="ru";
-    $("lang_en").onclick = ()=>document.documentElement.lang="en";
-    $("lang_ka").onclick = ()=>document.documentElement.lang="ka";
+    // language (UI only)
+    $("lang_ru").onclick = ()=>setLangUI("ru");
+    $("lang_en").onclick = ()=>setLangUI("en");
+    $("lang_ka").onclick = ()=>setLangUI("ka");
 
     document.addEventListener("keydown", (e)=>{
       if(e.key === "Escape"){
@@ -1294,6 +1325,15 @@
     const savedNick = localStorage.getItem("sg_nick") || "";
     if(savedNick) $("nick").value = savedNick;
     $("nick").addEventListener("input", ()=> localStorage.setItem("sg_nick", String($("nick").value||"").trim()));
+
+    // protocol warning
+    if(location.protocol === "file:"){
+      $("protoBox").innerHTML = `<b>⛔ Открыто через file:///</b><br/>Открой через <b>http(s)</b> (например GitHub Pages / Firebase Hosting / локальный сервер), иначе Firebase может не работать.`;
+    }
+
+    // restore lang
+    const savedLang = localStorage.getItem("sg_lang") || "ru";
+    setLangUI(savedLang);
 
     bind();
 
