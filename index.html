@@ -27,6 +27,7 @@
       --r:18px;
     }
     *{box-sizing:border-box}
+    html,body{height:100%;}
     body{
       margin:0;
       font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial;
@@ -36,24 +37,47 @@
         radial-gradient(800px 700px at 40% 120%, rgba(52,211,153,.10), transparent 60%),
         var(--bg);
       color:var(--text);
+      overflow-x:hidden;
     }
+
     .wrap{max-width:1180px; margin:0 auto; padding:18px;}
     header{
       display:flex; gap:14px; align-items:center; justify-content:space-between;
       padding:14px 16px; border:1px solid var(--line); border-radius:var(--r);
-      background:linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,.02));
+      background:linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,.02));
       box-shadow: var(--shadow);
       position:sticky; top:14px; z-index:10;
       backdrop-filter: blur(10px);
+      animation: dropIn .35s ease both;
+    }
+    @keyframes dropIn{
+      from{ transform: translateY(-10px); opacity:.0; }
+      to{ transform: translateY(0); opacity:1; }
     }
     .brand{display:flex; gap:12px; align-items:center;}
     .logo{
       width:42px; height:42px; border-radius:14px;
-      background: radial-gradient(circle at 30% 20%, rgba(110,231,255,.9), rgba(167,139,250,.8) 40%, rgba(0,0,0,0) 72%),
-                  linear-gradient(180deg, rgba(255,255,255,.12), rgba(255,255,255,.02));
+      background:
+        radial-gradient(circle at 30% 20%, rgba(110,231,255,.9), rgba(167,139,250,.8) 40%, rgba(0,0,0,0) 72%),
+        linear-gradient(180deg, rgba(255,255,255,.14), rgba(255,255,255,.02));
       border:1px solid var(--line);
       box-shadow: 0 12px 30px rgba(0,0,0,.4);
+      position:relative;
+      overflow:hidden;
     }
+    .logo:after{
+      content:"";
+      position:absolute; inset:-60%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,.18), transparent);
+      transform: rotate(22deg) translateX(-60%);
+      animation: shine 4.2s ease-in-out infinite;
+    }
+    @keyframes shine{
+      0%, 72%{ transform: rotate(22deg) translateX(-70%); opacity:.0; }
+      80%{ opacity:1; }
+      100%{ transform: rotate(22deg) translateX(70%); opacity:0; }
+    }
+
     .brand h1{margin:0; font-size:16px; letter-spacing:.4px}
     .brand .sub{margin:0; color:var(--muted); font-size:12px}
 
@@ -62,8 +86,28 @@
       padding:8px 10px; border-radius:999px; border:1px solid var(--line);
       background:rgba(255,255,255,.03);
       color:var(--muted); font-size:12px;
+      display:flex; gap:6px; align-items:center;
     }
     .pill strong{color:var(--text); font-weight:900}
+
+    .dot{
+      width:8px; height:8px; border-radius:999px;
+      background:rgba(255,255,255,.25);
+      box-shadow:0 0 0 0 rgba(110,231,255,.0);
+    }
+    .dot.ok{
+      background: rgba(52,211,153,.9);
+      box-shadow: 0 0 0 0 rgba(52,211,153,.45);
+      animation: pulse 1.8s ease-out infinite;
+    }
+    .dot.err{
+      background: rgba(251,113,133,.95);
+    }
+    @keyframes pulse{
+      0%{ box-shadow:0 0 0 0 rgba(52,211,153,.35); }
+      70%{ box-shadow:0 0 0 10px rgba(52,211,153,0); }
+      100%{ box-shadow:0 0 0 0 rgba(52,211,153,0); }
+    }
 
     .lang{
       display:flex; gap:6px;
@@ -79,7 +123,9 @@
       cursor:pointer;
       font-weight:900;
       font-size:12px;
+      transition: transform .12s ease, background .12s ease, border-color .12s ease;
     }
+    .lang button:hover{ transform: translateY(-1px); }
     .lang button.active{
       border-color: rgba(110,231,255,.55);
       background: rgba(110,231,255,.10);
@@ -91,6 +137,12 @@
       grid-template-columns: 1.15fr .85fr;
       gap:18px;
       margin-top:16px;
+      animation: fadeUp .35s ease both;
+      animation-delay: .06s;
+    }
+    @keyframes fadeUp{
+      from{ transform: translateY(8px); opacity:0; }
+      to{ transform: translateY(0); opacity:1; }
     }
     @media (max-width: 980px){
       .grid{grid-template-columns:1fr;}
@@ -132,14 +184,21 @@
       cursor:pointer;
       font-weight:1000;
       letter-spacing:.2px;
+      transition: transform .10s ease, border-color .12s ease, background .12s ease, box-shadow .12s ease, opacity .12s ease;
     }
-    button:hover{border-color: rgba(110,231,255,.5)}
+    button:hover{border-color: rgba(110,231,255,.5); transform: translateY(-1px)}
+    button:active{transform: translateY(0px) scale(.99)}
+    button[disabled]{opacity:.55; cursor:not-allowed; transform:none}
+
     .primary{
       border-color: rgba(110,231,255,.55);
       background: linear-gradient(180deg, rgba(110,231,255,.18), rgba(167,139,250,.10));
+      box-shadow: 0 0 0 0 rgba(110,231,255,0);
     }
+    .primary:hover{ box-shadow: 0 0 0 3px rgba(110,231,255,.10); }
     .ghost{background:transparent}
     .danger{border-color: rgba(251,113,133,.6); background: rgba(251,113,133,.10)}
+    .warn{border-color: rgba(251,191,36,.55); background: rgba(251,191,36,.08)}
     .mini{padding:6px 10px; border-radius:12px; font-size:12px; font-weight:1000}
 
     label{display:block; font-size:12px; color:var(--muted); margin:0 0 6px}
@@ -151,6 +210,7 @@
       background:rgba(0,0,0,.25);
       color:var(--text);
       outline:none;
+      transition: border-color .12s ease, box-shadow .12s ease, transform .12s ease;
     }
     input:focus, select:focus{border-color: rgba(110,231,255,.6); box-shadow:0 0 0 3px rgba(110,231,255,.12)}
     .row{display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:10px;}
@@ -170,12 +230,22 @@
       border-radius:16px;
       background:rgba(0,0,0,.22);
       cursor:pointer;
-      transition: transform .08s ease, border-color .12s ease, box-shadow .12s ease;
+      transition: transform .10s ease, border-color .12s ease, box-shadow .12s ease;
       user-select:none;
       position:relative;
       min-height:74px;
+      overflow:hidden;
+    }
+    .pc:before{
+      content:"";
+      position:absolute; inset:0;
+      background: radial-gradient(600px 200px at -20% 0%, rgba(110,231,255,.12), transparent 60%);
+      opacity:.0;
+      transition: opacity .2s ease;
+      pointer-events:none;
     }
     .pc:hover{transform: translateY(-1px); border-color: rgba(110,231,255,.4)}
+    .pc:hover:before{opacity:1}
     .pc .name{font-weight:1100; letter-spacing:.3px}
     .pc .meta{margin-top:6px; color:var(--muted); font-size:12px}
     .pc.selected{
@@ -191,11 +261,13 @@
       color: transparent;
       font-weight:1100;
       font-size:12px;
+      transition: transform .12s ease, background .12s ease, border-color .12s ease, color .12s ease;
     }
     .pc.selected .check{
       border-color: rgba(110,231,255,.75);
       background: rgba(110,231,255,.14);
       color: var(--text);
+      transform: scale(1.06);
     }
 
     .chipbar{display:flex; gap:8px; flex-wrap:wrap; margin-top:10px}
@@ -208,8 +280,9 @@
       font-size:12px;
       user-select:none;
       white-space:nowrap;
+      transition: transform .10s ease, border-color .12s ease, box-shadow .12s ease, opacity .12s ease;
     }
-    .chip:hover{border-color: rgba(110,231,255,.5)}
+    .chip:hover{border-color: rgba(110,231,255,.5); transform: translateY(-1px)}
     .chip.active{
       border-color: rgba(110,231,255,.75);
       background: rgba(110,231,255,.10);
@@ -220,8 +293,18 @@
       background: rgba(251,113,133,.08);
       color: rgba(251,113,133,.95);
       cursor:not-allowed;
-      opacity:.95;
+      opacity:.92;
+      transform:none !important;
     }
+    .chip.skel{
+      border-style:dashed;
+      opacity:.65;
+      cursor:default;
+      background: linear-gradient(90deg, rgba(255,255,255,.03), rgba(255,255,255,.06), rgba(255,255,255,.03));
+      background-size: 240% 100%;
+      animation: sk 1.2s ease infinite;
+    }
+    @keyframes sk{ 0%{background-position:0% 0} 100%{background-position:100% 0} }
 
     table{
       width:100%;
@@ -258,6 +341,16 @@
     }
     .hide{display:none !important;}
 
+    /* Toast message animation */
+    .toastIn{
+      animation: toast .28s ease both;
+    }
+    @keyframes toast{
+      from{ transform: translateY(6px); opacity:.0; }
+      to{ transform: translateY(0); opacity:1; }
+    }
+
+    /* Modal */
     .backdrop{
       position:fixed; inset:0;
       background:rgba(0,0,0,.55);
@@ -267,7 +360,9 @@
       padding:16px;
       z-index:999;
     }
-    .backdrop.show{display:flex;}
+    .backdrop.show{display:flex; animation: fade .18s ease both;}
+    @keyframes fade{ from{opacity:0} to{opacity:1} }
+
     .modal{
       width:min(560px, 100%);
       border:1px solid var(--line);
@@ -275,6 +370,12 @@
       background: linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,.02));
       box-shadow: var(--shadow);
       overflow:hidden;
+      animation: pop .22s ease both;
+      transform-origin: 50% 20%;
+    }
+    @keyframes pop{
+      from{ transform: translateY(10px) scale(.98); opacity:.0; }
+      to{ transform: translateY(0) scale(1); opacity:1; }
     }
     .mh{
       padding:14px 16px;
@@ -286,6 +387,24 @@
     }
     .mb{padding:14px 16px}
     .mut{color:var(--muted); font-size:12px}
+
+    .smalllinks{
+      margin-top:10px;
+      display:flex;
+      justify-content:space-between;
+      gap:10px;
+      flex-wrap:wrap;
+    }
+    .linkbtn{
+      border:1px solid var(--line);
+      background:transparent;
+      color:var(--muted);
+      border-radius:999px;
+      padding:8px 10px;
+      font-size:12px;
+      cursor:pointer;
+    }
+    .linkbtn:hover{ color:var(--text); border-color: rgba(110,231,255,.35); }
   </style>
 </head>
 
@@ -306,12 +425,18 @@
         <button id="lang_en" type="button">EN</button>
         <button id="lang_ka" type="button">KA</button>
       </div>
+
       <div class="pill"><span id="t_user">Пользователь</span>: <strong id="userPill">—</strong></div>
-      <div class="pill"><span id="t_status">Статус</span>: <strong id="cloudPill">…</strong></div>
+
+      <div class="pill">
+        <span class="dot" id="cloudDot"></span>
+        <span id="t_status">Статус</span>: <strong id="cloudPill">…</strong>
+      </div>
     </div>
   </header>
 
   <div class="grid">
+    <!-- LEFT -->
     <div class="card">
       <div class="hd">
         <h2 id="t_main">Бронирование</h2>
@@ -319,6 +444,7 @@
       </div>
 
       <div class="bd">
+        <!-- AUTH BAR -->
         <div class="notice" id="authBar">
           <b id="t_authTitle">Аккаунт</b><br/>
           <span id="t_authDesc">Для бронирования нужен логин.</span>
@@ -329,6 +455,7 @@
           <div class="notice" style="margin-top:10px" id="authMsg">—</div>
         </div>
 
+        <!-- FLOW -->
         <div class="notice" style="margin-top:12px" id="flowHelp">
           <b id="t_flowTitle">Как бронировать</b><br/>
           <span id="t_flow1">1) Выбери 1 или несколько ПК</span><br/>
@@ -337,6 +464,7 @@
           <span id="t_flow4">4) Подтверди</span>
         </div>
 
+        <!-- FORM -->
         <div style="margin-top:12px">
           <div class="row">
             <div>
@@ -384,6 +512,7 @@
           <div class="notice" style="margin-top:10px" id="msgBox">—</div>
         </div>
 
+        <!-- MY BOOKINGS -->
         <div id="myBox" class="hide" style="margin-top:14px">
           <div class="btns">
             <button class="ghost" id="closeMyBtn" type="button">✖ <span id="t_close">Закрыть</span></button>
@@ -402,6 +531,7 @@
           </table>
         </div>
 
+        <!-- TODAY -->
         <div id="todayBox" class="hide" style="margin-top:14px">
           <div class="btns">
             <button class="ghost" id="closeTodayBtn" type="button">✖ <span id="t_close2">Закрыть</span></button>
@@ -419,13 +549,47 @@
           </table>
         </div>
 
+        <!-- ADMIN -->
+        <div id="adminBox" class="hide" style="margin-top:14px">
+          <div class="notice">
+            <b>Admin</b> — управление бронями
+            <div class="row" style="margin-top:10px">
+              <div>
+                <label>Дата (рабочий день)</label>
+                <input id="adminDate" type="date" />
+              </div>
+              <div>
+                <label>Поиск (ник/ПК/email)</label>
+                <input id="adminSearch" type="text" placeholder="search" />
+              </div>
+            </div>
+            <div class="btns">
+              <button class="ghost" id="refreshAdminBtn" type="button">🔄 Refresh</button>
+              <button class="danger" id="adminCloseBtn" type="button">🚪 Close admin</button>
+            </div>
+          </div>
+
+          <table>
+            <thead>
+              <tr>
+                <th>День</th><th>Время</th><th>ПК</th><th>Ник</th><th>User</th><th>Action</th>
+              </tr>
+            </thead>
+            <tbody id="adminTable"></tbody>
+          </table>
+        </div>
+
         <div class="footerbar">
           <div><span class="kbd">Esc</span> — <span id="t_esc">закрыть окна</span></div>
+          <div class="btns" style="margin:0">
+            <button class="mini ghost" id="openAdminBtn" type="button">🔐 Admin</button>
+          </div>
         </div>
 
       </div>
     </div>
 
+    <!-- RIGHT -->
     <div class="card">
       <div class="hd">
         <h2 id="t_side">Подсказка</h2>
@@ -438,13 +602,15 @@
         <div style="height:12px"></div>
         <div class="notice">
           <b>Важно</b><br/>
-          Firebase работает только на <b>http(s)</b>. На <b>file:///</b> авторизация/база блокируются браузером.
+          Firebase работает только на <b>http(s)</b>. На <b>file:///</b> авторизация/база блокируются браузером.<br/>
+          Если видишь <b>permission-denied</b> — проверь Firestore Rules.
         </div>
       </div>
     </div>
   </div>
 </div>
 
+<!-- AUTH MODAL -->
 <div class="backdrop" id="authBackdrop" aria-hidden="true">
   <div class="modal" role="dialog" aria-modal="true">
     <div class="mh">
@@ -468,6 +634,10 @@
       <div class="btns">
         <button class="primary" id="doLoginBtn" type="button">Войти</button>
         <button class="ghost" id="doRegisterBtn" type="button">Регистрация</button>
+      </div>
+      <div class="smalllinks">
+        <button class="linkbtn" id="forgotBtn" type="button">Забыли пароль?</button>
+        <span class="mut">Пароль ≥ 6 символов</span>
       </div>
       <div class="notice" style="margin-top:10px" id="authModalMsg">—</div>
     </div>
@@ -495,13 +665,16 @@
   const PCs = ["Bishop","Godzilla","Elf","Kadita","Orc","Lancelot","Fantomas","Soultaker","Pudge","Kratos"];
   const SLOT_STEP_MIN = 30;
 
+  // рабочий день (может пересекать полночь)
   const WORKING_HOURS_ENABLED = true;
   const WORK_START = "10:00";
-  const WORK_END = "03:00"; // next day
+  const WORK_END   = "03:00"; // на следующий день
 
-  // =========================
-  // LOCKS (важно: это фиксит tx.get(query) ошибку)
-  // =========================
+  // Админы по email (добавь свои)
+  const ADMIN_EMAILS = [
+    // "kiralite93@gmail.com",
+  ];
+
   const LOCKS_COLLECTION = "locks";
 
   // =========================
@@ -514,27 +687,36 @@
   const minutesFromHHMM = (t)=>{ const [h,m]=t.split(":").map(Number); return h*60+m; };
   const hhmmFromMinutes = (min)=>{ min=((min%1440)+1440)%1440; const h=Math.floor(min/60), m=min%60; return `${pad2(h)}:${pad2(m)}`; };
 
+  const addDays = (dateObj, days) => new Date(dateObj.getTime() + days*24*60*60*1000);
+
   function escapeHtml(s){
     return String(s ?? "")
       .replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;")
       .replaceAll('"',"&quot;").replaceAll("'","&#039;");
   }
 
-  function setMsg(text, kind="info"){
+  function setToast(text, kind="info"){
     const el = $("msgBox");
+    el.classList.remove("toastIn");
+    void el.offsetWidth; // restart animation
+    el.classList.add("toastIn");
+
     el.textContent = text;
     el.style.borderColor =
       kind==="good" ? "rgba(52,211,153,.45)" :
       kind==="bad" ? "rgba(251,113,133,.55)" :
+      kind==="warn"? "rgba(251,191,36,.55)" :
       "rgba(110,231,255,.35)";
     el.style.background =
       kind==="good" ? "rgba(52,211,153,.08)" :
       kind==="bad" ? "rgba(251,113,133,.08)" :
+      kind==="warn"? "rgba(251,191,36,.08)" :
       "rgba(110,231,255,.06)";
   }
 
   function show(el){ el.classList.remove("hide"); }
   function hide(el){ el.classList.add("hide"); }
+
   function openModal(){ $("authBackdrop").classList.add("show"); }
   function closeModal(){ $("authBackdrop").classList.remove("show"); }
 
@@ -545,8 +727,56 @@
     return we <= ws;
   }
 
+  // “рабочий день” = выбранная дата. Слоты после полуночи относятся к +1 календарному дню.
+  function slotStartAbs(dateISO, startMin){
+    const base = parseISODate(dateISO);
+    let d = new Date(base.getFullYear(), base.getMonth(), base.getDate(), Math.floor(startMin/60), startMin%60, 0, 0);
+    if(isCrossMidnight()){
+      const ws = minutesFromHHMM(WORK_START);
+      if(startMin < ws) d = addDays(d, 1); // ночной слот -> следующий календарный день
+    }
+    return d;
+  }
+  function slotEndAbs(dateISO, endMin){
+    // endMin может “упираться” в 03:00 и тоже должен быть в корректном календарном дне
+    const base = parseISODate(dateISO);
+    let d = new Date(base.getFullYear(), base.getMonth(), base.getDate(), Math.floor(endMin/60), endMin%60, 0, 0);
+    if(isCrossMidnight()){
+      const ws = minutesFromHHMM(WORK_START);
+      // если конец меньше начала рабочего дня — это следующий день
+      if(endMin <= ws) d = addDays(d, 1);
+    }
+    return d;
+  }
+
+  function overlapsAbs(aStart, aEnd, bStart, bEnd){
+    return Math.max(aStart, bStart) < Math.min(aEnd, bEnd);
+  }
+
+  // locks должны отличать календарный день сегмента (чтобы не было странных пересечений)
+  function lockSegmentISO(dateISO, minute){
+    if(!isCrossMidnight()) return dateISO;
+    const ws = minutesFromHHMM(WORK_START);
+    if(minute < ws) {
+      const d = addDays(parseISODate(dateISO), 1);
+      return toISODate(d);
+    }
+    return dateISO;
+  }
+
+  function lockId(dateISO, pc, minute){
+    const segISO = lockSegmentISO(dateISO, minute);
+    return `${segISO}__${pc}__${minute}`;
+  }
+
+  function lockMinutesBetween(startMin, endMin){
+    const mins = [];
+    for(let m = startMin; m < endMin; m += SLOT_STEP_MIN) mins.push(m);
+    return mins;
+  }
+
   // =========================
-  // i18n (минимум)
+  // i18n
   // =========================
   const LANG_KEY = "sg_lang";
   let lang = localStorage.getItem(LANG_KEY) || "ru";
@@ -566,17 +796,17 @@
       flow3:"3) Выбери удобный слот (зелёный свободен)",
       flow4:"4) Подтверди",
       nickLabel:"Твой ник (в клубе)",
-      dateLabel:"Дата",
+      dateLabel:"Дата (рабочий день)",
       duration:"Длительность",
       note:"Комментарий (опционально)",
       pickpc:"Выбери ПК (можно несколько):",
       slotsTitle:"Слоты",
-      slotsDesc:"Сначала выбери ПК и длительность — потом появятся свободные слоты.",
+      slotsDesc:"Выбери ПК и длительность — появятся свободные слоты. Ночные слоты помечены 🌙(+1).",
       bookNow:"Забронировать",
       my:"Мои брони",
       today:"Сегодня",
       close:"Закрыть",
-      colDate:"Дата",
+      colDate:"День",
       colTime:"Время",
       colPc:"ПК",
       colNote:"Комментарий",
@@ -591,7 +821,7 @@
 
 👤 “Мои брони” — просмотр/отмена.`,
       rulesTitle:"Правила",
-      rulesBody:"• Нельзя пересекать брони на одном ПК<br/>• Слот подсвечивается по выбранным ПК<br/>• Для общей базы включён Firebase",
+      rulesBody:"• Нельзя пересекать брони на одном ПК<br/>• Ночные слоты относятся к следующему дню 🌙(+1)<br/>• Firebase = общая база (у всех одна)",
       esc:"закрыть окна",
     },
     en: {
@@ -608,17 +838,17 @@
       flow3:"3) Pick a slot (green = free)",
       flow4:"4) Confirm",
       nickLabel:"Your club nickname",
-      dateLabel:"Date",
+      dateLabel:"Date (work day)",
       duration:"Duration",
       note:"Note (optional)",
       pickpc:"Select PCs (multi-select):",
       slotsTitle:"Slots",
-      slotsDesc:"Pick PCs + duration first — then you will see available slots.",
+      slotsDesc:"Pick PCs + duration — available slots will appear. Night slots are marked 🌙(+1).",
       bookNow:"Book now",
       my:"My bookings",
       today:"Today",
       close:"Close",
-      colDate:"Date",
+      colDate:"Day",
       colTime:"Time",
       colPc:"PC",
       colNote:"Note",
@@ -633,7 +863,7 @@
 
 👤 “My bookings” — view/cancel.`,
       rulesTitle:"Rules",
-      rulesBody:"• No overlaps on the same PC<br/>• Slots depend on selected PCs<br/>• Firebase enabled (shared DB)",
+      rulesBody:"• No overlaps on the same PC<br/>• Night slots belong to next day 🌙(+1)<br/>• Firebase enabled (shared DB)",
       esc:"close panels",
     },
     ka: {
@@ -650,17 +880,17 @@
       flow3:"3) აირჩიე სლოტი (მწვანე = თავისუფალი)",
       flow4:"4) დაადასტურე",
       nickLabel:"ნიკი (კლუბში)",
-      dateLabel:"თარიღი",
+      dateLabel:"თარიღი (სამუშაო დღე)",
       duration:"ხანგრძლივობა",
       note:"შენიშვნა (არასავალდებულო)",
       pickpc:"აირჩიე PC-ები (შეიძლება რამდენიმე):",
       slotsTitle:"სლოტები",
-      slotsDesc:"ჯერ აირჩიე PC და ხანგრძლივობა — შემდეგ გამოჩნდება თავისუფალი სლოტები.",
+      slotsDesc:"აირჩიე PC და ხანგრძლივობა — გამოჩნდება თავისუფალი სლოტები. ღამის სლოტები: 🌙(+1).",
       bookNow:"დაჯავშნა",
       my:"ჩემი ჯავშნები",
       today:"დღეს",
       close:"დახურვა",
-      colDate:"თარიღი",
+      colDate:"დღე",
       colTime:"დრო",
       colPc:"PC",
       colNote:"შენიშვნა",
@@ -675,7 +905,7 @@
 
 👤 “ჩემი ჯავშნები” — ნახვა/გაუქმება.`,
       rulesTitle:"წესები",
-      rulesBody:"• ერთ PC-ზე გადაკვეთა არ შეიძლება<br/>• სლოტები დამოკიდებულია არჩეულ PC-ზე<br/>• Firebase ჩართულია (საერთო ბაზა)",
+      rulesBody:"• ერთ PC-ზე გადაკვეთა არ შეიძლება<br/>• ღამის სლოტები ეკუთვნის შემდეგ დღეს 🌙(+1)<br/>• Firebase ჩართულია (საერთო ბაზა)",
       esc:"ფანჯრების დახურვა",
     }
   };
@@ -730,26 +960,33 @@
   // =========================
   let app, auth, db;
   let currentUser = null;
+  let isAdmin = false;
 
-  function setCloud(text){ $("cloudPill").textContent = text; }
+  function setCloud(text, ok=true){
+    $("cloudPill").textContent = text;
+    const dot = $("cloudDot");
+    dot.classList.remove("ok","err");
+    if(ok) dot.classList.add("ok");
+    else dot.classList.add("err");
+  }
 
   try{
     app = firebase.initializeApp(firebaseConfig);
     auth = firebase.auth();
     db = firebase.firestore();
-    setCloud("OK");
+    setCloud("OK", true);
   }catch(e){
     console.error(e);
-    setCloud("ERROR");
-    setMsg("Firebase init error. Open Console (F12).", "bad");
+    setCloud("ERROR", false);
+    setToast("Firebase init error. Open Console (F12).", "bad");
   }
 
   // =========================
   // UI STATE
   // =========================
   let selectedPCs = new Set();
-  let selectedSlot = null;
-  let cachedDayBookings = [];
+  let selectedSlot = null; // {startMin,endMin,label,startAt,endAt}
+  let cachedDayBookings = []; // bookings for dateKey
 
   function renderPCGrid(){
     const grid = $("pcGrid");
@@ -772,29 +1009,49 @@
     }
   }
 
-  function workingWindowMinutes(){
+  function workingWindowSegments(){
     const ws = minutesFromHHMM(WORK_START);
     const we = minutesFromHHMM(WORK_END);
-    if(!WORKING_HOURS_ENABLED) return [{a:0,b:1440}];
-    if(we > ws) return [{a:ws,b:we}];
-    return [{a:ws,b:1440},{a:0,b:we}];
+    if(!WORKING_HOURS_ENABLED) return [{a:0,b:1440, night:false}];
+    if(we > ws) return [{a:ws,b:we, night:false}];
+    // crosses midnight: [ws..1440] + [0..we]
+    return [
+      {a:ws,b:1440, night:false},
+      {a:0,b:we, night:true}
+    ];
   }
 
-  function overlaps(a1,a2,b1,b2){
-    return Math.max(a1,b1) < Math.min(a2,b2);
-  }
-
-  function slotBusyForSelectedPCs(startMin, endMin){
+  function slotBusyForSelectedPCs(slot){
+    // сравнение по реальному времени startAt/endAt
     for(const b of cachedDayBookings){
       if(!selectedPCs.has(b.pc)) continue;
-      if(overlaps(startMin, endMin, b.startMin, b.endMin)) return true;
+      if(overlapsAbs(slot.startAtMs, slot.endAtMs, b.startAtMs, b.endAtMs)) return true;
     }
     return false;
   }
 
-  async function loadBookingsForDate(dateISO){
-    const snap = await db.collection("bookings").where("date", "==", dateISO).get();
+  async function loadBookingsForDateKey(dateKey){
+    const snap = await db.collection("bookings").where("dateKey", "==", dateKey).get();
     return snap.docs.map(d => ({ id:d.id, ...d.data() }));
+  }
+
+  async function refreshDayAndSlots(){
+    const dateKey = $("date").value;
+    if(!dateKey || !db) return;
+    try{
+      cachedDayBookings = await loadBookingsForDateKey(dateKey);
+      // normalize for compare
+      cachedDayBookings = cachedDayBookings.map(b => ({
+        ...b,
+        startAtMs: Number(b.startAtMs || 0),
+        endAtMs: Number(b.endAtMs || 0),
+      }));
+    }catch(e){
+      console.error(e);
+      setToast("Не могу загрузить брони из базы. Проверь Firestore rules.", "bad");
+      cachedDayBookings = [];
+    }
+    rebuildSlots();
   }
 
   function rebuildSlots(){
@@ -802,31 +1059,46 @@
     chips.innerHTML = "";
     selectedSlot = null;
 
-    const dateISO = $("date").value;
+    const dateKey = $("date").value;
     const dur = Number($("duration").value || 60);
 
-    if(!dateISO || selectedPCs.size === 0){
+    if(!dateKey || selectedPCs.size === 0){
       chips.innerHTML = `<div class="mut">—</div>`;
       return;
     }
 
-    const segs = workingWindowMinutes();
+    // small skeleton while loading is possible: but here we already have cached bookings
+    const segs = workingWindowSegments();
     const slots = [];
 
     for(const seg of segs){
       for(let s = seg.a; s + dur <= seg.b; s += SLOT_STEP_MIN){
         const e = s + dur;
-        let label = `${hhmmFromMinutes(s)} → ${hhmmFromMinutes(e)}`;
-        if(isCrossMidnight()){
-          const ws = minutesFromHHMM(WORK_START);
-          if(s < ws) label += "  🌙(+1)";
-        }
-        slots.push({startMin:s, endMin:e, label});
+
+        const startAt = slotStartAbs(dateKey, s);
+        const endAt = slotEndAbs(dateKey, e);
+
+        const labelBase = `${hhmmFromMinutes(s)} → ${hhmmFromMinutes(e)}`;
+        const label = seg.night ? `${labelBase}  🌙(+1)` : labelBase;
+
+        slots.push({
+          startMin:s,
+          endMin:e,
+          label,
+          startAtMs: startAt.getTime(),
+          endAtMs: endAt.getTime(),
+          night: !!seg.night
+        });
       }
     }
 
+    if(!slots.length){
+      chips.innerHTML = `<div class="mut">—</div>`;
+      return;
+    }
+
     for(const sl of slots){
-      const busy = slotBusyForSelectedPCs(sl.startMin, sl.endMin);
+      const busy = slotBusyForSelectedPCs(sl);
       const div = document.createElement("div");
       div.className = "chip" + (busy ? " busy" : "");
       div.textContent = busy ? `⛔ ${sl.label}` : `✅ ${sl.label}`;
@@ -840,21 +1112,8 @@
     }
   }
 
-  async function refreshDayAndSlots(){
-    const dateISO = $("date").value;
-    if(!dateISO) return;
-    try{
-      cachedDayBookings = await loadBookingsForDate(dateISO);
-    }catch(e){
-      console.error(e);
-      setMsg("Не могу загрузить брони из базы. Проверь Firestore rules.", "bad");
-      cachedDayBookings = [];
-    }
-    rebuildSlots();
-  }
-
   // =========================
-  // AUTH + PROFILE
+  // PROFILE
   // =========================
   async function upsertProfileNick(uid, nick){
     const safeNick = (nick || "").trim().slice(0, 32);
@@ -874,100 +1133,83 @@
     $("logoutBtn").classList.toggle("hide", !currentUser);
     $("openAuthBtn").classList.toggle("hide", !!currentUser);
     $("userPill").textContent = currentUser ? (currentUser.email || currentUser.uid.slice(0,6)) : "—";
+
+    isAdmin = !!(currentUser && ADMIN_EMAILS.map(x=>String(x).toLowerCase()).includes(String(currentUser.email||"").toLowerCase()));
+    if(!isAdmin) hide($("adminBox"));
   }
 
   // =========================
-  // LOCK HELPERS
-  // =========================
-  function lockId(dateISO, pc, minute){
-    // minute кратно 30
-    return `${dateISO}__${pc}__${minute}`;
-  }
-  function lockMinutesBetween(startMin, endMin){
-    const mins = [];
-    for(let m = startMin; m < endMin; m += SLOT_STEP_MIN) mins.push(m);
-    return mins;
-  }
-
-  // =========================
-  // CREATE BOOKING (transaction with doc refs only)
+  // BOOKING + LOCKS (transaction, только doc refs)
   // =========================
   async function createBooking(){
-    if(!currentUser){ setMsg("Сначала войди.", "bad"); return; }
-
-    const nick = ($("nick").value||"").trim();
-    const dateISO = $("date").value;
-    const note = ($("note").value||"").trim();
-
-    if(!nick){ setMsg("Введи ник.", "bad"); return; }
-    if(!dateISO){ setMsg("Выбери дату.", "bad"); return; }
-    if(selectedPCs.size===0){ setMsg("Выбери ПК.", "bad"); return; }
-    if(!selectedSlot){ setMsg("Выбери свободный слот.", "bad"); return; }
-
-    // запрет "в прошлом" с учётом пересечения полуночи
-    const now = new Date();
-    const day0 = parseISODate(dateISO);
-    let startAbs = new Date(day0.getFullYear(), day0.getMonth(), day0.getDate(),
-      Math.floor(selectedSlot.startMin/60), selectedSlot.startMin%60, 0, 0);
-    if (isCrossMidnight()){
-      const ws = minutesFromHHMM(WORK_START);
-      if (selectedSlot.startMin < ws){
-        startAbs = new Date(startAbs.getTime() + 24*60*60*1000);
-      }
-    }
-    if(startAbs.getTime() < now.getTime()){
-      setMsg("Нельзя бронировать в прошлом.", "bad");
+    if(!currentUser){
+      setToast("Сначала войди.", "bad");
       return;
     }
 
+    const nick = ($("nick").value||"").trim();
+    const dateKey = $("date").value;
+    const note = ($("note").value||"").trim();
+
+    if(!nick){ setToast("Введи ник.", "bad"); return; }
+    if(!dateKey){ setToast("Выбери дату.", "bad"); return; }
+    if(selectedPCs.size===0){ setToast("Выбери ПК.", "bad"); return; }
+    if(!selectedSlot){ setToast("Выбери свободный слот.", "bad"); return; }
+
+    // запрет в прошлое
+    const now = Date.now();
+    if(selectedSlot.startAtMs < now){
+      setToast("Нельзя бронировать в прошлом.", "bad");
+      return;
+    }
+
+    // save nick
     try{ await upsertProfileNick(currentUser.uid, nick); }catch(e){}
 
     const pcs = Array.from(selectedPCs);
-    const startMin = selectedSlot.startMin;
-    const endMin = selectedSlot.endMin;
 
-    setMsg("Создаю бронь…", "info");
+    $("createBtn").disabled = true;
+    setToast("Создаю бронь…", "info");
 
     try{
       await db.runTransaction(async (tx) => {
-        // 1) проверяем/создаём locks
-        // 2) если всё ок — создаём booking docs (по 1 на PC)
-
+        // для каждого PC создаём locks на каждый 30-мин сегмент
         for(const pc of pcs){
-          const mins = lockMinutesBetween(startMin, endMin);
-          const lockIds = mins.map(m => lockId(dateISO, pc, m));
+          const mins = lockMinutesBetween(selectedSlot.startMin, selectedSlot.endMin);
+          const lockIds = mins.map(m => lockId(dateKey, pc, m));
 
-          // check locks exist
-          for(const id of lockIds){
-            const ref = db.collection(LOCKS_COLLECTION).doc(id);
+          // 1) check locks
+          for(const lid of lockIds){
+            const ref = db.collection(LOCKS_COLLECTION).doc(lid);
             const snap = await tx.get(ref);
-            if(snap.exists){
-              throw new Error("OVERLAP_LOCK");
-            }
+            if(snap.exists) throw new Error("OVERLAP_LOCK");
           }
 
-          // create locks
-          for(const id of lockIds){
-            const ref = db.collection(LOCKS_COLLECTION).doc(id);
-            tx.set(ref, {
+          // 2) create locks
+          for(const lid of lockIds){
+            const minute = Number(lid.split("__").pop());
+            tx.set(db.collection(LOCKS_COLLECTION).doc(lid), {
               uid: currentUser.uid,
               pc,
-              date: dateISO,
-              minute: Number(id.split("__").pop()),
+              dateKey,
+              segmentISO: lockSegmentISO(dateKey, minute),
+              minute,
               createdAt: firebase.firestore.FieldValue.serverTimestamp()
             });
           }
 
-          // create booking doc
+          // 3) create booking doc
           const bRef = db.collection("bookings").doc();
           tx.set(bRef, {
             uid: currentUser.uid,
             userEmail: currentUser.email || "",
             nick,
             pc,
-            date: dateISO,
-            startMin,
-            endMin,
+            dateKey, // рабочий день
+            startMin: selectedSlot.startMin,
+            endMin: selectedSlot.endMin,
+            startAtMs: selectedSlot.startAtMs,
+            endAtMs: selectedSlot.endAtMs,
             note,
             lockIds,
             createdAt: firebase.firestore.FieldValue.serverTimestamp()
@@ -975,16 +1217,18 @@
         }
       });
 
-      setMsg(`✅ Готово! Забронировано: ${pcs.join(", ")} — ${selectedSlot.label}`, "good");
+      setToast(`✅ Готово! ПК: ${pcs.join(", ")} — ${selectedSlot.label}`, "good");
       await refreshDayAndSlots();
 
     }catch(e){
       console.error(e);
       if(String(e.message||"") === "OVERLAP_LOCK"){
-        setMsg("⛔ Этот слот уже заняли. Выбери другой.", "bad");
+        setToast("⛔ Этот слот уже заняли. Выбери другой.", "bad");
       }else{
-        setMsg("Ошибка бронирования. Открой Console (F12) и пришли 1 красную строку.", "bad");
+        setToast("Ошибка бронирования. Открой Console (F12) и пришли 1 красную строку.", "bad");
       }
+    }finally{
+      $("createBtn").disabled = false;
     }
   }
 
@@ -995,22 +1239,28 @@
     if(!currentUser) return [];
     const snap = await db.collection("bookings").where("uid","==", currentUser.uid).get();
     const list = snap.docs.map(d => ({ id:d.id, ...d.data() }));
-    list.sort((a,b)=> (a.date+a.startMin+a.pc).localeCompare(b.date+b.startMin+b.pc));
+    list.forEach(b=>{
+      b.startAtMs = Number(b.startAtMs || 0);
+      b.endAtMs = Number(b.endAtMs || 0);
+    });
+    list.sort((a,b)=> (a.startAtMs - b.startAtMs) || String(a.pc).localeCompare(String(b.pc)));
     return list;
   }
 
   async function deleteBookingAndLocks(b){
-    // b должен содержать id + lockIds
     const batch = db.batch();
-
     if(Array.isArray(b.lockIds)){
       for(const lid of b.lockIds){
         batch.delete(db.collection(LOCKS_COLLECTION).doc(lid));
       }
     }
     batch.delete(db.collection("bookings").doc(b.id));
-
     await batch.commit();
+  }
+
+  function fmtDayFromMs(ms){
+    const d = new Date(ms);
+    return `${pad2(d.getDate())}.${pad2(d.getMonth()+1)} ${pad2(d.getHours())}:${pad2(d.getMinutes())}`;
   }
 
   async function renderMyBookings(){
@@ -1027,14 +1277,19 @@
     }
 
     for(const b of list){
-      const timeStr = `${hhmmFromMinutes(b.startMin)} → ${hhmmFromMinutes(b.endMin)}`;
+      const start = new Date(b.startAtMs);
+      const end = new Date(b.endAtMs);
+      const timeStr = `${pad2(start.getHours())}:${pad2(start.getMinutes())} → ${pad2(end.getHours())}:${pad2(end.getMinutes())}`;
+      const dayStr = escapeHtml(b.dateKey || "");
+      const nightMark = isCrossMidnight() && (minutesFromHHMM(`${pad2(start.getHours())}:${pad2(start.getMinutes())}`) < minutesFromHHMM(WORK_START)) ? " 🌙(+1)" : "";
+
       const tr = document.createElement("tr");
       tr.innerHTML = `
-        <td>${escapeHtml(b.date)}</td>
-        <td>${escapeHtml(timeStr)}</td>
+        <td>${dayStr}</td>
+        <td>${escapeHtml(timeStr)}${nightMark}</td>
         <td><b>${escapeHtml(b.pc)}</b></td>
         <td style="color:var(--muted)">${escapeHtml(b.note||"")}</td>
-        <td><button class="mini danger" type="button" data-id="${b.id}">Cancel</button></td>
+        <td><button class="mini danger" type="button">Cancel</button></td>
       `;
       tbody.appendChild(tr);
 
@@ -1044,26 +1299,49 @@
           await deleteBookingAndLocks(b);
           await refreshDayAndSlots();
           await renderMyBookings();
-          setMsg("Отменено.", "good");
+          setToast("Отменено.", "good");
         }catch(e){
           console.error(e);
-          setMsg("Не могу отменить. Проверь Firestore rules.", "bad");
+          setToast("Не могу отменить. Проверь Firestore rules.", "bad");
         }
       });
     }
   }
 
   // =========================
-  // TODAY
+  // TODAY (по календарной дате сейчас)
   // =========================
   async function renderToday(){
     const tbody = $("todayTable");
     tbody.innerHTML = "";
-    const todayISO = toISODate(new Date());
+    const now = new Date();
+
+    // показываем брони, которые реально попадают "сегодня по календарю" (startAtMs within today's day)
+    const dayStart = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 0,0,0,0).getTime();
+    const dayEnd = dayStart + 24*60*60*1000;
+
     try{
-      const snap = await db.collection("bookings").where("date","==",todayISO).get();
-      const list = snap.docs.map(d => ({ id:d.id, ...d.data() }));
-      list.sort((a,b)=> (a.startMin+a.pc).toString().localeCompare((b.startMin+b.pc).toString()));
+      // читаем по dateKey сегодняшнего и вчерашнего (чтобы захватить ночные)
+      const todayKey = toISODate(now);
+      const yKey = toISODate(addDays(now, -1));
+
+      const [s1, s2] = await Promise.all([
+        db.collection("bookings").where("dateKey","==", todayKey).get(),
+        db.collection("bookings").where("dateKey","==", yKey).get(),
+      ]);
+
+      let list = [
+        ...s1.docs.map(d=>({id:d.id, ...d.data()})),
+        ...s2.docs.map(d=>({id:d.id, ...d.data()})),
+      ];
+
+      list = list.map(b=>({
+        ...b,
+        startAtMs: Number(b.startAtMs||0),
+        endAtMs: Number(b.endAtMs||0),
+      }))
+      .filter(b => overlapsAbs(b.startAtMs, b.endAtMs, dayStart, dayEnd))
+      .sort((a,b)=> (a.startAtMs - b.startAtMs) || String(a.pc).localeCompare(String(b.pc)));
 
       if(!list.length){
         tbody.innerHTML = `<tr><td colspan="4" style="color:var(--muted)">—</td></tr>`;
@@ -1071,9 +1349,12 @@
       }
 
       for(const b of list){
+        const start = new Date(b.startAtMs);
+        const end = new Date(b.endAtMs);
+        const timeStr = `${pad2(start.getHours())}:${pad2(start.getMinutes())} → ${pad2(end.getHours())}:${pad2(end.getMinutes())}`;
         const tr = document.createElement("tr");
         tr.innerHTML = `
-          <td>${escapeHtml(hhmmFromMinutes(b.startMin))} → ${escapeHtml(hhmmFromMinutes(b.endMin))}</td>
+          <td>${escapeHtml(timeStr)}</td>
           <td><b>${escapeHtml(b.pc)}</b></td>
           <td>${escapeHtml(b.nick||"")}</td>
           <td style="color:var(--muted)">${escapeHtml(b.note||"")}</td>
@@ -1083,6 +1364,77 @@
     }catch(e){
       console.error(e);
       tbody.innerHTML = `<tr><td colspan="4" style="color:var(--muted)">Firestore error</td></tr>`;
+    }
+  }
+
+  // =========================
+  // ADMIN
+  // =========================
+  async function renderAdmin(){
+    if(!isAdmin){ setToast("Ты не админ (проверь ADMIN_EMAILS).", "bad"); return; }
+    const dateKey = $("adminDate").value;
+    const q = ($("adminSearch").value||"").trim().toLowerCase();
+    const tbody = $("adminTable");
+    tbody.innerHTML = "";
+
+    if(!dateKey){
+      tbody.innerHTML = `<tr><td colspan="6" style="color:var(--muted)">Pick date</td></tr>`;
+      return;
+    }
+
+    try{
+      const snap = await db.collection("bookings").where("dateKey","==",dateKey).get();
+      let list = snap.docs.map(d => ({ id:d.id, ...d.data() }));
+      list = list.map(b=>({ ...b, startAtMs:Number(b.startAtMs||0), endAtMs:Number(b.endAtMs||0) }));
+
+      if(q){
+        list = list.filter(b =>
+          (b.nick||"").toLowerCase().includes(q) ||
+          (b.pc||"").toLowerCase().includes(q) ||
+          (b.userEmail||"").toLowerCase().includes(q)
+        );
+      }
+
+      list.sort((a,b)=> (a.startAtMs - b.startAtMs) || String(a.pc).localeCompare(String(b.pc)));
+
+      if(!list.length){
+        tbody.innerHTML = `<tr><td colspan="6" style="color:var(--muted)">—</td></tr>`;
+        return;
+      }
+
+      for(const b of list){
+        const start = new Date(b.startAtMs);
+        const end = new Date(b.endAtMs);
+        const timeStr = `${pad2(start.getHours())}:${pad2(start.getMinutes())} → ${pad2(end.getHours())}:${pad2(end.getMinutes())}`;
+        const nightMark = isCrossMidnight() && (minutesFromHHMM(`${pad2(start.getHours())}:${pad2(start.getMinutes())}`) < minutesFromHHMM(WORK_START)) ? " 🌙(+1)" : "";
+
+        const tr = document.createElement("tr");
+        tr.innerHTML = `
+          <td>${escapeHtml(b.dateKey||"")}</td>
+          <td>${escapeHtml(timeStr)}${nightMark}</td>
+          <td><b>${escapeHtml(b.pc)}</b></td>
+          <td>${escapeHtml(b.nick||"")}</td>
+          <td style="color:var(--muted)">${escapeHtml(b.userEmail||"")}</td>
+          <td><button class="mini danger" type="button">Delete</button></td>
+        `;
+        tbody.appendChild(tr);
+
+        tr.querySelector("button").addEventListener("click", async ()=>{
+          if(!confirm("Delete booking?")) return;
+          try{
+            await deleteBookingAndLocks(b);
+            await refreshDayAndSlots();
+            await renderAdmin();
+            setToast("Удалено.", "good");
+          }catch(e){
+            console.error(e);
+            setToast("Не могу удалить. Проверь rules.", "bad");
+          }
+        });
+      }
+    }catch(e){
+      console.error(e);
+      setToast("Admin load error. Check rules.", "bad");
     }
   }
 
@@ -1126,6 +1478,18 @@
       }
     };
 
+    $("forgotBtn").onclick = async ()=>{
+      const email = ($("authEmail").value||"").trim();
+      if(!email){ $("authModalMsg").textContent = "Введите email"; return; }
+      try{
+        await auth.sendPasswordResetEmail(email);
+        $("authModalMsg").textContent = "Письмо для сброса пароля отправлено ✅";
+      }catch(e){
+        console.error(e);
+        $("authModalMsg").textContent = e.message || "Reset error";
+      }
+    };
+
     $("logoutBtn").onclick = async ()=>{ try{ await auth.signOut(); }catch(e){} };
 
     $("date").addEventListener("change", async ()=>{ await refreshDayAndSlots(); });
@@ -1135,6 +1499,7 @@
     $("myBtn").onclick = async ()=>{
       show($("myBox"));
       hide($("todayBox"));
+      hide($("adminBox"));
       await renderMyBookings();
       $("myBox").scrollIntoView({behavior:"smooth", block:"start"});
     };
@@ -1143,14 +1508,30 @@
     $("todayBtn").onclick = async ()=>{
       hide($("myBox"));
       show($("todayBox"));
+      hide($("adminBox"));
       await renderToday();
       $("todayBox").scrollIntoView({behavior:"smooth", block:"start"});
     };
     $("closeTodayBtn").onclick = ()=> hide($("todayBox"));
 
+    // admin
+    $("openAdminBtn").onclick = async ()=>{
+      if(!currentUser){ setToast("Сначала войди.", "bad"); return; }
+      if(!isAdmin){ setToast("Ты не админ. Добавь свой email в ADMIN_EMAILS.", "bad"); return; }
+      hide($("myBox")); hide($("todayBox"));
+      show($("adminBox"));
+      $("adminDate").value = $("adminDate").value || $("date").value;
+      await renderAdmin();
+      $("adminBox").scrollIntoView({behavior:"smooth", block:"start"});
+    };
+    $("adminCloseBtn").onclick = ()=> hide($("adminBox"));
+    $("refreshAdminBtn").onclick = renderAdmin;
+    $("adminDate").addEventListener("change", renderAdmin);
+    $("adminSearch").addEventListener("input", ()=>{ renderAdmin(); });
+
     document.addEventListener("keydown", (e)=>{
       if(e.key === "Escape"){
-        hide($("myBox")); hide($("todayBox"));
+        hide($("myBox")); hide($("todayBox")); hide($("adminBox"));
         closeModal();
       }
     });
@@ -1160,7 +1541,9 @@
   // BOOT
   // =========================
   async function boot(){
-    $("date").value = toISODate(new Date());
+    const now = new Date();
+    $("date").value = toISODate(now);
+    $("adminDate").value = toISODate(now);
 
     if(!i18n[lang]) lang="ru";
     applyLang();
@@ -1173,13 +1556,17 @@
 
     bindEvents();
 
+    // init message
+    setToast("Сначала войди, чтобы бронировать.", "info");
+
+    // auth state
     auth.onAuthStateChanged(async (u)=>{
       currentUser = u || null;
       updateAuthUI();
 
       if(currentUser){
         $("authMsg").textContent = `✅ Logged in: ${currentUser.email || currentUser.uid.slice(0,6)}`;
-        setMsg("Выбери ПК и слот.", "info");
+        setToast("Выбери ПК и слот.", "info");
 
         if(!($("nick").value||"").trim()){
           try{
@@ -1189,7 +1576,7 @@
         }
       }else{
         $("authMsg").textContent = "—";
-        setMsg("Сначала войди, чтобы бронировать.", "info");
+        setToast("Сначала войди, чтобы бронировать.", "info");
       }
 
       await refreshDayAndSlots();
