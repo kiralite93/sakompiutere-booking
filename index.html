@@ -25,7 +25,6 @@
       --warn:#fbbf24;
       --shadow:0 20px 60px rgba(0,0,0,.55);
       --r:18px;
-
       --pad: 18px;
       --gap: 18px;
     }
@@ -44,91 +43,48 @@
       overflow-x:hidden;
     }
 
-    .wrap{
-      max-width: 1100px;
-      margin:0 auto;
-      padding: var(--pad);
-    }
+    .wrap{max-width:1100px;margin:0 auto;padding:var(--pad);}
 
     header{
-      display:flex;
-      gap:14px;
-      align-items:center;
-      justify-content:space-between;
-      padding:14px 16px;
-      border:1px solid var(--line);
-      border-radius:var(--r);
+      display:flex; gap:14px; align-items:center; justify-content:space-between;
+      padding:14px 16px; border:1px solid var(--line); border-radius:var(--r);
       background:linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,.02));
       box-shadow: var(--shadow);
-      position:sticky;
-      top:14px;
-      z-index:10;
+      position:sticky; top:14px; z-index:10;
       backdrop-filter: blur(10px);
     }
 
-    .brand{
-      display:flex;
-      gap:12px;
-      align-items:center;
-      min-width:0;
-      flex: 1 1 auto;
-    }
+    .brand{display:flex; gap:12px; align-items:center; min-width:0; flex:1 1 auto;}
     .brandText{min-width:0;}
-    .brand h1{
-      margin:0;
-      font-size:16px;
-      letter-spacing:.4px;
-      line-height:1.2;
-      word-break: break-word;
-    }
-    .brand .sub{
-      margin:4px 0 0;
-      color:var(--muted);
-      font-size:12px;
-      line-height:1.25;
-      word-break: break-word;
-    }
+    .brand h1{margin:0;font-size:16px;letter-spacing:.4px;line-height:1.2;word-break:break-word}
+    .brand .sub{margin:4px 0 0;color:var(--muted);font-size:12px;line-height:1.25;word-break:break-word}
 
-    /* NEW LOGO */
+    /* logo */
     .logo-wrap{
-      width:46px; height:46px; border-radius:16px;
-      display:grid; place-items:center;
+      width:46px;height:46px;border-radius:16px;
+      display:grid;place-items:center;flex:0 0 auto;
       border:1px solid rgba(255,255,255,.08);
       background:
         radial-gradient(circle at 30% 20%, rgba(255,193,7,.22), rgba(255,193,7,.06) 60%, transparent 72%),
         linear-gradient(180deg, rgba(255,255,255,.05), rgba(0,0,0,.12));
       box-shadow: 0 12px 30px rgba(0,0,0,.4), 0 0 0 1px rgba(255,193,7,.12) inset;
       animation: logoFloat 6s ease-in-out infinite;
-      flex: 0 0 auto;
     }
     .logo-symbol{
-      width:34px; height:auto;
+      width:34px;height:auto;user-select:none;-webkit-user-drag:none;
       mix-blend-mode: screen;
       filter: drop-shadow(0 0 6px rgba(255,193,7,.55)) drop-shadow(0 0 18px rgba(255,193,7,.22));
       animation: logoPulse 3.4s ease-in-out infinite;
-      user-select:none;
-      -webkit-user-drag:none;
     }
-    @keyframes logoFloat{ 0%,100%{transform:translateY(0)} 50%{transform:translateY(-4px)} }
-    @keyframes logoPulse{ 0%,100%{transform:scale(1);opacity:.95} 50%{transform:scale(1.06);opacity:1} }
+    @keyframes logoFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-4px)}}
+    @keyframes logoPulse{0%,100%{transform:scale(1);opacity:.95}50%{transform:scale(1.06);opacity:1}}
 
-    .rightbar{
-      display:flex;
-      gap:10px;
-      flex-wrap:wrap;
-      justify-content:flex-end;
-      align-items:center;
-      flex: 0 0 auto;
-    }
+    .rightbar{display:flex; gap:10px; flex-wrap:wrap; justify-content:flex-end; align-items:center; flex:0 0 auto;}
 
-    /* FIX: pills can wrap on mobile, no overflow */
     .pill{
-      padding:8px 10px;
-      border-radius:999px;
-      border:1px solid var(--line);
+      padding:8px 10px; border-radius:999px; border:1px solid var(--line);
       background:rgba(255,255,255,.03);
-      color:var(--muted);
-      font-size:12px;
+      color:var(--muted); font-size:12px;
       max-width: 320px;
       white-space: normal;
       overflow: hidden;
@@ -139,15 +95,13 @@
 
     .lang{
       display:flex; gap:6px;
-      padding:6px;
-      border-radius:999px;
+      padding:6px; border-radius:999px;
       border:1px solid var(--line);
       background:rgba(0,0,0,.22);
-      flex: 0 0 auto;
+      flex:0 0 auto;
     }
     .lang button{
-      padding:7px 10px;
-      border-radius:999px;
+      padding:7px 10px; border-radius:999px;
       border:1px solid transparent;
       background:transparent;
       color:var(--muted);
@@ -168,7 +122,7 @@
       display:grid;
       grid-template-columns: 1.15fr .85fr;
       gap: var(--gap);
-      margin-top: 16px;
+      margin-top:16px;
     }
 
     .card{
@@ -179,26 +133,20 @@
       overflow:hidden;
       animation: cardIn .45s ease-out both;
     }
-    @keyframes cardIn{
-      from{opacity:0; transform: translateY(6px)}
-      to{opacity:1; transform: translateY(0)}
-    }
+    @keyframes cardIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
 
     .hd{
       padding:14px 16px;
-      display:flex;
-      align-items:flex-start;
-      justify-content:space-between;
-      gap:10px;
+      display:flex; align-items:flex-start; justify-content:space-between; gap:10px;
       border-bottom:1px solid var(--line);
     }
-    .hd h2{margin:0; font-size:14px}
+    .hd h2{margin:0;font-size:14px}
     .hint{
       color:var(--muted);
       font-size:12px;
       line-height:1.25;
       text-align:right;
-      max-width: 55%;
+      max-width:55%;
     }
     .bd{padding:14px 16px}
 
@@ -238,7 +186,7 @@
     .danger{border-color: rgba(251,113,133,.6); background: rgba(251,113,133,.10)}
     .mini{padding:7px 10px; border-radius:12px; font-size:12px; font-weight:1000}
 
-    label{display:block; font-size:12px; color:var(--muted); margin:0 0 6px}
+    label{display:block;font-size:12px;color:var(--muted);margin:0 0 6px}
     input, select{
       width:100%;
       padding:11px 12px;
@@ -250,7 +198,7 @@
       transition: box-shadow .12s ease, border-color .12s ease;
     }
     input:focus, select:focus{border-color: rgba(110,231,255,.6); box-shadow:0 0 0 3px rgba(110,231,255,.12)}
-    .row{display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:10px;}
+    .row{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px;}
     .mut{color:var(--muted); font-size:12px}
 
     .pcgrid{
@@ -295,8 +243,7 @@
 
     .chipbar{display:flex; gap:8px; flex-wrap:wrap; margin-top:10px}
     .chip{
-      padding:10px 12px;
-      border-radius:999px;
+      padding:10px 12px; border-radius:999px;
       border:1px solid var(--line);
       background:rgba(0,0,0,.22);
       cursor:pointer;
@@ -304,8 +251,8 @@
       font-size:12px;
       user-select:none;
       transition: transform .12s ease, border-color .12s ease, box-shadow .12s ease;
-      max-width: 100%;
-      word-break: break-word;
+      max-width:100%;
+      word-break:break-word;
     }
     .chip:hover{border-color: rgba(110,231,255,.5)}
     .chip:active{transform: scale(.985)}
@@ -322,7 +269,6 @@
       opacity:.9;
     }
 
-    /* Table wrapper: FIX mobile overflow */
     .tablewrap{
       overflow-x:auto;
       -webkit-overflow-scrolling: touch;
@@ -392,10 +338,7 @@
       overflow:hidden;
       animation: modalIn .18s ease-out both;
     }
-    @keyframes modalIn{
-      from{opacity:0; transform: translateY(8px) scale(.985)}
-      to{opacity:1; transform: translateY(0) scale(1)}
-    }
+    @keyframes modalIn{from{opacity:0;transform:translateY(8px) scale(.985)}to{opacity:1;transform:translateY(0) scale(1)}}
     .mh{
       padding:14px 16px;
       display:flex;
@@ -418,67 +361,38 @@
     }
     @keyframes successFade{ from{opacity:1} to{opacity:0} }
 
-    /* Responsive */
     @media (max-width: 980px){
       .grid{grid-template-columns:1fr;}
       header{position:static;}
-      .hint{max-width: 100%; text-align:left;}
+      .hint{max-width:100%; text-align:left;}
     }
 
-    /* PHONE FIX (the main thing you asked) */
+    /* phone */
     @media (max-width: 560px){
       :root{ --pad: 12px; --gap: 12px; }
-
       header{
         flex-direction: column;
         align-items: stretch;
         gap: 10px;
         padding: 12px;
       }
-
-      .brand{
-        width: 100%;
-        align-items: center;
-      }
-
-      .brand h1{
-        font-size: 14px;
-      }
-      .brand .sub{
-        font-size: 11px;
-      }
-
-      .rightbar{
-        width: 100%;
-        justify-content: stretch;
-        gap: 8px;
-      }
-
-      .lang{
-        width: 100%;
-        justify-content: space-between;
-      }
-
+      .brand{width:100%;}
+      .brand h1{font-size:14px;}
+      .brand .sub{font-size:11px;}
+      .rightbar{width:100%; justify-content: stretch; gap:8px;}
+      .lang{width:100%; justify-content:space-between;}
       .pill{
-        width: 100%;
-        max-width: 100%;
-        border-radius: 14px;
+        width:100%;
+        max-width:100%;
+        border-radius:14px;
         white-space: normal;
       }
-
       .pcgrid{grid-template-columns: repeat(2, 1fr);}
       .row{grid-template-columns:1fr;}
       button{width:100%;}
       .btns{gap:8px}
-
-      .chip{
-        padding: 9px 10px;
-        font-size: 12px;
-      }
-
-      .tablewrap table{
-        min-width: 640px;
-      }
+      .chip{padding:9px 10px;font-size:12px;}
+      .tablewrap table{min-width:640px;}
     }
   </style>
 </head>
@@ -488,11 +402,11 @@
   <header>
     <div class="brand">
       <div class="logo-wrap" aria-hidden="true">
-        <img class="logo-symbol" src="logo-symbol.png" alt="Sakompiutere logo">
+        <img class="logo-symbol" src="logo-symbol.png" alt="Sakompiutere logo" onerror="this.style.display='none'">
       </div>
       <div class="brandText">
         <h1 id="t_title">Sakompiutere Gaming — Booking</h1>
-        <p class="sub" id="t_sub">Выбери ПК → выбери слот → подтвердить</p>
+        <p class="sub" id="t_sub">ПК → Дата/длительность → Время → Готово</p>
       </div>
     </div>
 
@@ -533,13 +447,13 @@
           <span id="t_flow1">1) Войди</span> ·
           <span id="t_flow2">2) Выбери ПК</span> ·
           <span id="t_flow3">3) Дату + длительность</span> ·
-          <span id="t_flow4">4) Слот → Забронировать</span>
+          <span id="t_flow4">4) Время → Забронировать</span>
         </div>
 
         <div style="margin-top:12px">
           <div class="row">
             <div>
-              <label id="t_nickLabel">Твой ник (в клубе)</label>
+              <label id="t_nickLabel">Ник (в клубе)</label>
               <input id="nick" type="text" placeholder="например: KiraLite" />
             </div>
             <div>
@@ -570,7 +484,7 @@
 
           <div class="notice" style="margin-top:10px">
             <b id="t_slotsTitle">Время</b><br/>
-            <span id="t_slotsDesc">Сначала выбери ПК и длительность — затем выбери свободный слот.</span>
+            <span id="t_slotsDesc">Выбери свободный слот (✅ свободно / ⛔ занято).</span>
             <div class="chipbar" id="slotChips"></div>
           </div>
 
@@ -649,7 +563,7 @@
                 <input id="adminSearch" type="text" placeholder="например: pudge или kira" />
               </div>
               <div>
-                <label id="t_adminLimit">Сколько показывать</label>
+                <label id="t_adminLimit">Лимит</label>
                 <select id="adminLimit">
                   <option value="50">50</option>
                   <option value="100" selected>100</option>
@@ -764,6 +678,7 @@
   const WORK_START = "10:00";
   const WORK_END = "03:00";
 
+  // Admins by email
   const ADMIN_EMAILS = [
     "adjarelispeak@gmail.com",
   ];
@@ -813,7 +728,7 @@
   }
 
   // =========================
-  // i18n (сделал мягче)
+  // i18n
   // =========================
   const LANG_KEY = "sg_lang";
   let lang = localStorage.getItem(LANG_KEY) || "ru";
@@ -850,7 +765,7 @@
       colAct:"Действия",
       side:"Подсказка",
       side2:"для игроков",
-      help:`✅ Логика простая: Войти → ПК → Дата/длительность → Время → Забронировать.`,
+      help:`✅ Войти → ПК → Дата/длительность → Время → Забронировать.`,
       rulesTitle:"Важно",
       rulesBody:"• На одном ПК нельзя пересечения<br/>• Ночные слоты отмечены (+1)<br/>• После брони сверху будет зелёное подтверждение",
       esc:"закрыть окна",
@@ -899,9 +814,9 @@
       colAct:"Actions",
       side:"Hint",
       side2:"for players",
-      help:`✅ Simple: Login → PCs → Date/duration → Time → Book.`,
+      help:`✅ Login → PCs → Date/duration → Time → Book.`,
       rulesTitle:"Important",
-      rulesBody:"• No overlaps on the same PC<br/>• Night slots are marked (+1)<br/>• You will see a green confirmation after booking",
+      rulesBody:"• No overlaps on the same PC<br/>• Night slots are marked (+1)<br/>• You will see green confirmation after booking",
       esc:"close panels",
       adminTitle:"Admin",
       adminView:"Mode",
@@ -948,7 +863,7 @@
       colAct:"ქმედება",
       side:"მინიშნება",
       side2:"მოთამაშეებისთვის",
-      help:`✅ მარტივი: შესვლა → PC → თარიღი/ხანგრძლივობა → დრო → დაჯავშნა.`,
+      help:`✅ შესვლა → PC → თარიღი/ხანგრძლივობა → დრო → დაჯავშნა.`,
       rulesTitle:"მნიშვნელოვანი",
       rulesBody:"• ერთ PC-ზე გადაკვეთა არ შეიძლება<br/>• ღამის დრო მონიშნულია (+1)<br/>• დაჯავშნის შემდეგ გამოჩნდება მწვანე დადასტურება",
       esc:"ფანჯრების დახურვა",
@@ -962,7 +877,7 @@
       aDate:"თარიღი",
       aTime:"დრო",
       aPc:"PC",
-      aNick:"ნიკი",
+      aNick:"ნიკ",
       aUser:"User",
       aAct:"Action",
     }
@@ -1050,7 +965,7 @@
   initFirebase();
 
   // =========================
-  // TIME LOGIC (club day + real calendar day)
+  // TIME LOGIC
   // =========================
   const wsMin = minutesFromHHMM(WORK_START);
   const weMin = minutesFromHHMM(WORK_END);
@@ -1065,7 +980,6 @@
     ];
   }
 
-  // Always build a real Date from baseDate + minutes + (next day)
   function dateTimeFromBase(baseDateISO, minutes, nextDay){
     const base = parseISODate(baseDateISO);
     const actual = nextDay ? addDays(base, 1) : base;
@@ -1205,7 +1119,47 @@
   }
 
   // =========================
-  // BOOKING CREATE (transaction)
+  // SAFE TIME READ (works with ms + old timestamp if any)
+  // =========================
+  function toMillisAny(b, key){
+    const msKey = key + "Ms";
+    if(typeof b?.[msKey] === "number") return b[msKey];
+
+    const ts = b?.[key];
+    try{
+      if(ts && typeof ts.toMillis === "function") return ts.toMillis();
+      if(ts && typeof ts.toDate === "function") return ts.toDate().getTime();
+    }catch(e){}
+    return 0;
+  }
+
+  function sortBookings(list){
+    return list.sort((a,b)=>{
+      const at = toMillisAny(a, "startAt");
+      const bt = toMillisAny(b, "startAt");
+      if(at && bt) return at - bt;
+      const ka = `${a.baseDate}-${a.startMin}-${a.pc}`;
+      const kb = `${b.baseDate}-${b.startMin}-${b.pc}`;
+      return ka.localeCompare(kb);
+    });
+  }
+
+  function bookingTimeLabel(b){
+    const a = hhmmFromMinutes(b.startMin||0);
+    const z = hhmmFromMinutes(b.endMin||0);
+
+    const ms = toMillisAny(b, "startAt");
+    if(ms){
+      const dt = new Date(ms);
+      const base = parseISODate(b.baseDate);
+      const isNext = dt.toDateString() !== base.toDateString();
+      return `${a} → ${z}${isNext ? " (+1)" : ""}`;
+    }
+    return `${a} → ${z}`;
+  }
+
+  // =========================
+  // BOOKING CREATE (transaction)  ✅ FIXED: only store numbers
   // =========================
   async function createBooking(){
     if(!currentUser){ setMsg("Сначала войди.", "bad"); return; }
@@ -1260,8 +1214,13 @@
             baseDate,
             startMin, endMin,
             note,
-            startAt: firebase.firestore.Timestamp.fromDate(startAt),
-            endAt: firebase.firestore.Timestamp.fromDate(endAt),
+
+            // ✅ numbers only (no Timestamp.fromDate)
+            startAtMs: startAt.getTime(),
+            endAtMs: endAt.getTime(),
+            createdAtMs: Date.now(),
+
+            // server timestamp is safe
             createdAt: firebase.firestore.FieldValue.serverTimestamp(),
           });
         });
@@ -1288,36 +1247,6 @@
   // =========================
   // MY BOOKINGS
   // =========================
-  function toMillisSafe(ts){
-    try{ return ts?.toMillis ? ts.toMillis() : 0; }catch(e){ return 0; }
-  }
-
-  function sortBookings(list){
-    return list.sort((a,b)=>{
-      const at = toMillisSafe(a.startAt);
-      const bt = toMillisSafe(b.startAt);
-      if(at && bt) return at - bt;
-      const ka = `${a.baseDate}-${a.startMin}-${a.pc}`;
-      const kb = `${b.baseDate}-${b.startMin}-${b.pc}`;
-      return ka.localeCompare(kb);
-    });
-  }
-
-  function bookingTimeLabel(b){
-    const a = hhmmFromMinutes(b.startMin||0);
-    const z = hhmmFromMinutes(b.endMin||0);
-
-    // Decide (+1) by real startAt day vs baseDate day
-    if(b.startAt && b.startAt.toDate){
-      const dt = b.startAt.toDate();
-      const base = parseISODate(b.baseDate);
-      const isNext = dt.toDateString() !== base.toDateString();
-      return `${a} → ${z}${isNext ? " (+1)" : ""}`;
-    }
-    // fallback
-    return `${a} → ${z}`;
-  }
-
   async function loadMyBookings(){
     if(!currentUser) return [];
     const snap = await db.collection("bookings").where("uid","==", currentUser.uid).get();
@@ -1372,7 +1301,7 @@
   }
 
   // =========================
-  // TODAY (by real calendar startAt)
+  // TODAY (by real calendar startAtMs)
   // =========================
   async function renderToday(){
     const tbody = $("todayTable");
@@ -1387,12 +1316,10 @@
 
       let list = [...snapA.docs, ...snapB.docs].map(d=>({id:d.id, ...d.data()}));
 
-      // Filter: startAt is today
       list = list.filter(b=>{
-        if(b.startAt && b.startAt.toDate){
-          return toISODate(b.startAt.toDate()) === todayISO;
-        }
-        return false;
+        const ms = toMillisAny(b, "startAt");
+        if(!ms) return false;
+        return toISODate(new Date(ms)) === todayISO;
       });
 
       sortBookings(list);
@@ -1419,7 +1346,7 @@
   }
 
   // =========================
-  // ADMIN (see all)
+  // ADMIN
   // =========================
   async function loadAdminBookings(){
     const mode = $("adminMode").value;
@@ -1435,7 +1362,10 @@
       const snapA = await db.collection("bookings").where("baseDate","==", todayISO).get();
       const snapB = await db.collection("bookings").where("baseDate","==", yISO).get();
       list = [...snapA.docs, ...snapB.docs].map(d=>({id:d.id, ...d.data()}));
-      list = list.filter(b => b.startAt && b.startAt.toDate && toISODate(b.startAt.toDate()) === todayISO);
+      list = list.filter(b => {
+        const ms = toMillisAny(b, "startAt");
+        return ms && toISODate(new Date(ms)) === todayISO;
+      });
       $("adminHint").textContent = "Показываю брони, которые начинаются сегодня (по реальной дате).";
     }
     else if(mode === "date"){
@@ -1454,7 +1384,7 @@
         const todayISO = toISODate(new Date());
         const snap = await db.collection("bookings").where("baseDate","==", todayISO).get();
         list = snap.docs.map(d=>({id:d.id, ...d.data()}));
-        $("adminHint").textContent = "Последние: fallback (нет orderBy).";
+        $("adminHint").textContent = "Последние: fallback (нет orderBy/индекса).";
       }
     }
 
@@ -1619,6 +1549,7 @@
 
     if(!i18n[lang]) lang="ru";
     applyLang();
+
     renderPCGrid();
 
     const savedNick = localStorage.getItem("sg_nick") || "";
