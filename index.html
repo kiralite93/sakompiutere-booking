@@ -41,6 +41,24 @@
     }
     .wrap{max-width:1180px; margin:0 auto; padding:18px;}
 
+    /* subtle background motion */
+    .bgGlow{
+      position:fixed; inset:-30%;
+      background:
+        radial-gradient(600px 400px at 20% 30%, rgba(110,231,255,.08), transparent 60%),
+        radial-gradient(700px 450px at 75% 25%, rgba(167,139,250,.10), transparent 60%),
+        radial-gradient(650px 420px at 55% 80%, rgba(52,211,153,.07), transparent 60%);
+      filter: blur(0px);
+      animation: drift 14s ease-in-out infinite alternate;
+      pointer-events:none;
+      z-index:-1;
+      opacity:.9;
+    }
+    @keyframes drift{
+      0%{ transform: translate3d(-10px,-8px,0) scale(1.02); }
+      100%{ transform: translate3d(14px,10px,0) scale(1.05); }
+    }
+
     header{
       display:flex; gap:14px; align-items:center; justify-content:space-between;
       padding:14px 16px; border:1px solid var(--line); border-radius:var(--r);
@@ -64,6 +82,11 @@
       border:1px solid var(--line);
       box-shadow: 0 12px 30px rgba(0,0,0,.4);
       position:relative; overflow:hidden;
+      animation: float 3.6s ease-in-out infinite;
+    }
+    @keyframes float{
+      0%,100%{ transform: translateY(0) }
+      50%{ transform: translateY(-2px) }
     }
     .logo:after{
       content:"";
@@ -169,6 +192,12 @@
       border-radius:16px;
       font-size:12px;
       line-height:1.4;
+      transition: transform .12s ease, border-color .2s ease, background .2s ease;
+    }
+    .notice:hover{
+      transform: translateY(-1px);
+      border-color: rgba(110,231,255,.50);
+      background: rgba(110,231,255,.075);
     }
 
     .btns{display:flex; gap:10px; flex-wrap:wrap; margin-top:10px}
@@ -182,7 +211,18 @@
       font-weight:1000;
       letter-spacing:.2px;
       transition: transform .10s ease, border-color .12s ease, background .12s ease, box-shadow .12s ease, opacity .12s ease;
+      position:relative;
+      overflow:hidden;
     }
+    button:before{
+      content:"";
+      position:absolute; inset:-40% -40%;
+      background: radial-gradient(240px 120px at 20% 30%, rgba(110,231,255,.16), transparent 55%);
+      opacity:0;
+      transition: opacity .2s ease;
+      pointer-events:none;
+    }
+    button:hover:before{ opacity:1; }
     button:hover{border-color: rgba(110,231,255,.5); transform: translateY(-1px)}
     button:active{transform: translateY(0) scale(.99)}
     button[disabled]{opacity:.55; cursor:not-allowed; transform:none}
@@ -205,7 +245,9 @@
       background:rgba(0,0,0,.18);
       color:var(--muted);
       font-size:12px;
+      transition: transform .12s ease, border-color .12s ease;
     }
+    .chipmini:hover{ transform: translateY(-1px); border-color: rgba(110,231,255,.35); }
     .chipmini b{color:var(--text)}
 
     label{display:block; font-size:12px; color:var(--muted); margin:0 0 6px}
@@ -217,9 +259,10 @@
       background:rgba(0,0,0,.25);
       color:var(--text);
       outline:none;
-      transition: border-color .12s ease, box-shadow .12s ease;
+      transition: border-color .12s ease, box-shadow .12s ease, transform .12s ease;
     }
     input:focus, select:focus{border-color: rgba(110,231,255,.6); box-shadow:0 0 0 3px rgba(110,231,255,.12)}
+    input:hover, select:hover{ transform: translateY(-1px); }
     .row{display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:10px;}
     @media (max-width:520px){ .row{grid-template-columns:1fr;} }
 
@@ -284,7 +327,9 @@
       background: rgba(0,0,0,.16);
       border-radius:18px;
       padding:12px;
+      transition: transform .12s ease, border-color .2s ease;
     }
+    .timeBox:hover{ transform: translateY(-1px); border-color: rgba(110,231,255,.28); }
     .timeTop{
       display:flex; justify-content:space-between; align-items:center; gap:10px;
       margin-bottom:10px;
@@ -309,11 +354,27 @@
       border:1px solid var(--line);
       background: rgba(255,255,255,.03);
       cursor:pointer;
-      transition: transform .10s ease, border-color .12s ease, box-shadow .12s ease;
+      transition: transform .10s ease, border-color .12s ease, box-shadow .12s ease, filter .12s ease;
       font-weight:1100;
       text-align:center;
       user-select:none;
+      position:relative;
+      overflow:hidden;
+      animation: inSlots .22s ease both;
     }
+    @keyframes inSlots{
+      from{ transform: translateY(6px); opacity:0 }
+      to{ transform: translateY(0); opacity:1 }
+    }
+    .tbtn:after{
+      content:"";
+      position:absolute; inset:-40% -40%;
+      background: radial-gradient(220px 120px at 20% 20%, rgba(110,231,255,.12), transparent 55%);
+      opacity:0;
+      transition: opacity .2s ease;
+      pointer-events:none;
+    }
+    .tbtn:hover:after{opacity:1}
     .tbtn:hover{transform: translateY(-1px); border-color: rgba(110,231,255,.5)}
     .tbtn.busy{
       cursor:not-allowed;
@@ -322,6 +383,7 @@
       background: rgba(251,113,133,.06);
       color: rgba(251,113,133,.9);
       transform:none !important;
+      filter: grayscale(.1);
     }
     .tbtn.active{
       border-color: rgba(110,231,255,.75);
@@ -365,9 +427,7 @@
     .hide{display:none !important;}
 
     /* Panel transitions */
-    .panel{
-      animation: panelIn .22s ease both;
-    }
+    .panel{ animation: panelIn .22s ease both; }
     @keyframes panelIn{
       from{ transform: translateY(8px); opacity:0 }
       to{ transform: translateY(0); opacity:1 }
@@ -447,8 +507,10 @@
       color: var(--muted);
       font-size:12px;
       font-weight:1100;
+      transition: transform .12s ease;
     }
-    .slides{ position:relative; height: 240px; overflow:hidden; }
+    .badge:hover{ transform: translateY(-1px); }
+    .slides{ position:relative; height: 260px; overflow:hidden; }
     .slide{
       position:absolute; inset:0;
       padding:16px 16px 14px;
@@ -468,6 +530,11 @@
       font-size:20px;
       margin-bottom:10px;
       box-shadow: 0 10px 30px rgba(0,0,0,.35);
+      animation: bob 2.8s ease-in-out infinite;
+    }
+    @keyframes bob{
+      0%,100%{ transform: translateY(0) }
+      50%{ transform: translateY(-2px) }
     }
     .sH{ margin:0; font-size:14px; letter-spacing:.2px; font-weight:1200; }
     .sP{ margin:8px 0 0; color: var(--muted); font-size:12px; line-height:1.5; }
@@ -481,6 +548,11 @@
       border-radius:14px;
       border:1px solid rgba(255,255,255,.06);
       background: rgba(0,0,0,.18);
+      transition: transform .12s ease, border-color .12s ease;
+    }
+    .sList li:hover{
+      transform: translateY(-1px);
+      border-color: rgba(110,231,255,.22);
     }
     .sliderBot{
       display:flex; justify-content:space-between; align-items:center; gap:10px;
@@ -573,10 +645,17 @@
       display:flex; gap:10px; flex-wrap:wrap;
       margin-top:12px;
     }
+
+    /* reduced motion */
+    @media (prefers-reduced-motion: reduce){
+      *{ animation:none !important; transition:none !important; }
+    }
   </style>
 </head>
 
 <body>
+<div class="bgGlow" aria-hidden="true"></div>
+
 <div class="wrap">
   <header>
     <div class="brand">
@@ -656,7 +735,7 @@
           <div class="hint" id="t_pickpc">Выбери ПК (можно несколько):</div>
           <div id="pcGrid" class="pcgrid"></div>
 
-          <!-- NEW TIME PICKER -->
+          <!-- TIME PICKER -->
           <div class="timeBox">
             <div class="timeTop">
               <div class="title">⏱ <span id="t_timeTitle">Выбор времени</span></div>
@@ -664,8 +743,8 @@
             </div>
 
             <div class="btns" style="margin-top:0">
-              <button class="ghost mini" id="nextFreeBtn" type="button">⚡ Следующий свободный</button>
-              <button class="ghost mini" id="refreshBtn" type="button">🔄 Обновить</button>
+              <button class="ghost mini" id="nextFreeBtn" type="button">⚡ <span id="t_nextFree">Следующий свободный</span></button>
+              <button class="ghost mini" id="refreshBtn" type="button">🔄 <span id="t_refresh">Обновить</span></button>
             </div>
 
             <div class="timeList" id="timeList"></div>
@@ -721,27 +800,27 @@
         <!-- ADMIN -->
         <div id="adminBox" class="hide panel" style="margin-top:14px">
           <div class="notice">
-            <b>Admin</b> — управление бронями (realtime)
+            <b id="t_adminTitle">Admin</b> — <span id="t_adminDesc">управление бронями (realtime)</span>
             <div class="row" style="margin-top:10px">
               <div>
-                <label>Дата (рабочий день)</label>
+                <label id="t_adminDateLabel">Дата (рабочий день)</label>
                 <input id="adminDate" type="date" />
               </div>
               <div>
-                <label>Поиск (ник/ПК/email)</label>
+                <label id="t_adminSearchLabel">Поиск (ник/ПК/email)</label>
                 <input id="adminSearch" type="text" placeholder="search" />
               </div>
             </div>
             <div class="btns">
-              <button class="ghost" id="refreshAdminBtn" type="button">🔄 Refresh</button>
-              <button class="danger" id="adminCloseBtn" type="button">🚪 Close admin</button>
+              <button class="ghost" id="refreshAdminBtn" type="button">🔄 <span id="t_refresh2">Refresh</span></button>
+              <button class="danger" id="adminCloseBtn" type="button">🚪 <span id="t_closeAdmin">Close admin</span></button>
             </div>
           </div>
 
           <table>
             <thead>
               <tr>
-                <th>День</th><th>Время</th><th>ПК</th><th>Ник</th><th>User</th><th>Action</th>
+                <th id="t_a_day">День</th><th id="t_a_time">Время</th><th id="t_a_pc">ПК</th><th id="t_a_nick">Ник</th><th id="t_a_user">User</th><th id="t_a_action">Action</th>
               </tr>
             </thead>
             <tbody id="adminTable"></tbody>
@@ -751,7 +830,7 @@
         <div class="footerbar">
           <div><span class="kbd">Esc</span> — <span id="t_esc">закрыть окна</span></div>
           <div class="btns" style="margin:0">
-            <button class="mini ghost" id="openAdminBtn" type="button">🔐 Admin</button>
+            <button class="mini ghost" id="openAdminBtn" type="button">🔐 <span id="t_adminBtn">Admin</span></button>
           </div>
         </div>
 
@@ -777,41 +856,41 @@
           <div class="slides">
             <div class="slide active" data-i="0">
               <div class="sIcon">🔑</div>
-              <p class="sH">Вход</p>
-              <p class="sP">Войди или зарегистрируйся — иначе бронирование не создаётся.</p>
+              <p class="sH" id="s0_h">Вход</p>
+              <p class="sP" id="s0_p">Войди или зарегистрируйся — иначе бронирование не создаётся.</p>
               <ul class="sList">
-                <li><span>•</span><div><b>Login</b> защищает твои брони</div></li>
-                <li><span>•</span><div>Появится раздел <b>“Мои брони”</b></div></li>
+                <li><span>•</span><div id="s0_l1"><b>Login</b> защищает твои брони</div></li>
+                <li><span>•</span><div id="s0_l2">Появится раздел <b>“Мои брони”</b></div></li>
               </ul>
             </div>
 
             <div class="slide" data-i="1">
               <div class="sIcon">🖥️</div>
-              <p class="sH">Выбор ПК</p>
-              <p class="sP">Можно выбрать сразу несколько ПК — время проверится по всем.</p>
+              <p class="sH" id="s1_h">Выбор ПК</p>
+              <p class="sP" id="s1_p">Можно выбрать сразу несколько ПК — время проверится по всем.</p>
               <ul class="sList">
-                <li><span>•</span><div>Нажми ПК — он <b>подсветится</b></div></li>
-                <li><span>•</span><div>Повторный клик — <b>снять</b></div></li>
+                <li><span>•</span><div id="s1_l1">Нажми ПК — он <b>подсветится</b></div></li>
+                <li><span>•</span><div id="s1_l2">Повторный клик — <b>снять</b></div></li>
               </ul>
             </div>
 
             <div class="slide" data-i="2">
               <div class="sIcon">⏱</div>
-              <p class="sH">Время</p>
-              <p class="sP">Выбирай доступный старт. Показаны только реально свободные варианты.</p>
+              <p class="sH" id="s2_h">Время</p>
+              <p class="sP" id="s2_p">Выбирай доступный старт. Показаны только реально свободные варианты.</p>
               <ul class="sList">
-                <li><span>•</span><div>Кнопка <b>“Следующий свободный”</b></div></li>
-                <li><span>•</span><div>Ночь помечается <b>🌙(+1)</b></div></li>
+                <li><span>•</span><div id="s2_l1">Кнопка <b>“Следующий свободный”</b></div></li>
+                <li><span>•</span><div id="s2_l2">Ночь помечается <b>🌙(+1)</b></div></li>
               </ul>
             </div>
 
             <div class="slide" data-i="3">
               <div class="sIcon">✅</div>
-              <p class="sH">Готово</p>
-              <p class="sP">Нажми “Забронировать” — покажется успех + детали + быстрые кнопки.</p>
+              <p class="sH" id="s3_h">Готово</p>
+              <p class="sP" id="s3_p">Нажми “Забронировать” — покажется успех + детали + быстрые кнопки.</p>
               <ul class="sList">
-                <li><span>•</span><div><b>Мои брони</b> — просмотр/отмена</div></li>
-                <li><span>•</span><div><b>Admin</b> видит брони в реальном времени</div></li>
+                <li><span>•</span><div id="s3_l1"><b>Мои брони</b> — просмотр/отмена</div></li>
+                <li><span>•</span><div id="s3_l2"><b>Admin</b> видит брони в реальном времени</div></li>
               </ul>
             </div>
           </div>
@@ -843,18 +922,18 @@
     <div class="mb">
       <div class="row">
         <div>
-          <label>Email</label>
+          <label id="t_email">Email</label>
           <input id="authEmail" type="email" placeholder="email@example.com" />
         </div>
         <div>
-          <label>Password</label>
+          <label id="t_pass">Password</label>
           <input id="authPass" type="password" placeholder="******" />
         </div>
       </div>
       <div class="btns">
-        <button class="primary" id="doLoginBtn" type="button">Войти</button>
-        <button class="ghost" id="doRegisterBtn" type="button">Регистрация</button>
-        <button class="linkbtn" id="forgotBtn" type="button">Забыли пароль?</button>
+        <button class="primary" id="doLoginBtn" type="button"><span id="t_login2">Войти</span></button>
+        <button class="ghost" id="doRegisterBtn" type="button"><span id="t_register2">Регистрация</span></button>
+        <button class="linkbtn" id="forgotBtn" type="button"><span id="t_forgot">Забыли пароль?</span></button>
       </div>
       <div class="notice" style="margin-top:10px" id="authModalMsg">—</div>
     </div>
@@ -873,8 +952,8 @@
       <div class="bigCheck">✔</div>
       <div class="successInfo" id="succInfo"></div>
       <div class="successActions">
-        <button class="primary" type="button" id="succMy">👤 Мои брони</button>
-        <button class="ghost" type="button" id="succAgain">➕ Забронировать ещё</button>
+        <button class="primary" type="button" id="succMy">👤 <span id="t_succMy">Мои брони</span></button>
+        <button class="ghost" type="button" id="succAgain">➕ <span id="t_succAgain">Забронировать ещё</span></button>
       </div>
     </div>
   </div>
@@ -930,6 +1009,365 @@
       .replaceAll('"',"&quot;").replaceAll("'","&#039;");
   }
 
+  // =========================
+  // i18n (full)
+  // =========================
+  const LANG_KEY = "sg_lang";
+  let lang = localStorage.getItem(LANG_KEY) || "ru";
+
+  const i18n = {
+    ru: {
+      title: "Sakompiutere Gaming — Booking",
+      sub: "Выбери ПК → дату → время → подтвердить",
+      user: "Пользователь",
+      status: "Статус",
+      main: "Бронирование",
+      hintTop: "Онлайн база через Firebase",
+      authTitle: "Аккаунт",
+      authDesc: "Чтобы бронировать — нужно войти.",
+      login: "Войти",
+      register: "Регистрация",
+      logout: "Выйти",
+      nickLabel: "Твой ник (в клубе)",
+      dateLabel: "Дата (рабочий день)",
+      duration: "Длительность",
+      noteLabel: "Комментарий (опционально)",
+      pickpc: "Выбери ПК (можно несколько):",
+      timeTitle: "Выбор времени",
+      nextFree: "Следующий свободный",
+      refresh: "Обновить",
+      timeHintIdle: "Выбери ПК + дату + длительность — появятся доступные старты.",
+      timeHintPick: "Выбери старт (показываются реальные свободные варианты).",
+      bookNow: "Забронировать",
+      my: "Мои брони",
+      today: "Сегодня",
+      close: "Закрыть",
+      colDay: "День",
+      colTime: "Время",
+      colPc: "ПК",
+      colNote: "Комментарий",
+      colAct: "Действия",
+      esc: "закрыть окна",
+      adminBtn: "Admin",
+      adminTitle: "Admin",
+      adminDesc: "управление бронями (realtime)",
+      adminDateLabel: "Дата (рабочий день)",
+      adminSearchLabel: "Поиск (ник/ПК/email)",
+      closeAdmin: "Close admin",
+      tableA: { day:"День", time:"Время", pc:"ПК", nick:"Ник", user:"User", action:"Action" },
+      modalTitle: "Войти / Регистрация",
+      modalSub: "Email + пароль",
+      email:"Email",
+      pass:"Password",
+      forgot:"Забыли пароль?",
+      login2:"Войти",
+      register2:"Регистрация",
+      s_title:"Как бронировать",
+      s0:{h:"Вход", p:"Войди или зарегистрируйся — иначе бронирование не создаётся.", l1:"<b>Login</b> защищает твои брони", l2:"Появится раздел <b>“Мои брони”</b>"},
+      s1:{h:"Выбор ПК", p:"Можно выбрать сразу несколько ПК — время проверится по всем.", l1:"Нажми ПК — он <b>подсветится</b>", l2:"Повторный клик — <b>снять</b>"},
+      s2:{h:"Время", p:"Выбирай доступный старт. Показаны только реально свободные варианты.", l1:"Кнопка <b>“Следующий свободный”</b>", l2:"Ночь помечается <b>🌙(+1)</b>"},
+      s3:{h:"Готово", p:"Нажми “Забронировать” — покажется успех + детали + быстрые кнопки.", l1:"<b>Мои брони</b> — просмотр/отмена", l2:"<b>Admin</b> видит брони в реальном времени"},
+      msg: {
+        welcome:"Войди, выбери ПК и время — и бронируй ✅",
+        loginFirst:"Сначала войди.",
+        enterNick:"Введи ник.",
+        pickDate:"Выбери дату.",
+        pickPc:"Выбери ПК.",
+        pickTime:"Выбери время.",
+        past:"Нельзя бронировать в прошлом.",
+        creating:"Создаю бронь…",
+        ok:"✅ Бронь создана!",
+        nextFreeNone:"Свободного времени нет 😕",
+        refreshed:"Обновлено.",
+        rulesDenied:"Firestore permission denied. Нужно обновить Firestore Rules в Firebase Console.",
+        fsError:"Firestore error. Открой Console (F12) и пришли 1 красную строку.",
+        selected:"Выбрано время: ",
+        cancelOk:"Отменено.",
+        delOk:"Удалено.",
+        notAdmin:"Ты не админ. Добавь email в ADMIN_EMAILS."
+      },
+      succ:{ title:"✅ Успешно забронировано", my:"Мои брони", again:"Забронировать ещё", hintAdmin:"Админ увидит бронь в разделе Admin (если есть права)." },
+      cancelConfirm:"Cancel booking?",
+      deleteConfirm:"Delete booking?",
+      loginErr:"Введите email+password",
+      resetSent:"Письмо для сброса пароля отправлено ✅",
+      loginOK:"OK",
+      created:"Created!",
+    },
+
+    en: {
+      title: "Sakompiutere Gaming — Booking",
+      sub: "Pick PC → date → time → confirm",
+      user: "User",
+      status: "Status",
+      main: "Booking",
+      hintTop: "Live database via Firebase",
+      authTitle: "Account",
+      authDesc: "Login required to book.",
+      login: "Login",
+      register: "Register",
+      logout: "Logout",
+      nickLabel: "Your nickname (club)",
+      dateLabel: "Date (work day)",
+      duration: "Duration",
+      noteLabel: "Note (optional)",
+      pickpc: "Select PCs (multi-select):",
+      timeTitle: "Pick time",
+      nextFree: "Next available",
+      refresh: "Refresh",
+      timeHintIdle: "Pick PCs + date + duration — available starts will appear.",
+      timeHintPick: "Pick a start time (only real free options are shown).",
+      bookNow: "Book now",
+      my: "My bookings",
+      today: "Today",
+      close: "Close",
+      colDay: "Day",
+      colTime: "Time",
+      colPc: "PC",
+      colNote: "Note",
+      colAct: "Actions",
+      esc: "close panels",
+      adminBtn: "Admin",
+      adminTitle: "Admin",
+      adminDesc: "manage bookings (realtime)",
+      adminDateLabel: "Date (work day)",
+      adminSearchLabel: "Search (nick/PC/email)",
+      closeAdmin: "Close admin",
+      tableA: { day:"Day", time:"Time", pc:"PC", nick:"Nick", user:"User", action:"Action" },
+      modalTitle: "Login / Register",
+      modalSub: "Email + password",
+      email:"Email",
+      pass:"Password",
+      forgot:"Forgot password?",
+      login2:"Login",
+      register2:"Register",
+      s_title:"How to book",
+      s0:{h:"Login", p:"Login or register — otherwise booking can’t be created.", l1:"<b>Login</b> protects your bookings", l2:"You’ll see <b>“My bookings”</b>"},
+      s1:{h:"Pick PCs", p:"You can select multiple PCs — time checks all selected.", l1:"Tap a PC — it becomes <b>selected</b>", l2:"Tap again — <b>unselect</b>"},
+      s2:{h:"Pick time", p:"Choose an available start. Only real free options are shown.", l1:"Use <b>“Next available”</b>", l2:"Night is marked <b>🌙(+1)</b>"},
+      s3:{h:"Done", p:"Press “Book now” — success screen + details + quick actions.", l1:"<b>My bookings</b> — view/cancel", l2:"<b>Admin</b> sees bookings in realtime"},
+      msg: {
+        welcome:"Login, pick PCs & time — then book ✅",
+        loginFirst:"Please login first.",
+        enterNick:"Enter your nickname.",
+        pickDate:"Pick a date.",
+        pickPc:"Pick PCs.",
+        pickTime:"Pick a time.",
+        past:"Cannot book in the past.",
+        creating:"Creating booking…",
+        ok:"✅ Booking created!",
+        nextFreeNone:"No free time 😕",
+        refreshed:"Refreshed.",
+        rulesDenied:"Firestore permission denied. Update Firestore Rules in Firebase Console.",
+        fsError:"Firestore error. Open Console (F12) and send 1 red line.",
+        selected:"Selected time: ",
+        cancelOk:"Canceled.",
+        delOk:"Deleted.",
+        notAdmin:"You are not admin. Add your email to ADMIN_EMAILS."
+      },
+      succ:{ title:"✅ Booking successful", my:"My bookings", again:"Book again", hintAdmin:"Admin will see it in Admin panel (if allowed)." },
+      cancelConfirm:"Cancel booking?",
+      deleteConfirm:"Delete booking?",
+      loginErr:"Enter email+password",
+      resetSent:"Password reset email sent ✅",
+      loginOK:"OK",
+      created:"Created!",
+    },
+
+    ka: {
+      title: "Sakompiutere Gaming — Booking",
+      sub: "აირჩიე PC → თარიღი → დრო → დაადასტურე",
+      user: "მომხმარებელი",
+      status: "სტატუსი",
+      main: "ჯავშანი",
+      hintTop: "ონლაინ ბაზა Firebase-ით",
+      authTitle: "აქაუნთი",
+      authDesc: "ჯავშნისთვის საჭიროა შესვლა.",
+      login: "შესვლა",
+      register: "რეგისტრაცია",
+      logout: "გასვლა",
+      nickLabel: "ნიკი (კლუბში)",
+      dateLabel: "თარიღი (სამუშაო დღე)",
+      duration: "ხანგრძლივობა",
+      noteLabel: "შენიშვნა (არასავალდებულო)",
+      pickpc: "აირჩიე PC-ები (შეიძლება რამდენიმე):",
+      timeTitle: "დროის არჩევა",
+      nextFree: "შემდეგი თავისუფალი",
+      refresh: "განახლება",
+      timeHintIdle: "აირჩიე PC + თარიღი + ხანგრძლივობა — გამოჩნდება თავისუფალი სტარტები.",
+      timeHintPick: "აირჩიე დაწყება (ნაჩვენებია მხოლოდ რეალურად თავისუფალი ვარიანტები).",
+      bookNow: "დაჯავშნა",
+      my: "ჩემი ჯავშნები",
+      today: "დღეს",
+      close: "დახურვა",
+      colDay: "დღე",
+      colTime: "დრო",
+      colPc: "PC",
+      colNote: "შენიშვნა",
+      colAct: "ქმედება",
+      esc: "ფანჯრების დახურვა",
+      adminBtn: "Admin",
+      adminTitle: "Admin",
+      adminDesc: "ჯავშნების მართვა (realtime)",
+      adminDateLabel: "თარიღი (სამუშაო დღე)",
+      adminSearchLabel: "ძიება (ნიკი/PC/email)",
+      closeAdmin: "Close admin",
+      tableA: { day:"დღე", time:"დრო", pc:"PC", nick:"ნიკი", user:"User", action:"Action" },
+      modalTitle: "შესვლა / რეგისტრაცია",
+      modalSub: "Email + პაროლი",
+      email:"Email",
+      pass:"Password",
+      forgot:"დაგავიწყდა პაროლი?",
+      login2:"შესვლა",
+      register2:"რეგისტრაცია",
+      s_title:"როგორ დავჯავშნო",
+      s0:{h:"შესვლა", p:"შედი ან დარეგისტრირდი — სხვა შემთხვევაში ჯავშანი არ შეიქმნება.", l1:"<b>Login</b> იცავს შენს ჯავშნებს", l2:"გამოჩნდება <b>“ჩემი ჯავშნები”</b>"},
+      s1:{h:"PC-ების არჩევა", p:"შეგიძლია რამდენიმე PC — დრო შემოწმდება ყველა არჩეულზე.", l1:"დააჭირე PC-ს — <b>აირჩევა</b>", l2:"მეორედ — <b>გაუქმდება</b>"},
+      s2:{h:"დრო", p:"აირჩიე თავისუფალი დაწყება. ნაჩვენებია მხოლოდ რეალურად თავისუფალი ვარიანტები.", l1:"გამოიყენე <b>“შემდეგი თავისუფალი”</b>", l2:"ღამე აღნიშნულია <b>🌙(+1)</b>"},
+      s3:{h:"მზადაა", p:"დააჭირე “დაჯავშნა” — გამოჩნდება წარმატება + დეტალები + სწრაფი ქმედებები.", l1:"<b>ჩემი ჯავშნები</b> — ნახვა/გაუქმება", l2:"<b>Admin</b> ხედავს realtime-ში"},
+      msg: {
+        welcome:"შედი, აირჩიე PC და დრო — და შემდეგ დაჯავშნე ✅",
+        loginFirst:"ჯერ შედი.",
+        enterNick:"შეიყვანე ნიკი.",
+        pickDate:"აირჩიე თარიღი.",
+        pickPc:"აირჩიე PC.",
+        pickTime:"აირჩიე დრო.",
+        past:"წარსულში დაჯავშნა არ შეიძლება.",
+        creating:"ვქმნი ჯავშანს…",
+        ok:"✅ ჯავშანი შეიქმნა!",
+        nextFreeNone:"თავისუფალი დრო არ არის 😕",
+        refreshed:"განახლდა.",
+        rulesDenied:"Firestore permission denied. განაახლე Firestore Rules Firebase Console-ში.",
+        fsError:"Firestore error. გახსენი Console (F12) და გამომიგზავნე 1 წითელი ხაზი.",
+        selected:"არჩეული დრო: ",
+        cancelOk:"გაუქმდა.",
+        delOk:"წაიშალა.",
+        notAdmin:"Admin არ ხარ. დაამატე email ADMIN_EMAILS-ში."
+      },
+      succ:{ title:"✅ ჯავშანი წარმატებულია", my:"ჩემი ჯავშნები", again:"კიდევ დაჯავშნა", hintAdmin:"Admin ნახავს Admin პანელში (თუ აქვს უფლება)." },
+      cancelConfirm:"Cancel booking?",
+      deleteConfirm:"Delete booking?",
+      loginErr:"შეიყვანე email+password",
+      resetSent:"პაროლის აღდგენის წერილი გაიგზავნა ✅",
+      loginOK:"OK",
+      created:"Created!",
+    }
+  };
+
+  function tr(path){
+    const parts = path.split(".");
+    let obj = i18n[lang] || i18n.ru;
+    for(const p of parts){
+      obj = (obj && obj[p] != null) ? obj[p] : null;
+    }
+    if(obj == null){
+      obj = i18n.ru;
+      for(const p of parts){ obj = (obj && obj[p] != null) ? obj[p] : null; }
+    }
+    return obj == null ? path : obj;
+  }
+
+  function applyLang(){
+    document.title = tr("title");
+    $("t_title").textContent = tr("title");
+    $("t_sub").textContent = tr("sub");
+    $("t_user").textContent = tr("user");
+    $("t_status").textContent = tr("status");
+    $("t_main").textContent = tr("main");
+    $("hintTop").textContent = tr("hintTop");
+
+    $("t_authTitle").textContent = tr("authTitle");
+    $("t_authDesc").textContent = tr("authDesc");
+    $("t_login").textContent = tr("login");
+    $("t_register").textContent = tr("register");
+    $("t_logout").textContent = tr("logout");
+
+    $("t_nickLabel").textContent = tr("nickLabel");
+    $("t_dateLabel").textContent = tr("dateLabel");
+    $("t_duration").textContent = tr("duration");
+    $("t_noteLabel").textContent = tr("noteLabel");
+    $("t_pickpc").textContent = tr("pickpc");
+
+    $("t_timeTitle").textContent = tr("timeTitle");
+    $("t_nextFree").textContent = tr("nextFree");
+    $("t_refresh").textContent = tr("refresh");
+
+    $("t_bookNow").textContent = tr("bookNow");
+    $("t_my").textContent = tr("my");
+    $("t_today").textContent = tr("today");
+    $("t_close").textContent = tr("close");
+    $("t_close2").textContent = tr("close");
+
+    $("t_colDate").textContent = tr("colDay");
+    $("t_colTime").textContent = tr("colTime");
+    $("t_colPc").textContent = tr("colPc");
+    $("t_colNote").textContent = tr("colNote");
+    $("t_colAct").textContent = tr("colAct");
+
+    $("t_esc").textContent = tr("esc");
+    $("t_adminBtn").textContent = tr("adminBtn");
+
+    $("t_adminTitle").textContent = tr("adminTitle");
+    $("t_adminDesc").textContent = tr("adminDesc");
+    $("t_adminDateLabel").textContent = tr("adminDateLabel");
+    $("t_adminSearchLabel").textContent = tr("adminSearchLabel");
+    $("t_refresh2").textContent = tr("refresh");
+    $("t_closeAdmin").textContent = tr("closeAdmin");
+
+    $("t_a_day").textContent = tr("tableA.day");
+    $("t_a_time").textContent = tr("tableA.time");
+    $("t_a_pc").textContent = tr("tableA.pc");
+    $("t_a_nick").textContent = tr("tableA.nick");
+    $("t_a_user").textContent = tr("tableA.user");
+    $("t_a_action").textContent = tr("tableA.action");
+
+    $("t_authModal").textContent = tr("modalTitle");
+    $("t_authModal2").textContent = tr("modalSub");
+    $("t_email").textContent = tr("email");
+    $("t_pass").textContent = tr("pass");
+    $("t_forgot").textContent = tr("forgot");
+    $("t_login2").textContent = tr("login2");
+    $("t_register2").textContent = tr("register2");
+
+    $("t_succMy").textContent = tr("succ.my");
+    $("t_succAgain").textContent = tr("succ.again");
+    $("succTitle").textContent = tr("succ.title");
+
+    $("t_side").textContent = tr("s_title"); // header right
+    $("t_side2").textContent = (lang==="en" ? "quick steps" : lang==="ka" ? "სწრაფი ნაბიჯები" : "быстрые шаги");
+
+    $("s_title").textContent = tr("s_title");
+    $("s0_h").textContent = tr("s0.h");
+    $("s0_p").textContent = tr("s0.p");
+    $("s0_l1").innerHTML = tr("s0.l1");
+    $("s0_l2").innerHTML = tr("s0.l2");
+
+    $("s1_h").textContent = tr("s1.h");
+    $("s1_p").textContent = tr("s1.p");
+    $("s1_l1").innerHTML = tr("s1.l1");
+    $("s1_l2").innerHTML = tr("s1.l2");
+
+    $("s2_h").textContent = tr("s2.h");
+    $("s2_p").textContent = tr("s2.p");
+    $("s2_l1").innerHTML = tr("s2.l1");
+    $("s2_l2").innerHTML = tr("s2.l2");
+
+    $("s3_h").textContent = tr("s3.h");
+    $("s3_p").textContent = tr("s3.p");
+    $("s3_l1").innerHTML = tr("s3.l1");
+    $("s3_l2").innerHTML = tr("s3.l2");
+
+    $("lang_ru").classList.toggle("active", lang==="ru");
+    $("lang_en").classList.toggle("active", lang==="en");
+    $("lang_ka").classList.toggle("active", lang==="ka");
+
+    // update hints based on state
+    updateTimeHint();
+  }
+
+  // =========================
+  // UI text helpers
+  // =========================
   function setCloud(text, ok=true){
     $("cloudPill").textContent = text;
     const dot = $("cloudDot");
@@ -1023,24 +1461,6 @@
   }
 
   // =========================
-  // i18n (минимально)
-  // =========================
-  const LANG_KEY = "sg_lang";
-  let lang = localStorage.getItem(LANG_KEY) || "ru";
-  const i18n = {
-    ru:{ user:"Пользователь", status:"Статус" },
-    en:{ user:"User", status:"Status" },
-    ka:{ user:"მომხმარებელი", status:"სტატუსი" },
-  };
-  function applyLang(){
-    $("t_user").textContent = (i18n[lang]||i18n.ru).user;
-    $("t_status").textContent = (i18n[lang]||i18n.ru).status;
-    $("lang_ru").classList.toggle("active", lang==="ru");
-    $("lang_en").classList.toggle("active", lang==="en");
-    $("lang_ka").classList.toggle("active", lang==="ka");
-  }
-
-  // =========================
   // FIREBASE INIT
   // =========================
   let app, auth, db;
@@ -1064,7 +1484,7 @@
   // =========================
   let selectedPCs = new Set();
   let selectedStart = null; // {startMin,endMin,startAtMs,endAtMs,label,night}
-  let cachedBookings = [];  // bookings for dateKey (and also previous day for night overlap)
+  let cachedBookings = [];
   let unsubDateRealtime = null;
   let unsubAdminRealtime = null;
 
@@ -1097,24 +1517,19 @@
     if(unsubDateRealtime) { try{unsubDateRealtime();}catch(e){} unsubDateRealtime=null; }
     if(!dateKey) return;
 
-    // Чтобы корректно перекрывать ночь, берём брони и текущего dateKey и предыдущего.
     const prevKey = toISODate(addDays(parseISODate(dateKey), -1));
-
     const col = db.collection("bookings");
     const q1 = col.where("dateKey","==",dateKey);
     const q2 = col.where("dateKey","==",prevKey);
 
-    // подписываемся на две выборки и склеиваем
     let list1 = [], list2 = [];
 
     const apply = ()=>{
-      const merged = [...list1, ...list2]
-        .map(b=>({
-          ...b,
-          startAtMs: Number(b.startAtMs||0),
-          endAtMs: Number(b.endAtMs||0),
-        }));
-      cachedBookings = merged;
+      cachedBookings = [...list1, ...list2].map(b=>({
+        ...b,
+        startAtMs: Number(b.startAtMs||0),
+        endAtMs: Number(b.endAtMs||0),
+      }));
       rebuildTimeList();
     };
 
@@ -1141,15 +1556,15 @@
     const msg = String(err && (err.message||err.code||err) || "");
     if(msg.toLowerCase().includes("permission")){
       setCloud("RULES", false);
-      setToast("Firestore permission denied. Нужно обновить Firestore Rules в Firebase Console (я дал правила внизу файла).", "bad");
+      setToast(tr("msg.rulesDenied"), "bad");
     }else{
       setCloud("ERR", false);
-      setToast("Firestore error. Открой Console (F12) и пришли 1 красную строку.", "bad");
+      setToast(tr("msg.fsError"), "bad");
     }
   }
 
   // =========================
-  // TIME PICKER: build available starts
+  // TIME PICKER
   // =========================
   function isBusyForPCs(slot){
     for(const b of cachedBookings){
@@ -1157,6 +1572,21 @@
       if(overlapsAbs(slot.startAtMs, slot.endAtMs, b.startAtMs, b.endAtMs)) return true;
     }
     return false;
+  }
+
+  function labelShort(sl){
+    const start = hhmmFromMinutes(sl.startMin);
+    return sl.night ? `${start} 🌙` : start;
+  }
+
+  function updateTimeHint(){
+    const dateKey = $("date").value;
+    const dur = Number($("duration").value||60);
+    if(!dateKey || selectedPCs.size===0 || !dur){
+      $("timeHint").textContent = tr("timeHintIdle");
+    }else{
+      $("timeHint").textContent = tr("timeHintPick");
+    }
   }
 
   function rebuildTimeList(){
@@ -1171,7 +1601,7 @@
     $("createBtn").disabled = true;
 
     if(!dateKey || selectedPCs.size===0){
-      $("timeHint").textContent = "Выбери ПК + дату + длительность — появятся доступные старты.";
+      updateTimeHint();
       return;
     }
 
@@ -1190,11 +1620,11 @@
       }
     }
 
-    // фильтр "в прошлом"
     const now = Date.now();
     for(const sl of slots){
       const busy = isBusyForPCs(sl);
       const past = sl.startAtMs < now;
+
       const div = document.createElement("div");
       div.className = "tbtn" + (busy || past ? " busy" : "");
       div.textContent = busy ? `⛔ ${labelShort(sl)}` : past ? `— ${labelShort(sl)}` : `✅ ${labelShort(sl)}`;
@@ -1206,28 +1636,21 @@
         [...listEl.children].forEach(x=>x.classList.remove("active"));
         div.classList.add("active");
 
-        $("pickedSummary").innerHTML = `<b>${escapeHtml(sl.label)}</b> • ПК: <b>${escapeHtml(Array.from(selectedPCs).join(", "))}</b>`;
+        $("pickedSummary").innerHTML = `<b>${escapeHtml(sl.label)}</b> • ${lang==="en" ? "PCs" : lang==="ka" ? "PC-ები" : "ПК"}: <b>${escapeHtml(Array.from(selectedPCs).join(", "))}</b>`;
         $("createBtn").disabled = false;
 
         sliderGo(2);
-        setToast(`Выбрано время: ${sl.label}`, "info");
+        setToast(tr("msg.selected") + sl.label, "info");
       });
 
       listEl.appendChild(div);
     }
 
-    $("timeHint").textContent = "Выбери старт (показываются реальные свободные варианты).";
-  }
-
-  function labelShort(sl){
-    // коротко: только start time
-    const start = hhmmFromMinutes(sl.startMin);
-    return sl.night ? `${start} 🌙` : start;
+    updateTimeHint();
   }
 
   function pickNextFree(){
-    const listEl = $("timeList");
-    const btns = [...listEl.querySelectorAll(".tbtn")];
+    const btns = [...$("timeList").querySelectorAll(".tbtn")];
     const first = btns.find(b=>!b.classList.contains("busy"));
     if(first){
       first.click();
@@ -1311,7 +1734,7 @@
   // =========================
   async function createBooking(){
     if(!currentUser){
-      setToast("Сначала войди.", "bad");
+      setToast(tr("msg.loginFirst"), "bad");
       sliderGo(0);
       return;
     }
@@ -1319,37 +1742,33 @@
     const dateKey = $("date").value;
     const note = ($("note").value||"").trim();
 
-    if(!nick){ setToast("Введи ник.", "bad"); return; }
-    if(!dateKey){ setToast("Выбери дату.", "bad"); return; }
-    if(selectedPCs.size===0){ setToast("Выбери ПК.", "bad"); sliderGo(1); return; }
-    if(!selectedStart){ setToast("Выбери время.", "bad"); sliderGo(2); return; }
-
+    if(!nick){ setToast(tr("msg.enterNick"), "bad"); return; }
+    if(!dateKey){ setToast(tr("msg.pickDate"), "bad"); return; }
+    if(selectedPCs.size===0){ setToast(tr("msg.pickPc"), "bad"); sliderGo(1); return; }
+    if(!selectedStart){ setToast(tr("msg.pickTime"), "bad"); sliderGo(2); return; }
     if(selectedStart.startAtMs < Date.now()){
-      setToast("Нельзя бронировать в прошлом.", "bad");
+      setToast(tr("msg.past"), "bad");
       return;
     }
 
     const pcs = Array.from(selectedPCs);
     $("createBtn").disabled = true;
-    setToast("Создаю бронь…", "info");
+    setToast(tr("msg.creating"), "info");
 
     try{
       await upsertProfileNick(currentUser.uid, nick);
 
       await db.runTransaction(async (tx)=>{
         for(const pc of pcs){
-          // lock ids by 30-min steps
           const mins = lockMinutesBetween(selectedStart.startMin, selectedStart.endMin);
           const lockIds = mins.map(m => lockId(dateKey, pc, m));
 
-          // check locks exist
           for(const lid of lockIds){
             const ref = db.collection(LOCKS_COLLECTION).doc(lid);
             const snap = await tx.get(ref);
             if(snap.exists) throw new Error("OVERLAP_LOCK");
           }
 
-          // create locks
           for(const lid of lockIds){
             const minute = Number(lid.split("__").pop());
             tx.set(db.collection(LOCKS_COLLECTION).doc(lid), {
@@ -1362,7 +1781,6 @@
             });
           }
 
-          // create booking
           const bRef = db.collection("bookings").doc();
           tx.set(bRef, {
             uid: currentUser.uid,
@@ -1381,23 +1799,29 @@
         }
       });
 
-      // UI финал
       const start = new Date(selectedStart.startAtMs);
       const end = new Date(selectedStart.endAtMs);
       const timeStr = `${pad2(start.getHours())}:${pad2(start.getMinutes())} → ${pad2(end.getHours())}:${pad2(end.getMinutes())}`;
+
+      const pcsLabel = (lang==="en" ? "PCs" : lang==="ka" ? "PC-ები" : "ПК");
+      const dayLabel = (lang==="en" ? "Day" : lang==="ka" ? "დღე" : "День");
+      const timeLabel = (lang==="en" ? "Time" : lang==="ka" ? "დრო" : "Время");
+      const nickLabel = (lang==="en" ? "Nick" : lang==="ka" ? "ნიკი" : "Ник");
+      const noteLabel = (lang==="en" ? "Note" : lang==="ka" ? "შენიშვნა" : "Комментарий");
+
       const details = `
-        <div><b>Ник:</b> ${escapeHtml(nick)}</div>
-        <div><b>ПК:</b> ${escapeHtml(pcs.join(", "))}</div>
-        <div><b>День:</b> ${escapeHtml(dateKey)} ${selectedStart.night ? " <span style='color:rgba(251,191,36,.9)'>🌙(+1)</span>" : ""}</div>
-        <div><b>Время:</b> ${escapeHtml(timeStr)} ${selectedStart.night ? " <span style='color:rgba(251,191,36,.9)'>🌙</span>" : ""}</div>
-        <div><b>Комментарий:</b> ${escapeHtml(note || "—")}</div>
-        <div style="margin-top:8px; color:rgba(154,164,191,.95)">Админ увидит бронь в разделе Admin (если есть права).</div>
+        <div><b>${nickLabel}:</b> ${escapeHtml(nick)}</div>
+        <div><b>${pcsLabel}:</b> ${escapeHtml(pcs.join(", "))}</div>
+        <div><b>${dayLabel}:</b> ${escapeHtml(dateKey)} ${selectedStart.night ? " <span style='color:rgba(251,191,36,.9)'>🌙(+1)</span>" : ""}</div>
+        <div><b>${timeLabel}:</b> ${escapeHtml(timeStr)} ${selectedStart.night ? " <span style='color:rgba(251,191,36,.9)'>🌙</span>" : ""}</div>
+        <div><b>${noteLabel}:</b> ${escapeHtml(note || "—")}</div>
+        <div style="margin-top:8px; color:rgba(154,164,191,.95)">${escapeHtml(tr("succ.hintAdmin"))}</div>
       `;
-      setToast("✅ Бронь создана!", "good");
+
+      setToast(tr("msg.ok"), "good");
       sliderGo(3);
       showSuccess(details);
 
-      // reset only time
       selectedStart = null;
       $("pickedSummary").innerHTML = `<b>—</b>`;
       $("createBtn").disabled = true;
@@ -1405,16 +1829,10 @@
     }catch(e){
       console.error(e);
       if(String(e.message||"")==="OVERLAP_LOCK"){
-        setToast("⛔ Этот слот уже заняли. Выбери другое время.", "bad");
+        setToast(lang==="en" ? "⛔ Slot was taken. Pick another time." : lang==="ka" ? "⛔ დრო დაკავებულია. აირჩიე სხვა." : "⛔ Этот слот уже заняли. Выбери другое время.", "bad");
       }else{
         handleFirestoreErr(e);
       }
-    }finally{
-      $("createBtn").disabled = true; // до выбора времени
-      $("createBtn").disabled = !selectedStart;
-      $("createBtn").disabled = true;
-      // кнопка будет включаться при выборе времени
-      // (это сделано специально, чтобы не было "недовыбранных" броней)
     }
   }
 
@@ -1445,7 +1863,7 @@
     const tbody = $("myTable");
     tbody.innerHTML = "";
     if(!currentUser){
-      tbody.innerHTML = `<tr><td colspan="5" style="color:var(--muted)">Login first</td></tr>`;
+      tbody.innerHTML = `<tr><td colspan="5" style="color:var(--muted)">${lang==="en"?"Login first":lang==="ka"?"ჯერ შედი":"Сначала войди"}</td></tr>`;
       return;
     }
     const list = await loadMyBookings();
@@ -1458,20 +1876,21 @@
       const start = new Date(b.startAtMs);
       const end = new Date(b.endAtMs);
       const timeStr = `${pad2(start.getHours())}:${pad2(start.getMinutes())} → ${pad2(end.getHours())}:${pad2(end.getMinutes())}`;
-      const tr = document.createElement("tr");
-      tr.innerHTML = `
+      const trEl = document.createElement("tr");
+      trEl.innerHTML = `
         <td>${escapeHtml(b.dateKey || "")}</td>
         <td>${escapeHtml(timeStr)}</td>
         <td><b>${escapeHtml(b.pc)}</b></td>
         <td style="color:var(--muted)">${escapeHtml(b.note||"")}</td>
-        <td><button class="mini danger" type="button">Cancel</button></td>
+        <td><button class="mini danger" type="button">${lang==="en"?"Cancel":lang==="ka"?"გაუქმება":"Cancel"}</button></td>
       `;
-      tbody.appendChild(tr);
-      tr.querySelector("button").addEventListener("click", async ()=>{
-        if(!confirm("Cancel booking?")) return;
+      tbody.appendChild(trEl);
+
+      trEl.querySelector("button").addEventListener("click", async ()=>{
+        if(!confirm(tr("cancelConfirm"))) return;
         try{
           await deleteBookingAndLocks(b);
-          setToast("Отменено.", "good");
+          setToast(tr("msg.cancelOk"), "good");
         }catch(e){
           console.error(e);
           handleFirestoreErr(e);
@@ -1516,14 +1935,14 @@
         const start = new Date(b.startAtMs);
         const end = new Date(b.endAtMs);
         const timeStr = `${pad2(start.getHours())}:${pad2(start.getMinutes())} → ${pad2(end.getHours())}:${pad2(end.getMinutes())}`;
-        const tr = document.createElement("tr");
-        tr.innerHTML = `
+        const trEl = document.createElement("tr");
+        trEl.innerHTML = `
           <td>${escapeHtml(timeStr)}</td>
           <td><b>${escapeHtml(b.pc)}</b></td>
           <td>${escapeHtml(b.nick||"")}</td>
           <td style="color:var(--muted)">${escapeHtml(b.note||"")}</td>
         `;
-        tbody.appendChild(tr);
+        tbody.appendChild(trEl);
       }
     }catch(e){
       console.error(e);
@@ -1579,22 +1998,22 @@
       const end = new Date(b.endAtMs);
       const timeStr = `${pad2(start.getHours())}:${pad2(start.getMinutes())} → ${pad2(end.getHours())}:${pad2(end.getMinutes())}`;
 
-      const tr = document.createElement("tr");
-      tr.innerHTML = `
+      const trEl = document.createElement("tr");
+      trEl.innerHTML = `
         <td>${escapeHtml(b.dateKey||"")}</td>
         <td>${escapeHtml(timeStr)}</td>
         <td><b>${escapeHtml(b.pc)}</b></td>
         <td>${escapeHtml(b.nick||"")}</td>
         <td style="color:var(--muted)">${escapeHtml(b.userEmail||"")}</td>
-        <td><button class="mini danger" type="button">Delete</button></td>
+        <td><button class="mini danger" type="button">${lang==="en"?"Delete":lang==="ka"?"წაშლა":"Delete"}</button></td>
       `;
-      tbody.appendChild(tr);
+      tbody.appendChild(trEl);
 
-      tr.querySelector("button").addEventListener("click", async ()=>{
-        if(!confirm("Delete booking?")) return;
+      trEl.querySelector("button").addEventListener("click", async ()=>{
+        if(!confirm(tr("deleteConfirm"))) return;
         try{
           await deleteBookingAndLocks(b);
-          setToast("Удалено.", "good");
+          setToast(tr("msg.delOk"), "good");
         }catch(e){
           console.error(e);
           handleFirestoreErr(e);
@@ -1638,7 +2057,8 @@
     slides.forEach(s=>s.classList.remove("active"));
     slides[slideIndex].classList.add("active");
     [...$("sdots").children].forEach((d, idx)=> d.classList.toggle("on", idx===slideIndex));
-    $("s_step").textContent = `Шаг ${slideIndex+1}/${n}`;
+    $("s_step").textContent =
+      (lang==="en" ? `Step ${slideIndex+1}/${n}` : lang==="ka" ? `ნაბიჯი ${slideIndex+1}/${n}` : `Шаг ${slideIndex+1}/${n}`);
   }
 
   // =========================
@@ -1656,10 +2076,10 @@
     $("doLoginBtn").onclick = async ()=>{
       const email = ($("authEmail").value||"").trim();
       const pass = ($("authPass").value||"").trim();
-      if(!email || !pass){ $("authModalMsg").textContent = "Введите email+password"; return; }
+      if(!email || !pass){ $("authModalMsg").textContent = tr("loginErr"); return; }
       try{
         await auth.signInWithEmailAndPassword(email, pass);
-        $("authModalMsg").textContent = "OK";
+        $("authModalMsg").textContent = tr("loginOK");
         closeModal();
       }catch(e){
         console.error(e);
@@ -1670,10 +2090,10 @@
     $("doRegisterBtn").onclick = async ()=>{
       const email = ($("authEmail").value||"").trim();
       const pass = ($("authPass").value||"").trim();
-      if(!email || !pass){ $("authModalMsg").textContent = "Введите email+password"; return; }
+      if(!email || !pass){ $("authModalMsg").textContent = tr("loginErr"); return; }
       try{
         await auth.createUserWithEmailAndPassword(email, pass);
-        $("authModalMsg").textContent = "Created!";
+        $("authModalMsg").textContent = tr("created");
         closeModal();
       }catch(e){
         console.error(e);
@@ -1683,10 +2103,10 @@
 
     $("forgotBtn").onclick = async ()=>{
       const email = ($("authEmail").value||"").trim();
-      if(!email){ $("authModalMsg").textContent = "Введите email"; return; }
+      if(!email){ $("authModalMsg").textContent = tr("email"); return; }
       try{
         await auth.sendPasswordResetEmail(email);
-        $("authModalMsg").textContent = "Письмо для сброса пароля отправлено ✅";
+        $("authModalMsg").textContent = tr("resetSent");
       }catch(e){
         console.error(e);
         $("authModalMsg").textContent = e.message || "Reset error";
@@ -1708,12 +2128,12 @@
       const dateKey = $("date").value;
       await startRealtimeForDate(dateKey);
       rebuildTimeList();
-      setToast("Обновлено.", "good");
+      setToast(tr("msg.refreshed"), "good");
     };
 
     $("nextFreeBtn").onclick = ()=>{
       if(!pickNextFree()){
-        setToast("Свободного времени нет 😕", "warn");
+        setToast(tr("msg.nextFreeNone"), "warn");
       }
     };
 
@@ -1734,8 +2154,8 @@
     $("closeTodayBtn").onclick = ()=> hide($("todayBox"));
 
     $("openAdminBtn").onclick = async ()=>{
-      if(!currentUser){ setToast("Сначала войди.", "bad"); return; }
-      if(!isAdmin){ setToast("Ты не админ. Добавь email в ADMIN_EMAILS.", "bad"); return; }
+      if(!currentUser){ setToast(tr("msg.loginFirst"), "bad"); return; }
+      if(!isAdmin){ setToast(tr("msg.notAdmin"), "bad"); return; }
       hide($("myBox")); hide($("todayBox"));
       show($("adminBox"));
       $("adminDate").value = $("adminDate").value || $("date").value;
@@ -1764,7 +2184,7 @@
       selectedStart = null;
       $("pickedSummary").innerHTML = `<b>—</b>`;
       rebuildTimeList();
-      setToast("Выбери новое время.", "info");
+      setToast(lang==="en" ? "Pick a new time." : lang==="ka" ? "აირჩიე ახალი დრო." : "Выбери новое время.", "info");
       sliderGo(2);
       $("timeList").scrollIntoView({behavior:"smooth", block:"center"});
     };
@@ -1786,6 +2206,7 @@
     $("date").value = toISODate(now);
     $("adminDate").value = toISODate(now);
 
+    if(!i18n[lang]) lang="ru";
     applyLang();
     renderPCGrid();
     sliderInit();
@@ -1795,7 +2216,7 @@
     if(savedNick) $("nick").value = savedNick;
     $("nick").addEventListener("input", ()=> localStorage.setItem("sg_nick", ($("nick").value||"").trim()));
 
-    setToast("Войди, выбери ПК и время — и бронируй ✅", "info");
+    setToast(tr("msg.welcome"), "info");
 
     auth.onAuthStateChanged(async (u)=>{
       currentUser = u || null;
@@ -1812,12 +2233,11 @@
           }catch(e){}
         }
 
-        // start realtime date
         await startRealtimeForDate($("date").value);
         rebuildTimeList();
       }else{
         $("authMsg").textContent = "—";
-        setToast("Сначала войди, чтобы бронировать.", "info");
+        setToast(tr("msg.loginFirst"), "info");
         sliderGo(0);
         if(unsubDateRealtime){ try{unsubDateRealtime();}catch(e){} unsubDateRealtime=null; }
         stopAdminRealtime();
@@ -1829,7 +2249,7 @@
 
   // =========================
   // IMPORTANT: Firestore Rules
-  // (Скопируй в Firebase Console → Firestore → Rules)
+  // (Firebase Console → Firestore → Rules)
   //
   // rules_version = '2';
   // service cloud.firestore {
@@ -1841,7 +2261,7 @@
   //     }
   //
   //     match /bookings/{id} {
-  //       allow read: if true; // чтобы всем показывать доступность/сегодня
+  //       allow read: if true;
   //       allow create: if signedIn();
   //       allow delete: if signedIn() && (
   //         resource.data.uid == request.auth.uid ||
@@ -1851,7 +2271,7 @@
   //     }
   //
   //     match /locks/{id} {
-  //       allow read: if true; // иначе availability не работает
+  //       allow read: if true;
   //       allow create: if signedIn();
   //       allow delete: if signedIn() && (
   //         resource.data.uid == request.auth.uid ||
