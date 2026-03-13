@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
-  <title>Sakompiutere Gaming — Live Hall</title>
+  <title>Sakompiutere Gaming — Booking</title>
   <meta name="theme-color" content="#0b1020" />
   <link rel="icon" href="data:," />
 
@@ -13,177 +13,51 @@
 
   <style>
     :root{
-      --bg:#070a12;
-      --card:#0d1324;
-      --text:#edf3ff;
-      --muted:#9aa7c7;
-      --line:rgba(255,255,255,.09);
-      --free:#34d399;
-      --soon:#fbbf24;
-      --busy:#fb7185;
-      --accent:#6ee7ff;
-      --accent2:#a78bfa;
-      --shadow:0 18px 60px rgba(0,0,0,.45);
+      --bg:#070a12; --card:#0d1324; --text:#edf3ff; --muted:#9aa7c7; --line:rgba(255,255,255,.09);
+      --free:#34d399; --soon:#fbbf24; --busy:#fb7185; --accent:#6ee7ff; --accent2:#a78bfa; --shadow:0 18px 60px rgba(0,0,0,.45);
     }
-    *{box-sizing:border-box}
-    html,body{height:100%}
-    body{
-      margin:0;
-      color:var(--text);
-      font-family:Inter, ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial;
-      background:
-        radial-gradient(1000px 600px at 10% -10%, rgba(110,231,255,.12), transparent 60%),
-        radial-gradient(900px 700px at 90% 0%, rgba(167,139,250,.14), transparent 60%),
-        radial-gradient(1200px 700px at 50% 120%, rgba(52,211,153,.08), transparent 60%),
-        var(--bg);
-      overflow-x:hidden;
-    }
-    .wrap{max-width:1320px;margin:0 auto;padding:14px}
+    *{box-sizing:border-box} html,body{height:100%}
+    body{margin:0;color:var(--text);font-family:Inter,ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Arial;background:
+      radial-gradient(1000px 600px at 10% -10%, rgba(110,231,255,.12), transparent 60%),
+      radial-gradient(900px 700px at 90% 0%, rgba(167,139,250,.14), transparent 60%),
+      radial-gradient(1200px 700px at 50% 120%, rgba(52,211,153,.08), transparent 60%), var(--bg);overflow-x:hidden}
+    .wrap{max-width:1360px;margin:0 auto;padding:12px}
     .glass{background:linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.03));border:1px solid var(--line);box-shadow:var(--shadow);backdrop-filter:blur(12px)}
-
-    header{
-      display:flex;align-items:center;justify-content:space-between;gap:12px;
-      padding:14px 16px;border-radius:22px;position:sticky;top:10px;z-index:20;
-    }
-    .brand{display:flex;align-items:center;gap:12px;min-width:0}
-    .logo{
-      width:44px;height:44px;flex:0 0 44px;border-radius:15px;
-      background:radial-gradient(circle at 28% 20%, rgba(110,231,255,.95), rgba(167,139,250,.9) 45%, transparent 72%), rgba(255,255,255,.05);
-      border:1px solid var(--line);
-      box-shadow:0 10px 28px rgba(0,0,0,.35);
-    }
-    h1{margin:0;font-size:18px;letter-spacing:.2px}
-    .sub{margin:4px 0 0;color:var(--muted);font-size:12px}
+    header{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 16px;border-radius:22px;position:sticky;top:10px;z-index:20}
+    .brand{display:flex;align-items:center;gap:12px;min-width:0}.logo{width:44px;height:44px;flex:0 0 44px;border-radius:15px;background:radial-gradient(circle at 28% 20%, rgba(110,231,255,.95), rgba(167,139,250,.9) 45%, transparent 72%), rgba(255,255,255,.05);border:1px solid var(--line);box-shadow:0 10px 28px rgba(0,0,0,.35)}
+    h1{margin:0;font-size:18px}.sub{margin:4px 0 0;color:var(--muted);font-size:12px}
     .topbar{display:flex;flex-wrap:wrap;gap:8px;align-items:center;justify-content:flex-end}
-    .pill,.lang{
-      display:flex;align-items:center;gap:8px;padding:8px 10px;border-radius:999px;
-      border:1px solid var(--line);background:rgba(255,255,255,.04);font-size:12px;color:var(--muted);
-    }
+    .pill,.lang{display:flex;align-items:center;gap:8px;padding:8px 10px;border-radius:999px;border:1px solid var(--line);background:rgba(255,255,255,.04);font-size:12px;color:var(--muted)}
     .lang button,.btn,.mini{border:1px solid var(--line);background:rgba(255,255,255,.04);color:var(--text);cursor:pointer;transition:.15s ease;font-weight:800}
-    .lang button{padding:7px 10px;border-radius:999px;background:transparent;color:var(--muted)}
-    .lang button.active{background:rgba(110,231,255,.12);border-color:rgba(110,231,255,.45);color:var(--text)}
+    .lang button{padding:7px 10px;border-radius:999px;background:transparent;color:var(--muted)} .lang button.active{background:rgba(110,231,255,.12);border-color:rgba(110,231,255,.45);color:var(--text)}
     .lang button:hover,.btn:hover,.mini:hover{transform:translateY(-1px);border-color:rgba(110,231,255,.45)}
-    .dot{width:8px;height:8px;border-radius:999px;background:#fff2}
-    .dot.ok{background:var(--free);box-shadow:0 0 0 0 rgba(52,211,153,.35);animation:pulse 1.8s infinite}
-    .dot.err{background:var(--busy)}
+    .dot{width:8px;height:8px;border-radius:999px;background:#fff2}.dot.ok{background:var(--free);box-shadow:0 0 0 0 rgba(52,211,153,.35);animation:pulse 1.8s infinite}.dot.err{background:var(--busy)}
     @keyframes pulse{70%{box-shadow:0 0 0 10px rgba(52,211,153,0)}100%{box-shadow:0 0 0 0 rgba(52,211,153,0)}}
 
-    .layout{display:grid;grid-template-columns:1fr 360px;gap:16px;margin-top:14px}
-    @media (max-width:1120px){.layout{grid-template-columns:1fr}}
-    .panel{border-radius:24px}
-    .panelHead{padding:14px 16px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;gap:12px;align-items:center}
-    .panelTitle{font-size:15px;font-weight:900}
-    .panelBody{padding:16px}
-    .actions{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:14px}
-    .btn{padding:11px 14px;border-radius:14px}
-    .btn.primary{background:linear-gradient(180deg, rgba(110,231,255,.18), rgba(167,139,250,.12));border-color:rgba(110,231,255,.45)}
-    .btn.ghost{background:transparent}
-    .btn.bad{background:rgba(251,113,133,.10);border-color:rgba(251,113,133,.28)}
+    .layout{display:grid;grid-template-columns:1.25fr .95fr;gap:14px;margin-top:14px}@media (max-width:1150px){.layout{grid-template-columns:1fr}}
+    .panel{border-radius:24px}.panelHead{padding:14px 16px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;gap:10px;align-items:center}.panelTitle{font-size:15px;font-weight:900}.panelBody{padding:14px}
+    .actions{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:14px}.btn{padding:11px 14px;border-radius:14px}.btn.primary{background:linear-gradient(180deg, rgba(110,231,255,.18), rgba(167,139,250,.12));border-color:rgba(110,231,255,.45)}.btn.bad{background:rgba(251,113,133,.10);border-color:rgba(251,113,133,.28)}.btn.ghost{background:transparent}
     .notice{border:1px dashed rgba(110,231,255,.3);padding:12px 13px;border-radius:16px;background:rgba(110,231,255,.06);font-size:12px;color:var(--muted);line-height:1.45;margin-bottom:14px}
-    .toast{margin-bottom:12px;border-radius:16px;padding:12px 13px;border:1px solid var(--line);background:rgba(255,255,255,.04);font-size:12px}
-    .toast.good{border-color:rgba(52,211,153,.28);background:rgba(52,211,153,.08)}
-    .toast.bad{border-color:rgba(251,113,133,.28);background:rgba(251,113,133,.08)}
-    .toast.warn{border-color:rgba(251,191,36,.28);background:rgba(251,191,36,.08)}
-    .hidden{display:none !important}
-
-    .topStats{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:14px}
-    .stat{padding:12px;border-radius:16px;border:1px solid var(--line);background:rgba(255,255,255,.03)}
-    .stat b{display:block;font-size:18px;margin-top:4px}
-    .stat span{font-size:11px;color:var(--muted)}
-    @media (max-width:760px){.topStats{grid-template-columns:repeat(2,1fr)}}
-
-    .hall{display:grid;grid-template-columns:1fr 80px 1fr;gap:14px;align-items:start}
-    .side{display:grid;gap:10px}
-    .aisle{min-height:100%;border-radius:20px;border:1px dashed rgba(255,255,255,.08);background:linear-gradient(180deg, rgba(255,255,255,.03), rgba(255,255,255,.01));display:flex;align-items:center;justify-content:center;color:var(--muted);font-size:12px;letter-spacing:.18em;text-transform:uppercase;writing-mode:vertical-rl;transform:rotate(180deg);padding:14px 0}
-    @media (max-width:900px){.hall{grid-template-columns:1fr}.aisle{writing-mode:initial;transform:none;min-height:auto;padding:10px;letter-spacing:.12em}}
-
-    .pc{
-      position:relative;padding:14px;border-radius:20px;border:1px solid var(--line);
-      background:linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,.03));
-      overflow:hidden;cursor:pointer;transition:.18s ease;
-    }
-    .pc:hover{transform:translateY(-2px)}
-    .pc.active{border-color:rgba(110,231,255,.55);box-shadow:0 0 0 3px rgba(110,231,255,.08)}
-    .pc.selectedMulti{box-shadow:0 0 0 3px rgba(167,139,250,.13), inset 0 0 0 1px rgba(167,139,250,.28)}
-    .pc.free{box-shadow:inset 0 0 0 1px rgba(52,211,153,.14)}
-    .pc.soon{box-shadow:inset 0 0 0 1px rgba(251,191,36,.14)}
-    .pc.busy{box-shadow:inset 0 0 0 1px rgba(251,113,133,.14)}
-    .pc::before{content:"";position:absolute;inset:-20% auto auto -10%;width:160px;height:110px;border-radius:999px;filter:blur(18px);opacity:.3}
-    .pc.free::before{background:rgba(52,211,153,.25)}
-    .pc.soon::before{background:rgba(251,191,36,.22)}
-    .pc.busy::before{background:rgba(251,113,133,.22)}
-    .pcTop{display:flex;justify-content:space-between;gap:10px;align-items:start}
-    .pcName{font-size:17px;font-weight:1000;letter-spacing:.02em}
-    .statusTag{font-size:11px;font-weight:900;padding:7px 9px;border-radius:999px;border:1px solid var(--line);white-space:nowrap}
-    .statusTag.free{color:var(--free);background:rgba(52,211,153,.09);border-color:rgba(52,211,153,.25)}
-    .statusTag.soon{color:var(--soon);background:rgba(251,191,36,.09);border-color:rgba(251,191,36,.25)}
-    .statusTag.busy{color:var(--busy);background:rgba(251,113,133,.09);border-color:rgba(251,113,133,.25)}
-    .pcMeta{margin-top:10px;display:grid;gap:6px;font-size:13px;color:var(--muted)}
-    .pcMeta b{color:var(--text)}
-    .progress{height:8px;border-radius:999px;background:rgba(255,255,255,.06);overflow:hidden;margin-top:6px}
-    .bar{height:100%;background:linear-gradient(90deg, rgba(251,113,133,.8), rgba(251,191,36,.8));width:0%}
-    .pcBottom{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-top:12px}
-    .mini{padding:8px 10px;border-radius:12px;font-size:12px}
-    .mini.primary{background:linear-gradient(180deg, rgba(110,231,255,.18), rgba(167,139,250,.10));border-color:rgba(110,231,255,.42)}
-    .mini.soft{background:rgba(167,139,250,.10);border-color:rgba(167,139,250,.22)}
-
-    .sideCard{border-radius:24px;position:sticky;top:86px}
-    @media (max-width:1120px){.sideCard{position:static}}
-    .bigStatus{padding:14px;border-radius:18px;border:1px solid var(--line);background:rgba(255,255,255,.03);margin-bottom:14px}
-    .bigStatus h3{margin:0 0 6px;font-size:20px}
-    .quickList{display:grid;gap:10px}
-    .quickItem{border:1px solid var(--line);border-radius:18px;padding:12px;background:rgba(255,255,255,.03);display:flex;justify-content:space-between;gap:10px;align-items:center}
-    .quickItem small{display:block;color:var(--muted);margin-top:3px}
-    .chipRow{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
-    .chip{padding:7px 10px;border-radius:999px;border:1px solid var(--line);background:rgba(255,255,255,.04);font-size:12px;color:var(--muted)}
-    .chip b{color:var(--text)}
-
-    .formRow{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px}
-    @media (max-width:520px){.formRow{grid-template-columns:1fr}}
-    label{display:block;font-size:12px;color:var(--muted);margin:0 0 6px}
-    input,select{width:100%;padding:11px 12px;border-radius:14px;border:1px solid var(--line);background:rgba(0,0,0,.22);color:var(--text);outline:none}
-    input:focus,select:focus{border-color:rgba(110,231,255,.5);box-shadow:0 0 0 3px rgba(110,231,255,.1)}
-    .small{font-size:12px}.muted{color:var(--muted)}
-
-    .myBookings{display:grid;gap:10px;margin-top:14px}
-    .bookingItem{padding:12px;border-radius:18px;border:1px solid var(--line);background:rgba(255,255,255,.03);display:flex;justify-content:space-between;gap:12px;align-items:center}
-    .bookingItem .meta{font-size:12px;color:var(--muted);margin-top:4px}
-
-    .backdrop{position:fixed;inset:0;background:rgba(0,0,0,.6);display:none;align-items:center;justify-content:center;padding:16px;z-index:80}
-    .backdrop.show{display:flex}
-    .modal{width:min(560px,100%);border-radius:24px}
-    .modalHead{padding:16px 18px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;gap:10px}
-    .modalBody{padding:18px}
-    .auth{display:grid;gap:10px}
-
-    .mobileBar{display:none}
-    @media (max-width:700px){
-      .wrap{padding:10px}
-      header{position:static;padding:12px}
-      h1{font-size:16px}
-      .sub{font-size:11px}
-      .topbar{justify-content:flex-start}
-      .pill{padding:7px 9px}
-      .panelHead,.panelBody{padding:12px}
-      .pc{padding:12px}
-      .pcName{font-size:15px}
-      .statusTag{font-size:10px;padding:6px 8px}
-      .quickItem{padding:10px}
-      .mobileBar{display:flex;position:sticky;bottom:8px;z-index:35;padding:8px;gap:8px;border-radius:18px;margin-top:12px;backdrop-filter:blur(14px)}
-      .mobileBar .btn{flex:1;padding:12px 10px}
-    }
+    .toast{margin-bottom:12px;border-radius:16px;padding:12px 13px;border:1px solid var(--line);background:rgba(255,255,255,.04);font-size:12px}.toast.good{border-color:rgba(52,211,153,.28);background:rgba(52,211,153,.08)}.toast.bad{border-color:rgba(251,113,133,.28);background:rgba(251,113,133,.08)}.toast.warn{border-color:rgba(251,191,36,.28);background:rgba(251,191,36,.08)}.hidden{display:none !important}
+    .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:14px}.stat{padding:12px;border-radius:16px;border:1px solid var(--line);background:rgba(255,255,255,.03)}.stat b{display:block;font-size:18px;margin-top:4px}.stat span{font-size:11px;color:var(--muted)}@media (max-width:760px){.stats{grid-template-columns:repeat(2,1fr)}}
+    .hall{display:grid;grid-template-columns:1fr 72px 1fr;gap:12px;align-items:start}.side{display:grid;gap:10px}.aisle{min-height:100%;border-radius:20px;border:1px dashed rgba(255,255,255,.08);background:linear-gradient(180deg, rgba(255,255,255,.03), rgba(255,255,255,.01));display:flex;align-items:center;justify-content:center;color:var(--muted);font-size:12px;letter-spacing:.18em;text-transform:uppercase;writing-mode:vertical-rl;transform:rotate(180deg);padding:14px 0}@media (max-width:900px){.hall{grid-template-columns:1fr}.aisle{writing-mode:initial;transform:none;min-height:auto;padding:10px;letter-spacing:.12em}}
+    .pc{position:relative;padding:14px;border-radius:20px;border:1px solid var(--line);background:linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,.03));overflow:hidden;cursor:pointer;transition:.18s ease}.pc:hover{transform:translateY(-2px)}.pc.active{border-color:rgba(110,231,255,.55);box-shadow:0 0 0 3px rgba(110,231,255,.08)}.pc.marked{box-shadow:0 0 0 3px rgba(167,139,250,.13), inset 0 0 0 1px rgba(167,139,250,.28)}.pc.free{box-shadow:inset 0 0 0 1px rgba(52,211,153,.14)}.pc.soon{box-shadow:inset 0 0 0 1px rgba(251,191,36,.14)}.pc.busy{box-shadow:inset 0 0 0 1px rgba(251,113,133,.14)}
+    .pc::before{content:"";position:absolute;inset:-20% auto auto -10%;width:160px;height:110px;border-radius:999px;filter:blur(18px);opacity:.3}.pc.free::before{background:rgba(52,211,153,.25)}.pc.soon::before{background:rgba(251,191,36,.22)}.pc.busy::before{background:rgba(251,113,133,.22)}
+    .pcTop{display:flex;justify-content:space-between;gap:10px;align-items:start}.pcName{font-size:17px;font-weight:1000}.statusTag{font-size:11px;font-weight:900;padding:7px 9px;border-radius:999px;border:1px solid var(--line);white-space:nowrap}.statusTag.free{color:var(--free);background:rgba(52,211,153,.09);border-color:rgba(52,211,153,.25)}.statusTag.soon{color:var(--soon);background:rgba(251,191,36,.09);border-color:rgba(251,191,36,.25)}.statusTag.busy{color:var(--busy);background:rgba(251,113,133,.09);border-color:rgba(251,113,133,.25)}
+    .pcMeta{margin-top:10px;display:grid;gap:6px;font-size:13px;color:var(--muted)}.pcMeta b{color:var(--text)}.progress{height:8px;border-radius:999px;background:rgba(255,255,255,.06);overflow:hidden;margin-top:6px}.bar{height:100%;background:linear-gradient(90deg, rgba(251,113,133,.8), rgba(251,191,36,.8));width:0%}.pcBottom{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-top:12px}.mini{padding:8px 10px;border-radius:12px;font-size:12px}.mini.primary{background:linear-gradient(180deg, rgba(110,231,255,.18), rgba(167,139,250,.10));border-color:rgba(110,231,255,.42)}.mini.soft{background:rgba(167,139,250,.10);border-color:rgba(167,139,250,.22)}
+    .rightCol{display:grid;gap:14px}
+    .bigStatus{padding:14px;border-radius:18px;border:1px solid var(--line);background:rgba(255,255,255,.03)}.bigStatus h3{margin:0 0 6px;font-size:20px}.chipRow{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}.chip{padding:7px 10px;border-radius:999px;border:1px solid var(--line);background:rgba(255,255,255,.04);font-size:12px;color:var(--muted)}.chip b{color:var(--text)}
+    .quickList{display:grid;gap:10px}.quickItem{border:1px solid var(--line);border-radius:18px;padding:12px;background:rgba(255,255,255,.03);display:flex;justify-content:space-between;gap:10px;align-items:center}.quickItem small{display:block;color:var(--muted);margin-top:3px}
+    .formRow{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px}@media (max-width:520px){.formRow{grid-template-columns:1fr}} label{display:block;font-size:12px;color:var(--muted);margin:0 0 6px} input,select{width:100%;padding:11px 12px;border-radius:14px;border:1px solid var(--line);background:rgba(0,0,0,.22);color:var(--text);outline:none} input:focus,select:focus{border-color:rgba(110,231,255,.5);box-shadow:0 0 0 3px rgba(110,231,255,.1)}
+    .list{display:grid;gap:10px}.item{padding:12px;border-radius:18px;border:1px solid var(--line);background:rgba(255,255,255,.03);display:flex;justify-content:space-between;gap:12px;align-items:center}.item .meta{font-size:12px;color:var(--muted);margin-top:4px}.small{font-size:12px}.muted{color:var(--muted)}
+    .backdrop{position:fixed;inset:0;background:rgba(0,0,0,.6);display:none;align-items:center;justify-content:center;padding:16px;z-index:80}.backdrop.show{display:flex}.modal{width:min(560px,100%);border-radius:24px}.modalHead{padding:16px 18px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;gap:10px}.modalBody{padding:18px}.auth{display:grid;gap:10px}
+    .mobileBar{display:none}@media (max-width:700px){.wrap{padding:10px}header{position:static;padding:12px}.panelHead,.panelBody{padding:12px}.pc{padding:12px}.pcName{font-size:15px}.mobileBar{display:flex;position:sticky;bottom:8px;z-index:35;padding:8px;gap:8px;border-radius:18px;margin-top:12px}.mobileBar .btn{flex:1;padding:12px 10px}}
   </style>
 </head>
 <body>
   <div class="wrap">
     <header class="glass">
-      <div class="brand">
-        <div class="logo"></div>
-        <div>
-          <h1 id="t_title"></h1>
-          <div class="sub" id="t_sub"></div>
-        </div>
-      </div>
+      <div class="brand"><div class="logo"></div><div><h1 id="t_title"></h1><div class="sub" id="t_sub"></div></div></div>
       <div class="topbar">
         <div class="lang"><button id="lang_ru">RU</button><button id="lang_en">EN</button><button id="lang_ka">KA</button></div>
         <div class="pill"><span id="t_user"></span>: <b id="userPill">—</b></div>
@@ -193,952 +67,304 @@
 
     <div class="layout">
       <section class="panel glass">
-        <div class="panelHead">
-          <div>
-            <div class="panelTitle" id="t_livehall"></div>
-            <div class="small muted" id="t_livehint"></div>
-          </div>
-          <div class="actions" style="margin:0">
-            <button class="btn ghost" id="filterAll"></button>
-            <button class="btn ghost" id="filterFree"></button>
-            <button class="btn ghost" id="filterSoon"></button>
-          </div>
-        </div>
+        <div class="panelHead"><div><div class="panelTitle" id="t_livehall"></div><div class="small muted" id="t_livehint"></div></div><div class="actions" style="margin:0"><button class="btn ghost" id="filterAll"></button><button class="btn ghost" id="filterFree"></button><button class="btn ghost" id="filterSoon"></button></div></div>
         <div class="panelBody">
           <div id="toast" class="toast hidden"></div>
           <div class="notice" id="topNotice"></div>
-
-          <div class="topStats">
+          <div class="stats">
             <div class="stat"><span id="t_statAll"></span><b id="statAll">10</b></div>
             <div class="stat"><span id="t_statFree"></span><b id="statFree">0</b></div>
             <div class="stat"><span id="t_statBusy"></span><b id="statBusy">0</b></div>
             <div class="stat"><span id="t_statSelected"></span><b id="statSelected">0</b></div>
           </div>
-
           <div class="actions">
             <button class="btn primary" id="findNowBtn"></button>
             <button class="btn ghost" id="toggleMultiBtn"></button>
             <button class="btn ghost" id="clearSelectedBtn"></button>
             <button class="btn ghost" id="openMyBtn"></button>
-            <button class="btn ghost" id="openAdminBtn">Admin</button>
+            <button class="btn ghost" id="openAdminBtn"></button>
             <button class="btn ghost" id="openAuthBtn"></button>
             <button class="btn ghost hidden" id="logoutBtn"></button>
           </div>
-
-          <div class="hall">
-            <div class="side" id="leftSide"></div>
-            <div class="aisle" id="t_aisle"></div>
-            <div class="side" id="rightSide"></div>
-          </div>
-
-          <div class="mobileBar glass">
-            <button class="btn ghost" id="mobileMyBtn"></button>
-            <button class="btn primary" id="mobileBookBtn"></button>
-          </div>
+          <div class="hall"><div class="side" id="leftSide"></div><div class="aisle" id="t_aisle"></div><div class="side" id="rightSide"></div></div>
+          <div class="mobileBar glass"><button class="btn ghost" id="mobileMyBtn"></button><button class="btn primary" id="mobileBookBtn"></button></div>
         </div>
       </section>
 
-      <aside class="sideCard panel glass">
-        <div class="panelHead">
-          <div>
-            <div class="panelTitle" id="t_sidepanel"></div>
-            <div class="small muted" id="t_sidehint"></div>
+      <section class="rightCol">
+        <div class="panel glass">
+          <div class="panelHead"><div class="panelTitle" id="t_bookingPanel"></div></div>
+          <div class="panelBody">
+            <div class="bigStatus"><h3 id="selectedName">—</h3><div class="muted" id="selectedStatus"></div><div class="chipRow" id="selectedChips"></div></div>
+            <div id="selectedActions" class="hidden"><div class="quickList" id="quickActions"></div></div>
+            <div id="customSection" style="margin-top:16px">
+              <div class="panelTitle" id="t_customtitle"></div>
+              <div class="small muted" id="t_customhint" style="margin-top:6px"></div>
+              <div class="formRow"><div><label id="t_date"></label><input type="date" id="customDate" /></div><div><label id="t_duration"></label><select id="customDuration"><option value="60">1h</option><option value="120">2h</option><option value="180">3h</option><option value="240">4h</option></select></div></div>
+              <div class="formRow"><div><label id="t_time"></label><select id="customTime"></select></div><div><label id="t_nick"></label><input id="nickInput" placeholder="KiraLite" /></div></div>
+              <div class="formRow"><div style="grid-column:1/-1"><label id="t_note"></label><input id="noteInput" placeholder="CS2 / Duo / Team" /></div></div>
+              <div class="actions"><button class="btn primary" id="bookCustomBtn"></button><button class="btn ghost" id="clearPanelsBtn"></button></div>
+            </div>
           </div>
         </div>
-        <div class="panelBody">
-          <div class="bigStatus">
-            <h3 id="selectedName">—</h3>
-            <div class="muted" id="selectedStatus"></div>
-            <div class="chipRow" id="selectedChips"></div>
-          </div>
 
-          <div id="selectedActions" class="hidden">
-            <div class="quickList" id="quickActions"></div>
-          </div>
-
-          <div id="customSection" class="hidden" style="margin-top:16px">
-            <div class="panelTitle" id="t_customtitle" style="margin-bottom:8px"></div>
-            <div class="small muted" id="t_customhint"></div>
-            <div class="formRow">
-              <div>
-                <label id="t_date"></label>
-                <input type="date" id="customDate" />
-              </div>
-              <div>
-                <label id="t_duration"></label>
-                <select id="customDuration">
-                  <option value="60">1h</option>
-                  <option value="120">2h</option>
-                  <option value="180">3h</option>
-                  <option value="240">4h</option>
-                </select>
-              </div>
-            </div>
-            <div class="formRow">
-              <div>
-                <label id="t_time"></label>
-                <select id="customTime"></select>
-              </div>
-              <div>
-                <label id="t_nick"></label>
-                <input id="nickInput" placeholder="KiraLite" />
-              </div>
-            </div>
-            <div class="formRow">
-              <div style="grid-column:1/-1">
-                <label id="t_note"></label>
-                <input id="noteInput" placeholder="CS2 / Duo / Team" />
-              </div>
-            </div>
-            <div class="actions">
-              <button class="btn primary" id="bookCustomBtn"></button>
-              <button class="btn ghost" id="hideCustomBtn"></button>
-            </div>
-          </div>
-
-          <div id="mySection" class="hidden" style="margin-top:16px">
-            <div class="panelTitle" id="t_mybookings"></div>
-            <div class="myBookings" id="myBookings"></div>
-          </div>
-
-          <div id="adminSection" class="hidden" style="margin-top:16px">
-            <div class="panelTitle" id="t_adminbookings">Admin</div>
-            <div class="small muted" style="margin-top:6px">Все активные брони</div>
-            <div class="myBookings" id="adminBookings"></div>
-          </div>
+        <div class="panel glass" id="myPanel">
+          <div class="panelHead"><div class="panelTitle" id="t_mybookings"></div></div>
+          <div class="panelBody"><div class="list" id="myBookings"></div></div>
         </div>
-      </aside>
+
+        <div class="panel glass" id="adminPanel">
+          <div class="panelHead"><div><div class="panelTitle" id="t_adminbookings"></div><div class="small muted" id="t_adminhint"></div></div></div>
+          <div class="panelBody"><div class="list" id="adminBookings"></div></div>
+        </div>
+      </section>
     </div>
   </div>
 
-  <div class="backdrop" id="authBackdrop">
-    <div class="modal glass">
-      <div class="modalHead">
-        <div>
-          <div class="panelTitle" id="t_auth"></div>
-          <div class="small muted" id="t_authhint"></div>
-        </div>
-        <button class="btn ghost" id="closeAuthBtn">✕</button>
-      </div>
-      <div class="modalBody auth">
-        <div>
-          <label>Email</label>
-          <input type="email" id="authEmail" placeholder="email@example.com" />
-        </div>
-        <div>
-          <label id="t_password"></label>
-          <input type="password" id="authPass" placeholder="******" />
-        </div>
-        <div class="actions">
-          <button class="btn primary" id="loginBtn"></button>
-          <button class="btn ghost" id="registerBtn"></button>
-          <button class="btn ghost" id="resetBtn"></button>
-        </div>
-        <div class="notice" id="authMsg">—</div>
-      </div>
-    </div>
-  </div>
-
-  <div class="backdrop" id="confirmBackdrop">
-    <div class="modal glass">
-      <div class="modalHead">
-        <div>
-          <div class="panelTitle" id="t_confirmtitle"></div>
-          <div class="small muted" id="t_confirmhint"></div>
-        </div>
-        <button class="btn ghost" id="closeConfirmBtn">✕</button>
-      </div>
-      <div class="modalBody">
-        <div class="notice" id="confirmInfo"></div>
-        <div class="actions">
-          <button class="btn primary" id="confirmBookBtn"></button>
-          <button class="btn ghost" id="cancelConfirmBtn"></button>
-        </div>
-      </div>
-    </div>
-  </div>
+  <div class="backdrop" id="authBackdrop"><div class="modal glass"><div class="modalHead"><div><div class="panelTitle" id="t_auth"></div><div class="small muted" id="t_authhint"></div></div><button class="btn ghost" id="closeAuthBtn">✕</button></div><div class="modalBody auth"><div><label>Email</label><input type="email" id="authEmail" placeholder="email@example.com" /></div><div><label id="t_password"></label><input type="password" id="authPass" placeholder="******" /></div><div class="actions"><button class="btn primary" id="loginBtn"></button><button class="btn ghost" id="registerBtn"></button><button class="btn ghost" id="resetBtn"></button></div><div class="notice" id="authMsg">—</div></div></div></div>
+  <div class="backdrop" id="confirmBackdrop"><div class="modal glass"><div class="modalHead"><div><div class="panelTitle" id="t_confirmtitle"></div><div class="small muted" id="t_confirmhint"></div></div><button class="btn ghost" id="closeConfirmBtn">✕</button></div><div class="modalBody"><div class="notice" id="confirmInfo"></div><div class="actions"><button class="btn primary" id="confirmBookBtn"></button><button class="btn ghost" id="cancelConfirmBtn"></button></div></div></div></div>
 
 <script>
 (() => {
-  const firebaseConfig = {
-    apiKey: "AIzaSyDJ-5e_xLPW9PnYT66ENey_Ndh8HJdI5wc",
-    authDomain: "sakompiutere-gaming.firebaseapp.com",
-    projectId: "sakompiutere-gaming",
-    storageBucket: "sakompiutere-gaming.firebasestorage.app",
-    messagingSenderId: "508996154674",
-    appId: "1:508996154674:web:0b6e475d284c49ba80d32b",
-    measurementId: "G-H2HKS025KH"
+  const firebaseConfig = { apiKey:"AIzaSyDJ-5e_xLPW9PnYT66ENey_Ndh8HJdI5wc", authDomain:"sakompiutere-gaming.firebaseapp.com", projectId:"sakompiutere-gaming", storageBucket:"sakompiutere-gaming.firebasestorage.app", messagingSenderId:"508996154674", appId:"1:508996154674:web:0b6e475d284c49ba80d32b", measurementId:"G-H2HKS025KH" };
+  const LEFT=["Bishop","Godzilla","Elf","Kadita","Orc"], RIGHT=["Lancelot","Fantomas","Soultaker","Pudge","Kratos"], ALL=[...LEFT,...RIGHT], ADMIN_EMAILS=['adjarelispeak@gmail.com','kiralite93@gmail.com'].map(x=>x.toLowerCase());
+  const WORK_START=10*60, WORK_END_NEXTDAY=3*60, SLOT_STEP=30, SOON_MIN=30, LANG_KEY='sg_live_lang', NICK_KEY='sg_live_nick';
+  const $=id=>document.getElementById(id), pad=n=>String(n).padStart(2,'0'), fmtHM=d=>`${pad(d.getHours())}:${pad(d.getMinutes())}`, toISODate=d=>`${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`, addMinutes=(d,m)=>new Date(d.getTime()+m*60000), addDays=(d,x)=>new Date(d.getTime()+x*86400000), overlaps=(a1,a2,b1,b2)=>Math.max(a1,b1)<Math.min(a2,b2), esc=s=>String(s??'').replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;').replaceAll('"','&quot;').replaceAll("'",'&#039;');
+  let lang=localStorage.getItem(LANG_KEY)||'ru';
+  const T={
+    ru:{title:'Sakompiutere Gaming — Booking',sub:'Можно выбирать несколько ПК, видеть свои брони и управлять ими.',user:'Пользователь',cloud:'База',livehall:'Live Hall',livehint:'Статусы ПК в реальном времени.',all:'Все',free:'Свободные',soon:'Скоро свободны',topNotice:'Выбирай один или несколько ПК, затем заверши бронь справа. После создания бронь сразу появится в блоке “Мои брони”.',statAll:'Всего ПК',statFree:'Свободно',statBusy:'Занято',statSelected:'Выбрано',findNow:'⚡ Найти свободные',multiOff:'👥 Мультивыбор: OFF',multiOn:'👥 Мультивыбор: ON',clearSelected:'Сбросить',my:'👤 Мои брони',admin:'🔐 Admin',auth:'🔑 Войти',logout:'🚪 Выйти',aisle:'ПРОХОД',bookingPanel:'Завершение брони',singleHint:'Выбери ПК и заверши бронь справа.',multiHint:'Мультивыбор включён. Отмечай ПК для групповой брони.',selectedNone:'Выбери хотя бы один ПК.',selectedOne:'Выбран 1 ПК',selectedMany:'Выбрано ПК',customtitle:'Параметры брони',customhint:'Дата, время и длительность применяются ко всем выбранным ПК.',date:'Дата',duration:'Длительность',time:'Время',nick:'Ник',note:'Комментарий',bookCustom:'Завершить бронирование',clearPanels:'Скрыть формы',mybookings:'Мои брони',adminBookings:'Admin панель',adminHint:'Все активные брони. Можно удалять.',authTitle:'Вход / Регистрация',authHint:'Email + пароль',password:'Пароль',login:'Войти',register:'Регистрация',reset:'Сбросить пароль',confirmtitle:'Подтверждение',confirmhint:'Проверь детали перед записью',confirm:'Подтвердить',cancel:'Отмена',freeTag:'🟢 Свободен',soonTag:'🟡 Скоро свободен',busyTag:'🔴 Занят',freeNow:'Свободен прямо сейчас',playing:'Сейчас играет',freeAt:'Свободен в',endsIn:'Через',play1:'Играть сейчас • 1 час',play2:'Играть сейчас • 2 часа',play3:'Играть сейчас • 3 часа',group2:'Группой • 2 часа',group3:'Группой • 3 часа',bookAt:'Забронировать ближайшее',queue:'В очередь',exact:'Выбрать вручную',loginNeeded:'Сначала войди в аккаунт.',enterNick:'Введи ник.',pickTime:'Выбери время.',booked:'✅ Бронь создана!',canceled:'Отменено.',noFree:'Сейчас нет свободных ПК.',authOk:'✅ Вход выполнен: ',authNeed:'Нужно войти, чтобы бронировать.',loginErr:'Введите email и пароль.',resetSent:'Письмо для сброса отправлено ✅',fsErr:'Ошибка Firestore. Проверь Rules или блокировщик.',rules:'Firestore Rules не позволяют запись.',blocked:'Браузер или расширение блокирует Firebase.',statusOk:'OK',statusLive:'LIVE',statusErr:'ERR',minutes:'мин',starts:'Начало',ends:'Конец',pc:'ПК',pcs:'ПК',remove:'Удалить',empty:'Пока ничего нет',taken:'Этот слот уже занят. Выбери другой.',queueHint:'Сейчас эта кнопка ставит на ближайшее свободное время.',busyUntil:'Занят до',guest:'Гость',adminDenied:'Ты не админ.',mobileMy:'Мои',mobileBook:'Бронировать'},
+    en:{title:'Sakompiutere Gaming — Booking',sub:'You can select multiple PCs, see your bookings and manage them.',user:'User',cloud:'Database',livehall:'Live Hall',livehint:'PC status in realtime.',all:'All',free:'Free',soon:'Soon free',topNotice:'Choose one or multiple PCs, then finish booking on the right. After creation it appears in “My bookings”.',statAll:'Total PCs',statFree:'Free',statBusy:'Busy',statSelected:'Selected',findNow:'⚡ Find free',multiOff:'👥 Multi-select: OFF',multiOn:'👥 Multi-select: ON',clearSelected:'Clear',my:'👤 My bookings',admin:'🔐 Admin',auth:'🔑 Login',logout:'🚪 Logout',aisle:'AISLE',bookingPanel:'Finish booking',singleHint:'Choose a PC and finish booking on the right.',multiHint:'Multi-select is on. Mark PCs for group booking.',selectedNone:'Choose at least one PC.',selectedOne:'1 PC selected',selectedMany:'PCs selected',customtitle:'Booking parameters',customhint:'Date, time and duration apply to all selected PCs.',date:'Date',duration:'Duration',time:'Time',nick:'Nick',note:'Note',bookCustom:'Finish booking',clearPanels:'Hide forms',mybookings:'My bookings',adminBookings:'Admin panel',adminHint:'All active bookings. Can delete.',authTitle:'Login / Register',authHint:'Email + password',password:'Password',login:'Login',register:'Register',reset:'Reset password',confirmtitle:'Confirmation',confirmhint:'Check details before saving',confirm:'Confirm',cancel:'Cancel',freeTag:'🟢 Free',soonTag:'🟡 Soon free',busyTag:'🔴 Busy',freeNow:'Free right now',playing:'Now playing',freeAt:'Free at',endsIn:'In',play1:'Play now • 1 hour',play2:'Play now • 2 hours',play3:'Play now • 3 hours',group2:'Group • 2 hours',group3:'Group • 3 hours',bookAt:'Book nearest free time',queue:'Queue',exact:'Choose manually',loginNeeded:'Please login first.',enterNick:'Enter your nickname.',pickTime:'Pick a time.',booked:'✅ Booking created!',canceled:'Canceled.',noFree:'No free PCs right now.',authOk:'✅ Logged in: ',authNeed:'Login is required for booking.',loginErr:'Enter email and password.',resetSent:'Password reset email sent ✅',fsErr:'Firestore error. Check Rules or ad blocker.',rules:'Firestore Rules do not allow this write.',blocked:'Browser or extension blocks Firebase.',statusOk:'OK',statusLive:'LIVE',statusErr:'ERR',minutes:'min',starts:'Start',ends:'End',pc:'PC',pcs:'PCs',remove:'Delete',empty:'Nothing yet',taken:'This slot is already taken. Pick another one.',queueHint:'This button books nearest free time.',busyUntil:'Busy until',guest:'Guest',adminDenied:'You are not admin.',mobileMy:'Mine',mobileBook:'Book'},
+    ka:{title:'Sakompiutere Gaming — Booking',sub:'შეგიძლია რამდენიმე PC აირჩიო, ნახო შენი ჯავშნები და მართო ისინი.',user:'მომხმარებელი',cloud:'ბაზა',livehall:'Live Hall',livehint:'PC სტატუსები რეალურ დროში.',all:'ყველა',free:'თავისუფალი',soon:'მალე თავისუფალი',topNotice:'აირჩიე ერთი ან რამდენიმე PC და დაასრულე ჯავშანი მარჯვნივ. შექმნის შემდეგ ის მაშინვე გამოჩნდება “ჩემი ჯავშნები”-ში.',statAll:'სულ PC',statFree:'თავისუფალი',statBusy:'დაკავებული',statSelected:'არჩეული',findNow:'⚡ იპოვე თავისუფალი',multiOff:'👥 Multi-select: OFF',multiOn:'👥 Multi-select: ON',clearSelected:'გასუფთავება',my:'👤 ჩემი ჯავშნები',admin:'🔐 Admin',auth:'🔑 შესვლა',logout:'🚪 გასვლა',aisle:'გასასვლელი',bookingPanel:'ჯავშნის დასრულება',singleHint:'აირჩიე PC და დაასრულე ჯავშანი მარჯვნივ.',multiHint:'Multi-select ჩართულია. მონიშნე PC-ები ჯგუფური ჯავშნისთვის.',selectedNone:'აირჩიე მინიმუმ ერთი PC.',selectedOne:'არჩეულია 1 PC',selectedMany:'არჩეულია PC',customtitle:'ჯავშნის პარამეტრები',customhint:'თარიღი, დრო და ხანგრძლივობა ყველა არჩეულ PC-ზე გავრცელდება.',date:'თარიღი',duration:'ხანგრძლივობა',time:'დრო',nick:'ნიკი',note:'შენიშვნა',bookCustom:'ჯავშნის დასრულება',clearPanels:'ფორმების დამალვა',mybookings:'ჩემი ჯავშნები',adminBookings:'Admin პანელი',adminHint:'ყველა აქტიური ჯავშანი. შესაძლებელია წაშლა.',authTitle:'შესვლა / რეგისტრაცია',authHint:'Email + პაროლი',password:'პაროლი',login:'შესვლა',register:'რეგისტრაცია',reset:'პაროლის აღდგენა',confirmtitle:'დადასტურება',confirmhint:'შეამოწმე დეტალები',confirm:'დადასტურება',cancel:'გაუქმება',freeTag:'🟢 თავისუფალია',soonTag:'🟡 მალე გათავისუფლდება',busyTag:'🔴 დაკავებულია',freeNow:'ახლავე თავისუფალია',playing:'ახლა თამაშობს',freeAt:'თავისუფალი იქნება',endsIn:'მიერ',play1:'ითამაშე ახლა • 1 საათი',play2:'ითამაშე ახლა • 2 საათი',play3:'ითამაშე ახლა • 3 საათი',group2:'ჯგუფურად • 2 საათი',group3:'ჯგუფურად • 3 საათი',bookAt:'უახლოეს დროზე დაჯავშნა',queue:'რიგში ჩადგომა',exact:'ხელით არჩევა',loginNeeded:'ჯერ შედი ანგარიშში.',enterNick:'შეიყვანე ნიკი.',pickTime:'აირჩიე დრო.',booked:'✅ ჯავშანი შეიქმნა!',canceled:'გაუქმდა.',noFree:'ახლა თავისუფალი PC არ არის.',authOk:'✅ შესულია: ',authNeed:'ჯავშნისთვის საჭიროა შესვლა.',loginErr:'შეიყვანე email და პაროლი.',resetSent:'აღდგენის წერილი გაიგზავნა ✅',fsErr:'Firestore შეცდომა. შეამოწმე Rules ან ad blocker.',rules:'Firestore Rules არ უშვებს ჩანაწერს.',blocked:'ბრაუზერი ან გაფართოება ბლოკავს Firebase-ს.',statusOk:'OK',statusLive:'LIVE',statusErr:'ERR',minutes:'წთ',starts:'დასაწყისი',ends:'დასასრული',pc:'PC',pcs:'PC-ები',remove:'წაშლა',empty:'ჯერ არაფერია',taken:'ეს დრო უკვე დაკავებულია. აირჩიე სხვა.',queueHint:'ეს ღილაკი უახლოეს თავისუფალ დროს აჯავშნებს.',busyUntil:'დაკავებულია',guest:'სტუმარი',adminDenied:'ადმინი არ ხარ.',mobileMy:'ჩემი',mobileBook:'დაჯავშნა'}
   };
+  const tr=k=>(T[lang]&&T[lang][k])||T.ru[k]||k;
+  let app,auth,db,currentUser=null,isAdmin=false,allBookings=[],selectedPc=null,selectedPCs=new Set(),multiMode=false,currentFilter='all',pendingBooking=null,unsub=null,timer=null;
+  try{app=firebase.initializeApp(firebaseConfig);auth=firebase.auth();db=firebase.firestore();}catch(e){console.error(e)}
+  const toast=(msg,type='')=>{const el=$('toast');el.textContent=msg;el.className='toast '+type;el.classList.remove('hidden');clearTimeout(el._t);el._t=setTimeout(()=>el.classList.add('hidden'),3200)};
+  const setCloud=(text,ok=true)=>{$('cloudPill').textContent=text;$('cloudDot').className='dot '+(ok?'ok':'err')};
+  const dayBoundsNow=()=>{const now=new Date(), s=new Date(now.getFullYear(),now.getMonth(),now.getDate(),0,0,0,0), e=addDays(s,2); return {start:s.getTime(), end:e.getTime()};};
+  function setLangUI(){ document.title=tr('title'); $('t_title').textContent=tr('title'); $('t_sub').textContent=tr('sub'); $('t_user').textContent=tr('user'); $('t_cloud').textContent=tr('cloud'); $('t_livehall').textContent=tr('livehall'); $('t_livehint').textContent=tr('livehint'); $('filterAll').textContent=tr('all'); $('filterFree').textContent=tr('free'); $('filterSoon').textContent=tr('soon'); $('topNotice').textContent=tr('topNotice'); $('t_statAll').textContent=tr('statAll'); $('t_statFree').textContent=tr('statFree'); $('t_statBusy').textContent=tr('statBusy'); $('t_statSelected').textContent=tr('statSelected'); $('findNowBtn').textContent=tr('findNow'); $('toggleMultiBtn').textContent=multiMode?tr('multiOn'):tr('multiOff'); $('clearSelectedBtn').textContent=tr('clearSelected'); $('openMyBtn').textContent=tr('my'); $('openAdminBtn').textContent=tr('admin'); $('openAuthBtn').textContent=tr('auth'); $('logoutBtn').textContent=tr('logout'); $('t_aisle').textContent=tr('aisle'); $('t_bookingPanel').textContent=tr('bookingPanel'); $('t_customtitle').textContent=tr('customtitle'); $('t_customhint').textContent=tr('customhint'); $('t_date').textContent=tr('date'); $('t_duration').textContent=tr('duration'); $('t_time').textContent=tr('time'); $('t_nick').textContent=tr('nick'); $('t_note').textContent=tr('note'); $('bookCustomBtn').textContent=tr('bookCustom'); $('clearPanelsBtn').textContent=tr('clearPanels'); $('t_mybookings').textContent=tr('mybookings'); $('t_adminbookings').textContent=tr('adminBookings'); $('t_adminhint').textContent=tr('adminHint'); $('t_auth').textContent=tr('authTitle'); $('t_authhint').textContent=tr('authHint'); $('t_password').textContent=tr('password'); $('loginBtn').textContent=tr('login'); $('registerBtn').textContent=tr('register'); $('resetBtn').textContent=tr('reset'); $('t_confirmtitle').textContent=tr('confirmtitle'); $('t_confirmhint').textContent=tr('confirmhint'); $('confirmBookBtn').textContent=tr('confirm'); $('cancelConfirmBtn').textContent=tr('cancel'); $('mobileMyBtn').textContent=tr('mobileMy'); $('mobileBookBtn').textContent=tr('mobileBook'); $('lang_ru').classList.toggle('active',lang==='ru'); $('lang_en').classList.toggle('active',lang==='en'); $('lang_ka').classList.toggle('active',lang==='ka'); renderStats(); renderHall(); renderSelected(); renderMyBookings(); renderAdminBookings(); }
+  function handleFsError(err){ console.error(err); const msg=String(err?.message||err?.code||err||'').toLowerCase(); if(msg.includes('permission')) toast(tr('rules'),'bad'); else if(msg.includes('fetch')||msg.includes('network')||msg.includes('blocked')) toast(tr('blocked'),'bad'); else toast(tr('fsErr'),'bad'); setCloud(tr('statusErr'),false); }
+  function progressFor(b){ const now=Date.now(); if(!b||!b.startAtMs||!b.endAtMs) return 0; if(now<=b.startAtMs) return 0; if(now>=b.endAtMs) return 100; return Math.max(0,Math.min(100,((now-b.startAtMs)/(b.endAtMs-b.startAtMs))*100)); }
+  function getPcBookings(pc){ return allBookings.filter(b=>b.pc===pc).sort((a,b)=>a.startAtMs-b.startAtMs); }
+  function getPcStatus(pc){ const now=Date.now(); const future=getPcBookings(pc).filter(b=>b.endAtMs>now); const active=future.find(b=>b.startAtMs<=now&&b.endAtMs>now); if(active){ const mins=Math.max(1,Math.ceil((active.endAtMs-now)/60000)); return {state: mins<=SOON_MIN?'soon':'busy', active, freeAtMs:active.endAtMs, minsToFree:mins}; } const next=future.find(b=>b.startAtMs>now); if(next&&next.startAtMs-now<=SOON_MIN*60000){ return {state:'soon', active:null, freeAtMs:next.startAtMs, minsToFree:Math.max(1,Math.ceil((next.startAtMs-now)/60000))}; } return {state:'free', active:null, freeAtMs:now, minsToFree:0}; }
+  const statusLabel=s=>s.state==='free'?tr('freeTag'):s.state==='soon'?tr('soonTag'):tr('busyTag');
+  const minsText=m=>`${m} ${tr('minutes')}`;
+  function updateSelection(pc){ if(multiMode){ if(selectedPCs.has(pc)) selectedPCs.delete(pc); else if(selectedPCs.size<10) selectedPCs.add(pc); selectedPc=selectedPCs.size?[...selectedPCs][0]:null; } else { selectedPc=pc; selectedPCs=new Set([pc]); } renderStats(); renderHall(); renderSelected(); buildCustomTimes(); }
+  function renderCard(pc){ const s=getPcStatus(pc); if(currentFilter==='free'&&s.state!=='free') return null; if(currentFilter==='soon'&&s.state==='free') return null; const marked=selectedPCs.has(pc); const el=document.createElement('div'); el.className=`pc ${s.state} ${selectedPc===pc?'active':''} ${marked?'marked':''}`; let meta=s.state==='free'?`<div>${tr('freeNow')}</div>`:s.active?`<div>${tr('playing')}: <b>${esc(s.active.nick||tr('guest'))}</b></div><div>${tr('freeAt')}: <b>${fmtHM(new Date(s.freeAtMs))}</b></div><div>${tr('endsIn')}: <b>${minsText(s.minsToFree)}</b></div><div class="progress"><div class="bar" style="width:${progressFor(s.active)}%"></div></div>`:`<div>${tr('freeAt')}: <b>${fmtHM(new Date(s.freeAtMs))}</b></div><div>${tr('endsIn')}: <b>${minsText(s.minsToFree)}</b></div>`;
+    el.innerHTML=`<div class="pcTop"><div class="pcName">${esc(pc)}</div><div class="statusTag ${s.state}">${esc(statusLabel(s))}</div></div><div class="pcMeta">${meta}</div><div class="pcBottom"><button class="mini ${marked?'soft':''}" data-a="pick">${marked?'✓':'+'}</button><button class="mini ${s.state==='free'?'primary':''}" data-a="quick">${multiMode?'👥':'→'}</button></div>`;
+    el.addEventListener('click',e=>{ if(e.target.closest('button')) return; updateSelection(pc); });
+    setTimeout(()=>{ const pick=el.querySelector('[data-a="pick"]'); const quick=el.querySelector('[data-a="quick"]'); if(pick) pick.onclick=e=>{e.stopPropagation(); updateSelection(pc)}; if(quick) quick.onclick=e=>{e.stopPropagation(); updateSelection(pc); if(multiMode){ showCustom(); } else { if(s.state==='free') openQuickConfirm([pc], new Date(), 60); else openNearestConfirm([pc]); } }; },0);
+    return el; }
+  function renderHall(){ $('leftSide').innerHTML=''; $('rightSide').innerHTML=''; LEFT.forEach(pc=>{const c=renderCard(pc); if(c) $('leftSide').appendChild(c)}); RIGHT.forEach(pc=>{const c=renderCard(pc); if(c) $('rightSide').appendChild(c)}); }
+  function renderStats(){ const freeCount=ALL.filter(pc=>getPcStatus(pc).state==='free').length; $('statAll').textContent=String(ALL.length); $('statFree').textContent=String(freeCount); $('statBusy').textContent=String(ALL.length-freeCount); $('statSelected').textContent=String(selectedPCs.size); }
+  function renderSelected(){ $('selectedChips').innerHTML=''; if(!selectedPCs.size){ $('selectedName').textContent='—'; $('selectedStatus').textContent=multiMode?tr('multiHint'):tr('singleHint'); $('selectedActions').classList.add('hidden'); return; } const names=[...selectedPCs]; $('selectedName').textContent=names.length===1?names[0]:`${names.length} ${tr('pcs')}`; $('selectedStatus').textContent=names.length===1?tr('selectedOne'):`${tr('selectedMany')}: ${names.length}`; names.forEach(pc=>{ const chip=document.createElement('div'); chip.className='chip'; chip.innerHTML=`<b>${esc(pc)}</b>`; $('selectedChips').appendChild(chip); }); $('selectedActions').classList.remove('hidden'); const actions=[]; if(names.length===1&&!multiMode){ const s=getPcStatus(names[0]); if(s.state==='free'){ actions.push({label:tr('play1'), small:`${tr('starts')}: ${fmtHM(new Date())}`, fn:()=>openQuickConfirm(names,new Date(),60)}); actions.push({label:tr('play2'), small:`${tr('starts')}: ${fmtHM(new Date())}`, fn:()=>openQuickConfirm(names,new Date(),120)}); actions.push({label:tr('play3'), small:`${tr('starts')}: ${fmtHM(new Date())}`, fn:()=>openQuickConfirm(names,new Date(),180)}); } else { actions.push({label:tr('bookAt'), small:`${tr('starts')}: ${fmtHM(new Date(s.freeAtMs))}`, fn:()=>openNearestConfirm(names)}); actions.push({label:tr('queue'), small:tr('queueHint'), fn:()=>openNearestConfirm(names)}); } } else { actions.push({label:tr('group2'), small:names.join(', '), fn:()=>openQuickConfirm(names,new Date(),120)}); actions.push({label:tr('group3'), small:names.join(', '), fn:()=>openQuickConfirm(names,new Date(),180)}); }
+    actions.push({label:tr('exact'), small:tr('customhint'), fn:()=>showCustom()}); $('quickActions').innerHTML=''; actions.forEach((a,i)=>{ const div=document.createElement('div'); div.className='quickItem'; div.innerHTML=`<div><b>${esc(a.label)}</b><small>${esc(a.small)}</small></div><button class="mini ${i===0?'primary':''}">→</button>`; div.querySelector('button').onclick=a.fn; $('quickActions').appendChild(div); }); }
+  function clampToOpen(date){ const d=new Date(date); const base=new Date(d.getFullYear(),d.getMonth(),d.getDate(),0,0,0,0), open=addMinutes(base,WORK_START), close=addDays(base,1); close.setHours(Math.floor(WORK_END_NEXTDAY/60),WORK_END_NEXTDAY%60,0,0); if(d<open) return open; if(d>close) return null; return d; }
+  function roundUp(date){ const d=new Date(date); d.setSeconds(0,0); const m=d.getMinutes(); const extra=(SLOT_STEP-(m%SLOT_STEP))%SLOT_STEP; if(extra) d.setMinutes(m+extra); return d; }
+  const isFreeRangeForAll=(pcs,startMs,endMs)=>pcs.every(pc=>!getPcBookings(pc).some(b=>overlaps(startMs,endMs,b.startAtMs,b.endAtMs)));
+  function findNearestForAll(pcs,earliest,dur){ let cur=roundUp(clampToOpen(earliest)||earliest); const until=addDays(new Date(),5).getTime(); while(cur&&cur.getTime()<until){ const end=addMinutes(cur,dur), a=clampToOpen(cur), b=clampToOpen(end); if(a&&b&&isFreeRangeForAll(pcs,cur.getTime(),end.getTime())) return cur; cur=addMinutes(cur,SLOT_STEP); } return null; }
+  const openAuth=()=>$('authBackdrop').classList.add('show'), closeAuth=()=>$('authBackdrop').classList.remove('show'), openConfirm=()=>$('confirmBackdrop').classList.add('show'), closeConfirm=()=>$('confirmBackdrop').classList.remove('show');
+  function needLogin(){ openAuth(); $('authMsg').textContent=tr('loginNeeded'); }
+  function openQuickConfirm(pcs,start,dur){ if(!currentUser) return needLogin(); const nick=($('nickInput').value||'').trim()||localStorage.getItem(NICK_KEY)||''; if(!nick) return toast(tr('enterNick'),'warn'); const safe=findNearestForAll(pcs,start,dur); if(!safe) return toast(tr('taken'),'bad'); pendingBooking={pcs:[...pcs], startAtMs:safe.getTime(), endAtMs:addMinutes(safe,dur).getTime(), nick, note:($('noteInput').value||'').trim()}; fillConfirm(); openConfirm(); }
+  function openNearestConfirm(pcs){ if(!currentUser) return needLogin(); const nick=($('nickInput').value||'').trim()||localStorage.getItem(NICK_KEY)||''; if(!nick) return toast(tr('enterNick'),'warn'); const safe=findNearestForAll(pcs,new Date(),120); if(!safe) return toast(tr('taken'),'bad'); pendingBooking={pcs:[...pcs], startAtMs:safe.getTime(), endAtMs:addMinutes(safe,120).getTime(), nick, note:($('noteInput').value||'').trim()}; fillConfirm(); openConfirm(); }
+  function fillConfirm(){ if(!pendingBooking) return; const s=new Date(pendingBooking.startAtMs), e=new Date(pendingBooking.endAtMs); $('confirmInfo').innerHTML=`<b>${esc(tr('pcs'))}:</b> ${esc(pendingBooking.pcs.join(', '))}<br><b>${esc(tr('starts'))}:</b> ${esc(toISODate(s))} ${esc(fmtHM(s))}<br><b>${esc(tr('ends'))}:</b> ${esc(toISODate(e))} ${esc(fmtHM(e))}<br><b>${esc(tr('nick'))}:</b> ${esc(pendingBooking.nick)}${pendingBooking.note?`<br><b>${esc(tr('note'))}:</b> ${esc(pendingBooking.note)}`:''}`; }
+  function showCustom(){ if(!selectedPCs.size) return toast(tr('selectedNone'),'warn'); buildCustomTimes(); }
+  function buildCustomTimes(){ if(!selectedPCs.size) return; const pcs=[...selectedPCs], dateKey=$('customDate').value||toISODate(new Date()), dur=Number($('customDuration').value||60), sel=$('customTime'); sel.innerHTML=''; const [y,m,d]=dateKey.split('-').map(Number); const base=new Date(y,m-1,d,0,0,0,0), open=addMinutes(base,WORK_START), close=addDays(base,1); close.setHours(Math.floor(WORK_END_NEXTDAY/60),WORK_END_NEXTDAY%60,0,0); for(let cur=new Date(open); addMinutes(cur,dur)<=close; cur=addMinutes(cur,SLOT_STEP)){ const end=addMinutes(cur,dur); if(cur.getTime()<Date.now()) continue; if(!isFreeRangeForAll(pcs,cur.getTime(),end.getTime())) continue; const o=document.createElement('option'); o.value=String(cur.getTime()); o.textContent=`${fmtHM(cur)} → ${fmtHM(end)}`; sel.appendChild(o);} if(!sel.children.length){ const o=document.createElement('option'); o.value=''; o.textContent='—'; sel.appendChild(o);} }
+  async function createBooking(data){ if(!currentUser) return needLogin(); const pcs=[...new Set((data.pcs||[]).map(String))].slice(0,10), startAtMs=Number(data.startAtMs), endAtMs=Number(data.endAtMs), nick=String(data.nick||'').trim().slice(0,32), note=String(data.note||'').trim().slice(0,120); if(!pcs.length) return toast(tr('selectedNone'),'warn'); if(!nick) return toast(tr('enterNick'),'warn'); if(!isFreeRangeForAll(pcs,startAtMs,endAtMs)) return toast(tr('taken'),'bad'); try{ await db.collection('users').doc(String(currentUser.uid)).set({nick,updatedAtMs:Date.now()},{merge:true}); const batch=db.batch(); pcs.forEach(pc=>{ const ref=db.collection('bookings').doc(); batch.set(ref,{uid:String(currentUser.uid),userEmail:String(currentUser.email||''),nick,pc,note,startAtMs,endAtMs,createdAtMs:Date.now()}); }); await batch.commit(); localStorage.setItem(NICK_KEY,nick); $('nickInput').value=nick; toast(tr('booked'),'good'); closeConfirm(); pendingBooking=null; await renderMyBookings(); if(isAdmin) await renderAdminBookings(); $('myPanel').scrollIntoView({behavior:'smooth',block:'start'}); }catch(e){ handleFsError(e); } }
+  async function renderMyBookings(){ const box=$('myBookings'); box.innerHTML=''; if(!currentUser){ box.innerHTML=`<div class="notice">${esc(tr('authNeed'))}</div>`; return; } const mine=allBookings.filter(b=>b.uid===currentUser.uid&&b.endAtMs>Date.now()-86400000).sort((a,b)=>a.startAtMs-b.startAtMs); if(!mine.length){ box.innerHTML=`<div class="notice">${esc(tr('empty'))}</div>`; return; } mine.forEach(b=>{ const s=new Date(b.startAtMs), e=new Date(b.endAtMs); const item=document.createElement('div'); item.className='item'; item.innerHTML=`<div><b>${esc(b.pc)}</b><div class="meta">${esc(toISODate(s))} • ${esc(fmtHM(s))} → ${esc(fmtHM(e))}</div></div><button class="mini bad">${esc(tr('remove'))}</button>`; item.querySelector('button').onclick=async()=>{ if(!confirm(tr('remove')+'?')) return; try{ await db.collection('bookings').doc(b.id).delete(); toast(tr('canceled'),'good'); }catch(e){ handleFsError(e); } }; box.appendChild(item); }); }
+  async function renderAdminBookings(){ const box=$('adminBookings'); box.innerHTML=''; $('adminPanel').classList.toggle('hidden', !isAdmin); if(!isAdmin) return; const list=allBookings.filter(b=>b.endAtMs>Date.now()).sort((a,b)=>a.startAtMs-b.startAtMs); if(!list.length){ box.innerHTML=`<div class="notice">${esc(tr('empty'))}</div>`; return; } list.forEach(b=>{ const s=new Date(b.startAtMs), e=new Date(b.endAtMs); const item=document.createElement('div'); item.className='item'; item.innerHTML=`<div><b>${esc(b.pc)}</b><div class="meta">${esc(b.nick||'')} • ${esc(toISODate(s))} • ${esc(fmtHM(s))} → ${esc(fmtHM(e))}</div></div><button class="mini bad">${esc(tr('remove'))}</button>`; item.querySelector('button').onclick=async()=>{ if(!confirm(tr('remove')+'?')) return; try{ await db.collection('bookings').doc(b.id).delete(); toast(tr('canceled'),'good'); }catch(e){ handleFsError(e); } }; box.appendChild(item); }); }
+  function updateUserUI(){ $('userPill').textContent=currentUser?(currentUser.email||currentUser.uid.slice(0,6)):'—'; isAdmin=!!(currentUser&&ADMIN_EMAILS.includes(String(currentUser.email||'').toLowerCase())); $('openAuthBtn').classList.toggle('hidden',!!currentUser); $('logoutBtn').classList.toggle('hidden',!currentUser); if(currentUser) $('authMsg').textContent=tr('authOk')+(currentUser.email||currentUser.uid.slice(0,6)); $('adminPanel').classList.toggle('hidden', !isAdmin); }
+  function findFreeNow(){ const free=ALL.filter(pc=>getPcStatus(pc).state==='free'); if(!free.length) return toast(tr('noFree'),'warn'); if(multiMode){ selectedPCs=new Set(free.slice(0,Math.min(3,free.length))); selectedPc=[...selectedPCs][0]||null; } else { selectedPc=free[0]; selectedPCs=new Set([free[0]]); } renderStats(); renderHall(); renderSelected(); buildCustomTimes(); }
+  async function startRealtime(){ if(unsub){ try{unsub()}catch(_){}} const {start,end}=dayBoundsNow(); unsub=db.collection('bookings').where('startAtMs','<',end).where('endAtMs','>',start).onSnapshot(snap=>{ allBookings=snap.docs.map(d=>({id:d.id,...d.data()})).map(x=>({...x,startAtMs:Number(x.startAtMs||0),endAtMs:Number(x.endAtMs||0)})); setCloud(tr('statusLive'),true); renderStats(); renderHall(); renderSelected(); renderMyBookings(); renderAdminBookings(); },handleFsError); }
+  function startTicker(){ clearInterval(timer); timer=setInterval(()=>{ renderStats(); renderHall(); renderSelected(); },30000); }
+  function bind(){ $('lang_ru').onclick=()=>{lang='ru';localStorage.setItem(LANG_KEY,lang);setLangUI()}; $('lang_en').onclick=()=>{lang='en';localStorage.setItem(LANG_KEY,lang);setLangUI()}; $('lang_ka').onclick=()=>{lang='ka';localStorage.setItem(LANG_KEY,lang);setLangUI()}; $('filterAll').onclick=()=>{currentFilter='all';renderHall()}; $('filterFree').onclick=()=>{currentFilter='free';renderHall()}; $('filterSoon').onclick=()=>{currentFilter='soon';renderHall()}; $('findNowBtn').onclick=findFreeNow; $('toggleMultiBtn').onclick=()=>{ multiMode=!multiMode; if(!multiMode&&selectedPCs.size>1){ const first=[...selectedPCs][0]; selectedPCs=new Set(first?[first]:[]); selectedPc=first||null; } setLangUI(); }; $('clearSelectedBtn').onclick=()=>{ selectedPCs.clear(); selectedPc=null; renderStats(); renderHall(); renderSelected(); buildCustomTimes(); }; $('openMyBtn').onclick=()=>$('myPanel').scrollIntoView({behavior:'smooth',block:'start'}); $('mobileMyBtn').onclick=()=>$('myPanel').scrollIntoView({behavior:'smooth',block:'start'}); $('mobileBookBtn').onclick=()=>{ if(!selectedPCs.size) return toast(tr('selectedNone'),'warn'); $('customSection').scrollIntoView({behavior:'smooth',block:'start'}); }; $('openAdminBtn').onclick=()=>{ if(!currentUser) return toast(tr('loginNeeded'),'warn'); if(!isAdmin) return toast(tr('adminDenied'),'bad'); $('adminPanel').scrollIntoView({behavior:'smooth',block:'start'}); }; $('openAuthBtn').onclick=openAuth; $('logoutBtn').onclick=async()=>{ try{await auth.signOut()}catch(_){}}; $('closeAuthBtn').onclick=closeAuth; $('authBackdrop').onclick=e=>{ if(e.target===$('authBackdrop')) closeAuth(); }; $('closeConfirmBtn').onclick=closeConfirm; $('cancelConfirmBtn').onclick=closeConfirm; $('confirmBackdrop').onclick=e=>{ if(e.target===$('confirmBackdrop')) closeConfirm(); }; $('customDate').value=toISODate(new Date()); $('nickInput').value=localStorage.getItem(NICK_KEY)||''; $('nickInput').addEventListener('input',()=>localStorage.setItem(NICK_KEY,$('nickInput').value.trim())); $('customDate').addEventListener('change',buildCustomTimes); $('customDuration').addEventListener('change',buildCustomTimes); $('clearPanelsBtn').onclick=()=>{ selectedPCs.clear(); selectedPc=null; renderStats(); renderHall(); renderSelected(); buildCustomTimes(); }; $('bookCustomBtn').onclick=()=>{ if(!selectedPCs.size) return toast(tr('selectedNone'),'warn'); const startAtMs=Number($('customTime').value||0); if(!startAtMs) return toast(tr('pickTime'),'warn'); const duration=Number($('customDuration').value||60); pendingBooking={pcs:[...selectedPCs], startAtMs, endAtMs:startAtMs+duration*60000, nick:($('nickInput').value||'').trim(), note:($('noteInput').value||'').trim()}; fillConfirm(); openConfirm(); }; $('confirmBookBtn').onclick=()=>{ if(pendingBooking) createBooking(pendingBooking); }; $('loginBtn').onclick=async()=>{ const email=($('authEmail').value||'').trim(), pass=($('authPass').value||'').trim(); if(!email||!pass) return $('authMsg').textContent=tr('loginErr'); try{ await auth.signInWithEmailAndPassword(email,pass); closeAuth(); }catch(e){ console.error(e); $('authMsg').textContent=e.message||tr('fsErr'); } }; $('registerBtn').onclick=async()=>{ const email=($('authEmail').value||'').trim(), pass=($('authPass').value||'').trim(); if(!email||!pass) return $('authMsg').textContent=tr('loginErr'); try{ await auth.createUserWithEmailAndPassword(email,pass); closeAuth(); }catch(e){ console.error(e); $('authMsg').textContent=e.message||tr('fsErr'); } }; $('resetBtn').onclick=async()=>{ const email=($('authEmail').value||'').trim(); if(!email) return $('authMsg').textContent=tr('loginErr'); try{ await auth.sendPasswordResetEmail(email); $('authMsg').textContent=tr('resetSent'); }catch(e){ console.error(e); $('authMsg').textContent=e.message||tr('fsErr'); } }; document.addEventListener('keydown',e=>{ if(e.key==='Escape'){ closeAuth(); closeConfirm(); } }); }
+  async function boot(){ setLangUI(); bind(); setCloud(tr('statusOk'),true); startTicker(); if(db) startRealtime(); auth.onAuthStateChanged(async u=>{ currentUser=u||null; updateUserUI(); renderMyBookings(); renderAdminBookings(); if(currentUser&&!$('nickInput').value.trim()){ try{ const doc=await db.collection('users').doc(String(currentUser.uid)).get(); const nick=doc.exists?(doc.data().nick||''):''; if(nick){ $('nickInput').value=nick; localStorage.setItem(NICK_KEY,nick); } }catch(_){} } }); }
+  boot();
+})();
+</script>
+</body>
+</html>
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+  <title>Sakompiutere Gaming — Booking</title>
+  <meta name="theme-color" content="#0b1020" />
+  <link rel="icon" href="data:," />
 
-  const LEFT = ["Bishop","Godzilla","Elf","Kadita","Orc"];
-  const RIGHT = ["Lancelot","Fantomas","Soultaker","Pudge","Kratos"];
-  const ALL = [...LEFT, ...RIGHT];
-  const WORK_START = 10 * 60;
-  const ADMIN_EMAILS = ['adjarelispeak@gmail.com','kiralite93@gmail.com'].map(x => x.toLowerCase());
-  const WORK_END_NEXTDAY = 3 * 60;
-  const SLOT_STEP = 30;
-  const SOON_MIN = 30;
-  const LANG_KEY = 'sg_live_lang';
-  const NICK_KEY = 'sg_live_nick';
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
 
-  const $ = id => document.getElementById(id);
-  const pad = n => String(n).padStart(2, '0');
-  const fmtHM = d => `${pad(d.getHours())}:${pad(d.getMinutes())}`;
-  const toISODate = d => `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`;
-  const addMinutes = (d,m) => new Date(d.getTime() + m * 60000);
-  const addDays = (d,x) => new Date(d.getTime() + x * 86400000);
-  const overlaps = (a1,a2,b1,b2) => Math.max(a1,b1) < Math.min(a2,b2);
-  const esc = s => String(s ?? '').replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;').replaceAll('"','&quot;').replaceAll("'",'&#039;');
-
-  let lang = localStorage.getItem(LANG_KEY) || 'ru';
-
-  const T = {
-    ru: {
-      title:'Sakompiutere Gaming — Live Hall', sub:'Удобно и на телефоне, и на ПК. Можно выбрать до 10 ПК.', user:'Пользователь', cloud:'База',
-      livehall:'Live Hall', livehint:'Быстрый режим для обычного игрока + мультивыбор ПК для команд.',
-      all:'Все', free:'Свободные', soon:'Скоро освободятся',
-      topNotice:'Одиночный режим — просто выбери ПК и нажми быстрое действие. Мультивыбор — для команды или группы.',
-      statAll:'Всего ПК', statFree:'Свободно сейчас', statBusy:'Занято', statSelected:'Выбрано',
-      findNow:'⚡ Найти свободный сейчас', multiOff:'👥 Мультивыбор: OFF', multiOn:'👥 Мультивыбор: ON', clearSelected:'Сбросить выбор', my:'👤 Мои брони', auth:'🔑 Войти', logout:'🚪 Выйти', aisle:'ПРОХОД',
-      sidepanel:'Панель бронирования', sidehint:'Один ПК или сразу несколько.',
-      singleSelectHint:'Выбери один ПК, чтобы увидеть быстрые действия.',
-      multiSelectHint:'Мультивыбор включён. Отмечай ПК для групповой брони.',
-      selectedOne:'Выбран 1 ПК', selectedMany:'Выбрано ПК', chooseAtLeastOne:'Выбери хотя бы один ПК.',
-      customtitle:'Точное время', customhint:'Подходит и для 1 ПК, и для нескольких сразу.',
-      date:'Дата', duration:'Длительность', time:'Время', nick:'Ник', note:'Комментарий', bookCustom:'Подтвердить бронь', hideCustom:'Скрыть',
-      mybookings:'Мои брони', authTitle:'Вход / Регистрация', authHint:'Email + пароль', password:'Пароль', login:'Войти', register:'Регистрация', reset:'Сбросить пароль',
-      confirmtitle:'Подтверждение', confirmhint:'Проверь детали перед записью', confirm:'Подтвердить', cancel:'Отмена',
-      freeTag:'🟢 Свободен', soonTag:'🟡 Скоро свободен', busyTag:'🔴 Занят',
-      freeNow:'Свободен прямо сейчас', playing:'Сейчас играет', freeAt:'Свободен в', endsIn:'Через',
-      play1:'Играть сейчас • 1 час', play2:'Играть сейчас • 2 часа', play3:'Играть сейчас • 3 часа',
-      group2:'Группой • 2 часа', group3:'Группой • 3 часа',
-      bookAt:'Забронировать на ближайшее', queue:'В очередь', exact:'Выбрать вручную', nearest:'Скоро будет свободен',
-      loginNeeded:'Сначала войди в аккаунт.', enterNick:'Введи ник.', pickTime:'Выбери время.', booked:'✅ Бронь создана!', canceled:'Отменено.', noFree:'Сейчас нет свободных ПК.',
-      authOk:'✅ Вход выполнен: ', authNeed:'Нужно войти, чтобы бронировать.', loginErr:'Введите email и пароль.', resetSent:'Письмо для сброса отправлено ✅',
-      fsErr:'Ошибка Firestore. Проверь Rules или блокировщик.', rules:'Firestore Rules не позволяют запись.', blocked:'Браузер или расширение блокирует Firebase.',
-      statusOk:'OK', statusLive:'LIVE', statusErr:'ERR', minutes:'мин', starts:'Начало', ends:'Конец', pc:'ПК', pcs:'ПК', remove:'Отменить', empty:'Пока ничего нет',
-      taken:'Этот слот уже занят. Выбери другой.', queueHint:'Функция очереди сейчас бронирует на ближайшее освобождение.', busyUntil:'Занят до', guest:'Гость', saveNickHint:'Ник автоматически сохраняется для следующего входа.',
-      multiHelp:'Когда мультивыбор включён, быстрые действия бронируют сразу все отмеченные ПК.', mobileMy:'Мои', mobileBook:'Бронь', admin:'🔐 Admin', adminDenied:'Ты не админ.', adminBookings:'Admin панель'
-    },
-    en: {
-      title:'Sakompiutere Gaming — Live Hall', sub:'Comfortable on phone and desktop. Up to 10 PCs can be selected.', user:'User', cloud:'Database',
-      livehall:'Live Hall', livehint:'Quick mode for normal players + multi-select for teams.',
-      all:'All', free:'Free', soon:'Soon free', topNotice:'Single mode is for fast booking. Multi-select is for teams or group reservations.',
-      statAll:'Total PCs', statFree:'Free now', statBusy:'Busy', statSelected:'Selected',
-      findNow:'⚡ Find free now', multiOff:'👥 Multi-select: OFF', multiOn:'👥 Multi-select: ON', clearSelected:'Clear selection', my:'👤 My bookings', auth:'🔑 Login', logout:'🚪 Logout', aisle:'AISLE',
-      sidepanel:'Booking panel', sidehint:'One PC or many PCs at once.',
-      singleSelectHint:'Choose one PC to see quick actions.', multiSelectHint:'Multi-select is ON. Mark PCs for group booking.', selectedOne:'1 PC selected', selectedMany:'PCs selected', chooseAtLeastOne:'Choose at least one PC.',
-      customtitle:'Exact time', customhint:'Works for one PC and multiple PCs too.', date:'Date', duration:'Duration', time:'Time', nick:'Nick', note:'Note', bookCustom:'Confirm booking', hideCustom:'Hide',
-      mybookings:'My bookings', authTitle:'Login / Register', authHint:'Email + password', password:'Password', login:'Login', register:'Register', reset:'Reset password',
-      confirmtitle:'Confirmation', confirmhint:'Check details before saving', confirm:'Confirm', cancel:'Cancel',
-      freeTag:'🟢 Free', soonTag:'🟡 Soon free', busyTag:'🔴 Busy', freeNow:'Free right now', playing:'Now playing', freeAt:'Free at', endsIn:'In',
-      play1:'Play now • 1 hour', play2:'Play now • 2 hours', play3:'Play now • 3 hours', group2:'Group • 2 hours', group3:'Group • 3 hours',
-      bookAt:'Book nearest free time', queue:'Queue', exact:'Choose manually', nearest:'Soon available', loginNeeded:'Please login first.', enterNick:'Enter your nickname.', pickTime:'Pick a time.', booked:'✅ Booking created!', canceled:'Canceled.', noFree:'No free PCs right now.', authOk:'✅ Logged in: ', authNeed:'Login is required for booking.', loginErr:'Enter email and password.', resetSent:'Password reset email sent ✅', fsErr:'Firestore error. Check Rules or ad blocker.', rules:'Firestore Rules do not allow this write.', blocked:'Browser or extension blocks Firebase.', statusOk:'OK', statusLive:'LIVE', statusErr:'ERR', minutes:'min', starts:'Start', ends:'End', pc:'PC', pcs:'PCs', remove:'Cancel', empty:'Nothing yet', taken:'This slot is already taken. Pick another one.', queueHint:'Queue action currently books the nearest release time.', busyUntil:'Busy until', guest:'Guest', saveNickHint:'Nick is saved automatically for next time.', multiHelp:'When multi-select is ON, quick actions book all marked PCs.', mobileMy:'Mine', mobileBook:'Book', admin:'🔐 Admin', adminDenied:'You are not admin.', adminBookings:'Admin panel'
-    },
-    ka: {
-      title:'Sakompiutere Gaming — Live Hall', sub:'მორგებულია ტელეფონზეც და კომპიუტერზეც. შესაძლებელია 10 PC-მდე არჩევა.', user:'მომხმარებელი', cloud:'ბაზა',
-      livehall:'Live Hall', livehint:'სწრაფი რეჟიმი ჩვეულებრივი მოთამაშისთვის და multiselect გუნდებისთვის.',
-      all:'ყველა', free:'თავისუფალი', soon:'მალე თავისუფალი', topNotice:'ერთჯერადი რეჟიმი სწრაფი ჯავშნისთვისაა. Multi-select კი გუნდური ჯავშნისთვის.',
-      statAll:'სულ PC', statFree:'ახლა თავისუფალი', statBusy:'დაკავებული', statSelected:'არჩეული',
-      findNow:'⚡ იპოვე თავისუფალი ახლა', multiOff:'👥 Multi-select: OFF', multiOn:'👥 Multi-select: ON', clearSelected:'გასუფთავება', my:'👤 ჩემი ჯავშნები', auth:'🔑 შესვლა', logout:'🚪 გასვლა', aisle:'გასასვლელი',
-      sidepanel:'ჯავშნის პანელი', sidehint:'ერთი PC ან რამდენიმე ერთად.',
-      singleSelectHint:'აირჩიე ერთი PC სწრაფი მოქმედებებისთვის.', multiSelectHint:'Multi-select ჩართულია. მონიშნე PC-ები ჯგუფური ჯავშნისთვის.', selectedOne:'არჩეულია 1 PC', selectedMany:'არჩეულია PC', chooseAtLeastOne:'აირჩიე მინიმუმ ერთი PC.',
-      customtitle:'ზუსტი დრო', customhint:'მუშაობს როგორც 1 PC-ზე, ისე რამდენიმეზე ერთად.', date:'თარიღი', duration:'ხანგრძლივობა', time:'დრო', nick:'ნიკი', note:'შენიშვნა', bookCustom:'ჯავშნის დადასტურება', hideCustom:'დამალვა',
-      mybookings:'ჩემი ჯავშნები', authTitle:'შესვლა / რეგისტრაცია', authHint:'Email + პაროლი', password:'პაროლი', login:'შესვლა', register:'რეგისტრაცია', reset:'პაროლის აღდგენა',
-      confirmtitle:'დადასტურება', confirmhint:'შეამოწმე დეტალები', confirm:'დადასტურება', cancel:'გაუქმება',
-      freeTag:'🟢 თავისუფალია', soonTag:'🟡 მალე გათავისუფლდება', busyTag:'🔴 დაკავებულია', freeNow:'ახლავე თავისუფალია', playing:'ახლა თამაშობს', freeAt:'თავისუფალი იქნება', endsIn:'მიერ',
-      play1:'ითამაშე ახლა • 1 საათი', play2:'ითამაშე ახლა • 2 საათი', play3:'ითამაშე ახლა • 3 საათი', group2:'ჯგუფურად • 2 საათი', group3:'ჯგუფურად • 3 საათი',
-      bookAt:'უახლოეს დროზე დაჯავშნა', queue:'რიგში ჩადგომა', exact:'ხელით არჩევა', nearest:'მალე თავისუფალი', loginNeeded:'ჯერ შედი ანგარიშში.', enterNick:'შეიყვანე ნიკი.', pickTime:'აირჩიე დრო.', booked:'✅ ჯავშანი შეიქმნა!', canceled:'გაუქმდა.', noFree:'ახლა თავისუფალი PC არ არის.', authOk:'✅ შესულია: ', authNeed:'ჯავშნისთვის საჭიროა შესვლა.', loginErr:'შეიყვანე email და პაროლი.', resetSent:'აღდგენის წერილი გაიგზავნა ✅', fsErr:'Firestore შეცდომა. შეამოწმე Rules ან ad blocker.', rules:'Firestore Rules არ უშვებს ჩანაწერს.', blocked:'ბრაუზერი ან გაფართოება ბლოკავს Firebase-ს.', statusOk:'OK', statusLive:'LIVE', statusErr:'ERR', minutes:'წთ', starts:'დასაწყისი', ends:'დასასრული', pc:'PC', pcs:'PC-ები', remove:'გაუქმება', empty:'ჯერ არაფერია', taken:'ეს დრო უკვე დაკავებულია. აირჩიე სხვა.', queueHint:'რიგის ღილაკი ახლა უახლოეს თავისუფალ დროს აჯავშნებს.', busyUntil:'დაკავებულია', guest:'სტუმარი', saveNickHint:'ნიკი ავტომატურად შეინახება.', multiHelp:'როცა multi-select ჩართულია, სწრაფი მოქმედებები ყველა მონიშნულ PC-ზე მუშაობს.', mobileMy:'ჩემი', mobileBook:'ჯავშანი', admin:'🔐 Admin', adminDenied:'ადმინი არ ხარ.', adminBookings:'Admin პანელი'
+  <style>
+    :root{
+      --bg:#070a12; --card:#0d1324; --text:#edf3ff; --muted:#9aa7c7; --line:rgba(255,255,255,.09);
+      --free:#34d399; --soon:#fbbf24; --busy:#fb7185; --accent:#6ee7ff; --accent2:#a78bfa; --shadow:0 18px 60px rgba(0,0,0,.45);
     }
-  };
-  const tr = k => (T[lang] && T[lang][k]) || T.ru[k] || k;
+    *{box-sizing:border-box} html,body{height:100%}
+    body{margin:0;color:var(--text);font-family:Inter,ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Arial;background:
+      radial-gradient(1000px 600px at 10% -10%, rgba(110,231,255,.12), transparent 60%),
+      radial-gradient(900px 700px at 90% 0%, rgba(167,139,250,.14), transparent 60%),
+      radial-gradient(1200px 700px at 50% 120%, rgba(52,211,153,.08), transparent 60%), var(--bg);overflow-x:hidden}
+    .wrap{max-width:1360px;margin:0 auto;padding:12px}
+    .glass{background:linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.03));border:1px solid var(--line);box-shadow:var(--shadow);backdrop-filter:blur(12px)}
+    header{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 16px;border-radius:22px;position:sticky;top:10px;z-index:20}
+    .brand{display:flex;align-items:center;gap:12px;min-width:0}.logo{width:44px;height:44px;flex:0 0 44px;border-radius:15px;background:radial-gradient(circle at 28% 20%, rgba(110,231,255,.95), rgba(167,139,250,.9) 45%, transparent 72%), rgba(255,255,255,.05);border:1px solid var(--line);box-shadow:0 10px 28px rgba(0,0,0,.35)}
+    h1{margin:0;font-size:18px}.sub{margin:4px 0 0;color:var(--muted);font-size:12px}
+    .topbar{display:flex;flex-wrap:wrap;gap:8px;align-items:center;justify-content:flex-end}
+    .pill,.lang{display:flex;align-items:center;gap:8px;padding:8px 10px;border-radius:999px;border:1px solid var(--line);background:rgba(255,255,255,.04);font-size:12px;color:var(--muted)}
+    .lang button,.btn,.mini{border:1px solid var(--line);background:rgba(255,255,255,.04);color:var(--text);cursor:pointer;transition:.15s ease;font-weight:800}
+    .lang button{padding:7px 10px;border-radius:999px;background:transparent;color:var(--muted)} .lang button.active{background:rgba(110,231,255,.12);border-color:rgba(110,231,255,.45);color:var(--text)}
+    .lang button:hover,.btn:hover,.mini:hover{transform:translateY(-1px);border-color:rgba(110,231,255,.45)}
+    .dot{width:8px;height:8px;border-radius:999px;background:#fff2}.dot.ok{background:var(--free);box-shadow:0 0 0 0 rgba(52,211,153,.35);animation:pulse 1.8s infinite}.dot.err{background:var(--busy)}
+    @keyframes pulse{70%{box-shadow:0 0 0 10px rgba(52,211,153,0)}100%{box-shadow:0 0 0 0 rgba(52,211,153,0)}}
 
-  let app, auth, db;
-  let currentUser = null;
-  let isAdmin = false;
-  let allBookings = [];
-  let selectedPc = null;
-  let selectedPCs = new Set();
-  let multiMode = false;
-  let currentFilter = 'all';
-  let pendingBooking = null;
-  let unsub = null;
-  let timer = null;
-
-  try { app = firebase.initializeApp(firebaseConfig); auth = firebase.auth(); db = firebase.firestore(); } catch(e) { console.error(e); }
-
-  const toast = (msg, type='') => {
-    const el = $('toast');
-    el.textContent = msg;
-    el.className = 'toast ' + type;
-    el.classList.remove('hidden');
-    clearTimeout(el._t);
-    el._t = setTimeout(() => el.classList.add('hidden'), 3200);
-  };
-  const setCloud = (text, ok=true) => { $('cloudPill').textContent = text; $('cloudDot').className = 'dot ' + (ok ? 'ok' : 'err'); };
-  const dayBoundsNow = () => {
-    const now = new Date();
-    const s = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 0,0,0,0);
-    const e = addDays(s, 2);
-    return { start:s.getTime(), end:e.getTime() };
-  };
-
-  function setLangUI() {
-    document.title = tr('title');
-    $('t_title').textContent = tr('title');
-    $('t_sub').textContent = tr('sub');
-    $('t_user').textContent = tr('user');
-    $('t_cloud').textContent = tr('cloud');
-    $('t_livehall').textContent = tr('livehall');
-    $('t_livehint').textContent = tr('livehint');
-    $('filterAll').textContent = tr('all');
-    $('filterFree').textContent = tr('free');
-    $('filterSoon').textContent = tr('soon');
-    $('topNotice').textContent = tr('topNotice');
-    $('t_statAll').textContent = tr('statAll');
-    $('t_statFree').textContent = tr('statFree');
-    $('t_statBusy').textContent = tr('statBusy');
-    $('t_statSelected').textContent = tr('statSelected');
-    $('findNowBtn').textContent = tr('findNow');
-    $('toggleMultiBtn').textContent = multiMode ? tr('multiOn') : tr('multiOff');
-    $('clearSelectedBtn').textContent = tr('clearSelected');
-    $('openMyBtn').textContent = tr('my');
-    $('openAdminBtn').textContent = tr('admin');
-    $('openAuthBtn').textContent = tr('auth');
-    $('logoutBtn').textContent = tr('logout');
-    $('t_aisle').textContent = tr('aisle');
-    $('t_sidepanel').textContent = tr('sidepanel');
-    $('t_sidehint').textContent = tr('sidehint');
-    $('t_customtitle').textContent = tr('customtitle');
-    $('t_customhint').textContent = tr('customhint');
-    $('t_date').textContent = tr('date');
-    $('t_duration').textContent = tr('duration');
-    $('t_time').textContent = tr('time');
-    $('t_nick').textContent = tr('nick');
-    $('t_note').textContent = tr('note');
-    $('bookCustomBtn').textContent = tr('bookCustom');
-    $('hideCustomBtn').textContent = tr('hideCustom');
-    $('t_mybookings').textContent = tr('mybookings');
-    $('t_adminbookings').textContent = tr('adminBookings');
-    $('t_auth').textContent = tr('authTitle');
-    $('t_authhint').textContent = tr('authHint');
-    $('t_password').textContent = tr('password');
-    $('loginBtn').textContent = tr('login');
-    $('registerBtn').textContent = tr('register');
-    $('resetBtn').textContent = tr('reset');
-    $('t_confirmtitle').textContent = tr('confirmtitle');
-    $('t_confirmhint').textContent = tr('confirmhint');
-    $('confirmBookBtn').textContent = tr('confirm');
-    $('cancelConfirmBtn').textContent = tr('cancel');
-    $('mobileMyBtn').textContent = tr('mobileMy');
-    $('mobileBookBtn').textContent = tr('mobileBook');
-    $('lang_ru').classList.toggle('active', lang === 'ru');
-    $('lang_en').classList.toggle('active', lang === 'en');
-    $('lang_ka').classList.toggle('active', lang === 'ka');
-    renderStats();
-    renderHall();
-    renderSelected();
-    renderMyBookings();
-  }
-
-  function handleFsError(err) {
-    console.error(err);
-    const msg = String(err?.message || err?.code || err || '').toLowerCase();
-    if (msg.includes('permission')) toast(tr('rules'), 'bad');
-    else if (msg.includes('fetch') || msg.includes('network') || msg.includes('blocked')) toast(tr('blocked'), 'bad');
-    else toast(tr('fsErr'), 'bad');
-    setCloud(tr('statusErr'), false);
-  }
-
-  function progressFor(b) {
-    const now = Date.now();
-    if (!b || !b.startAtMs || !b.endAtMs) return 0;
-    if (now <= b.startAtMs) return 0;
-    if (now >= b.endAtMs) return 100;
-    return Math.max(0, Math.min(100, ((now - b.startAtMs) / (b.endAtMs - b.startAtMs)) * 100));
-  }
-
-  function getPcBookings(pc) { return allBookings.filter(b => b.pc === pc).sort((a,b)=>a.startAtMs-b.startAtMs); }
-  function getPcStatus(pc) {
-    const now = Date.now();
-    const future = getPcBookings(pc).filter(b => b.endAtMs > now);
-    const active = future.find(b => b.startAtMs <= now && b.endAtMs > now);
-    if (active) {
-      const mins = Math.max(1, Math.ceil((active.endAtMs - now) / 60000));
-      return { state: mins <= SOON_MIN ? 'soon' : 'busy', active, next:null, freeAtMs:active.endAtMs, minsToFree:mins };
-    }
-    const next = future.find(b => b.startAtMs > now);
-    if (next && next.startAtMs - now <= SOON_MIN * 60000) {
-      return { state:'soon', active:null, next, freeAtMs:next.startAtMs, minsToFree:Math.max(1, Math.ceil((next.startAtMs - now) / 60000)) };
-    }
-    return { state:'free', active:null, next, freeAtMs:now, minsToFree:0 };
-  }
-  const statusLabel = s => s.state === 'free' ? tr('freeTag') : s.state === 'soon' ? tr('soonTag') : tr('busyTag');
-  const minsText = m => `${m} ${tr('minutes')}`;
-
-  function updateSelection(pc) {
-    if (multiMode) {
-      if (selectedPCs.has(pc)) selectedPCs.delete(pc); else selectedPCs.add(pc);
-      selectedPc = selectedPCs.size ? [...selectedPCs][0] : null;
-    } else {
-      selectedPc = pc;
-      selectedPCs = new Set([pc]);
-    }
-    renderStats();
-    renderHall();
-    renderSelected();
-  }
-
-  function renderCard(pc) {
-    const s = getPcStatus(pc);
-    if (currentFilter === 'free' && s.state !== 'free') return null;
-    if (currentFilter === 'soon' && s.state === 'free') return null;
-
-    const el = document.createElement('div');
-    const selectedMulti = selectedPCs.has(pc);
-    el.className = `pc ${s.state} ${selectedPc === pc ? 'active' : ''} ${selectedMulti ? 'selectedMulti' : ''}`;
-
-    let meta = '';
-    if (s.state === 'free') {
-      meta = `<div>${tr('freeNow')}</div>`;
-    } else if (s.active) {
-      meta = `
-        <div>${tr('playing')}: <b>${esc(s.active.nick || tr('guest'))}</b></div>
-        <div>${tr('freeAt')}: <b>${fmtHM(new Date(s.freeAtMs))}</b></div>
-        <div>${tr('endsIn')}: <b>${minsText(s.minsToFree)}</b></div>
-        <div class="progress"><div class="bar" style="width:${progressFor(s.active)}%"></div></div>
-      `;
-    } else {
-      meta = `
-        <div>${tr('freeAt')}: <b>${fmtHM(new Date(s.freeAtMs))}</b></div>
-        <div>${tr('endsIn')}: <b>${minsText(s.minsToFree)}</b></div>
-      `;
-    }
-
-    el.innerHTML = `
-      <div class="pcTop">
-        <div class="pcName">${esc(pc)}</div>
-        <div class="statusTag ${s.state}">${esc(statusLabel(s))}</div>
+    .layout{display:grid;grid-template-columns:1.25fr .95fr;gap:14px;margin-top:14px}@media (max-width:1150px){.layout{grid-template-columns:1fr}}
+    .panel{border-radius:24px}.panelHead{padding:14px 16px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;gap:10px;align-items:center}.panelTitle{font-size:15px;font-weight:900}.panelBody{padding:14px}
+    .actions{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:14px}.btn{padding:11px 14px;border-radius:14px}.btn.primary{background:linear-gradient(180deg, rgba(110,231,255,.18), rgba(167,139,250,.12));border-color:rgba(110,231,255,.45)}.btn.bad{background:rgba(251,113,133,.10);border-color:rgba(251,113,133,.28)}.btn.ghost{background:transparent}
+    .notice{border:1px dashed rgba(110,231,255,.3);padding:12px 13px;border-radius:16px;background:rgba(110,231,255,.06);font-size:12px;color:var(--muted);line-height:1.45;margin-bottom:14px}
+    .toast{margin-bottom:12px;border-radius:16px;padding:12px 13px;border:1px solid var(--line);background:rgba(255,255,255,.04);font-size:12px}.toast.good{border-color:rgba(52,211,153,.28);background:rgba(52,211,153,.08)}.toast.bad{border-color:rgba(251,113,133,.28);background:rgba(251,113,133,.08)}.toast.warn{border-color:rgba(251,191,36,.28);background:rgba(251,191,36,.08)}.hidden{display:none !important}
+    .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:14px}.stat{padding:12px;border-radius:16px;border:1px solid var(--line);background:rgba(255,255,255,.03)}.stat b{display:block;font-size:18px;margin-top:4px}.stat span{font-size:11px;color:var(--muted)}@media (max-width:760px){.stats{grid-template-columns:repeat(2,1fr)}}
+    .hall{display:grid;grid-template-columns:1fr 72px 1fr;gap:12px;align-items:start}.side{display:grid;gap:10px}.aisle{min-height:100%;border-radius:20px;border:1px dashed rgba(255,255,255,.08);background:linear-gradient(180deg, rgba(255,255,255,.03), rgba(255,255,255,.01));display:flex;align-items:center;justify-content:center;color:var(--muted);font-size:12px;letter-spacing:.18em;text-transform:uppercase;writing-mode:vertical-rl;transform:rotate(180deg);padding:14px 0}@media (max-width:900px){.hall{grid-template-columns:1fr}.aisle{writing-mode:initial;transform:none;min-height:auto;padding:10px;letter-spacing:.12em}}
+    .pc{position:relative;padding:14px;border-radius:20px;border:1px solid var(--line);background:linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,.03));overflow:hidden;cursor:pointer;transition:.18s ease}.pc:hover{transform:translateY(-2px)}.pc.active{border-color:rgba(110,231,255,.55);box-shadow:0 0 0 3px rgba(110,231,255,.08)}.pc.marked{box-shadow:0 0 0 3px rgba(167,139,250,.13), inset 0 0 0 1px rgba(167,139,250,.28)}.pc.free{box-shadow:inset 0 0 0 1px rgba(52,211,153,.14)}.pc.soon{box-shadow:inset 0 0 0 1px rgba(251,191,36,.14)}.pc.busy{box-shadow:inset 0 0 0 1px rgba(251,113,133,.14)}
+    .pc::before{content:"";position:absolute;inset:-20% auto auto -10%;width:160px;height:110px;border-radius:999px;filter:blur(18px);opacity:.3}.pc.free::before{background:rgba(52,211,153,.25)}.pc.soon::before{background:rgba(251,191,36,.22)}.pc.busy::before{background:rgba(251,113,133,.22)}
+    .pcTop{display:flex;justify-content:space-between;gap:10px;align-items:start}.pcName{font-size:17px;font-weight:1000}.statusTag{font-size:11px;font-weight:900;padding:7px 9px;border-radius:999px;border:1px solid var(--line);white-space:nowrap}.statusTag.free{color:var(--free);background:rgba(52,211,153,.09);border-color:rgba(52,211,153,.25)}.statusTag.soon{color:var(--soon);background:rgba(251,191,36,.09);border-color:rgba(251,191,36,.25)}.statusTag.busy{color:var(--busy);background:rgba(251,113,133,.09);border-color:rgba(251,113,133,.25)}
+    .pcMeta{margin-top:10px;display:grid;gap:6px;font-size:13px;color:var(--muted)}.pcMeta b{color:var(--text)}.progress{height:8px;border-radius:999px;background:rgba(255,255,255,.06);overflow:hidden;margin-top:6px}.bar{height:100%;background:linear-gradient(90deg, rgba(251,113,133,.8), rgba(251,191,36,.8));width:0%}.pcBottom{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-top:12px}.mini{padding:8px 10px;border-radius:12px;font-size:12px}.mini.primary{background:linear-gradient(180deg, rgba(110,231,255,.18), rgba(167,139,250,.10));border-color:rgba(110,231,255,.42)}.mini.soft{background:rgba(167,139,250,.10);border-color:rgba(167,139,250,.22)}
+    .rightCol{display:grid;gap:14px}
+    .bigStatus{padding:14px;border-radius:18px;border:1px solid var(--line);background:rgba(255,255,255,.03)}.bigStatus h3{margin:0 0 6px;font-size:20px}.chipRow{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}.chip{padding:7px 10px;border-radius:999px;border:1px solid var(--line);background:rgba(255,255,255,.04);font-size:12px;color:var(--muted)}.chip b{color:var(--text)}
+    .quickList{display:grid;gap:10px}.quickItem{border:1px solid var(--line);border-radius:18px;padding:12px;background:rgba(255,255,255,.03);display:flex;justify-content:space-between;gap:10px;align-items:center}.quickItem small{display:block;color:var(--muted);margin-top:3px}
+    .formRow{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px}@media (max-width:520px){.formRow{grid-template-columns:1fr}} label{display:block;font-size:12px;color:var(--muted);margin:0 0 6px} input,select{width:100%;padding:11px 12px;border-radius:14px;border:1px solid var(--line);background:rgba(0,0,0,.22);color:var(--text);outline:none} input:focus,select:focus{border-color:rgba(110,231,255,.5);box-shadow:0 0 0 3px rgba(110,231,255,.1)}
+    .list{display:grid;gap:10px}.item{padding:12px;border-radius:18px;border:1px solid var(--line);background:rgba(255,255,255,.03);display:flex;justify-content:space-between;gap:12px;align-items:center}.item .meta{font-size:12px;color:var(--muted);margin-top:4px}.small{font-size:12px}.muted{color:var(--muted)}
+    .backdrop{position:fixed;inset:0;background:rgba(0,0,0,.6);display:none;align-items:center;justify-content:center;padding:16px;z-index:80}.backdrop.show{display:flex}.modal{width:min(560px,100%);border-radius:24px}.modalHead{padding:16px 18px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;gap:10px}.modalBody{padding:18px}.auth{display:grid;gap:10px}
+    .mobileBar{display:none}@media (max-width:700px){.wrap{padding:10px}header{position:static;padding:12px}.panelHead,.panelBody{padding:12px}.pc{padding:12px}.pcName{font-size:15px}.mobileBar{display:flex;position:sticky;bottom:8px;z-index:35;padding:8px;gap:8px;border-radius:18px;margin-top:12px}.mobileBar .btn{flex:1;padding:12px 10px}}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header class="glass">
+      <div class="brand"><div class="logo"></div><div><h1 id="t_title"></h1><div class="sub" id="t_sub"></div></div></div>
+      <div class="topbar">
+        <div class="lang"><button id="lang_ru">RU</button><button id="lang_en">EN</button><button id="lang_ka">KA</button></div>
+        <div class="pill"><span id="t_user"></span>: <b id="userPill">—</b></div>
+        <div class="pill"><span class="dot" id="cloudDot"></span><span id="t_cloud"></span>: <b id="cloudPill">…</b></div>
       </div>
-      <div class="pcMeta">${meta}</div>
-      <div class="pcBottom">
-        <button class="mini ${selectedMulti ? 'soft' : ''}" data-a="pick">${selectedMulti ? '✓' : '+'}</button>
-        <button class="mini ${s.state === 'free' ? 'primary' : ''}" data-a="quick">${multiMode ? '👥' : '→'}</button>
-      </div>
-    `;
+    </header>
 
-    el.addEventListener('click', e => {
-      if (e.target.closest('button')) return;
-      updateSelection(pc);
-    });
+    <div class="layout">
+      <section class="panel glass">
+        <div class="panelHead"><div><div class="panelTitle" id="t_livehall"></div><div class="small muted" id="t_livehint"></div></div><div class="actions" style="margin:0"><button class="btn ghost" id="filterAll"></button><button class="btn ghost" id="filterFree"></button><button class="btn ghost" id="filterSoon"></button></div></div>
+        <div class="panelBody">
+          <div id="toast" class="toast hidden"></div>
+          <div class="notice" id="topNotice"></div>
+          <div class="stats">
+            <div class="stat"><span id="t_statAll"></span><b id="statAll">10</b></div>
+            <div class="stat"><span id="t_statFree"></span><b id="statFree">0</b></div>
+            <div class="stat"><span id="t_statBusy"></span><b id="statBusy">0</b></div>
+            <div class="stat"><span id="t_statSelected"></span><b id="statSelected">0</b></div>
+          </div>
+          <div class="actions">
+            <button class="btn primary" id="findNowBtn"></button>
+            <button class="btn ghost" id="toggleMultiBtn"></button>
+            <button class="btn ghost" id="clearSelectedBtn"></button>
+            <button class="btn ghost" id="openMyBtn"></button>
+            <button class="btn ghost" id="openAdminBtn"></button>
+            <button class="btn ghost" id="openAuthBtn"></button>
+            <button class="btn ghost hidden" id="logoutBtn"></button>
+          </div>
+          <div class="hall"><div class="side" id="leftSide"></div><div class="aisle" id="t_aisle"></div><div class="side" id="rightSide"></div></div>
+          <div class="mobileBar glass"><button class="btn ghost" id="mobileMyBtn"></button><button class="btn primary" id="mobileBookBtn"></button></div>
+        </div>
+      </section>
 
-    setTimeout(() => {
-      const pick = el.querySelector('button[data-a="pick"]');
-      const quick = el.querySelector('button[data-a="quick"]');
-      if (pick) pick.onclick = ev => { ev.stopPropagation(); updateSelection(pc); };
-      if (quick) quick.onclick = ev => {
-        ev.stopPropagation();
-        updateSelection(pc);
-        if (multiMode) {
-          if (!selectedPCs.size) return toast(tr('chooseAtLeastOne'), 'warn');
-          showCustom();
-        } else {
-          if (s.state === 'free') openQuickConfirm([pc], new Date(), 60);
-          else openNearestConfirm([pc]);
-        }
-      };
-    }, 0);
-    return el;
-  }
+      <section class="rightCol">
+        <div class="panel glass">
+          <div class="panelHead"><div class="panelTitle" id="t_bookingPanel"></div></div>
+          <div class="panelBody">
+            <div class="bigStatus"><h3 id="selectedName">—</h3><div class="muted" id="selectedStatus"></div><div class="chipRow" id="selectedChips"></div></div>
+            <div id="selectedActions" class="hidden"><div class="quickList" id="quickActions"></div></div>
+            <div id="customSection" style="margin-top:16px">
+              <div class="panelTitle" id="t_customtitle"></div>
+              <div class="small muted" id="t_customhint" style="margin-top:6px"></div>
+              <div class="formRow"><div><label id="t_date"></label><input type="date" id="customDate" /></div><div><label id="t_duration"></label><select id="customDuration"><option value="60">1h</option><option value="120">2h</option><option value="180">3h</option><option value="240">4h</option></select></div></div>
+              <div class="formRow"><div><label id="t_time"></label><select id="customTime"></select></div><div><label id="t_nick"></label><input id="nickInput" placeholder="KiraLite" /></div></div>
+              <div class="formRow"><div style="grid-column:1/-1"><label id="t_note"></label><input id="noteInput" placeholder="CS2 / Duo / Team" /></div></div>
+              <div class="actions"><button class="btn primary" id="bookCustomBtn"></button><button class="btn ghost" id="clearPanelsBtn"></button></div>
+            </div>
+          </div>
+        </div>
 
-  function renderHall() {
-    $('leftSide').innerHTML = '';
-    $('rightSide').innerHTML = '';
-    LEFT.forEach(pc => { const c = renderCard(pc); if (c) $('leftSide').appendChild(c); });
-    RIGHT.forEach(pc => { const c = renderCard(pc); if (c) $('rightSide').appendChild(c); });
-  }
+        <div class="panel glass" id="myPanel">
+          <div class="panelHead"><div class="panelTitle" id="t_mybookings"></div></div>
+          <div class="panelBody"><div class="list" id="myBookings"></div></div>
+        </div>
 
-  function renderStats() {
-    const freeCount = ALL.filter(pc => getPcStatus(pc).state === 'free').length;
-    const busyCount = ALL.length - freeCount;
-    $('statAll').textContent = String(ALL.length);
-    $('statFree').textContent = String(freeCount);
-    $('statBusy').textContent = String(busyCount);
-    $('statSelected').textContent = String(selectedPCs.size);
-  }
+        <div class="panel glass" id="adminPanel">
+          <div class="panelHead"><div><div class="panelTitle" id="t_adminbookings"></div><div class="small muted" id="t_adminhint"></div></div></div>
+          <div class="panelBody"><div class="list" id="adminBookings"></div></div>
+        </div>
+      </section>
+    </div>
+  </div>
 
-  function renderSelected() {
-    $('selectedChips').innerHTML = '';
-    if (!selectedPCs.size) {
-      $('selectedName').textContent = '—';
-      $('selectedStatus').textContent = multiMode ? tr('multiSelectHint') : tr('singleSelectHint');
-      $('selectedActions').classList.add('hidden');
-      return;
-    }
+  <div class="backdrop" id="authBackdrop"><div class="modal glass"><div class="modalHead"><div><div class="panelTitle" id="t_auth"></div><div class="small muted" id="t_authhint"></div></div><button class="btn ghost" id="closeAuthBtn">✕</button></div><div class="modalBody auth"><div><label>Email</label><input type="email" id="authEmail" placeholder="email@example.com" /></div><div><label id="t_password"></label><input type="password" id="authPass" placeholder="******" /></div><div class="actions"><button class="btn primary" id="loginBtn"></button><button class="btn ghost" id="registerBtn"></button><button class="btn ghost" id="resetBtn"></button></div><div class="notice" id="authMsg">—</div></div></div></div>
+  <div class="backdrop" id="confirmBackdrop"><div class="modal glass"><div class="modalHead"><div><div class="panelTitle" id="t_confirmtitle"></div><div class="small muted" id="t_confirmhint"></div></div><button class="btn ghost" id="closeConfirmBtn">✕</button></div><div class="modalBody"><div class="notice" id="confirmInfo"></div><div class="actions"><button class="btn primary" id="confirmBookBtn"></button><button class="btn ghost" id="cancelConfirmBtn"></button></div></div></div></div>
 
-    $('selectedActions').classList.remove('hidden');
-
-    const names = [...selectedPCs];
-    $('selectedName').textContent = names.length === 1 ? names[0] : `${names.length} ${tr('pcs')}`;
-    $('selectedStatus').textContent = multiMode
-      ? `${tr('selectedMany')}: ${names.length}. ${tr('multiHelp')}`
-      : tr('selectedOne');
-
-    names.forEach(pc => {
-      const chip = document.createElement('div');
-      chip.className = 'chip';
-      chip.innerHTML = `<b>${esc(pc)}</b>`;
-      $('selectedChips').appendChild(chip);
-    });
-
-    const actions = [];
-    if (names.length === 1 && !multiMode) {
-      const s = getPcStatus(names[0]);
-      if (s.state === 'free') {
-        actions.push({ label:tr('play1'), small:`${tr('starts')}: ${fmtHM(new Date())}`, fn:()=>openQuickConfirm(names, new Date(), 60) });
-        actions.push({ label:tr('play2'), small:`${tr('starts')}: ${fmtHM(new Date())}`, fn:()=>openQuickConfirm(names, new Date(), 120) });
-        actions.push({ label:tr('play3'), small:`${tr('starts')}: ${fmtHM(new Date())}`, fn:()=>openQuickConfirm(names, new Date(), 180) });
-      } else {
-        actions.push({ label:tr('bookAt'), small:`${tr('starts')}: ${fmtHM(new Date(s.freeAtMs))}`, fn:()=>openNearestConfirm(names) });
-        actions.push({ label:tr('queue'), small:tr('queueHint'), fn:()=>openNearestConfirm(names) });
-      }
-    } else {
-      actions.push({ label:tr('group2'), small:`${tr('pcs')}: ${names.join(', ')}`, fn:()=>openQuickConfirm(names, new Date(), 120) });
-      actions.push({ label:tr('group3'), small:`${tr('pcs')}: ${names.join(', ')}`, fn:()=>openQuickConfirm(names, new Date(), 180) });
-    }
-    actions.push({ label:tr('exact'), small:tr('saveNickHint'), fn:()=>showCustom() });
-
-    $('quickActions').innerHTML = '';
-    actions.forEach((a,i) => {
-      const div = document.createElement('div');
-      div.className = 'quickItem';
-      div.innerHTML = `<div><b>${esc(a.label)}</b><small>${esc(a.small)}</small></div><button class="mini ${i===0?'primary':''}">→</button>`;
-      div.querySelector('button').onclick = a.fn;
-      $('quickActions').appendChild(div);
-    });
-
-    buildCustomTimes();
-  }
-
-  function clampToOpen(date) {
-    const d = new Date(date);
-    const base = new Date(d.getFullYear(), d.getMonth(), d.getDate(), 0,0,0,0);
-    const open = addMinutes(base, WORK_START);
-    const close = addDays(base, 1);
-    close.setHours(Math.floor(WORK_END_NEXTDAY / 60), WORK_END_NEXTDAY % 60, 0, 0);
-    if (d < open) return open;
-    if (d > close) return null;
-    return d;
-  }
-
-  function roundUp(date) {
-    const d = new Date(date);
-    d.setSeconds(0,0);
-    const m = d.getMinutes();
-    const extra = (SLOT_STEP - (m % SLOT_STEP)) % SLOT_STEP;
-    if (extra) d.setMinutes(m + extra);
-    return d;
-  }
-
-  function isFreeRangeForAll(pcs, startMs, endMs) {
-    return pcs.every(pc => !getPcBookings(pc).some(b => overlaps(startMs, endMs, b.startAtMs, b.endAtMs)));
-  }
-
-  function findNearestForAll(pcs, earliest, dur) {
-    let cur = roundUp(clampToOpen(earliest) || earliest);
-    const until = addDays(new Date(), 5).getTime();
-    while (cur && cur.getTime() < until) {
-      const end = addMinutes(cur, dur);
-      const a = clampToOpen(cur), b = clampToOpen(end);
-      if (a && b && isFreeRangeForAll(pcs, cur.getTime(), end.getTime())) return cur;
-      cur = addMinutes(cur, SLOT_STEP);
-    }
-    return null;
-  }
-
-  const openAuth = () => $('authBackdrop').classList.add('show');
-  const closeAuth = () => $('authBackdrop').classList.remove('show');
-  const openConfirm = () => $('confirmBackdrop').classList.add('show');
-  const closeConfirm = () => $('confirmBackdrop').classList.remove('show');
-  const needLogin = () => { openAuth(); $('authMsg').textContent = tr('loginNeeded'); };
-
-  function openQuickConfirm(pcs, start, dur) {
-    if (!currentUser) return needLogin();
-    const nick = ($('nickInput').value || '').trim() || localStorage.getItem(NICK_KEY) || '';
-    if (!nick) return showCustom(true);
-    const safe = findNearestForAll(pcs, start, dur);
-    if (!safe) return toast(tr('taken'), 'bad');
-    pendingBooking = {
-      pcs:[...pcs],
-      startAtMs:safe.getTime(),
-      endAtMs:addMinutes(safe, dur).getTime(),
-      nick,
-      note:($('noteInput').value || '').trim()
-    };
-    fillConfirm();
-    openConfirm();
-  }
-
-  function openNearestConfirm(pcs) {
-    if (!currentUser) return needLogin();
-    const nick = ($('nickInput').value || '').trim() || localStorage.getItem(NICK_KEY) || '';
-    if (!nick) return showCustom(true);
-    const safe = findNearestForAll(pcs, new Date(), 120);
-    if (!safe) return toast(tr('taken'), 'bad');
-    pendingBooking = {
-      pcs:[...pcs],
-      startAtMs:safe.getTime(),
-      endAtMs:addMinutes(safe, 120).getTime(),
-      nick,
-      note:($('noteInput').value || '').trim()
-    };
-    fillConfirm();
-    openConfirm();
-  }
-
-  function fillConfirm() {
-    if (!pendingBooking) return;
-    const s = new Date(pendingBooking.startAtMs), e = new Date(pendingBooking.endAtMs);
-    $('confirmInfo').innerHTML = `
-      <b>${esc(tr('pcs'))}:</b> ${esc(pendingBooking.pcs.join(', '))}<br>
-      <b>${esc(tr('starts'))}:</b> ${esc(toISODate(s))} ${esc(fmtHM(s))}<br>
-      <b>${esc(tr('ends'))}:</b> ${esc(toISODate(e))} ${esc(fmtHM(e))}<br>
-      <b>${esc(tr('nick'))}:</b> ${esc(pendingBooking.nick)}
-      ${pendingBooking.note ? `<br><b>${esc(tr('note'))}:</b> ${esc(pendingBooking.note)}` : ''}
-    `;
-  }
-
-  function showCustom(focusNick=false) {
-    if (!selectedPCs.size) return toast(tr('chooseAtLeastOne'), 'warn');
-    $('customSection').classList.remove('hidden');
-    $('mySection').classList.add('hidden');
-    $('customDate').value = $('customDate').value || toISODate(new Date());
-    buildCustomTimes();
-    if (focusNick) setTimeout(() => $('nickInput').focus(), 50);
-  }
-
-  function hideCustom() { $('customSection').classList.add('hidden'); }
-
-  function buildCustomTimes() {
-    if (!selectedPCs.size) return;
-    const pcs = [...selectedPCs];
-    const dateKey = $('customDate').value || toISODate(new Date());
-    const dur = Number($('customDuration').value || 60);
-    const sel = $('customTime');
-    sel.innerHTML = '';
-
-    const [y,m,d] = dateKey.split('-').map(Number);
-    const base = new Date(y, m-1, d, 0, 0, 0, 0);
-    const open = addMinutes(base, WORK_START);
-    const close = addDays(base, 1);
-    close.setHours(Math.floor(WORK_END_NEXTDAY / 60), WORK_END_NEXTDAY % 60, 0, 0);
-
-    for (let cur = new Date(open); addMinutes(cur, dur) <= close; cur = addMinutes(cur, SLOT_STEP)) {
-      const end = addMinutes(cur, dur);
-      if (cur.getTime() < Date.now()) continue;
-      if (!isFreeRangeForAll(pcs, cur.getTime(), end.getTime())) continue;
-      const o = document.createElement('option');
-      o.value = String(cur.getTime());
-      o.textContent = `${fmtHM(cur)} → ${fmtHM(end)}`;
-      sel.appendChild(o);
-    }
-
-    if (!sel.children.length) {
-      const o = document.createElement('option');
-      o.value = '';
-      o.textContent = '—';
-      sel.appendChild(o);
-    }
-  }
-
-  async function createBooking(data) {
-    if (!currentUser) return needLogin();
-    const pcs = [...new Set((data.pcs || []).map(String))].slice(0, 10);
-    const startAtMs = Number(data.startAtMs);
-    const endAtMs = Number(data.endAtMs);
-    const nick = String(data.nick || '').trim().slice(0, 32);
-    const note = String(data.note || '').trim().slice(0, 120);
-    if (!pcs.length) return toast(tr('chooseAtLeastOne'), 'warn');
-    if (!nick) return toast(tr('enterNick'), 'warn');
-    if (!isFreeRangeForAll(pcs, startAtMs, endAtMs)) return toast(tr('taken'), 'bad');
-
-    try {
-      await db.collection('users').doc(String(currentUser.uid)).set({ nick, updatedAtMs:Date.now() }, { merge:true });
-      const batch = db.batch();
-      pcs.forEach(pc => {
-        const ref = db.collection('bookings').doc();
-        batch.set(ref, {
-          uid:String(currentUser.uid),
-          userEmail:String(currentUser.email || ''),
-          nick,
-          pc,
-          note,
-          startAtMs,
-          endAtMs,
-          createdAtMs:Date.now()
-        });
-      });
-      await batch.commit();
-      localStorage.setItem(NICK_KEY, nick);
-      $('nickInput').value = nick;
-      toast(tr('booked'), 'good');
-      closeConfirm();
-      hideCustom();
-      pendingBooking = null;
-      $('mySection').classList.remove('hidden');
-      $('adminSection').classList.add('hidden');
-      renderMyBookings();
-      $('mySection').scrollIntoView({behavior:'smooth', block:'start'});
-    } catch(e) {
-      handleFsError(e);
-    }
-  }
-
-  function renderMyBookings() {
-    const box = $('myBookings');
-    if (!box) return;
-    box.innerHTML = '';
-    if (!currentUser) {
-      box.innerHTML = `<div class="notice">${esc(tr('authNeed'))}</div>`;
-      return;
-    }
-    const mine = allBookings.filter(b => b.uid === currentUser.uid && b.endAtMs > Date.now() - 86400000).sort((a,b)=>a.startAtMs-b.startAtMs);
-    if (!mine.length) {
-      box.innerHTML = `<div class="notice">${esc(tr('empty'))}</div>`;
-      return;
-    }
-    mine.forEach(b => {
-      const s = new Date(b.startAtMs), e = new Date(b.endAtMs);
-      const item = document.createElement('div');
-      item.className = 'bookingItem';
-      item.innerHTML = `<div><b>${esc(b.pc)}</b><div class="meta">${esc(toISODate(s))} • ${esc(fmtHM(s))} → ${esc(fmtHM(e))}</div></div><button class="mini bad">${esc(tr('remove'))}</button>`;
-      item.querySelector('button').onclick = async () => {
-        if (!confirm(tr('remove') + '?')) return;
-        try { await db.collection('bookings').doc(b.id).delete(); toast(tr('canceled'), 'good'); }
-        catch(e) { handleFsError(e); }
-      };
-      box.appendChild(item);
-    });
-  }
-
-  function toggleMy() {
-    $('mySection').classList.toggle('hidden');
-    $('customSection').classList.add('hidden');
-    $('adminSection').classList.add('hidden');
-    renderMyBookings();
-    if (!$('mySection').classList.contains('hidden')) $('mySection').scrollIntoView({behavior:'smooth', block:'start'});
-  }
-
-  async function renderAdminBookings() {
-    const box = $('adminBookings');
-    if (!box) return;
-    box.innerHTML = '';
-    if (!isAdmin) {
-      box.innerHTML = `<div class="notice">${esc(tr('adminDenied'))}</div>`;
-      return;
-    }
-    const list = allBookings.filter(b => b.endAtMs > Date.now()).sort((a,b)=>a.startAtMs-b.startAtMs);
-    if (!list.length) {
-      box.innerHTML = `<div class="notice">${esc(tr('empty'))}</div>`;
-      return;
-    }
-    list.forEach(b => {
-      const s = new Date(b.startAtMs), e = new Date(b.endAtMs);
-      const item = document.createElement('div');
-      item.className = 'bookingItem';
-      item.innerHTML = `<div><b>${esc(b.pc)}</b><div class="meta">${esc(b.nick || '')} • ${esc(toISODate(s))} • ${esc(fmtHM(s))} → ${esc(fmtHM(e))}</div></div><button class="mini bad">${esc(tr('remove'))}</button>`;
-      item.querySelector('button').onclick = async () => {
-        if (!confirm(tr('remove') + '?')) return;
-        try { await db.collection('bookings').doc(b.id).delete(); toast(tr('canceled'), 'good'); }
-        catch(e) { handleFsError(e); }
-      };
-      box.appendChild(item);
-    });
-  }
-
-  function toggleAdmin() {
-    if (!currentUser) return toast(tr('loginNeeded'), 'warn');
-    if (!isAdmin) return toast(tr('adminDenied'), 'bad');
-    $('adminSection').classList.toggle('hidden');
-    $('customSection').classList.add('hidden');
-    $('mySection').classList.add('hidden');
-    renderAdminBookings();
-    if (!$('adminSection').classList.contains('hidden')) $('adminSection').scrollIntoView({behavior:'smooth', block:'start'});
-  }
-
-  function updateUserUI() {
-    $('userPill').textContent = currentUser ? (currentUser.email || currentUser.uid.slice(0,6)) : '—';
-    isAdmin = !!(currentUser && ADMIN_EMAILS.includes(String(currentUser.email || '').toLowerCase()));
-    $('openAuthBtn').classList.toggle('hidden', !!currentUser);
-    $('logoutBtn').classList.toggle('hidden', !currentUser);
-    if (currentUser) $('authMsg').textContent = tr('authOk') + (currentUser.email || currentUser.uid.slice(0,6));
-  }
-
-  function findFreeNow() {
-    const free = ALL.filter(pc => getPcStatus(pc).state === 'free');
-    if (!free.length) return toast(tr('noFree'), 'warn');
-    if (multiMode) {
-      selectedPCs = new Set(free.slice(0, 3));
-      selectedPc = [...selectedPCs][0] || null;
-    } else {
-      selectedPc = free[0];
-      selectedPCs = new Set([free[0]]);
-    }
-    renderStats();
-    renderHall();
-    renderSelected();
-  }
-
-  async function startRealtime() {
-    if (unsub) { try { unsub(); } catch(_) {} }
-    const { start, end } = dayBoundsNow();
-    unsub = db.collection('bookings')
-      .where('startAtMs', '<', end)
-      .where('endAtMs', '>', start)
-      .onSnapshot(snap => {
-        allBookings = snap.docs.map(d => ({ id:d.id, ...d.data() })).map(x => ({ ...x, startAtMs:Number(x.startAtMs||0), endAtMs:Number(x.endAtMs||0) }));
-        setCloud(tr('statusLive'), true);
-        renderStats();
-        renderHall();
-        renderSelected();
-        renderMyBookings();
-      }, handleFsError);
-  }
-
-  function startTicker() {
-    clearInterval(timer);
-    timer = setInterval(() => {
-      renderStats();
-      renderHall();
-      renderSelected();
-    }, 30000);
-  }
-
-  function bind() {
-    $('lang_ru').onclick = () => { lang='ru'; localStorage.setItem(LANG_KEY, lang); setLangUI(); };
-    $('lang_en').onclick = () => { lang='en'; localStorage.setItem(LANG_KEY, lang); setLangUI(); };
-    $('lang_ka').onclick = () => { lang='ka'; localStorage.setItem(LANG_KEY, lang); setLangUI(); };
-
-    $('filterAll').onclick = () => { currentFilter='all'; renderHall(); };
-    $('filterFree').onclick = () => { currentFilter='free'; renderHall(); };
-    $('filterSoon').onclick = () => { currentFilter='soon'; renderHall(); };
-
-    $('findNowBtn').onclick = findFreeNow;
-    $('toggleMultiBtn').onclick = () => {
-      multiMode = !multiMode;
-      if (!multiMode && selectedPCs.size > 1) {
-        const first = [...selectedPCs][0];
-        selectedPCs = new Set(first ? [first] : []);
-        selectedPc = first || null;
-      }
-      setLangUI();
-    };
-    $('clearSelectedBtn').onclick = () => {
-      selectedPCs.clear();
-      selectedPc = null;
-      renderStats();
-      renderHall();
-      renderSelected();
-    };
-
-    $('openMyBtn').onclick = toggleMy;
-    $('openAdminBtn').onclick = toggleAdmin;
-    $('mobileMyBtn').onclick = toggleMy;
-    $('mobileBookBtn').onclick = () => {
-      if (!selectedPCs.size) return toast(tr('chooseAtLeastOne'), 'warn');
-      showCustom();
-    };
-
-    $('openAuthBtn').onclick = () => $('authBackdrop').classList.add('show');
-    $('logoutBtn').onclick = async () => { try { await auth.signOut(); } catch(_){} };
-
-    $('closeAuthBtn').onclick = () => $('authBackdrop').classList.remove('show');
-    $('authBackdrop').onclick = e => { if (e.target === $('authBackdrop')) $('authBackdrop').classList.remove('show'); };
-    $('closeConfirmBtn').onclick = closeConfirm;
-    $('cancelConfirmBtn').onclick = closeConfirm;
-    $('confirmBackdrop').onclick = e => { if (e.target === $('confirmBackdrop')) closeConfirm(); };
-
-    $('customDate').value = toISODate(new Date());
-    $('nickInput').value = localStorage.getItem(NICK_KEY) || '';
-    $('nickInput').addEventListener('input', () => localStorage.setItem(NICK_KEY, $('nickInput').value.trim()));
-    $('customDate').addEventListener('change', buildCustomTimes);
-    $('customDuration').addEventListener('change', buildCustomTimes);
-
-    $('hideCustomBtn').onclick = hideCustom;
-    $('bookCustomBtn').onclick = () => {
-      if (!selectedPCs.size) return toast(tr('chooseAtLeastOne'), 'warn');
-      const startAtMs = Number($('customTime').value || 0);
-      if (!startAtMs) return toast(tr('pickTime'), 'warn');
-      const duration = Number($('customDuration').value || 60);
-      pendingBooking = {
-        pcs:[...selectedPCs],
-        startAtMs,
-        endAtMs:startAtMs + duration * 60000,
-        nick:($('nickInput').value || '').trim(),
-        note:($('noteInput').value || '').trim()
-      };
-      fillConfirm();
-      openConfirm();
-    };
-
-    $('confirmBookBtn').onclick = () => { if (pendingBooking) createBooking(pendingBooking); };
-
-    $('loginBtn').onclick = async () => {
-      const email = ($('authEmail').value || '').trim();
-      const pass = ($('authPass').value || '').trim();
-      if (!email || !pass) return $('authMsg').textContent = tr('loginErr');
-      try { await auth.signInWithEmailAndPassword(email, pass); $('authBackdrop').classList.remove('show'); }
-      catch(e) { console.error(e); $('authMsg').textContent = e.message || tr('fsErr'); }
-    };
-
-    $('registerBtn').onclick = async () => {
-      const email = ($('authEmail').value || '').trim();
-      const pass = ($('authPass').value || '').trim();
-      if (!email || !pass) return $('authMsg').textContent = tr('loginErr');
-      try { await auth.createUserWithEmailAndPassword(email, pass); $('authBackdrop').classList.remove('show'); }
-      catch(e) { console.error(e); $('authMsg').textContent = e.message || tr('fsErr'); }
-    };
-
-    $('resetBtn').onclick = async () => {
-      const email = ($('authEmail').value || '').trim();
-      if (!email) return $('authMsg').textContent = tr('loginErr');
-      try { await auth.sendPasswordResetEmail(email); $('authMsg').textContent = tr('resetSent'); }
-      catch(e) { console.error(e); $('authMsg').textContent = e.message || tr('fsErr'); }
-    };
-
-    document.addEventListener('keydown', e => {
-      if (e.key === 'Escape') {
-        $('authBackdrop').classList.remove('show');
-        closeConfirm();
-      }
-    });
-  }
-
-  async function boot() {
-    setLangUI();
-    bind();
-    setCloud(tr('statusOk'), true);
-    startTicker();
-    if (db) startRealtime();
-
-    auth.onAuthStateChanged(async u => {
-      currentUser = u || null;
-      updateUserUI();
-      renderMyBookings();
-      renderAdminBookings();
-      if (currentUser && !$('nickInput').value.trim()) {
-        try {
-          const doc = await db.collection('users').doc(String(currentUser.uid)).get();
-          const nick = doc.exists ? (doc.data().nick || '') : '';
-          if (nick) {
-            $('nickInput').value = nick;
-            localStorage.setItem(NICK_KEY, nick);
-          }
-        } catch(_) {}
-      }
-    });
-  }
-
+<script>
+(() => {
+  const firebaseConfig = { apiKey:"AIzaSyDJ-5e_xLPW9PnYT66ENey_Ndh8HJdI5wc", authDomain:"sakompiutere-gaming.firebaseapp.com", projectId:"sakompiutere-gaming", storageBucket:"sakompiutere-gaming.firebasestorage.app", messagingSenderId:"508996154674", appId:"1:508996154674:web:0b6e475d284c49ba80d32b", measurementId:"G-H2HKS025KH" };
+  const LEFT=["Bishop","Godzilla","Elf","Kadita","Orc"], RIGHT=["Lancelot","Fantomas","Soultaker","Pudge","Kratos"], ALL=[...LEFT,...RIGHT], ADMIN_EMAILS=['adjarelispeak@gmail.com','kiralite93@gmail.com'].map(x=>x.toLowerCase());
+  const WORK_START=10*60, WORK_END_NEXTDAY=3*60, SLOT_STEP=30, SOON_MIN=30, LANG_KEY='sg_live_lang', NICK_KEY='sg_live_nick';
+  const $=id=>document.getElementById(id), pad=n=>String(n).padStart(2,'0'), fmtHM=d=>`${pad(d.getHours())}:${pad(d.getMinutes())}`, toISODate=d=>`${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`, addMinutes=(d,m)=>new Date(d.getTime()+m*60000), addDays=(d,x)=>new Date(d.getTime()+x*86400000), overlaps=(a1,a2,b1,b2)=>Math.max(a1,b1)<Math.min(a2,b2), esc=s=>String(s??'').replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;').replaceAll('"','&quot;').replaceAll("'",'&#039;');
+  let lang=localStorage.getItem(LANG_KEY)||'ru';
+  const T={
+    ru:{title:'Sakompiutere Gaming — Booking',sub:'Можно выбирать несколько ПК, видеть свои брони и управлять ими.',user:'Пользователь',cloud:'База',livehall:'Live Hall',livehint:'Статусы ПК в реальном времени.',all:'Все',free:'Свободные',soon:'Скоро свободны',topNotice:'Выбирай один или несколько ПК, затем заверши бронь справа. После создания бронь сразу появится в блоке “Мои брони”.',statAll:'Всего ПК',statFree:'Свободно',statBusy:'Занято',statSelected:'Выбрано',findNow:'⚡ Найти свободные',multiOff:'👥 Мультивыбор: OFF',multiOn:'👥 Мультивыбор: ON',clearSelected:'Сбросить',my:'👤 Мои брони',admin:'🔐 Admin',auth:'🔑 Войти',logout:'🚪 Выйти',aisle:'ПРОХОД',bookingPanel:'Завершение брони',singleHint:'Выбери ПК и заверши бронь справа.',multiHint:'Мультивыбор включён. Отмечай ПК для групповой брони.',selectedNone:'Выбери хотя бы один ПК.',selectedOne:'Выбран 1 ПК',selectedMany:'Выбрано ПК',customtitle:'Параметры брони',customhint:'Дата, время и длительность применяются ко всем выбранным ПК.',date:'Дата',duration:'Длительность',time:'Время',nick:'Ник',note:'Комментарий',bookCustom:'Завершить бронирование',clearPanels:'Скрыть формы',mybookings:'Мои брони',adminBookings:'Admin панель',adminHint:'Все активные брони. Можно удалять.',authTitle:'Вход / Регистрация',authHint:'Email + пароль',password:'Пароль',login:'Войти',register:'Регистрация',reset:'Сбросить пароль',confirmtitle:'Подтверждение',confirmhint:'Проверь детали перед записью',confirm:'Подтвердить',cancel:'Отмена',freeTag:'🟢 Свободен',soonTag:'🟡 Скоро свободен',busyTag:'🔴 Занят',freeNow:'Свободен прямо сейчас',playing:'Сейчас играет',freeAt:'Свободен в',endsIn:'Через',play1:'Играть сейчас • 1 час',play2:'Играть сейчас • 2 часа',play3:'Играть сейчас • 3 часа',group2:'Группой • 2 часа',group3:'Группой • 3 часа',bookAt:'Забронировать ближайшее',queue:'В очередь',exact:'Выбрать вручную',loginNeeded:'Сначала войди в аккаунт.',enterNick:'Введи ник.',pickTime:'Выбери время.',booked:'✅ Бронь создана!',canceled:'Отменено.',noFree:'Сейчас нет свободных ПК.',authOk:'✅ Вход выполнен: ',authNeed:'Нужно войти, чтобы бронировать.',loginErr:'Введите email и пароль.',resetSent:'Письмо для сброса отправлено ✅',fsErr:'Ошибка Firestore. Проверь Rules или блокировщик.',rules:'Firestore Rules не позволяют запись.',blocked:'Браузер или расширение блокирует Firebase.',statusOk:'OK',statusLive:'LIVE',statusErr:'ERR',minutes:'мин',starts:'Начало',ends:'Конец',pc:'ПК',pcs:'ПК',remove:'Удалить',empty:'Пока ничего нет',taken:'Этот слот уже занят. Выбери другой.',queueHint:'Сейчас эта кнопка ставит на ближайшее свободное время.',busyUntil:'Занят до',guest:'Гость',adminDenied:'Ты не админ.',mobileMy:'Мои',mobileBook:'Бронировать'},
+    en:{title:'Sakompiutere Gaming — Booking',sub:'You can select multiple PCs, see your bookings and manage them.',user:'User',cloud:'Database',livehall:'Live Hall',livehint:'PC status in realtime.',all:'All',free:'Free',soon:'Soon free',topNotice:'Choose one or multiple PCs, then finish booking on the right. After creation it appears in “My bookings”.',statAll:'Total PCs',statFree:'Free',statBusy:'Busy',statSelected:'Selected',findNow:'⚡ Find free',multiOff:'👥 Multi-select: OFF',multiOn:'👥 Multi-select: ON',clearSelected:'Clear',my:'👤 My bookings',admin:'🔐 Admin',auth:'🔑 Login',logout:'🚪 Logout',aisle:'AISLE',bookingPanel:'Finish booking',singleHint:'Choose a PC and finish booking on the right.',multiHint:'Multi-select is on. Mark PCs for group booking.',selectedNone:'Choose at least one PC.',selectedOne:'1 PC selected',selectedMany:'PCs selected',customtitle:'Booking parameters',customhint:'Date, time and duration apply to all selected PCs.',date:'Date',duration:'Duration',time:'Time',nick:'Nick',note:'Note',bookCustom:'Finish booking',clearPanels:'Hide forms',mybookings:'My bookings',adminBookings:'Admin panel',adminHint:'All active bookings. Can delete.',authTitle:'Login / Register',authHint:'Email + password',password:'Password',login:'Login',register:'Register',reset:'Reset password',confirmtitle:'Confirmation',confirmhint:'Check details before saving',confirm:'Confirm',cancel:'Cancel',freeTag:'🟢 Free',soonTag:'🟡 Soon free',busyTag:'🔴 Busy',freeNow:'Free right now',playing:'Now playing',freeAt:'Free at',endsIn:'In',play1:'Play now • 1 hour',play2:'Play now • 2 hours',play3:'Play now • 3 hours',group2:'Group • 2 hours',group3:'Group • 3 hours',bookAt:'Book nearest free time',queue:'Queue',exact:'Choose manually',loginNeeded:'Please login first.',enterNick:'Enter your nickname.',pickTime:'Pick a time.',booked:'✅ Booking created!',canceled:'Canceled.',noFree:'No free PCs right now.',authOk:'✅ Logged in: ',authNeed:'Login is required for booking.',loginErr:'Enter email and password.',resetSent:'Password reset email sent ✅',fsErr:'Firestore error. Check Rules or ad blocker.',rules:'Firestore Rules do not allow this write.',blocked:'Browser or extension blocks Firebase.',statusOk:'OK',statusLive:'LIVE',statusErr:'ERR',minutes:'min',starts:'Start',ends:'End',pc:'PC',pcs:'PCs',remove:'Delete',empty:'Nothing yet',taken:'This slot is already taken. Pick another one.',queueHint:'This button books nearest free time.',busyUntil:'Busy until',guest:'Guest',adminDenied:'You are not admin.',mobileMy:'Mine',mobileBook:'Book'},
+    ka:{title:'Sakompiutere Gaming — Booking',sub:'შეგიძლია რამდენიმე PC აირჩიო, ნახო შენი ჯავშნები და მართო ისინი.',user:'მომხმარებელი',cloud:'ბაზა',livehall:'Live Hall',livehint:'PC სტატუსები რეალურ დროში.',all:'ყველა',free:'თავისუფალი',soon:'მალე თავისუფალი',topNotice:'აირჩიე ერთი ან რამდენიმე PC და დაასრულე ჯავშანი მარჯვნივ. შექმნის შემდეგ ის მაშინვე გამოჩნდება “ჩემი ჯავშნები”-ში.',statAll:'სულ PC',statFree:'თავისუფალი',statBusy:'დაკავებული',statSelected:'არჩეული',findNow:'⚡ იპოვე თავისუფალი',multiOff:'👥 Multi-select: OFF',multiOn:'👥 Multi-select: ON',clearSelected:'გასუფთავება',my:'👤 ჩემი ჯავშნები',admin:'🔐 Admin',auth:'🔑 შესვლა',logout:'🚪 გასვლა',aisle:'გასასვლელი',bookingPanel:'ჯავშნის დასრულება',singleHint:'აირჩიე PC და დაასრულე ჯავშანი მარჯვნივ.',multiHint:'Multi-select ჩართულია. მონიშნე PC-ები ჯგუფური ჯავშნისთვის.',selectedNone:'აირჩიე მინიმუმ ერთი PC.',selectedOne:'არჩეულია 1 PC',selectedMany:'არჩეულია PC',customtitle:'ჯავშნის პარამეტრები',customhint:'თარიღი, დრო და ხანგრძლივობა ყველა არჩეულ PC-ზე გავრცელდება.',date:'თარიღი',duration:'ხანგრძლივობა',time:'დრო',nick:'ნიკი',note:'შენიშვნა',bookCustom:'ჯავშნის დასრულება',clearPanels:'ფორმების დამალვა',mybookings:'ჩემი ჯავშნები',adminBookings:'Admin პანელი',adminHint:'ყველა აქტიური ჯავშანი. შესაძლებელია წაშლა.',authTitle:'შესვლა / რეგისტრაცია',authHint:'Email + პაროლი',password:'პაროლი',login:'შესვლა',register:'რეგისტრაცია',reset:'პაროლის აღდგენა',confirmtitle:'დადასტურება',confirmhint:'შეამოწმე დეტალები',confirm:'დადასტურება',cancel:'გაუქმება',freeTag:'🟢 თავისუფალია',soonTag:'🟡 მალე გათავისუფლდება',busyTag:'🔴 დაკავებულია',freeNow:'ახლავე თავისუფალია',playing:'ახლა თამაშობს',freeAt:'თავისუფალი იქნება',endsIn:'მიერ',play1:'ითამაშე ახლა • 1 საათი',play2:'ითამაშე ახლა • 2 საათი',play3:'ითამაშე ახლა • 3 საათი',group2:'ჯგუფურად • 2 საათი',group3:'ჯგუფურად • 3 საათი',bookAt:'უახლოეს დროზე დაჯავშნა',queue:'რიგში ჩადგომა',exact:'ხელით არჩევა',loginNeeded:'ჯერ შედი ანგარიშში.',enterNick:'შეიყვანე ნიკი.',pickTime:'აირჩიე დრო.',booked:'✅ ჯავშანი შეიქმნა!',canceled:'გაუქმდა.',noFree:'ახლა თავისუფალი PC არ არის.',authOk:'✅ შესულია: ',authNeed:'ჯავშნისთვის საჭიროა შესვლა.',loginErr:'შეიყვანე email და პაროლი.',resetSent:'აღდგენის წერილი გაიგზავნა ✅',fsErr:'Firestore შეცდომა. შეამოწმე Rules ან ad blocker.',rules:'Firestore Rules არ უშვებს ჩანაწერს.',blocked:'ბრაუზერი ან გაფართოება ბლოკავს Firebase-ს.',statusOk:'OK',statusLive:'LIVE',statusErr:'ERR',minutes:'წთ',starts:'დასაწყისი',ends:'დასასრული',pc:'PC',pcs:'PC-ები',remove:'წაშლა',empty:'ჯერ არაფერია',taken:'ეს დრო უკვე დაკავებულია. აირჩიე სხვა.',queueHint:'ეს ღილაკი უახლოეს თავისუფალ დროს აჯავშნებს.',busyUntil:'დაკავებულია',guest:'სტუმარი',adminDenied:'ადმინი არ ხარ.',mobileMy:'ჩემი',mobileBook:'დაჯავშნა'}
+  };
+  const tr=k=>(T[lang]&&T[lang][k])||T.ru[k]||k;
+  let app,auth,db,currentUser=null,isAdmin=false,allBookings=[],selectedPc=null,selectedPCs=new Set(),multiMode=false,currentFilter='all',pendingBooking=null,unsub=null,timer=null;
+  try{app=firebase.initializeApp(firebaseConfig);auth=firebase.auth();db=firebase.firestore();}catch(e){console.error(e)}
+  const toast=(msg,type='')=>{const el=$('toast');el.textContent=msg;el.className='toast '+type;el.classList.remove('hidden');clearTimeout(el._t);el._t=setTimeout(()=>el.classList.add('hidden'),3200)};
+  const setCloud=(text,ok=true)=>{$('cloudPill').textContent=text;$('cloudDot').className='dot '+(ok?'ok':'err')};
+  const dayBoundsNow=()=>{const now=new Date(), s=new Date(now.getFullYear(),now.getMonth(),now.getDate(),0,0,0,0), e=addDays(s,2); return {start:s.getTime(), end:e.getTime()};};
+  function setLangUI(){ document.title=tr('title'); $('t_title').textContent=tr('title'); $('t_sub').textContent=tr('sub'); $('t_user').textContent=tr('user'); $('t_cloud').textContent=tr('cloud'); $('t_livehall').textContent=tr('livehall'); $('t_livehint').textContent=tr('livehint'); $('filterAll').textContent=tr('all'); $('filterFree').textContent=tr('free'); $('filterSoon').textContent=tr('soon'); $('topNotice').textContent=tr('topNotice'); $('t_statAll').textContent=tr('statAll'); $('t_statFree').textContent=tr('statFree'); $('t_statBusy').textContent=tr('statBusy'); $('t_statSelected').textContent=tr('statSelected'); $('findNowBtn').textContent=tr('findNow'); $('toggleMultiBtn').textContent=multiMode?tr('multiOn'):tr('multiOff'); $('clearSelectedBtn').textContent=tr('clearSelected'); $('openMyBtn').textContent=tr('my'); $('openAdminBtn').textContent=tr('admin'); $('openAuthBtn').textContent=tr('auth'); $('logoutBtn').textContent=tr('logout'); $('t_aisle').textContent=tr('aisle'); $('t_bookingPanel').textContent=tr('bookingPanel'); $('t_customtitle').textContent=tr('customtitle'); $('t_customhint').textContent=tr('customhint'); $('t_date').textContent=tr('date'); $('t_duration').textContent=tr('duration'); $('t_time').textContent=tr('time'); $('t_nick').textContent=tr('nick'); $('t_note').textContent=tr('note'); $('bookCustomBtn').textContent=tr('bookCustom'); $('clearPanelsBtn').textContent=tr('clearPanels'); $('t_mybookings').textContent=tr('mybookings'); $('t_adminbookings').textContent=tr('adminBookings'); $('t_adminhint').textContent=tr('adminHint'); $('t_auth').textContent=tr('authTitle'); $('t_authhint').textContent=tr('authHint'); $('t_password').textContent=tr('password'); $('loginBtn').textContent=tr('login'); $('registerBtn').textContent=tr('register'); $('resetBtn').textContent=tr('reset'); $('t_confirmtitle').textContent=tr('confirmtitle'); $('t_confirmhint').textContent=tr('confirmhint'); $('confirmBookBtn').textContent=tr('confirm'); $('cancelConfirmBtn').textContent=tr('cancel'); $('mobileMyBtn').textContent=tr('mobileMy'); $('mobileBookBtn').textContent=tr('mobileBook'); $('lang_ru').classList.toggle('active',lang==='ru'); $('lang_en').classList.toggle('active',lang==='en'); $('lang_ka').classList.toggle('active',lang==='ka'); renderStats(); renderHall(); renderSelected(); renderMyBookings(); renderAdminBookings(); }
+  function handleFsError(err){ console.error(err); const msg=String(err?.message||err?.code||err||'').toLowerCase(); if(msg.includes('permission')) toast(tr('rules'),'bad'); else if(msg.includes('fetch')||msg.includes('network')||msg.includes('blocked')) toast(tr('blocked'),'bad'); else toast(tr('fsErr'),'bad'); setCloud(tr('statusErr'),false); }
+  function progressFor(b){ const now=Date.now(); if(!b||!b.startAtMs||!b.endAtMs) return 0; if(now<=b.startAtMs) return 0; if(now>=b.endAtMs) return 100; return Math.max(0,Math.min(100,((now-b.startAtMs)/(b.endAtMs-b.startAtMs))*100)); }
+  function getPcBookings(pc){ return allBookings.filter(b=>b.pc===pc).sort((a,b)=>a.startAtMs-b.startAtMs); }
+  function getPcStatus(pc){ const now=Date.now(); const future=getPcBookings(pc).filter(b=>b.endAtMs>now); const active=future.find(b=>b.startAtMs<=now&&b.endAtMs>now); if(active){ const mins=Math.max(1,Math.ceil((active.endAtMs-now)/60000)); return {state: mins<=SOON_MIN?'soon':'busy', active, freeAtMs:active.endAtMs, minsToFree:mins}; } const next=future.find(b=>b.startAtMs>now); if(next&&next.startAtMs-now<=SOON_MIN*60000){ return {state:'soon', active:null, freeAtMs:next.startAtMs, minsToFree:Math.max(1,Math.ceil((next.startAtMs-now)/60000))}; } return {state:'free', active:null, freeAtMs:now, minsToFree:0}; }
+  const statusLabel=s=>s.state==='free'?tr('freeTag'):s.state==='soon'?tr('soonTag'):tr('busyTag');
+  const minsText=m=>`${m} ${tr('minutes')}`;
+  function updateSelection(pc){ if(multiMode){ if(selectedPCs.has(pc)) selectedPCs.delete(pc); else if(selectedPCs.size<10) selectedPCs.add(pc); selectedPc=selectedPCs.size?[...selectedPCs][0]:null; } else { selectedPc=pc; selectedPCs=new Set([pc]); } renderStats(); renderHall(); renderSelected(); buildCustomTimes(); }
+  function renderCard(pc){ const s=getPcStatus(pc); if(currentFilter==='free'&&s.state!=='free') return null; if(currentFilter==='soon'&&s.state==='free') return null; const marked=selectedPCs.has(pc); const el=document.createElement('div'); el.className=`pc ${s.state} ${selectedPc===pc?'active':''} ${marked?'marked':''}`; let meta=s.state==='free'?`<div>${tr('freeNow')}</div>`:s.active?`<div>${tr('playing')}: <b>${esc(s.active.nick||tr('guest'))}</b></div><div>${tr('freeAt')}: <b>${fmtHM(new Date(s.freeAtMs))}</b></div><div>${tr('endsIn')}: <b>${minsText(s.minsToFree)}</b></div><div class="progress"><div class="bar" style="width:${progressFor(s.active)}%"></div></div>`:`<div>${tr('freeAt')}: <b>${fmtHM(new Date(s.freeAtMs))}</b></div><div>${tr('endsIn')}: <b>${minsText(s.minsToFree)}</b></div>`;
+    el.innerHTML=`<div class="pcTop"><div class="pcName">${esc(pc)}</div><div class="statusTag ${s.state}">${esc(statusLabel(s))}</div></div><div class="pcMeta">${meta}</div><div class="pcBottom"><button class="mini ${marked?'soft':''}" data-a="pick">${marked?'✓':'+'}</button><button class="mini ${s.state==='free'?'primary':''}" data-a="quick">${multiMode?'👥':'→'}</button></div>`;
+    el.addEventListener('click',e=>{ if(e.target.closest('button')) return; updateSelection(pc); });
+    setTimeout(()=>{ const pick=el.querySelector('[data-a="pick"]'); const quick=el.querySelector('[data-a="quick"]'); if(pick) pick.onclick=e=>{e.stopPropagation(); updateSelection(pc)}; if(quick) quick.onclick=e=>{e.stopPropagation(); updateSelection(pc); if(multiMode){ showCustom(); } else { if(s.state==='free') openQuickConfirm([pc], new Date(), 60); else openNearestConfirm([pc]); } }; },0);
+    return el; }
+  function renderHall(){ $('leftSide').innerHTML=''; $('rightSide').innerHTML=''; LEFT.forEach(pc=>{const c=renderCard(pc); if(c) $('leftSide').appendChild(c)}); RIGHT.forEach(pc=>{const c=renderCard(pc); if(c) $('rightSide').appendChild(c)}); }
+  function renderStats(){ const freeCount=ALL.filter(pc=>getPcStatus(pc).state==='free').length; $('statAll').textContent=String(ALL.length); $('statFree').textContent=String(freeCount); $('statBusy').textContent=String(ALL.length-freeCount); $('statSelected').textContent=String(selectedPCs.size); }
+  function renderSelected(){ $('selectedChips').innerHTML=''; if(!selectedPCs.size){ $('selectedName').textContent='—'; $('selectedStatus').textContent=multiMode?tr('multiHint'):tr('singleHint'); $('selectedActions').classList.add('hidden'); return; } const names=[...selectedPCs]; $('selectedName').textContent=names.length===1?names[0]:`${names.length} ${tr('pcs')}`; $('selectedStatus').textContent=names.length===1?tr('selectedOne'):`${tr('selectedMany')}: ${names.length}`; names.forEach(pc=>{ const chip=document.createElement('div'); chip.className='chip'; chip.innerHTML=`<b>${esc(pc)}</b>`; $('selectedChips').appendChild(chip); }); $('selectedActions').classList.remove('hidden'); const actions=[]; if(names.length===1&&!multiMode){ const s=getPcStatus(names[0]); if(s.state==='free'){ actions.push({label:tr('play1'), small:`${tr('starts')}: ${fmtHM(new Date())}`, fn:()=>openQuickConfirm(names,new Date(),60)}); actions.push({label:tr('play2'), small:`${tr('starts')}: ${fmtHM(new Date())}`, fn:()=>openQuickConfirm(names,new Date(),120)}); actions.push({label:tr('play3'), small:`${tr('starts')}: ${fmtHM(new Date())}`, fn:()=>openQuickConfirm(names,new Date(),180)}); } else { actions.push({label:tr('bookAt'), small:`${tr('starts')}: ${fmtHM(new Date(s.freeAtMs))}`, fn:()=>openNearestConfirm(names)}); actions.push({label:tr('queue'), small:tr('queueHint'), fn:()=>openNearestConfirm(names)}); } } else { actions.push({label:tr('group2'), small:names.join(', '), fn:()=>openQuickConfirm(names,new Date(),120)}); actions.push({label:tr('group3'), small:names.join(', '), fn:()=>openQuickConfirm(names,new Date(),180)}); }
+    actions.push({label:tr('exact'), small:tr('customhint'), fn:()=>showCustom()}); $('quickActions').innerHTML=''; actions.forEach((a,i)=>{ const div=document.createElement('div'); div.className='quickItem'; div.innerHTML=`<div><b>${esc(a.label)}</b><small>${esc(a.small)}</small></div><button class="mini ${i===0?'primary':''}">→</button>`; div.querySelector('button').onclick=a.fn; $('quickActions').appendChild(div); }); }
+  function clampToOpen(date){ const d=new Date(date); const base=new Date(d.getFullYear(),d.getMonth(),d.getDate(),0,0,0,0), open=addMinutes(base,WORK_START), close=addDays(base,1); close.setHours(Math.floor(WORK_END_NEXTDAY/60),WORK_END_NEXTDAY%60,0,0); if(d<open) return open; if(d>close) return null; return d; }
+  function roundUp(date){ const d=new Date(date); d.setSeconds(0,0); const m=d.getMinutes(); const extra=(SLOT_STEP-(m%SLOT_STEP))%SLOT_STEP; if(extra) d.setMinutes(m+extra); return d; }
+  const isFreeRangeForAll=(pcs,startMs,endMs)=>pcs.every(pc=>!getPcBookings(pc).some(b=>overlaps(startMs,endMs,b.startAtMs,b.endAtMs)));
+  function findNearestForAll(pcs,earliest,dur){ let cur=roundUp(clampToOpen(earliest)||earliest); const until=addDays(new Date(),5).getTime(); while(cur&&cur.getTime()<until){ const end=addMinutes(cur,dur), a=clampToOpen(cur), b=clampToOpen(end); if(a&&b&&isFreeRangeForAll(pcs,cur.getTime(),end.getTime())) return cur; cur=addMinutes(cur,SLOT_STEP); } return null; }
+  const openAuth=()=>$('authBackdrop').classList.add('show'), closeAuth=()=>$('authBackdrop').classList.remove('show'), openConfirm=()=>$('confirmBackdrop').classList.add('show'), closeConfirm=()=>$('confirmBackdrop').classList.remove('show');
+  function needLogin(){ openAuth(); $('authMsg').textContent=tr('loginNeeded'); }
+  function openQuickConfirm(pcs,start,dur){ if(!currentUser) return needLogin(); const nick=($('nickInput').value||'').trim()||localStorage.getItem(NICK_KEY)||''; if(!nick) return toast(tr('enterNick'),'warn'); const safe=findNearestForAll(pcs,start,dur); if(!safe) return toast(tr('taken'),'bad'); pendingBooking={pcs:[...pcs], startAtMs:safe.getTime(), endAtMs:addMinutes(safe,dur).getTime(), nick, note:($('noteInput').value||'').trim()}; fillConfirm(); openConfirm(); }
+  function openNearestConfirm(pcs){ if(!currentUser) return needLogin(); const nick=($('nickInput').value||'').trim()||localStorage.getItem(NICK_KEY)||''; if(!nick) return toast(tr('enterNick'),'warn'); const safe=findNearestForAll(pcs,new Date(),120); if(!safe) return toast(tr('taken'),'bad'); pendingBooking={pcs:[...pcs], startAtMs:safe.getTime(), endAtMs:addMinutes(safe,120).getTime(), nick, note:($('noteInput').value||'').trim()}; fillConfirm(); openConfirm(); }
+  function fillConfirm(){ if(!pendingBooking) return; const s=new Date(pendingBooking.startAtMs), e=new Date(pendingBooking.endAtMs); $('confirmInfo').innerHTML=`<b>${esc(tr('pcs'))}:</b> ${esc(pendingBooking.pcs.join(', '))}<br><b>${esc(tr('starts'))}:</b> ${esc(toISODate(s))} ${esc(fmtHM(s))}<br><b>${esc(tr('ends'))}:</b> ${esc(toISODate(e))} ${esc(fmtHM(e))}<br><b>${esc(tr('nick'))}:</b> ${esc(pendingBooking.nick)}${pendingBooking.note?`<br><b>${esc(tr('note'))}:</b> ${esc(pendingBooking.note)}`:''}`; }
+  function showCustom(){ if(!selectedPCs.size) return toast(tr('selectedNone'),'warn'); buildCustomTimes(); }
+  function buildCustomTimes(){ if(!selectedPCs.size) return; const pcs=[...selectedPCs], dateKey=$('customDate').value||toISODate(new Date()), dur=Number($('customDuration').value||60), sel=$('customTime'); sel.innerHTML=''; const [y,m,d]=dateKey.split('-').map(Number); const base=new Date(y,m-1,d,0,0,0,0), open=addMinutes(base,WORK_START), close=addDays(base,1); close.setHours(Math.floor(WORK_END_NEXTDAY/60),WORK_END_NEXTDAY%60,0,0); for(let cur=new Date(open); addMinutes(cur,dur)<=close; cur=addMinutes(cur,SLOT_STEP)){ const end=addMinutes(cur,dur); if(cur.getTime()<Date.now()) continue; if(!isFreeRangeForAll(pcs,cur.getTime(),end.getTime())) continue; const o=document.createElement('option'); o.value=String(cur.getTime()); o.textContent=`${fmtHM(cur)} → ${fmtHM(end)}`; sel.appendChild(o);} if(!sel.children.length){ const o=document.createElement('option'); o.value=''; o.textContent='—'; sel.appendChild(o);} }
+  async function createBooking(data){ if(!currentUser) return needLogin(); const pcs=[...new Set((data.pcs||[]).map(String))].slice(0,10), startAtMs=Number(data.startAtMs), endAtMs=Number(data.endAtMs), nick=String(data.nick||'').trim().slice(0,32), note=String(data.note||'').trim().slice(0,120); if(!pcs.length) return toast(tr('selectedNone'),'warn'); if(!nick) return toast(tr('enterNick'),'warn'); if(!isFreeRangeForAll(pcs,startAtMs,endAtMs)) return toast(tr('taken'),'bad'); try{ await db.collection('users').doc(String(currentUser.uid)).set({nick,updatedAtMs:Date.now()},{merge:true}); const batch=db.batch(); pcs.forEach(pc=>{ const ref=db.collection('bookings').doc(); batch.set(ref,{uid:String(currentUser.uid),userEmail:String(currentUser.email||''),nick,pc,note,startAtMs,endAtMs,createdAtMs:Date.now()}); }); await batch.commit(); localStorage.setItem(NICK_KEY,nick); $('nickInput').value=nick; toast(tr('booked'),'good'); closeConfirm(); pendingBooking=null; await renderMyBookings(); if(isAdmin) await renderAdminBookings(); $('myPanel').scrollIntoView({behavior:'smooth',block:'start'}); }catch(e){ handleFsError(e); } }
+  async function renderMyBookings(){ const box=$('myBookings'); box.innerHTML=''; if(!currentUser){ box.innerHTML=`<div class="notice">${esc(tr('authNeed'))}</div>`; return; } const mine=allBookings.filter(b=>b.uid===currentUser.uid&&b.endAtMs>Date.now()-86400000).sort((a,b)=>a.startAtMs-b.startAtMs); if(!mine.length){ box.innerHTML=`<div class="notice">${esc(tr('empty'))}</div>`; return; } mine.forEach(b=>{ const s=new Date(b.startAtMs), e=new Date(b.endAtMs); const item=document.createElement('div'); item.className='item'; item.innerHTML=`<div><b>${esc(b.pc)}</b><div class="meta">${esc(toISODate(s))} • ${esc(fmtHM(s))} → ${esc(fmtHM(e))}</div></div><button class="mini bad">${esc(tr('remove'))}</button>`; item.querySelector('button').onclick=async()=>{ if(!confirm(tr('remove')+'?')) return; try{ await db.collection('bookings').doc(b.id).delete(); toast(tr('canceled'),'good'); }catch(e){ handleFsError(e); } }; box.appendChild(item); }); }
+  async function renderAdminBookings(){ const box=$('adminBookings'); box.innerHTML=''; $('adminPanel').classList.toggle('hidden', !isAdmin); if(!isAdmin) return; const list=allBookings.filter(b=>b.endAtMs>Date.now()).sort((a,b)=>a.startAtMs-b.startAtMs); if(!list.length){ box.innerHTML=`<div class="notice">${esc(tr('empty'))}</div>`; return; } list.forEach(b=>{ const s=new Date(b.startAtMs), e=new Date(b.endAtMs); const item=document.createElement('div'); item.className='item'; item.innerHTML=`<div><b>${esc(b.pc)}</b><div class="meta">${esc(b.nick||'')} • ${esc(toISODate(s))} • ${esc(fmtHM(s))} → ${esc(fmtHM(e))}</div></div><button class="mini bad">${esc(tr('remove'))}</button>`; item.querySelector('button').onclick=async()=>{ if(!confirm(tr('remove')+'?')) return; try{ await db.collection('bookings').doc(b.id).delete(); toast(tr('canceled'),'good'); }catch(e){ handleFsError(e); } }; box.appendChild(item); }); }
+  function updateUserUI(){ $('userPill').textContent=currentUser?(currentUser.email||currentUser.uid.slice(0,6)):'—'; isAdmin=!!(currentUser&&ADMIN_EMAILS.includes(String(currentUser.email||'').toLowerCase())); $('openAuthBtn').classList.toggle('hidden',!!currentUser); $('logoutBtn').classList.toggle('hidden',!currentUser); if(currentUser) $('authMsg').textContent=tr('authOk')+(currentUser.email||currentUser.uid.slice(0,6)); $('adminPanel').classList.toggle('hidden', !isAdmin); }
+  function findFreeNow(){ const free=ALL.filter(pc=>getPcStatus(pc).state==='free'); if(!free.length) return toast(tr('noFree'),'warn'); if(multiMode){ selectedPCs=new Set(free.slice(0,Math.min(3,free.length))); selectedPc=[...selectedPCs][0]||null; } else { selectedPc=free[0]; selectedPCs=new Set([free[0]]); } renderStats(); renderHall(); renderSelected(); buildCustomTimes(); }
+  async function startRealtime(){ if(unsub){ try{unsub()}catch(_){}} const {start,end}=dayBoundsNow(); unsub=db.collection('bookings').where('startAtMs','<',end).where('endAtMs','>',start).onSnapshot(snap=>{ allBookings=snap.docs.map(d=>({id:d.id,...d.data()})).map(x=>({...x,startAtMs:Number(x.startAtMs||0),endAtMs:Number(x.endAtMs||0)})); setCloud(tr('statusLive'),true); renderStats(); renderHall(); renderSelected(); renderMyBookings(); renderAdminBookings(); },handleFsError); }
+  function startTicker(){ clearInterval(timer); timer=setInterval(()=>{ renderStats(); renderHall(); renderSelected(); },30000); }
+  function bind(){ $('lang_ru').onclick=()=>{lang='ru';localStorage.setItem(LANG_KEY,lang);setLangUI()}; $('lang_en').onclick=()=>{lang='en';localStorage.setItem(LANG_KEY,lang);setLangUI()}; $('lang_ka').onclick=()=>{lang='ka';localStorage.setItem(LANG_KEY,lang);setLangUI()}; $('filterAll').onclick=()=>{currentFilter='all';renderHall()}; $('filterFree').onclick=()=>{currentFilter='free';renderHall()}; $('filterSoon').onclick=()=>{currentFilter='soon';renderHall()}; $('findNowBtn').onclick=findFreeNow; $('toggleMultiBtn').onclick=()=>{ multiMode=!multiMode; if(!multiMode&&selectedPCs.size>1){ const first=[...selectedPCs][0]; selectedPCs=new Set(first?[first]:[]); selectedPc=first||null; } setLangUI(); }; $('clearSelectedBtn').onclick=()=>{ selectedPCs.clear(); selectedPc=null; renderStats(); renderHall(); renderSelected(); buildCustomTimes(); }; $('openMyBtn').onclick=()=>$('myPanel').scrollIntoView({behavior:'smooth',block:'start'}); $('mobileMyBtn').onclick=()=>$('myPanel').scrollIntoView({behavior:'smooth',block:'start'}); $('mobileBookBtn').onclick=()=>{ if(!selectedPCs.size) return toast(tr('selectedNone'),'warn'); $('customSection').scrollIntoView({behavior:'smooth',block:'start'}); }; $('openAdminBtn').onclick=()=>{ if(!currentUser) return toast(tr('loginNeeded'),'warn'); if(!isAdmin) return toast(tr('adminDenied'),'bad'); $('adminPanel').scrollIntoView({behavior:'smooth',block:'start'}); }; $('openAuthBtn').onclick=openAuth; $('logoutBtn').onclick=async()=>{ try{await auth.signOut()}catch(_){}}; $('closeAuthBtn').onclick=closeAuth; $('authBackdrop').onclick=e=>{ if(e.target===$('authBackdrop')) closeAuth(); }; $('closeConfirmBtn').onclick=closeConfirm; $('cancelConfirmBtn').onclick=closeConfirm; $('confirmBackdrop').onclick=e=>{ if(e.target===$('confirmBackdrop')) closeConfirm(); }; $('customDate').value=toISODate(new Date()); $('nickInput').value=localStorage.getItem(NICK_KEY)||''; $('nickInput').addEventListener('input',()=>localStorage.setItem(NICK_KEY,$('nickInput').value.trim())); $('customDate').addEventListener('change',buildCustomTimes); $('customDuration').addEventListener('change',buildCustomTimes); $('clearPanelsBtn').onclick=()=>{ selectedPCs.clear(); selectedPc=null; renderStats(); renderHall(); renderSelected(); buildCustomTimes(); }; $('bookCustomBtn').onclick=()=>{ if(!selectedPCs.size) return toast(tr('selectedNone'),'warn'); const startAtMs=Number($('customTime').value||0); if(!startAtMs) return toast(tr('pickTime'),'warn'); const duration=Number($('customDuration').value||60); pendingBooking={pcs:[...selectedPCs], startAtMs, endAtMs:startAtMs+duration*60000, nick:($('nickInput').value||'').trim(), note:($('noteInput').value||'').trim()}; fillConfirm(); openConfirm(); }; $('confirmBookBtn').onclick=()=>{ if(pendingBooking) createBooking(pendingBooking); }; $('loginBtn').onclick=async()=>{ const email=($('authEmail').value||'').trim(), pass=($('authPass').value||'').trim(); if(!email||!pass) return $('authMsg').textContent=tr('loginErr'); try{ await auth.signInWithEmailAndPassword(email,pass); closeAuth(); }catch(e){ console.error(e); $('authMsg').textContent=e.message||tr('fsErr'); } }; $('registerBtn').onclick=async()=>{ const email=($('authEmail').value||'').trim(), pass=($('authPass').value||'').trim(); if(!email||!pass) return $('authMsg').textContent=tr('loginErr'); try{ await auth.createUserWithEmailAndPassword(email,pass); closeAuth(); }catch(e){ console.error(e); $('authMsg').textContent=e.message||tr('fsErr'); } }; $('resetBtn').onclick=async()=>{ const email=($('authEmail').value||'').trim(); if(!email) return $('authMsg').textContent=tr('loginErr'); try{ await auth.sendPasswordResetEmail(email); $('authMsg').textContent=tr('resetSent'); }catch(e){ console.error(e); $('authMsg').textContent=e.message||tr('fsErr'); } }; document.addEventListener('keydown',e=>{ if(e.key==='Escape'){ closeAuth(); closeConfirm(); } }); }
+  async function boot(){ setLangUI(); bind(); setCloud(tr('statusOk'),true); startTicker(); if(db) startRealtime(); auth.onAuthStateChanged(async u=>{ currentUser=u||null; updateUserUI(); renderMyBookings(); renderAdminBookings(); if(currentUser&&!$('nickInput').value.trim()){ try{ const doc=await db.collection('users').doc(String(currentUser.uid)).get(); const nick=doc.exists?(doc.data().nick||''):''; if(nick){ $('nickInput').value=nick; localStorage.setItem(NICK_KEY,nick); } }catch(_){} } }); }
   boot();
 })();
 </script>
