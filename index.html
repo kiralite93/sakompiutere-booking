@@ -971,9 +971,11 @@
     const { start, end } = dayBoundsNow();
     unsub = db.collection('bookings')
       .where('startAtMs', '<', end)
-      .where('endAtMs', '>', start)
       .onSnapshot(snap => {
-        allBookings = snap.docs.map(d => ({ id:d.id, ...d.data() })).map(x => ({ ...x, startAtMs:Number(x.startAtMs||0), endAtMs:Number(x.endAtMs||0) }));
+        allBookings = snap.docs
+          .map(d => ({ id:d.id, ...d.data() }))
+          .map(x => ({ ...x, startAtMs:Number(x.startAtMs||0), endAtMs:Number(x.endAtMs||0) }))
+          .filter(x => x.endAtMs > start);
         setCloud(tr('statusLive'), true);
         renderStats();
         renderHall();
