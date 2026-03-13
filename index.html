@@ -220,6 +220,7 @@
             <button class="btn ghost" id="toggleMultiBtn"></button>
             <button class="btn ghost" id="clearSelectedBtn"></button>
             <button class="btn ghost" id="openMyBtn"></button>
+            <button class="btn ghost" id="openAdminBtn">Admin</button>
             <button class="btn ghost" id="openAuthBtn"></button>
             <button class="btn ghost hidden" id="logoutBtn"></button>
           </div>
@@ -299,6 +300,12 @@
             <div class="panelTitle" id="t_mybookings"></div>
             <div class="myBookings" id="myBookings"></div>
           </div>
+
+          <div id="adminSection" class="hidden" style="margin-top:16px">
+            <div class="panelTitle" id="t_adminbookings">Admin</div>
+            <div class="small muted" style="margin-top:6px">Все активные брони</div>
+            <div class="myBookings" id="adminBookings"></div>
+          </div>
         </div>
       </aside>
     </div>
@@ -367,6 +374,7 @@
   const RIGHT = ["Lancelot","Fantomas","Soultaker","Pudge","Kratos"];
   const ALL = [...LEFT, ...RIGHT];
   const WORK_START = 10 * 60;
+  const ADMIN_EMAILS = ['adjarelispeak@gmail.com','kiralite93@gmail.com'].map(x => x.toLowerCase());
   const WORK_END_NEXTDAY = 3 * 60;
   const SLOT_STEP = 30;
   const SOON_MIN = 30;
@@ -410,7 +418,7 @@
       fsErr:'Ошибка Firestore. Проверь Rules или блокировщик.', rules:'Firestore Rules не позволяют запись.', blocked:'Браузер или расширение блокирует Firebase.',
       statusOk:'OK', statusLive:'LIVE', statusErr:'ERR', minutes:'мин', starts:'Начало', ends:'Конец', pc:'ПК', pcs:'ПК', remove:'Отменить', empty:'Пока ничего нет',
       taken:'Этот слот уже занят. Выбери другой.', queueHint:'Функция очереди сейчас бронирует на ближайшее освобождение.', busyUntil:'Занят до', guest:'Гость', saveNickHint:'Ник автоматически сохраняется для следующего входа.',
-      multiHelp:'Когда мультивыбор включён, быстрые действия бронируют сразу все отмеченные ПК.', mobileMy:'Мои', mobileBook:'Бронь'
+      multiHelp:'Когда мультивыбор включён, быстрые действия бронируют сразу все отмеченные ПК.', mobileMy:'Мои', mobileBook:'Бронь', admin:'🔐 Admin', adminDenied:'Ты не админ.', adminBookings:'Admin панель'
     },
     en: {
       title:'Sakompiutere Gaming — Live Hall', sub:'Comfortable on phone and desktop. Up to 10 PCs can be selected.', user:'User', cloud:'Database',
@@ -425,7 +433,7 @@
       confirmtitle:'Confirmation', confirmhint:'Check details before saving', confirm:'Confirm', cancel:'Cancel',
       freeTag:'🟢 Free', soonTag:'🟡 Soon free', busyTag:'🔴 Busy', freeNow:'Free right now', playing:'Now playing', freeAt:'Free at', endsIn:'In',
       play1:'Play now • 1 hour', play2:'Play now • 2 hours', play3:'Play now • 3 hours', group2:'Group • 2 hours', group3:'Group • 3 hours',
-      bookAt:'Book nearest free time', queue:'Queue', exact:'Choose manually', nearest:'Soon available', loginNeeded:'Please login first.', enterNick:'Enter your nickname.', pickTime:'Pick a time.', booked:'✅ Booking created!', canceled:'Canceled.', noFree:'No free PCs right now.', authOk:'✅ Logged in: ', authNeed:'Login is required for booking.', loginErr:'Enter email and password.', resetSent:'Password reset email sent ✅', fsErr:'Firestore error. Check Rules or ad blocker.', rules:'Firestore Rules do not allow this write.', blocked:'Browser or extension blocks Firebase.', statusOk:'OK', statusLive:'LIVE', statusErr:'ERR', minutes:'min', starts:'Start', ends:'End', pc:'PC', pcs:'PCs', remove:'Cancel', empty:'Nothing yet', taken:'This slot is already taken. Pick another one.', queueHint:'Queue action currently books the nearest release time.', busyUntil:'Busy until', guest:'Guest', saveNickHint:'Nick is saved automatically for next time.', multiHelp:'When multi-select is ON, quick actions book all marked PCs.', mobileMy:'Mine', mobileBook:'Book'
+      bookAt:'Book nearest free time', queue:'Queue', exact:'Choose manually', nearest:'Soon available', loginNeeded:'Please login first.', enterNick:'Enter your nickname.', pickTime:'Pick a time.', booked:'✅ Booking created!', canceled:'Canceled.', noFree:'No free PCs right now.', authOk:'✅ Logged in: ', authNeed:'Login is required for booking.', loginErr:'Enter email and password.', resetSent:'Password reset email sent ✅', fsErr:'Firestore error. Check Rules or ad blocker.', rules:'Firestore Rules do not allow this write.', blocked:'Browser or extension blocks Firebase.', statusOk:'OK', statusLive:'LIVE', statusErr:'ERR', minutes:'min', starts:'Start', ends:'End', pc:'PC', pcs:'PCs', remove:'Cancel', empty:'Nothing yet', taken:'This slot is already taken. Pick another one.', queueHint:'Queue action currently books the nearest release time.', busyUntil:'Busy until', guest:'Guest', saveNickHint:'Nick is saved automatically for next time.', multiHelp:'When multi-select is ON, quick actions book all marked PCs.', mobileMy:'Mine', mobileBook:'Book', admin:'🔐 Admin', adminDenied:'You are not admin.', adminBookings:'Admin panel'
     },
     ka: {
       title:'Sakompiutere Gaming — Live Hall', sub:'მორგებულია ტელეფონზეც და კომპიუტერზეც. შესაძლებელია 10 PC-მდე არჩევა.', user:'მომხმარებელი', cloud:'ბაზა',
@@ -440,13 +448,14 @@
       confirmtitle:'დადასტურება', confirmhint:'შეამოწმე დეტალები', confirm:'დადასტურება', cancel:'გაუქმება',
       freeTag:'🟢 თავისუფალია', soonTag:'🟡 მალე გათავისუფლდება', busyTag:'🔴 დაკავებულია', freeNow:'ახლავე თავისუფალია', playing:'ახლა თამაშობს', freeAt:'თავისუფალი იქნება', endsIn:'მიერ',
       play1:'ითამაშე ახლა • 1 საათი', play2:'ითამაშე ახლა • 2 საათი', play3:'ითამაშე ახლა • 3 საათი', group2:'ჯგუფურად • 2 საათი', group3:'ჯგუფურად • 3 საათი',
-      bookAt:'უახლოეს დროზე დაჯავშნა', queue:'რიგში ჩადგომა', exact:'ხელით არჩევა', nearest:'მალე თავისუფალი', loginNeeded:'ჯერ შედი ანგარიშში.', enterNick:'შეიყვანე ნიკი.', pickTime:'აირჩიე დრო.', booked:'✅ ჯავშანი შეიქმნა!', canceled:'გაუქმდა.', noFree:'ახლა თავისუფალი PC არ არის.', authOk:'✅ შესულია: ', authNeed:'ჯავშნისთვის საჭიროა შესვლა.', loginErr:'შეიყვანე email და პაროლი.', resetSent:'აღდგენის წერილი გაიგზავნა ✅', fsErr:'Firestore შეცდომა. შეამოწმე Rules ან ad blocker.', rules:'Firestore Rules არ უშვებს ჩანაწერს.', blocked:'ბრაუზერი ან გაფართოება ბლოკავს Firebase-ს.', statusOk:'OK', statusLive:'LIVE', statusErr:'ERR', minutes:'წთ', starts:'დასაწყისი', ends:'დასასრული', pc:'PC', pcs:'PC-ები', remove:'გაუქმება', empty:'ჯერ არაფერია', taken:'ეს დრო უკვე დაკავებულია. აირჩიე სხვა.', queueHint:'რიგის ღილაკი ახლა უახლოეს თავისუფალ დროს აჯავშნებს.', busyUntil:'დაკავებულია', guest:'სტუმარი', saveNickHint:'ნიკი ავტომატურად შეინახება.', multiHelp:'როცა multi-select ჩართულია, სწრაფი მოქმედებები ყველა მონიშნულ PC-ზე მუშაობს.', mobileMy:'ჩემი', mobileBook:'ჯავშანი'
+      bookAt:'უახლოეს დროზე დაჯავშნა', queue:'რიგში ჩადგომა', exact:'ხელით არჩევა', nearest:'მალე თავისუფალი', loginNeeded:'ჯერ შედი ანგარიშში.', enterNick:'შეიყვანე ნიკი.', pickTime:'აირჩიე დრო.', booked:'✅ ჯავშანი შეიქმნა!', canceled:'გაუქმდა.', noFree:'ახლა თავისუფალი PC არ არის.', authOk:'✅ შესულია: ', authNeed:'ჯავშნისთვის საჭიროა შესვლა.', loginErr:'შეიყვანე email და პაროლი.', resetSent:'აღდგენის წერილი გაიგზავნა ✅', fsErr:'Firestore შეცდომა. შეამოწმე Rules ან ad blocker.', rules:'Firestore Rules არ უშვებს ჩანაწერს.', blocked:'ბრაუზერი ან გაფართოება ბლოკავს Firebase-ს.', statusOk:'OK', statusLive:'LIVE', statusErr:'ERR', minutes:'წთ', starts:'დასაწყისი', ends:'დასასრული', pc:'PC', pcs:'PC-ები', remove:'გაუქმება', empty:'ჯერ არაფერია', taken:'ეს დრო უკვე დაკავებულია. აირჩიე სხვა.', queueHint:'რიგის ღილაკი ახლა უახლოეს თავისუფალ დროს აჯავშნებს.', busyUntil:'დაკავებულია', guest:'სტუმარი', saveNickHint:'ნიკი ავტომატურად შეინახება.', multiHelp:'როცა multi-select ჩართულია, სწრაფი მოქმედებები ყველა მონიშნულ PC-ზე მუშაობს.', mobileMy:'ჩემი', mobileBook:'ჯავშანი', admin:'🔐 Admin', adminDenied:'ადმინი არ ხარ.', adminBookings:'Admin პანელი'
     }
   };
   const tr = k => (T[lang] && T[lang][k]) || T.ru[k] || k;
 
   let app, auth, db;
   let currentUser = null;
+  let isAdmin = false;
   let allBookings = [];
   let selectedPc = null;
   let selectedPCs = new Set();
@@ -494,6 +503,7 @@
     $('toggleMultiBtn').textContent = multiMode ? tr('multiOn') : tr('multiOff');
     $('clearSelectedBtn').textContent = tr('clearSelected');
     $('openMyBtn').textContent = tr('my');
+    $('openAdminBtn').textContent = tr('admin');
     $('openAuthBtn').textContent = tr('auth');
     $('logoutBtn').textContent = tr('logout');
     $('t_aisle').textContent = tr('aisle');
@@ -509,6 +519,7 @@
     $('bookCustomBtn').textContent = tr('bookCustom');
     $('hideCustomBtn').textContent = tr('hideCustom');
     $('t_mybookings').textContent = tr('mybookings');
+    $('t_adminbookings').textContent = tr('adminBookings');
     $('t_auth').textContent = tr('authTitle');
     $('t_authhint').textContent = tr('authHint');
     $('t_password').textContent = tr('password');
@@ -874,6 +885,10 @@
       closeConfirm();
       hideCustom();
       pendingBooking = null;
+      $('mySection').classList.remove('hidden');
+      $('adminSection').classList.add('hidden');
+      renderMyBookings();
+      $('mySection').scrollIntoView({behavior:'smooth', block:'start'});
     } catch(e) {
       handleFsError(e);
     }
@@ -909,11 +924,51 @@
   function toggleMy() {
     $('mySection').classList.toggle('hidden');
     $('customSection').classList.add('hidden');
+    $('adminSection').classList.add('hidden');
     renderMyBookings();
+    if (!$('mySection').classList.contains('hidden')) $('mySection').scrollIntoView({behavior:'smooth', block:'start'});
+  }
+
+  async function renderAdminBookings() {
+    const box = $('adminBookings');
+    if (!box) return;
+    box.innerHTML = '';
+    if (!isAdmin) {
+      box.innerHTML = `<div class="notice">${esc(tr('adminDenied'))}</div>`;
+      return;
+    }
+    const list = allBookings.filter(b => b.endAtMs > Date.now()).sort((a,b)=>a.startAtMs-b.startAtMs);
+    if (!list.length) {
+      box.innerHTML = `<div class="notice">${esc(tr('empty'))}</div>`;
+      return;
+    }
+    list.forEach(b => {
+      const s = new Date(b.startAtMs), e = new Date(b.endAtMs);
+      const item = document.createElement('div');
+      item.className = 'bookingItem';
+      item.innerHTML = `<div><b>${esc(b.pc)}</b><div class="meta">${esc(b.nick || '')} • ${esc(toISODate(s))} • ${esc(fmtHM(s))} → ${esc(fmtHM(e))}</div></div><button class="mini bad">${esc(tr('remove'))}</button>`;
+      item.querySelector('button').onclick = async () => {
+        if (!confirm(tr('remove') + '?')) return;
+        try { await db.collection('bookings').doc(b.id).delete(); toast(tr('canceled'), 'good'); }
+        catch(e) { handleFsError(e); }
+      };
+      box.appendChild(item);
+    });
+  }
+
+  function toggleAdmin() {
+    if (!currentUser) return toast(tr('loginNeeded'), 'warn');
+    if (!isAdmin) return toast(tr('adminDenied'), 'bad');
+    $('adminSection').classList.toggle('hidden');
+    $('customSection').classList.add('hidden');
+    $('mySection').classList.add('hidden');
+    renderAdminBookings();
+    if (!$('adminSection').classList.contains('hidden')) $('adminSection').scrollIntoView({behavior:'smooth', block:'start'});
   }
 
   function updateUserUI() {
     $('userPill').textContent = currentUser ? (currentUser.email || currentUser.uid.slice(0,6)) : '—';
+    isAdmin = !!(currentUser && ADMIN_EMAILS.includes(String(currentUser.email || '').toLowerCase()));
     $('openAuthBtn').classList.toggle('hidden', !!currentUser);
     $('logoutBtn').classList.toggle('hidden', !currentUser);
     if (currentUser) $('authMsg').textContent = tr('authOk') + (currentUser.email || currentUser.uid.slice(0,6));
@@ -987,6 +1042,7 @@
     };
 
     $('openMyBtn').onclick = toggleMy;
+    $('openAdminBtn').onclick = toggleAdmin;
     $('mobileMyBtn').onclick = toggleMy;
     $('mobileBookBtn').onclick = () => {
       if (!selectedPCs.size) return toast(tr('chooseAtLeastOne'), 'warn');
@@ -1069,6 +1125,7 @@
       currentUser = u || null;
       updateUserUI();
       renderMyBookings();
+      renderAdminBookings();
       if (currentUser && !$('nickInput').value.trim()) {
         try {
           const doc = await db.collection('users').doc(String(currentUser.uid)).get();
