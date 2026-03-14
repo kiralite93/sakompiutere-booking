@@ -96,7 +96,10 @@
     .hall{display:grid;grid-template-columns:1fr 80px 1fr;gap:14px;align-items:start}
     .side{display:grid;gap:10px}
     .aisle{min-height:100%;border-radius:20px;border:1px dashed rgba(255,255,255,.08);background:linear-gradient(180deg, rgba(255,255,255,.03), rgba(255,255,255,.01));display:flex;align-items:center;justify-content:center;color:var(--muted);font-size:12px;letter-spacing:.18em;text-transform:uppercase;writing-mode:vertical-rl;transform:rotate(180deg);padding:14px 0}
-    @media (max-width:900px){.hall{grid-template-columns:1fr}.aisle{writing-mode:initial;transform:none;min-height:auto;padding:10px;letter-spacing:.12em}}
+    @media (max-width:900px){
+      .hall{grid-template-columns:1fr 1fr}
+      .aisle{display:none}
+    }
 
     .pc{position:relative;padding:14px;border-radius:20px;border:1px solid var(--line);background:linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,.03));overflow:hidden;cursor:pointer;transition:.18s ease}
     .pc:hover{transform:translateY(-2px)}
@@ -1140,6 +1143,3 @@
 </script>
 </body>
 </html>
-
-
-
