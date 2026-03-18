@@ -76,12 +76,11 @@
       background:linear-gradient(180deg, rgba(255,255,255,.88), rgba(255,255,255,.72))
     }
 
-    /* HEADER */
     .headerShell{
       border-radius:24px;
       position:sticky;
       top:10px;
-      z-index:40;
+      z-index:50;
       overflow:visible;
     }
     .headerMain{
@@ -130,6 +129,7 @@
       line-height:1.35;
       overflow-wrap:anywhere;
     }
+
     .topbar{
       display:flex;
       flex-wrap:wrap;
@@ -158,12 +158,13 @@
     body[data-theme="light"] .langTrigger{
       background:rgba(255,255,255,.75)
     }
-    .pill b,.pill span{
+    .pill b,
+    .pill span{
       min-width:0;
       overflow-wrap:anywhere;
     }
 
-    .btn,.mini,.langTrigger,.langOption,.chipBtn{
+    .btn,.mini,.langTrigger,.langOption,.filterBtn,.tinyAction{
       border:1px solid var(--line);
       background:rgba(255,255,255,.04);
       color:var(--text);
@@ -176,10 +177,11 @@
     body[data-theme="light"] .mini,
     body[data-theme="light"] .langTrigger,
     body[data-theme="light"] .langOption,
-    body[data-theme="light"] .chipBtn{
+    body[data-theme="light"] .filterBtn,
+    body[data-theme="light"] .tinyAction{
       background:rgba(255,255,255,.75)
     }
-    .btn:hover,.mini:hover,.langTrigger:hover,.langOption:hover,.chipBtn:hover{
+    .btn:hover,.mini:hover,.langTrigger:hover,.langOption:hover,.filterBtn:hover,.tinyAction:hover{
       transform:translateY(-1px);
       border-color:rgba(110,231,255,.45)
     }
@@ -187,21 +189,17 @@
     body[data-theme="light"] .mini:hover,
     body[data-theme="light"] .langTrigger:hover,
     body[data-theme="light"] .langOption:hover,
-    body[data-theme="light"] .chipBtn:hover{
+    body[data-theme="light"] .filterBtn:hover,
+    body[data-theme="light"] .tinyAction:hover{
       border-color:rgba(2,132,199,.35)
     }
 
-    .langWrap{
-      position:relative;
-    }
+    .langWrap{position:relative}
     .langTrigger{
       padding:8px 12px;
       white-space:nowrap;
     }
-    .langTrigger .flag{
-      font-size:15px;
-      line-height:1;
-    }
+    .langTrigger .flag{font-size:15px;line-height:1}
     .langMenu{
       position:absolute;
       top:calc(100% + 8px);
@@ -231,15 +229,8 @@
       gap:10px;
       min-width:0;
     }
-    .langFlag{
-      font-size:18px;
-      line-height:1;
-    }
-    .langCode{
-      color:var(--muted);
-      font-size:11px;
-      font-weight:700;
-    }
+    .langFlag{font-size:18px;line-height:1}
+    .langCode{color:var(--muted);font-size:11px;font-weight:700}
     .langOption.active{
       border-color:rgba(110,231,255,.45);
       background:rgba(110,231,255,.10);
@@ -254,144 +245,17 @@
     .dot.err{background:var(--busy)}
     @keyframes pulse{70%{box-shadow:0 0 0 10px rgba(52,211,153,0)}100%{box-shadow:0 0 0 0 rgba(52,211,153,0)}}
 
-    /* TOP DASHBOARD */
-    .topDashboard{
-      margin-top:14px;
-      border-radius:24px;
-      padding:14px;
-    }
-    .dashHead{
-      display:flex;
-      justify-content:space-between;
-      align-items:flex-start;
-      gap:12px;
-      flex-wrap:wrap;
-      margin-bottom:14px;
-    }
-    .dashHeadLeft{
-      min-width:0;
-      flex:1 1 320px;
-    }
-    .dashTitle{
-      font-size:20px;
-      font-weight:1000;
-      line-height:1.15;
-      margin:0;
-    }
-    .dashSub{
-      margin:6px 0 0;
-      font-size:13px;
-      color:var(--muted);
-      line-height:1.4;
-    }
-    .dashHeadRight{
-      display:flex;
-      flex-wrap:wrap;
-      gap:8px;
-      align-items:center;
-      justify-content:flex-end;
-    }
-
-    .chipBtn{
-      padding:10px 14px;
-      border-radius:14px;
-      white-space:nowrap;
-      font-size:13px;
-      background:rgba(255,255,255,.03);
-    }
-    .chipBtn.active{
-      background:linear-gradient(180deg, rgba(110,231,255,.18), rgba(167,139,250,.12));
-      border-color:rgba(110,231,255,.45);
-    }
-    body[data-theme="light"] .chipBtn.active{
-      background:linear-gradient(180deg, rgba(2,132,199,.12), rgba(124,58,237,.10));
-      border-color:rgba(2,132,199,.35);
-    }
-
-    .notice{
-      border:1px dashed rgba(110,231,255,.3);
-      padding:12px 13px;
-      border-radius:16px;
-      background:rgba(110,231,255,.06);
-      font-size:12px;
-      color:var(--muted);
-      line-height:1.45;
-      margin-bottom:14px;
-      overflow-wrap:anywhere;
-    }
-    body[data-theme="light"] .notice{
-      border-color:rgba(2,132,199,.20);
-      background:rgba(2,132,199,.06)
-    }
-
-    .toast{
-      margin-bottom:12px;
-      border-radius:16px;
-      padding:12px 13px;
-      border:1px solid var(--line);
-      background:rgba(255,255,255,.04);
-      font-size:12px;
-      line-height:1.4;
-      overflow-wrap:anywhere;
-    }
-    body[data-theme="light"] .toast{background:rgba(255,255,255,.72)}
-    .toast.good{border-color:rgba(52,211,153,.28);background:rgba(52,211,153,.08)}
-    .toast.bad{border-color:rgba(251,113,133,.28);background:rgba(251,113,133,.08)}
-    .toast.warn{border-color:rgba(251,191,36,.28);background:rgba(251,191,36,.08)}
-    .hidden{display:none !important}
-
-    .topStats{
+    .layout{
       display:grid;
-      grid-template-columns:repeat(4,1fr);
-      gap:10px;
-      margin-bottom:14px;
-      min-width:0;
+      grid-template-columns:1fr 360px;
+      gap:16px;
+      margin-top:14px;
+      min-width:0
     }
-    .stat{
-      padding:12px;
-      border-radius:16px;
-      border:1px solid var(--line);
-      background:rgba(255,255,255,.03);
-      min-width:0;
-    }
-    body[data-theme="light"] .stat{background:rgba(255,255,255,.72)}
-    .stat b{
-      display:block;
-      font-size:18px;
-      margin-top:4px;
-      line-height:1.2;
-      overflow-wrap:anywhere;
-    }
-    .stat span{
-      font-size:11px;
-      color:var(--muted);
-      line-height:1.3;
-      display:block;
-      overflow-wrap:anywhere;
+    @media (max-width:1120px){
+      .layout{grid-template-columns:1fr}
     }
 
-    .actions{
-      display:flex;
-      flex-wrap:wrap;
-      gap:10px;
-      min-width:0;
-    }
-    .btn{
-      padding:11px 14px;
-      border-radius:14px;
-      white-space:normal;
-      line-height:1.2;
-      text-align:center;
-      overflow-wrap:anywhere;
-    }
-    .btn.primary{background:linear-gradient(180deg, rgba(110,231,255,.18), rgba(167,139,250,.12));border-color:rgba(110,231,255,.45)}
-    body[data-theme="light"] .btn.primary{background:linear-gradient(180deg, rgba(2,132,199,.12), rgba(124,58,237,.10));border-color:rgba(2,132,199,.35)}
-    .btn.ghost{background:transparent}
-    .btn.bad{background:rgba(251,113,133,.10);border-color:rgba(251,113,133,.28)}
-
-    /* LAYOUT */
-    .layout{display:grid;grid-template-columns:1fr 360px;gap:16px;margin-top:14px;min-width:0}
-    @media (max-width:1120px){.layout{grid-template-columns:1fr}}
     .panel{border-radius:24px;min-width:0}
     .panelHead{
       padding:14px 16px;
@@ -411,6 +275,103 @@
       overflow-wrap:anywhere;
     }
     .panelBody{padding:16px;min-width:0}
+
+    .hallTopCompact{
+      display:flex;
+      justify-content:space-between;
+      gap:12px;
+      align-items:flex-start;
+      flex-wrap:wrap;
+      margin-bottom:14px;
+    }
+    .hallTopInfo{
+      min-width:0;
+      flex:1 1 360px;
+    }
+    .hallTitle{
+      margin:0;
+      font-size:20px;
+      font-weight:1000;
+      line-height:1.15;
+      overflow-wrap:anywhere;
+    }
+    .hallHint{
+      margin:6px 0 0;
+      color:var(--muted);
+      font-size:13px;
+      line-height:1.4;
+      overflow-wrap:anywhere;
+    }
+    .hallTools{
+      display:flex;
+      gap:8px;
+      flex-wrap:wrap;
+      align-items:center;
+      justify-content:flex-end;
+    }
+
+    .filterBtn{
+      padding:10px 14px;
+      border-radius:14px;
+      white-space:nowrap;
+      font-size:13px;
+      background:rgba(255,255,255,.03);
+    }
+    .filterBtn.active{
+      background:linear-gradient(180deg, rgba(110,231,255,.18), rgba(167,139,250,.12));
+      border-color:rgba(110,231,255,.45);
+    }
+    body[data-theme="light"] .filterBtn.active{
+      background:linear-gradient(180deg, rgba(2,132,199,.12), rgba(124,58,237,.10));
+      border-color:rgba(2,132,199,.35);
+    }
+
+    .miniStatsRow{
+      display:grid;
+      grid-template-columns:repeat(4,1fr);
+      gap:10px;
+      margin-bottom:14px;
+    }
+    .miniStat{
+      padding:10px 12px;
+      border-radius:16px;
+      border:1px solid var(--line);
+      background:rgba(255,255,255,.03);
+      min-width:0;
+    }
+    body[data-theme="light"] .miniStat{
+      background:rgba(255,255,255,.72)
+    }
+    .miniStat span{
+      display:block;
+      color:var(--muted);
+      font-size:11px;
+      line-height:1.25;
+      overflow-wrap:anywhere;
+    }
+    .miniStat b{
+      display:block;
+      margin-top:4px;
+      font-size:17px;
+      line-height:1.15;
+      overflow-wrap:anywhere;
+    }
+
+    .toast{
+      margin-bottom:12px;
+      border-radius:16px;
+      padding:12px 13px;
+      border:1px solid var(--line);
+      background:rgba(255,255,255,.04);
+      font-size:12px;
+      line-height:1.4;
+      overflow-wrap:anywhere;
+    }
+    body[data-theme="light"] .toast{background:rgba(255,255,255,.72)}
+    .toast.good{border-color:rgba(52,211,153,.28);background:rgba(52,211,153,.08)}
+    .toast.bad{border-color:rgba(251,113,133,.28);background:rgba(251,113,133,.08)}
+    .toast.warn{border-color:rgba(251,191,36,.28);background:rgba(251,191,36,.08)}
+    .hidden{display:none !important}
 
     .hall{display:grid;grid-template-columns:1fr 80px 1fr;gap:14px;align-items:start;min-width:0}
     .side{display:grid;gap:10px;min-width:0}
@@ -450,7 +411,9 @@
       transition:.18s ease;
       min-width:0;
     }
-    body[data-theme="light"] .pc{background:linear-gradient(180deg, rgba(255,255,255,.88), rgba(255,255,255,.72))}
+    body[data-theme="light"] .pc{
+      background:linear-gradient(180deg, rgba(255,255,255,.88), rgba(255,255,255,.72))
+    }
     .pc:hover{transform:translateY(-2px)}
     .pc.active{border-color:rgba(110,231,255,.55);box-shadow:0 0 0 3px rgba(110,231,255,.08)}
     body[data-theme="light"] .pc.active{border-color:rgba(2,132,199,.35);box-shadow:0 0 0 3px rgba(2,132,199,.08)}
@@ -458,7 +421,15 @@
     .pc.free{box-shadow:inset 0 0 0 1px rgba(52,211,153,.14)}
     .pc.soon{box-shadow:inset 0 0 0 1px rgba(251,191,36,.14)}
     .pc.busy{box-shadow:inset 0 0 0 1px rgba(251,113,133,.14)}
-    .pc::before{content:"";position:absolute;inset:-20% auto auto -10%;width:160px;height:110px;border-radius:999px;filter:blur(18px);opacity:.3}
+    .pc::before{
+      content:"";
+      position:absolute;
+      inset:-20% auto auto -10%;
+      width:160px;height:110px;
+      border-radius:999px;
+      filter:blur(18px);
+      opacity:.3
+    }
     .pc.free::before{background:rgba(52,211,153,.25)}
     .pc.soon::before{background:rgba(251,191,36,.22)}
     .pc.busy::before{background:rgba(251,113,133,.22)}
@@ -509,7 +480,13 @@
       line-height:1.35;
     }
     .pcMeta b{color:var(--text)}
-    .progress{height:8px;border-radius:999px;background:rgba(255,255,255,.06);overflow:hidden;margin-top:6px}
+    .progress{
+      height:8px;
+      border-radius:999px;
+      background:rgba(255,255,255,.06);
+      overflow:hidden;
+      margin-top:6px
+    }
     body[data-theme="light"] .progress{background:rgba(15,23,42,.07)}
     .bar{height:100%;background:linear-gradient(90deg, rgba(251,113,133,.8), rgba(251,191,36,.8));width:0%}
     .pcBottom{
@@ -532,9 +509,39 @@
     .mini.primary{background:linear-gradient(180deg, rgba(110,231,255,.18), rgba(167,139,250,.10));border-color:rgba(110,231,255,.42)}
     body[data-theme="light"] .mini.primary{background:linear-gradient(180deg, rgba(2,132,199,.12), rgba(124,58,237,.08));border-color:rgba(2,132,199,.32)}
     .mini.soft{background:rgba(167,139,250,.10);border-color:rgba(167,139,250,.22)}
+    .mini.bad{background:rgba(251,113,133,.10);border-color:rgba(251,113,133,.28)}
 
-    .sideCard{border-radius:24px;position:sticky;top:220px;min-width:0}
+    .sideCard{border-radius:24px;position:sticky;top:86px;min-width:0}
     @media (max-width:1120px){.sideCard{position:static}}
+
+    .topActionCluster{
+      display:grid;
+      gap:10px;
+      margin-bottom:14px;
+    }
+    .topActionRow{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:8px;
+    }
+    .topActionRow.single{grid-template-columns:1fr}
+    .tinyAction{
+      padding:10px 12px;
+      border-radius:14px;
+      text-align:center;
+      line-height:1.2;
+      font-size:12px;
+      background:rgba(255,255,255,.03);
+    }
+    .tinyAction.primary{
+      background:linear-gradient(180deg, rgba(110,231,255,.18), rgba(167,139,250,.12));
+      border-color:rgba(110,231,255,.42);
+    }
+    body[data-theme="light"] .tinyAction.primary{
+      background:linear-gradient(180deg, rgba(2,132,199,.12), rgba(124,58,237,.08));
+      border-color:rgba(2,132,199,.32);
+    }
+
     .bigStatus{
       padding:14px;
       border-radius:18px;
@@ -562,10 +569,7 @@
       align-items:center;
       min-width:0;
     }
-    .quickItem > div{
-      min-width:0;
-      flex:1 1 auto;
-    }
+    .quickItem > div{min-width:0;flex:1 1 auto}
     .quickItem b,.quickItem small{
       overflow-wrap:anywhere;
       display:block;
@@ -573,6 +577,7 @@
     }
     body[data-theme="light"] .quickItem{background:rgba(255,255,255,.72)}
     .quickItem small{color:var(--muted);margin-top:3px}
+
     .chipRow{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px;min-width:0}
     .chip{
       padding:7px 10px;
@@ -596,7 +601,10 @@
       min-width:0;
     }
     .formRow > div{min-width:0}
-    @media (max-width:520px){.formRow{grid-template-columns:1fr}}
+    @media (max-width:520px){
+      .formRow{grid-template-columns:1fr}
+    }
+
     label{
       display:block;
       font-size:12px;
@@ -618,13 +626,40 @@
     }
     body[data-theme="light"] input,
     body[data-theme="light"] select{background:#fff}
-    input:focus,select:focus{border-color:rgba(110,231,255,.5);box-shadow:0 0 0 3px rgba(110,231,255,.1)}
+    input:focus,select:focus{
+      border-color:rgba(110,231,255,.5);
+      box-shadow:0 0 0 3px rgba(110,231,255,.1)
+    }
     body[data-theme="light"] input:focus,
-    body[data-theme="light"] select:focus{border-color:rgba(2,132,199,.35);box-shadow:0 0 0 3px rgba(2,132,199,.10)}
+    body[data-theme="light"] select:focus{
+      border-color:rgba(2,132,199,.35);
+      box-shadow:0 0 0 3px rgba(2,132,199,.10)
+    }
+
     .small{font-size:12px;line-height:1.35}
     .muted{color:var(--muted)}
 
-    .myBookings{display:grid;gap:10px;margin-top:14px;min-width:0}
+    .notice{
+      border:1px dashed rgba(110,231,255,.3);
+      padding:12px 13px;
+      border-radius:16px;
+      background:rgba(110,231,255,.06);
+      font-size:12px;
+      color:var(--muted);
+      line-height:1.45;
+      overflow-wrap:anywhere;
+    }
+    body[data-theme="light"] .notice{
+      border-color:rgba(2,132,199,.20);
+      background:rgba(2,132,199,.06)
+    }
+
+    .myBookings{
+      display:grid;
+      gap:10px;
+      margin-top:14px;
+      min-width:0
+    }
     .bookingItem{
       padding:12px;
       border-radius:18px;
@@ -636,11 +671,8 @@
       align-items:center;
       min-width:0;
     }
-    .bookingItem > div{
-      min-width:0;
-      flex:1 1 auto;
-    }
-    .bookingItem b,.bookingItem .meta{overflow-wrap:anywhere;}
+    .bookingItem > div{min-width:0;flex:1 1 auto}
+    .bookingItem b,.bookingItem .meta{overflow-wrap:anywhere}
     body[data-theme="light"] .bookingItem{background:rgba(255,255,255,.72)}
     .bookingItem .meta{
       font-size:12px;
@@ -649,7 +681,16 @@
       line-height:1.35;
     }
 
-    .backdrop{position:fixed;inset:0;background:rgba(0,0,0,.6);display:none;align-items:center;justify-content:center;padding:16px;z-index:80}
+    .backdrop{
+      position:fixed;
+      inset:0;
+      background:rgba(0,0,0,.6);
+      display:none;
+      align-items:center;
+      justify-content:center;
+      padding:16px;
+      z-index:80
+    }
     .backdrop.show{display:flex}
     .modal{
       width:min(560px,100%);
@@ -674,7 +715,7 @@
     .mobileBar{display:none}
 
     @media (max-width:760px){
-      .topStats{grid-template-columns:repeat(2,1fr)}
+      .miniStatsRow{grid-template-columns:repeat(2,1fr)}
     }
 
     @media (max-width:700px){
@@ -694,30 +735,18 @@
         justify-content:flex-start;
         width:100%;
       }
-      .pill,.langTrigger{
-        max-width:100%;
-      }
+      .pill,.langTrigger{max-width:100%}
       .panelHead,.panelBody{padding:12px}
       .pc{padding:12px}
       .pcName{font-size:15px}
       .statusTag{font-size:10px;padding:6px 8px}
-      .quickItem{
-        padding:10px;
-        align-items:flex-start;
-      }
-      .bookingItem{
-        align-items:flex-start;
-      }
+      .quickItem{padding:10px;align-items:flex-start}
+      .bookingItem{align-items:flex-start}
       .quickItem,.bookingItem{flex-direction:column}
       .quickItem button,.bookingItem button{width:100%}
-      .actions .btn{flex:1 1 180px}
-      .dashHead{
-        flex-direction:column;
-        align-items:stretch;
-      }
-      .dashHeadRight{
-        justify-content:flex-start;
-      }
+      .hallTopCompact{flex-direction:column;align-items:stretch}
+      .hallTools{justify-content:flex-start}
+      .topActionRow{grid-template-columns:1fr}
       .mobileBar{
         display:flex;
         position:sticky;
@@ -730,7 +759,6 @@
         backdrop-filter:blur(14px);
       }
       .mobileBar .btn{flex:1;padding:12px 10px}
-      .sideCard{top:auto}
     }
 
     @media (max-width:520px){
@@ -745,19 +773,16 @@
         font-size:16px;
         line-height:1.15;
       }
-      .dashTitle{font-size:18px}
+      .hallTitle{font-size:18px}
       .panelTitle{font-size:14px}
-      .notice,.toast,.small,.muted,label,.meta,.pcMeta,.chip,.pill,.langTrigger,.btn,.mini,.chipBtn{
+      .notice,.toast,.small,.muted,label,.meta,.pcMeta,.chip,.pill,.langTrigger,.btn,.mini,.filterBtn,.tinyAction{
         font-size:11px;
       }
-      .stat b{font-size:16px}
+      .miniStat b{font-size:16px}
       .bigStatus h3{font-size:18px}
       .pcTop{gap:8px}
       .pcBottom{flex-wrap:wrap}
       .pcBottom .mini{flex:1 1 90px}
-      .actions{gap:8px}
-      .actions .btn{flex:1 1 100%}
-      .topStats{gap:8px}
       .pill,.langTrigger{
         border-radius:16px;
         padding:8px 10px;
@@ -770,7 +795,7 @@
     }
 
     @media (max-width:380px){
-      .topStats{grid-template-columns:1fr}
+      .miniStatsRow{grid-template-columns:1fr}
       .hall{grid-template-columns:1fr}
       .rightSide,.leftSide{gap:8px}
     }
@@ -829,44 +854,31 @@
       </div>
     </header>
 
-    <section class="topDashboard glass">
-      <div class="dashHead">
-        <div class="dashHeadLeft">
-          <h2 class="dashTitle" id="t_livehall"></h2>
-          <div class="dashSub" id="t_livehint"></div>
-        </div>
-
-        <div class="dashHeadRight">
-          <button class="chipBtn active" id="filterAll"></button>
-          <button class="chipBtn" id="filterFree"></button>
-          <button class="chipBtn" id="filterSoon"></button>
-        </div>
-      </div>
-
-      <div id="toast" class="toast hidden"></div>
-      <div class="notice" id="topNotice"></div>
-
-      <div class="topStats">
-        <div class="stat"><span id="t_statAll"></span><b id="statAll">10</b></div>
-        <div class="stat"><span id="t_statFree"></span><b id="statFree">0</b></div>
-        <div class="stat"><span id="t_statBusy"></span><b id="statBusy">0</b></div>
-        <div class="stat"><span id="t_statSelected"></span><b id="statSelected">0</b></div>
-      </div>
-
-      <div class="actions">
-        <button class="btn primary" id="findNowBtn"></button>
-        <button class="btn ghost" id="toggleMultiBtn"></button>
-        <button class="btn ghost" id="clearSelectedBtn"></button>
-        <button class="btn ghost" id="openMyBtn"></button>
-        <button class="btn ghost" id="openAdminBtn"></button>
-        <button class="btn ghost" id="openAuthBtn"></button>
-        <button class="btn ghost hidden" id="logoutBtn"></button>
-      </div>
-    </section>
-
     <div class="layout">
       <section class="panel glass">
         <div class="panelBody">
+          <div class="hallTopCompact">
+            <div class="hallTopInfo">
+              <h2 class="hallTitle" id="t_livehall"></h2>
+              <div class="hallHint" id="t_livehint"></div>
+            </div>
+
+            <div class="hallTools">
+              <button class="filterBtn active" id="filterAll"></button>
+              <button class="filterBtn" id="filterFree"></button>
+              <button class="filterBtn" id="filterSoon"></button>
+            </div>
+          </div>
+
+          <div id="toast" class="toast hidden"></div>
+
+          <div class="miniStatsRow">
+            <div class="miniStat"><span id="t_statAll"></span><b id="statAll">10</b></div>
+            <div class="miniStat"><span id="t_statFree"></span><b id="statFree">0</b></div>
+            <div class="miniStat"><span id="t_statBusy"></span><b id="statBusy">0</b></div>
+            <div class="miniStat"><span id="t_statSelected"></span><b id="statSelected">0</b></div>
+          </div>
+
           <div class="hall">
             <div class="side" id="leftSide"></div>
             <div class="aisle" id="t_aisle"></div>
@@ -887,7 +899,26 @@
             <div class="small muted" id="t_sidehint"></div>
           </div>
         </div>
+
         <div class="panelBody">
+          <div class="topActionCluster">
+            <div class="topActionRow single">
+              <button class="tinyAction primary" id="findNowBtn"></button>
+            </div>
+            <div class="topActionRow">
+              <button class="tinyAction" id="toggleMultiBtn"></button>
+              <button class="tinyAction" id="clearSelectedBtn"></button>
+            </div>
+            <div class="topActionRow">
+              <button class="tinyAction" id="openMyBtn"></button>
+              <button class="tinyAction" id="openAdminBtn"></button>
+            </div>
+            <div class="topActionRow">
+              <button class="tinyAction" id="openAuthBtn"></button>
+              <button class="tinyAction hidden" id="logoutBtn"></button>
+            </div>
+          </div>
+
           <div class="bigStatus">
             <h3 id="selectedName">—</h3>
             <div class="muted" id="selectedStatus"></div>
@@ -901,6 +932,7 @@
           <div id="customSection" style="margin-top:16px">
             <div class="panelTitle" id="t_customtitle" style="margin-bottom:8px"></div>
             <div class="small muted" id="t_customhint"></div>
+
             <div class="formRow">
               <div>
                 <label id="t_date"></label>
@@ -916,6 +948,7 @@
                 </select>
               </div>
             </div>
+
             <div class="formRow">
               <div>
                 <label id="t_time"></label>
@@ -926,13 +959,15 @@
                 <input id="nickInput" placeholder="KiraLite" />
               </div>
             </div>
+
             <div class="formRow">
               <div style="grid-column:1/-1">
                 <label id="t_note"></label>
                 <input id="noteInput" placeholder="CS2 / Duo / Team" />
               </div>
             </div>
-            <div class="actions">
+
+            <div class="topActionRow" style="margin-top:12px">
               <button class="btn primary" id="bookCustomBtn"></button>
               <button class="btn ghost" id="hideCustomBtn"></button>
             </div>
@@ -971,9 +1006,11 @@
           <label id="t_password"></label>
           <input type="password" id="authPass" placeholder="******" />
         </div>
-        <div class="actions">
+        <div class="topActionRow">
           <button class="btn primary" id="loginBtn"></button>
           <button class="btn ghost" id="registerBtn"></button>
+        </div>
+        <div class="topActionRow single">
           <button class="btn ghost" id="resetBtn"></button>
         </div>
         <div class="notice" id="authMsg">—</div>
@@ -992,7 +1029,7 @@
       </div>
       <div class="modalBody">
         <div class="notice" id="confirmInfo"></div>
-        <div class="actions">
+        <div class="topActionRow" style="margin-top:12px">
           <button class="btn primary" id="confirmBookBtn"></button>
           <button class="btn ghost" id="cancelConfirmBtn"></button>
         </div>
@@ -1049,7 +1086,6 @@
       user:'Пользователь', cloud:'База',
       livehall:'Live Hall', livehint:'Быстрый режим для обычного игрока + мультивыбор ПК для команд.',
       all:'Все', free:'Свободные', soon:'Скоро освободятся',
-      topNotice:'Выбирай ПК слева, а завершай бронь справа. После создания бронь сразу появится в “Мои брони”.',
       statAll:'Всего ПК', statFree:'Свободно сейчас', statBusy:'Занято', statSelected:'Выбрано',
       findNow:'⚡ Найти свободный сейчас', multiOff:'👥 Мультивыбор: OFF', multiOn:'👥 Мультивыбор: ON', clearSelected:'Сбросить выбор', my:'👤 Мои брони', admin:'🔐 Admin', auth:'🔑 Войти', logout:'🚪 Выйти', aisle:'ПРОХОД',
       sidepanel:'Панель бронирования', sidehint:'Один ПК или сразу несколько.',
@@ -1079,7 +1115,6 @@
       user:'User', cloud:'Database',
       livehall:'Live Hall', livehint:'Quick mode for normal players + multi-select for teams.',
       all:'All', free:'Free', soon:'Soon free',
-      topNotice:'Choose PCs on the left and finish booking on the right. After creation it appears in “My bookings”.',
       statAll:'Total PCs', statFree:'Free now', statBusy:'Busy', statSelected:'Selected',
       findNow:'⚡ Find free now', multiOff:'👥 Multi-select: OFF', multiOn:'👥 Multi-select: ON', clearSelected:'Clear selection', my:'👤 My bookings', admin:'🔐 Admin', auth:'🔑 Login', logout:'🚪 Logout', aisle:'AISLE',
       sidepanel:'Booking panel', sidehint:'One PC or many PCs at once.',
@@ -1106,12 +1141,12 @@
       user:'მომხმარებელი', cloud:'ბაზა',
       livehall:'Live Hall', livehint:'სწრაფი რეჟიმი ჩვეულებრივი მოთამაშისთვის და multi-select გუნდებისთვის.',
       all:'ყველა', free:'თავისუფალი', soon:'მალე თავისუფალი',
-      topNotice:'აირჩიე PC-ები მარცხნივ და დაასრულე ჯავშანი მარჯვნივ. შექმნის შემდეგ ის მაშინვე გამოჩნდება “ჩემი ჯავშნები”-ში.',
       statAll:'სულ PC', statFree:'ახლა თავისუფალი', statBusy:'დაკავებული', statSelected:'არჩეული',
       findNow:'⚡ იპოვე თავისუფალი ახლა', multiOff:'👥 Multi-select: OFF', multiOn:'👥 Multi-select: ON', clearSelected:'გასუფთავება', my:'👤 ჩემი ჯავშნები', admin:'🔐 Admin', auth:'🔑 შესვლა', logout:'🚪 გასვლა', aisle:'გასასვლელი',
       sidepanel:'ჯავშნის პანელი', sidehint:'ერთი PC ან რამდენიმე ერთად.',
       singleSelectHint:'აირჩიე ერთი PC სწრაფი მოქმედებებისთვის.', multiSelectHint:'Multi-select ჩართულია. მონიშნე PC-ები ჯგუფური ჯავშნისთვის.', selectedOne:'არჩეულია 1 PC', selectedMany:'არჩეულია PC', chooseAtLeastOne:'აირჩიე მინიმუმ ერთი PC.',
-      customtitle:'ზუსტი დრო', customhint:'მუშაობს როგორც 1 PC-ზე, ისე რამდენიმეზე ერთად.', date:'თარიღი', duration:'ხანგრძლივობა', time:'დრო', nick:'ნიკი', note:'შენიშვნა', bookCustom:'ჯავშნის დადასტურება', hideCustom:'დამალვა',
+      customtitle:'ზუსტი დრო', customhint:'მუშაობს როგორც 1 PC-ზე, ისე რამდენიმეზე ერთად.',
+      date:'თარიღი', duration:'ხანგრძლივობა', time:'დრო', nick:'ნიკი', note:'შენიშვნა', bookCustom:'ჯავშნის დადასტურება', hideCustom:'დამალვა',
       mybookings:'ჩემი ჯავშნები', adminBookings:'Admin პანელი', adminHint:'ყველა აქტიური ჯავშანი. შესაძლებელია წაშლა.', authTitle:'შესვლა / რეგისტრაცია', authHint:'Email + პაროლი', password:'პაროლი', login:'შესვლა', register:'რეგისტრაცია', reset:'პაროლის აღდგენა',
       confirmtitle:'დადასტურება', confirmhint:'შეამოწმე დეტალები', confirm:'დადასტურება', cancel:'გაუქმება',
       freeTag:'🟢 თავისუფალია', soonTag:'🟡 მალე გათავისუფლდება', busyTag:'🔴 დაკავებულია',
@@ -1147,7 +1182,9 @@
     app = firebase.initializeApp(firebaseConfig);
     auth = firebase.auth();
     db = firebase.firestore();
-  } catch(e) { console.error(e); }
+  } catch(e) {
+    console.error(e);
+  }
 
   const toast = (msg, type='') => {
     const el = $('toast');
@@ -1205,7 +1242,6 @@
     $('filterAll').textContent = tr('all');
     $('filterFree').textContent = tr('free');
     $('filterSoon').textContent = tr('soon');
-    $('topNotice').textContent = tr('topNotice');
     $('t_statAll').textContent = tr('statAll');
     $('t_statFree').textContent = tr('statFree');
     $('t_statBusy').textContent = tr('statBusy');
@@ -1272,7 +1308,9 @@
     return Math.max(0, Math.min(100, ((now - b.startAtMs) / (b.endAtMs - b.startAtMs)) * 100));
   }
 
-  function getPcBookings(pc) { return allBookings.filter(b => b.pc === pc).sort((a,b)=>a.startAtMs-b.startAtMs); }
+  function getPcBookings(pc) {
+    return allBookings.filter(b => b.pc === pc).sort((a,b)=>a.startAtMs-b.startAtMs);
+  }
 
   function getPcStatus(pc) {
     const now = Date.now();
@@ -1372,8 +1410,14 @@
   function renderHall() {
     $('leftSide').innerHTML = '';
     $('rightSide').innerHTML = '';
-    LEFT.forEach(pc => { const c = renderCard(pc); if (c) $('leftSide').appendChild(c); });
-    RIGHT.forEach(pc => { const c = renderCard(pc); if (c) $('rightSide').appendChild(c); });
+    LEFT.forEach(pc => {
+      const c = renderCard(pc);
+      if (c) $('leftSide').appendChild(c);
+    });
+    RIGHT.forEach(pc => {
+      const c = renderCard(pc);
+      if (c) $('rightSide').appendChild(c);
+    });
   }
 
   function renderStats() {
@@ -1480,7 +1524,10 @@
   const closeAuth = () => $('authBackdrop').classList.remove('show');
   const openConfirm = () => $('confirmBackdrop').classList.add('show');
   const closeConfirm = () => $('confirmBackdrop').classList.remove('show');
-  const needLogin = () => { openAuth(); $('authMsg').textContent = tr('loginNeeded'); };
+  const needLogin = () => {
+    openAuth();
+    $('authMsg').textContent = tr('loginNeeded');
+  };
 
   function openQuickConfirm(pcs, start, dur) {
     if (!currentUser) return needLogin();
@@ -1518,7 +1565,8 @@
 
   function fillConfirm() {
     if (!pendingBooking) return;
-    const s = new Date(pendingBooking.startAtMs), e = new Date(pendingBooking.endAtMs);
+    const s = new Date(pendingBooking.startAtMs);
+    const e = new Date(pendingBooking.endAtMs);
     $('confirmInfo').innerHTML = `
       <b>${esc(tr('pcs'))}:</b> ${esc(pendingBooking.pcs.join(', '))}<br>
       <b>${esc(tr('starts'))}:</b> ${esc(toISODate(s))} ${esc(fmtHM(s))}<br>
@@ -1536,7 +1584,9 @@
     if (focusNick) setTimeout(() => $('nickInput').focus(), 50);
   }
 
-  function hideCustom() { $('customSection').classList.add('hidden'); }
+  function hideCustom() {
+    $('customSection').classList.add('hidden');
+  }
 
   function buildCustomTimes() {
     const sel = $('customTime');
@@ -1648,7 +1698,9 @@
         try {
           await db.collection('bookings').doc(b.id).delete();
           toast(tr('canceled'), 'good');
-        } catch(e) { handleFsError(e); }
+        } catch(e) {
+          handleFsError(e);
+        }
       };
       box.appendChild(item);
     });
@@ -1678,7 +1730,9 @@
         try {
           await db.collection('bookings').doc(b.id).delete();
           toast(tr('canceled'), 'good');
-        } catch(e) { handleFsError(e); }
+        } catch(e) {
+          handleFsError(e);
+        }
       };
       box.appendChild(item);
     });
@@ -1749,10 +1803,6 @@
     $('langMenu').classList.remove('show');
   }
 
-  function openLangMenu() {
-    $('langMenu').classList.add('show');
-  }
-
   function toggleLangMenu() {
     $('langMenu').classList.toggle('show');
   }
@@ -1784,11 +1834,24 @@
       applyTheme();
     };
 
-    $('filterAll').onclick = () => { currentFilter='all'; setFilterUI(); renderHall(); };
-    $('filterFree').onclick = () => { currentFilter='free'; setFilterUI(); renderHall(); };
-    $('filterSoon').onclick = () => { currentFilter='soon'; setFilterUI(); renderHall(); };
+    $('filterAll').onclick = () => {
+      currentFilter = 'all';
+      setFilterUI();
+      renderHall();
+    };
+    $('filterFree').onclick = () => {
+      currentFilter = 'free';
+      setFilterUI();
+      renderHall();
+    };
+    $('filterSoon').onclick = () => {
+      currentFilter = 'soon';
+      setFilterUI();
+      renderHall();
+    };
 
     $('findNowBtn').onclick = findFreeNow;
+
     $('toggleMultiBtn').onclick = () => {
       multiMode = !multiMode;
       if (!multiMode && selectedPCs.size > 1) {
@@ -1824,14 +1887,20 @@
     };
 
     $('openAuthBtn').onclick = openAuth;
-    $('logoutBtn').onclick = async () => { try { await auth.signOut(); } catch(_){} };
+    $('logoutBtn').onclick = async () => {
+      try { await auth.signOut(); } catch(_) {}
+    };
 
     $('closeAuthBtn').onclick = closeAuth;
-    $('authBackdrop').onclick = e => { if (e.target === $('authBackdrop')) closeAuth(); };
+    $('authBackdrop').onclick = e => {
+      if (e.target === $('authBackdrop')) closeAuth();
+    };
 
     $('closeConfirmBtn').onclick = closeConfirm;
     $('cancelConfirmBtn').onclick = closeConfirm;
-    $('confirmBackdrop').onclick = e => { if (e.target === $('confirmBackdrop')) closeConfirm(); };
+    $('confirmBackdrop').onclick = e => {
+      if (e.target === $('confirmBackdrop')) closeConfirm();
+    };
 
     $('customDate').value = toISODate(new Date());
     $('nickInput').value = localStorage.getItem(NICK_KEY) || '';
