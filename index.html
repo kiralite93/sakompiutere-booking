@@ -47,7 +47,7 @@
     body{
       margin:0;
       color:var(--text);
-      font-family:Inter, ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial;
+      font-family:Inter, ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
       background:
         radial-gradient(1000px 600px at 10% -10%, rgba(110,231,255,.12), transparent 60%),
         radial-gradient(900px 700px at 90% 0%, rgba(167,139,250,.14), transparent 60%),
@@ -293,10 +293,20 @@
       gap:8px;
     }
 
-    .mobileHeaderActions{
+    .mobileHeaderCompactRow{
       display:grid;
       grid-template-columns:1fr 1fr;
       gap:8px;
+    }
+
+    .mobileHeaderActions{
+      display:none;
+      grid-template-columns:1fr 1fr;
+      gap:8px;
+    }
+
+    .mobileHeaderActions.show{
+      display:grid;
     }
 
     .mobileHeaderStat{
@@ -933,6 +943,7 @@
 
     @media (max-width:700px){
       .wrap{padding:10px}
+      .headerShell{position:static}
 
       .headerMain{
         padding:12px;
@@ -954,10 +965,7 @@
       }
 
       .pill,.langTrigger{max-width:100%}
-
-      .mobileHeaderDashboard{
-        display:grid;
-      }
+      .mobileHeaderDashboard{display:grid}
 
       .panelHead,.panelBody{padding:12px}
 
@@ -980,9 +988,7 @@
         min-height:0;
       }
 
-      .side{
-        align-content:start;
-      }
+      .side{align-content:start}
 
       .pc{padding:12px}
       .pcName{font-size:15px}
@@ -1063,19 +1069,12 @@
         right:auto;
         width:min(220px, calc(100vw - 32px));
       }
-
-      .mobileHeaderFilters{
-        grid-template-columns:1fr 1fr 1fr;
-      }
-
-      .mobileHeaderActions{
-        grid-template-columns:1fr 1fr;
-      }
     }
 
     @media (max-width:380px){
       .mobileHeaderStats{grid-template-columns:1fr}
       .mobileHeaderFilters{grid-template-columns:1fr}
+      .mobileHeaderCompactRow{grid-template-columns:1fr}
       .mobileHeaderActions{grid-template-columns:1fr}
       .hall{grid-template-columns:1fr}
       .rightSide,.leftSide{gap:8px}
@@ -1148,8 +1147,12 @@
           <div class="mobileHeaderStat"><span id="m_t_statSelected"></span><b id="mStatSelected">0</b></div>
         </div>
 
-        <div class="mobileHeaderActions">
+        <div class="mobileHeaderCompactRow">
           <button class="mobileQuickBtn primary" id="mFindNowBtn"></button>
+          <button class="mobileQuickBtn" id="mQuickMenuBtn"></button>
+        </div>
+
+        <div class="mobileHeaderActions" id="mobileHeaderActions">
           <button class="mobileQuickBtn" id="mToggleMultiBtn"></button>
           <button class="mobileQuickBtn" id="mClearSelectedBtn"></button>
           <button class="mobileQuickBtn" id="mOpenMyBtn"></button>
@@ -1374,9 +1377,11 @@
   const addMinutes = (d,m) => new Date(d.getTime() + m * 60000);
   const addDays = (d,x) => new Date(d.getTime() + x * 86400000);
   const overlaps = (a1,a2,b1,b2) => Math.max(a1,b1) < Math.min(a2,b2);
+  const esc = s => String(s ?? '').replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;').replaceAll('"','&quot;').replaceAll("'",'&#039;');
 
   let lang = localStorage.getItem(LANG_KEY) || 'ka';
   let theme = localStorage.getItem(THEME_KEY) || 'dark';
+  let mobileQuickMenuOpen = false;
 
   const LANG_META = {
     ru: { flag:'🇷🇺', label:'Русский', code:'RU' },
@@ -1393,6 +1398,7 @@
       all:'Все', free:'Свободные', soon:'Скоро освободятся',
       statAll:'Всего ПК', statFree:'Свободно сейчас', statBusy:'Занято', statSelected:'Выбрано',
       findNow:'⚡ Найти свободный сейчас', multiOff:'👥 Мультивыбор: OFF', multiOn:'👥 Мультивыбор: ON', clearSelected:'Сбросить выбор', my:'👤 Мои брони', admin:'🔐 Admin', auth:'🔑 Войти', logout:'🚪 Выйти', aisle:'ПРОХОД',
+      quickMenu:'⚙️ Быстрое меню', hideMenu:'✕ Скрыть меню',
       sidepanel:'Панель бронирования', sidehint:'Один ПК или сразу несколько.',
       singleSelectHint:'Выбери один ПК, чтобы увидеть быстрые действия.',
       multiSelectHint:'Мультивыбор включён. Отмечай ПК для групповой брони.',
@@ -1422,6 +1428,7 @@
       all:'All', free:'Free', soon:'Soon free',
       statAll:'Total PCs', statFree:'Free now', statBusy:'Busy', statSelected:'Selected',
       findNow:'⚡ Find free now', multiOff:'👥 Multi-select: OFF', multiOn:'👥 Multi-select: ON', clearSelected:'Clear selection', my:'👤 My bookings', admin:'🔐 Admin', auth:'🔑 Login', logout:'🚪 Logout', aisle:'AISLE',
+      quickMenu:'⚙️ Quick menu', hideMenu:'✕ Hide menu',
       sidepanel:'Booking panel', sidehint:'One PC or many PCs at once.',
       singleSelectHint:'Choose one PC to see quick actions.', multiSelectHint:'Multi-select is ON. Mark PCs for group booking.', selectedOne:'1 PC selected', selectedMany:'PCs selected', chooseAtLeastOne:'Choose at least one PC.',
       customtitle:'Exact time', customhint:'Works for one PC and multiple PCs too.', date:'Date', duration:'Duration', time:'Time', nick:'Nick', note:'Note', bookCustom:'Confirm booking', hideCustom:'Hide',
@@ -1448,6 +1455,7 @@
       all:'ყველა', free:'თავისუფალი', soon:'მალე თავისუფალი',
       statAll:'სულ PC', statFree:'ახლა თავისუფალი', statBusy:'დაკავებული', statSelected:'არჩეული',
       findNow:'⚡ იპოვე თავისუფალი ახლა', multiOff:'👥 Multi-select: OFF', multiOn:'👥 Multi-select: ON', clearSelected:'გასუფთავება', my:'👤 ჩემი ჯავშნები', admin:'🔐 Admin', auth:'🔑 შესვლა', logout:'🚪 გასვლა', aisle:'გასასვლელი',
+      quickMenu:'⚙️ სწრაფი მენიუ', hideMenu:'✕ მენიუს დამალვა',
       sidepanel:'ჯავშნის პანელი', sidehint:'ერთი PC ან რამდენიმე ერთად.',
       singleSelectHint:'აირჩიე ერთი PC სწრაფი მოქმედებებისთვის.', multiSelectHint:'Multi-select ჩართულია. მონიშნე PC-ები ჯგუფური ჯავშნისთვის.', selectedOne:'არჩეულია 1 PC', selectedMany:'არჩეულია PC', chooseAtLeastOne:'აირჩიე მინიმუმ ერთი PC.',
       customtitle:'ზუსტი დრო', customhint:'მუშაობს როგორც 1 PC-ზე, ისე რამდენიმეზე ერთად.',
@@ -1529,6 +1537,11 @@
     });
   }
 
+  function updateMobileQuickMenu() {
+    $('mobileHeaderActions').classList.toggle('show', mobileQuickMenuOpen);
+    $('mQuickMenuBtn').textContent = mobileQuickMenuOpen ? tr('hideMenu') : tr('quickMenu');
+  }
+
   function setFilterUI() {
     $('filterAll').classList.toggle('active', currentFilter === 'all');
     $('filterFree').classList.toggle('active', currentFilter === 'free');
@@ -1536,110 +1549,6 @@
     $('mFilterAll').classList.toggle('active', currentFilter === 'all');
     $('mFilterFree').classList.toggle('active', currentFilter === 'free');
     $('mFilterSoon').classList.toggle('active', currentFilter === 'soon');
-  }
-
-  function renderStats() {
-    const freeCount = ALL.filter(pc => getPcStatus(pc).state === 'free').length;
-    const busyCount = ALL.length - freeCount;
-
-    $('statAll').textContent = String(ALL.length);
-    $('statFree').textContent = String(freeCount);
-    $('statBusy').textContent = String(busyCount);
-    $('statSelected').textContent = String(selectedPCs.size);
-
-    $('mStatAll').textContent = String(ALL.length);
-    $('mStatFree').textContent = String(freeCount);
-    $('mStatBusy').textContent = String(busyCount);
-    $('mStatSelected').textContent = String(selectedPCs.size);
-  }
-
-  function setLangUI() {
-    document.documentElement.lang = lang;
-    document.title = tr('title');
-    $('t_title').textContent = tr('title');
-    $('t_headerSub').textContent = tr('sub');
-    $('t_user').textContent = tr('user');
-    $('t_cloud').textContent = tr('cloud');
-    $('t_livehall').textContent = tr('livehall');
-    $('t_livehint').textContent = tr('livehint');
-
-    $('filterAll').textContent = tr('all');
-    $('filterFree').textContent = tr('free');
-    $('filterSoon').textContent = tr('soon');
-    $('mFilterAll').textContent = tr('all');
-    $('mFilterFree').textContent = tr('free');
-    $('mFilterSoon').textContent = tr('soon');
-
-    $('t_statAll').textContent = tr('statAll');
-    $('t_statFree').textContent = tr('statFree');
-    $('t_statBusy').textContent = tr('statBusy');
-    $('t_statSelected').textContent = tr('statSelected');
-    $('m_t_statAll').textContent = tr('statAll');
-    $('m_t_statFree').textContent = tr('statFree');
-    $('m_t_statBusy').textContent = tr('statBusy');
-    $('m_t_statSelected').textContent = tr('statSelected');
-
-    $('findNowBtn').textContent = tr('findNow');
-    $('toggleMultiBtn').textContent = multiMode ? tr('multiOn') : tr('multiOff');
-    $('clearSelectedBtn').textContent = tr('clearSelected');
-    $('openMyBtn').textContent = tr('my');
-    $('openAdminBtn').textContent = tr('admin');
-    $('openAuthBtn').textContent = tr('auth');
-    $('logoutBtn').textContent = tr('logout');
-
-    $('mFindNowBtn').textContent = tr('findNow');
-    $('mToggleMultiBtn').textContent = multiMode ? tr('multiOn') : tr('multiOff');
-    $('mClearSelectedBtn').textContent = tr('clearSelected');
-    $('mOpenMyBtn').textContent = tr('my');
-    $('mOpenAdminBtn').textContent = tr('admin');
-    $('mOpenAuthBtn').textContent = tr('auth');
-    $('mLogoutBtn').textContent = tr('logout');
-
-    $('t_aisle').textContent = tr('aisle');
-    $('t_sidepanel').textContent = tr('sidepanel');
-    $('t_sidehint').textContent = tr('sidehint');
-    $('t_customtitle').textContent = tr('customtitle');
-    $('t_customhint').textContent = tr('customhint');
-    $('t_date').textContent = tr('date');
-    $('t_duration').textContent = tr('duration');
-    $('t_time').textContent = tr('time');
-    $('t_nick').textContent = tr('nick');
-    $('t_note').textContent = tr('note');
-    $('bookCustomBtn').textContent = tr('bookCustom');
-    $('hideCustomBtn').textContent = tr('hideCustom');
-    $('t_mybookings').textContent = tr('mybookings');
-    $('t_adminbookings').textContent = tr('adminBookings');
-    $('t_adminhint').textContent = tr('adminHint');
-    $('t_auth').textContent = tr('authTitle');
-    $('t_authhint').textContent = tr('authHint');
-    $('t_password').textContent = tr('password');
-    $('loginBtn').textContent = tr('login');
-    $('registerBtn').textContent = tr('register');
-    $('resetBtn').textContent = tr('reset');
-    $('t_confirmtitle').textContent = tr('confirmtitle');
-    $('t_confirmhint').textContent = tr('confirmhint');
-    $('confirmBookBtn').textContent = tr('confirm');
-    $('cancelConfirmBtn').textContent = tr('cancel');
-    $('mobileMyBtn').textContent = tr('mobileMy');
-    $('mobileBookBtn').textContent = tr('mobileBook');
-
-    applyTheme();
-    updateLangMenuUI();
-    setFilterUI();
-    renderStats();
-    renderHall();
-    renderSelected();
-    renderMyBookings();
-    renderAdminBookings();
-  }
-
-  function handleFsError(err) {
-    console.error(err);
-    const msg = String(err?.message || err?.code || err || '').toLowerCase();
-    if (msg.includes('permission')) toast(tr('rules'), 'bad');
-    else if (msg.includes('fetch') || msg.includes('network') || msg.includes('blocked')) toast(tr('blocked'), 'bad');
-    else toast(tr('fsErr'), 'bad');
-    setCloud(tr('statusErr'), false);
   }
 
   function progressFor(b) {
@@ -1672,6 +1581,21 @@
   const statusLabel = s => s.state === 'free' ? tr('freeTag') : s.state === 'soon' ? tr('soonTag') : tr('busyTag');
   const minsText = m => `${m} ${tr('minutes')}`;
 
+  function renderStats() {
+    const freeCount = ALL.filter(pc => getPcStatus(pc).state === 'free').length;
+    const busyCount = ALL.length - freeCount;
+
+    $('statAll').textContent = String(ALL.length);
+    $('statFree').textContent = String(freeCount);
+    $('statBusy').textContent = String(busyCount);
+    $('statSelected').textContent = String(selectedPCs.size);
+
+    $('mStatAll').textContent = String(ALL.length);
+    $('mStatFree').textContent = String(freeCount);
+    $('mStatBusy').textContent = String(busyCount);
+    $('mStatSelected').textContent = String(selectedPCs.size);
+  }
+
   function updateSelection(pc) {
     if (multiMode) {
       if (selectedPCs.has(pc)) selectedPCs.delete(pc);
@@ -1697,25 +1621,25 @@
 
     let meta = '';
     if (s.state === 'free') {
-      meta = `<div>${tr('freeNow')}</div>`;
+      meta = `<div>${esc(tr('freeNow'))}</div>`;
     } else if (s.active) {
       meta = `
-        <div>${tr('playing')}: <b>${esc(s.active.nick || tr('guest'))}</b></div>
-        <div>${tr('freeAt')}: <b>${fmtHM(new Date(s.freeAtMs))}</b></div>
-        <div>${tr('endsIn')}: <b>${minsText(s.minsToFree)}</b></div>
+        <div>${esc(tr('playing'))}: <b>${esc(s.active.nick || tr('guest'))}</b></div>
+        <div>${esc(tr('freeAt'))}: <b>${esc(fmtHM(new Date(s.freeAtMs)))}</b></div>
+        <div>${esc(tr('endsIn'))}: <b>${esc(minsText(s.minsToFree))}</b></div>
         <div class="progress"><div class="bar" style="width:${progressFor(s.active)}%"></div></div>
       `;
     } else {
       meta = `
-        <div>${tr('freeAt')}: <b>${fmtHM(new Date(s.freeAtMs))}</b></div>
-        <div>${tr('endsIn')}: <b>${minsText(s.minsToFree)}</b></div>
+        <div>${esc(tr('freeAt'))}: <b>${esc(fmtHM(new Date(s.freeAtMs)))}</b></div>
+        <div>${esc(tr('endsIn'))}: <b>${esc(minsText(s.minsToFree))}</b></div>
       `;
     }
 
     el.innerHTML = `
       <div class="pcTop">
-        <div class="pcName">${pc}</div>
-        <div class="statusTag ${s.state}">${statusLabel(s)}</div>
+        <div class="pcName">${esc(pc)}</div>
+        <div class="statusTag ${s.state}">${esc(statusLabel(s))}</div>
       </div>
       <div class="pcMeta">${meta}</div>
       <div class="pcBottom">
@@ -1732,7 +1656,12 @@
     setTimeout(() => {
       const pick = el.querySelector('button[data-a="pick"]');
       const quick = el.querySelector('button[data-a="quick"]');
-      if (pick) pick.onclick = ev => { ev.stopPropagation(); updateSelection(pc); };
+
+      if (pick) pick.onclick = ev => {
+        ev.stopPropagation();
+        updateSelection(pc);
+      };
+
       if (quick) quick.onclick = ev => {
         ev.stopPropagation();
         updateSelection(pc);
@@ -1764,6 +1693,7 @@
 
   function renderSelected() {
     $('selectedChips').innerHTML = '';
+
     if (!selectedPCs.size) {
       $('selectedName').textContent = '—';
       $('selectedStatus').textContent = multiMode ? tr('multiSelectHint') : tr('singleSelectHint');
@@ -1783,7 +1713,7 @@
     names.forEach(pc => {
       const chip = document.createElement('div');
       chip.className = 'chip';
-      chip.innerHTML = `<b>${pc}</b>`;
+      chip.innerHTML = `<b>${esc(pc)}</b>`;
       $('selectedChips').appendChild(chip);
     });
 
@@ -1802,13 +1732,14 @@
       actions.push({ label:tr('group2'), small:`${tr('pcs')}: ${names.join(', ')}`, fn:()=>openQuickConfirm(names, new Date(), 120) });
       actions.push({ label:tr('group3'), small:`${tr('pcs')}: ${names.join(', ')}`, fn:()=>openQuickConfirm(names, new Date(), 180) });
     }
+
     actions.push({ label:tr('exact'), small:tr('saveNickHint'), fn:()=>showCustom() });
 
     $('quickActions').innerHTML = '';
     actions.forEach((a,i) => {
       const div = document.createElement('div');
       div.className = 'quickItem';
-      div.innerHTML = `<div><b>${a.label}</b><small>${a.small}</small></div><button class="mini ${i===0?'primary':''}">→</button>`;
+      div.innerHTML = `<div><b>${esc(a.label)}</b><small>${esc(a.small)}</small></div><button class="mini ${i===0?'primary':''}">→</button>`;
       div.querySelector('button').onclick = a.fn;
       $('quickActions').appendChild(div);
     });
@@ -1868,11 +1799,11 @@
     const s = new Date(pendingBooking.startAtMs);
     const e = new Date(pendingBooking.endAtMs);
     $('confirmInfo').innerHTML = `
-      <b>${tr('pcs')}:</b> ${pendingBooking.pcs.join(', ')}<br>
-      <b>${tr('starts')}:</b> ${toISODate(s)} ${fmtHM(s)}<br>
-      <b>${tr('ends')}:</b> ${toISODate(e)} ${fmtHM(e)}<br>
-      <b>${tr('nick')}:</b> ${pendingBooking.nick}
-      ${pendingBooking.note ? `<br><b>${tr('note')}:</b> ${pendingBooking.note}` : ''}
+      <b>${esc(tr('pcs'))}:</b> ${esc(pendingBooking.pcs.join(', '))}<br>
+      <b>${esc(tr('starts'))}:</b> ${esc(toISODate(s))} ${esc(fmtHM(s))}<br>
+      <b>${esc(tr('ends'))}:</b> ${esc(toISODate(e))} ${esc(fmtHM(e))}<br>
+      <b>${esc(tr('nick'))}:</b> ${esc(pendingBooking.nick)}
+      ${pendingBooking.note ? `<br><b>${esc(tr('note'))}:</b> ${esc(pendingBooking.note)}` : ''}
     `;
   }
 
@@ -1882,6 +1813,7 @@
     if (!nick) return showCustom(true);
     const safe = findNearestForAll(pcs, start, dur);
     if (!safe) return toast(tr('taken'), 'bad');
+
     pendingBooking = {
       pcs:[...pcs],
       startAtMs:safe.getTime(),
@@ -1889,6 +1821,7 @@
       nick,
       note:($('noteInput').value || '').trim()
     };
+
     fillConfirm();
     openConfirm();
   }
@@ -1899,6 +1832,7 @@
     if (!nick) return showCustom(true);
     const safe = findNearestForAll(pcs, new Date(), 120);
     if (!safe) return toast(tr('taken'), 'bad');
+
     pendingBooking = {
       pcs:[...pcs],
       startAtMs:safe.getTime(),
@@ -1906,6 +1840,7 @@
       nick,
       note:($('noteInput').value || '').trim()
     };
+
     fillConfirm();
     openConfirm();
   }
@@ -1925,6 +1860,7 @@
   function buildCustomTimes() {
     const sel = $('customTime');
     sel.innerHTML = '';
+
     if (!selectedPCs.size) {
       const o = document.createElement('option');
       o.value = '';
@@ -1947,6 +1883,7 @@
       const end = addMinutes(cur, dur);
       if (cur.getTime() < Date.now()) continue;
       if (!isFreeRangeForAll(pcs, cur.getTime(), end.getTime())) continue;
+
       const o = document.createElement('option');
       o.value = String(cur.getTime());
       o.textContent = `${fmtHM(cur)} → ${fmtHM(end)}`;
@@ -1963,6 +1900,7 @@
 
   async function createBooking(data) {
     if (!currentUser) return needLogin();
+
     const pcs = [...new Set((data.pcs || []).map(String))].slice(0, 10);
     const startAtMs = Number(data.startAtMs);
     const endAtMs = Number(data.endAtMs);
@@ -1975,6 +1913,7 @@
 
     try {
       await db.collection('users').doc(String(currentUser.uid)).set({ nick, updatedAtMs:Date.now() }, { merge:true });
+
       const batch = db.batch();
       pcs.forEach(pc => {
         const ref = db.collection('bookings').doc();
@@ -1989,6 +1928,7 @@
           createdAtMs:Date.now()
         });
       });
+
       await batch.commit();
       localStorage.setItem(NICK_KEY, nick);
       $('nickInput').value = nick;
@@ -2009,7 +1949,7 @@
     box.innerHTML = '';
 
     if (!currentUser) {
-      box.innerHTML = `<div class="notice">${tr('authNeed')}</div>`;
+      box.innerHTML = `<div class="notice">${esc(tr('authNeed'))}</div>`;
       return;
     }
 
@@ -2018,7 +1958,7 @@
       .sort((a,b)=>a.startAtMs-b.startAtMs);
 
     if (!mine.length) {
-      box.innerHTML = `<div class="notice">${tr('empty')}</div>`;
+      box.innerHTML = `<div class="notice">${esc(tr('empty'))}</div>`;
       return;
     }
 
@@ -2026,7 +1966,7 @@
       const s = new Date(b.startAtMs), e = new Date(b.endAtMs);
       const item = document.createElement('div');
       item.className = 'bookingItem';
-      item.innerHTML = `<div><b>${b.pc}</b><div class="meta">${toISODate(s)} • ${fmtHM(s)} → ${fmtHM(e)}</div></div><button class="mini bad">${tr('remove')}</button>`;
+      item.innerHTML = `<div><b>${esc(b.pc)}</b><div class="meta">${esc(toISODate(s))} • ${esc(fmtHM(s))} → ${esc(fmtHM(e))}</div></div><button class="mini bad">${esc(tr('remove'))}</button>`;
       item.querySelector('button').onclick = async () => {
         if (!confirm(tr('remove') + '?')) return;
         try {
@@ -2050,7 +1990,7 @@
     const list = allBookings.filter(b => b.endAtMs > Date.now()).sort((a,b)=>a.startAtMs-b.startAtMs);
 
     if (!list.length) {
-      box.innerHTML = `<div class="notice">${tr('empty')}</div>`;
+      box.innerHTML = `<div class="notice">${esc(tr('empty'))}</div>`;
       return;
     }
 
@@ -2058,7 +1998,7 @@
       const s = new Date(b.startAtMs), e = new Date(b.endAtMs);
       const item = document.createElement('div');
       item.className = 'bookingItem';
-      item.innerHTML = `<div><b>${b.pc}</b><div class="meta">${b.nick || ''} • ${toISODate(s)} • ${fmtHM(s)} → ${fmtHM(e)}</div></div><button class="mini bad">${tr('remove')}</button>`;
+      item.innerHTML = `<div><b>${esc(b.pc)}</b><div class="meta">${esc(b.nick || '')} • ${esc(toISODate(s))} • ${esc(fmtHM(s))} → ${esc(fmtHM(e))}</div></div><button class="mini bad">${esc(tr('remove'))}</button>`;
       item.querySelector('button').onclick = async () => {
         if (!confirm(tr('remove') + '?')) return;
         try {
@@ -2101,6 +2041,7 @@
       selectedPc = free[0];
       selectedPCs = new Set([free[0]]);
     }
+
     renderStats();
     renderHall();
     renderSelected();
@@ -2110,6 +2051,7 @@
     if (unsub) {
       try { unsub(); } catch(_) {}
     }
+
     const { start, end } = dayBoundsNow();
     unsub = db.collection('bookings')
       .where('startAtMs', '<', end)
@@ -2152,6 +2094,91 @@
     setLangUI();
   }
 
+  function setLangUI() {
+    document.documentElement.lang = lang;
+    document.title = tr('title');
+
+    $('t_title').textContent = tr('title');
+    $('t_headerSub').textContent = tr('sub');
+    $('t_user').textContent = tr('user');
+    $('t_cloud').textContent = tr('cloud');
+
+    $('t_livehall').textContent = tr('livehall');
+    $('t_livehint').textContent = tr('livehint');
+
+    $('filterAll').textContent = tr('all');
+    $('filterFree').textContent = tr('free');
+    $('filterSoon').textContent = tr('soon');
+
+    $('mFilterAll').textContent = tr('all');
+    $('mFilterFree').textContent = tr('free');
+    $('mFilterSoon').textContent = tr('soon');
+
+    $('t_statAll').textContent = tr('statAll');
+    $('t_statFree').textContent = tr('statFree');
+    $('t_statBusy').textContent = tr('statBusy');
+    $('t_statSelected').textContent = tr('statSelected');
+
+    $('m_t_statAll').textContent = tr('statAll');
+    $('m_t_statFree').textContent = tr('statFree');
+    $('m_t_statBusy').textContent = tr('statBusy');
+    $('m_t_statSelected').textContent = tr('statSelected');
+
+    $('findNowBtn').textContent = tr('findNow');
+    $('toggleMultiBtn').textContent = multiMode ? tr('multiOn') : tr('multiOff');
+    $('clearSelectedBtn').textContent = tr('clearSelected');
+    $('openMyBtn').textContent = tr('my');
+    $('openAdminBtn').textContent = tr('admin');
+    $('openAuthBtn').textContent = tr('auth');
+    $('logoutBtn').textContent = tr('logout');
+
+    $('mFindNowBtn').textContent = tr('findNow');
+    $('mToggleMultiBtn').textContent = multiMode ? tr('multiOn') : tr('multiOff');
+    $('mClearSelectedBtn').textContent = tr('clearSelected');
+    $('mOpenMyBtn').textContent = tr('my');
+    $('mOpenAdminBtn').textContent = tr('admin');
+    $('mOpenAuthBtn').textContent = tr('auth');
+    $('mLogoutBtn').textContent = tr('logout');
+
+    $('t_aisle').textContent = tr('aisle');
+    $('t_sidepanel').textContent = tr('sidepanel');
+    $('t_sidehint').textContent = tr('sidehint');
+    $('t_customtitle').textContent = tr('customtitle');
+    $('t_customhint').textContent = tr('customhint');
+    $('t_date').textContent = tr('date');
+    $('t_duration').textContent = tr('duration');
+    $('t_time').textContent = tr('time');
+    $('t_nick').textContent = tr('nick');
+    $('t_note').textContent = tr('note');
+    $('bookCustomBtn').textContent = tr('bookCustom');
+    $('hideCustomBtn').textContent = tr('hideCustom');
+    $('t_mybookings').textContent = tr('mybookings');
+    $('t_adminbookings').textContent = tr('adminBookings');
+    $('t_adminhint').textContent = tr('adminHint');
+    $('t_auth').textContent = tr('authTitle');
+    $('t_authhint').textContent = tr('authHint');
+    $('t_password').textContent = tr('password');
+    $('loginBtn').textContent = tr('login');
+    $('registerBtn').textContent = tr('register');
+    $('resetBtn').textContent = tr('reset');
+    $('t_confirmtitle').textContent = tr('confirmtitle');
+    $('t_confirmhint').textContent = tr('confirmhint');
+    $('confirmBookBtn').textContent = tr('confirm');
+    $('cancelConfirmBtn').textContent = tr('cancel');
+    $('mobileMyBtn').textContent = tr('mobileMy');
+    $('mobileBookBtn').textContent = tr('mobileBook');
+
+    applyTheme();
+    updateLangMenuUI();
+    setFilterUI();
+    updateMobileQuickMenu();
+    renderStats();
+    renderHall();
+    renderSelected();
+    renderMyBookings();
+    renderAdminBookings();
+  }
+
   function bind() {
     document.querySelectorAll('.langOption').forEach(btn => {
       btn.onclick = () => setLanguage(btn.dataset.lang);
@@ -2170,6 +2197,11 @@
       theme = theme === 'dark' ? 'light' : 'dark';
       localStorage.setItem(THEME_KEY, theme);
       applyTheme();
+    };
+
+    $('mQuickMenuBtn').onclick = () => {
+      mobileQuickMenuOpen = !mobileQuickMenuOpen;
+      updateMobileQuickMenu();
     };
 
     const setAllFilter = val => {
@@ -2264,6 +2296,7 @@
       const startAtMs = Number($('customTime').value || 0);
       if (!startAtMs) return toast(tr('pickTime'), 'warn');
       const duration = Number($('customDuration').value || 60);
+
       pendingBooking = {
         pcs:[...selectedPCs],
         startAtMs,
@@ -2271,6 +2304,7 @@
         nick:($('nickInput').value || '').trim(),
         note:($('noteInput').value || '').trim()
       };
+
       fillConfirm();
       openConfirm();
     };
@@ -2283,6 +2317,7 @@
       const email = ($('authEmail').value || '').trim();
       const pass = ($('authPass').value || '').trim();
       if (!email || !pass) return $('authMsg').textContent = tr('loginErr');
+
       try {
         await auth.signInWithEmailAndPassword(email, pass);
         closeAuth();
@@ -2296,6 +2331,7 @@
       const email = ($('authEmail').value || '').trim();
       const pass = ($('authPass').value || '').trim();
       if (!email || !pass) return $('authMsg').textContent = tr('loginErr');
+
       try {
         await auth.createUserWithEmailAndPassword(email, pass);
         closeAuth();
@@ -2308,6 +2344,7 @@
     $('resetBtn').onclick = async () => {
       const email = ($('authEmail').value || '').trim();
       if (!email) return $('authMsg').textContent = tr('loginErr');
+
       try {
         await auth.sendPasswordResetEmail(email);
         $('authMsg').textContent = tr('resetSent');
