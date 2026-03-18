@@ -43,11 +43,10 @@
     *{box-sizing:border-box}
     html,body{height:100%}
     html{-webkit-text-size-adjust:100%}
-
     body{
       margin:0;
       color:var(--text);
-      font-family:Inter, ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      font-family:Inter, ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial;
       background:
         radial-gradient(1000px 600px at 10% -10%, rgba(110,231,255,.12), transparent 60%),
         radial-gradient(900px 700px at 90% 0%, rgba(167,139,250,.14), transparent 60%),
@@ -58,7 +57,6 @@
       word-wrap:break-word;
       overflow-wrap:anywhere;
     }
-
     body[data-theme="light"]{
       background:
         radial-gradient(1000px 600px at 10% -10%, rgba(2,132,199,.10), transparent 60%),
@@ -67,17 +65,20 @@
         var(--bg);
     }
 
-    .wrap{max-width:1320px;margin:0 auto;padding:14px}
-
+    .wrap{
+      max-width:1320px;
+      margin:0 auto;
+      padding:14px;
+      padding-bottom:max(14px, env(safe-area-inset-bottom));
+    }
     .glass{
       background:linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.03));
       border:1px solid var(--line);
       box-shadow:var(--shadow);
-      backdrop-filter:blur(12px);
+      backdrop-filter:blur(12px)
     }
-
     body[data-theme="light"] .glass{
-      background:linear-gradient(180deg, rgba(255,255,255,.88), rgba(255,255,255,.72));
+      background:linear-gradient(180deg, rgba(255,255,255,.88), rgba(255,255,255,.72))
     }
 
     .headerShell{
@@ -87,13 +88,20 @@
       z-index:50;
       overflow:visible;
     }
-
     .headerMain{
-      display:flex;
+      display:grid;
+      grid-template-columns:minmax(0,1fr) auto;
       align-items:center;
-      justify-content:space-between;
       gap:12px;
-      padding:14px 16px;
+      padding:14px 16px 10px;
+      min-width:0;
+    }
+    .headerMeta{
+      display:flex;
+      flex-wrap:wrap;
+      justify-content:flex-end;
+      gap:8px;
+      padding:0 16px 14px;
       min-width:0;
     }
 
@@ -102,21 +110,17 @@
       align-items:center;
       gap:12px;
       min-width:0;
-      flex:1 1 auto;
     }
-
     .brand > div:last-child{
       min-width:0;
       flex:1 1 auto;
     }
-
     h1{
       margin:0;
       font-size:22px;
       line-height:1.15;
       overflow-wrap:anywhere;
     }
-
     .logo{
       width:56px;
       height:56px;
@@ -131,7 +135,6 @@
       box-shadow:none;
       overflow:hidden;
     }
-
     .sub{
       margin:4px 0 0;
       color:var(--muted);
@@ -142,12 +145,11 @@
 
     .topbar{
       display:flex;
-      flex-wrap:wrap;
       gap:8px;
       align-items:center;
       justify-content:flex-end;
       min-width:0;
-      flex:0 1 auto;
+      flex-wrap:nowrap;
     }
 
     .pill,.langTrigger{
@@ -164,18 +166,29 @@
       max-width:100%;
       line-height:1.2;
     }
-
     body[data-theme="light"] .pill,
     body[data-theme="light"] .langTrigger{
-      background:rgba(255,255,255,.75);
+      background:rgba(255,255,255,.75)
     }
-
-    .pill b,.pill span{
+    .pill b,
+    .pill span{
       min-width:0;
       overflow-wrap:anywhere;
     }
+    .headerMeta .pill{
+      min-width:0;
+      overflow:hidden;
+    }
+    .headerMeta .pill b{
+      display:block;
+      min-width:0;
+      overflow:hidden;
+      text-overflow:ellipsis;
+      white-space:nowrap;
+      max-width:160px;
+    }
 
-    .btn,.mini,.langTrigger,.langOption,.filterBtn,.tinyAction,.mobileQuickBtn{
+    .btn,.mini,.langTrigger,.langOption,.filterBtn,.tinyAction{
       border:1px solid var(--line);
       background:rgba(255,255,255,.04);
       color:var(--text);
@@ -184,41 +197,33 @@
       font-weight:800;
       min-width:0;
     }
-
     body[data-theme="light"] .btn,
     body[data-theme="light"] .mini,
     body[data-theme="light"] .langTrigger,
     body[data-theme="light"] .langOption,
     body[data-theme="light"] .filterBtn,
-    body[data-theme="light"] .tinyAction,
-    body[data-theme="light"] .mobileQuickBtn{
-      background:rgba(255,255,255,.75);
+    body[data-theme="light"] .tinyAction{
+      background:rgba(255,255,255,.75)
     }
-
-    .btn:hover,.mini:hover,.langTrigger:hover,.langOption:hover,.filterBtn:hover,.tinyAction:hover,.mobileQuickBtn:hover{
+    .btn:hover,.mini:hover,.langTrigger:hover,.langOption:hover,.filterBtn:hover,.tinyAction:hover{
       transform:translateY(-1px);
-      border-color:rgba(110,231,255,.45);
+      border-color:rgba(110,231,255,.45)
     }
-
     body[data-theme="light"] .btn:hover,
     body[data-theme="light"] .mini:hover,
     body[data-theme="light"] .langTrigger:hover,
     body[data-theme="light"] .langOption:hover,
     body[data-theme="light"] .filterBtn:hover,
-    body[data-theme="light"] .tinyAction:hover,
-    body[data-theme="light"] .mobileQuickBtn:hover{
-      border-color:rgba(2,132,199,.35);
+    body[data-theme="light"] .tinyAction:hover{
+      border-color:rgba(2,132,199,.35)
     }
 
     .langWrap{position:relative}
-
     .langTrigger{
       padding:8px 12px;
       white-space:nowrap;
     }
-
     .langTrigger .flag{font-size:15px;line-height:1}
-
     .langMenu{
       position:absolute;
       top:calc(100% + 8px);
@@ -229,9 +234,7 @@
       display:none;
       z-index:60;
     }
-
     .langMenu.show{display:block}
-
     .langOption{
       width:100%;
       display:flex;
@@ -243,24 +246,19 @@
       margin:0 0 6px;
       text-align:left;
     }
-
     .langOption:last-child{margin-bottom:0}
-
     .langLeft{
       display:flex;
       align-items:center;
       gap:10px;
       min-width:0;
     }
-
     .langFlag{font-size:18px;line-height:1}
     .langCode{color:var(--muted);font-size:11px;font-weight:700}
-
     .langOption.active{
       border-color:rgba(110,231,255,.45);
       background:rgba(110,231,255,.10);
     }
-
     body[data-theme="light"] .langOption.active{
       border-color:rgba(2,132,199,.35);
       background:rgba(2,132,199,.08);
@@ -269,94 +267,20 @@
     .dot{width:8px;height:8px;border-radius:999px;background:#fff2;flex:0 0 8px}
     .dot.ok{background:var(--free);box-shadow:0 0 0 0 rgba(52,211,153,.35);animation:pulse 1.8s infinite}
     .dot.err{background:var(--busy)}
-
-    @keyframes pulse{
-      70%{box-shadow:0 0 0 10px rgba(52,211,153,0)}
-      100%{box-shadow:0 0 0 0 rgba(52,211,153,0)}
-    }
-
-    .mobileHeaderDashboard{
-      display:none;
-      padding:0 16px 16px;
-      gap:10px;
-    }
-
-    .mobileHeaderFilters{
-      display:grid;
-      grid-template-columns:repeat(3,1fr);
-      gap:8px;
-    }
-
-    .mobileHeaderStats{
-      display:grid;
-      grid-template-columns:repeat(2,1fr);
-      gap:8px;
-    }
-
-    .mobileHeaderCompactRow{
-      display:grid;
-      grid-template-columns:1fr 1fr;
-      gap:8px;
-    }
-
-    .mobileHeaderActions{
-      display:none;
-      grid-template-columns:1fr 1fr;
-      gap:8px;
-    }
-
-    .mobileHeaderActions.show{
-      display:grid;
-    }
-
-    .mobileHeaderStat{
-      padding:10px 12px;
-      border-radius:16px;
-      border:1px solid var(--line);
-      background:rgba(255,255,255,.03);
-      min-width:0;
-    }
-
-    body[data-theme="light"] .mobileHeaderStat{
-      background:rgba(255,255,255,.72);
-    }
-
-    .mobileHeaderStat span{
-      display:block;
-      color:var(--muted);
-      font-size:11px;
-      line-height:1.25;
-      overflow-wrap:anywhere;
-    }
-
-    .mobileHeaderStat b{
-      display:block;
-      margin-top:4px;
-      font-size:17px;
-      line-height:1.15;
-      overflow-wrap:anywhere;
-    }
+    @keyframes pulse{70%{box-shadow:0 0 0 10px rgba(52,211,153,0)}100%{box-shadow:0 0 0 0 rgba(52,211,153,0)}}
 
     .layout{
       display:grid;
       grid-template-columns:1fr 360px;
       gap:16px;
       margin-top:14px;
-      min-width:0;
-      align-items:start;
+      min-width:0
     }
-
     @media (max-width:1120px){
       .layout{grid-template-columns:1fr}
     }
 
-    .panel{
-      border-radius:24px;
-      min-width:0;
-      height:auto;
-      align-self:start;
-    }
-
+    .panel{border-radius:24px;min-width:0}
     .panelHead{
       padding:14px 16px;
       border-bottom:1px solid var(--line);
@@ -367,29 +291,14 @@
       min-width:0;
       flex-wrap:wrap;
     }
-
     .panelHead > div{min-width:0}
-
     .panelTitle{
       font-size:15px;
       font-weight:900;
       line-height:1.25;
       overflow-wrap:anywhere;
     }
-
-    .panelBody{
-      padding:16px;
-      min-width:0;
-    }
-
-    .mainHallPanel .panelBody{
-      display:flex;
-      flex-direction:column;
-      align-items:stretch;
-      gap:14px;
-      height:auto;
-      min-height:0;
-    }
+    .panelBody{padding:16px;min-width:0}
 
     .hallTopCompact{
       display:flex;
@@ -397,17 +306,12 @@
       gap:12px;
       align-items:flex-start;
       flex-wrap:wrap;
-      margin:0;
-      flex:none;
-      min-height:0;
+      margin-bottom:14px;
     }
-
     .hallTopInfo{
       min-width:0;
       flex:1 1 360px;
-      min-height:0;
     }
-
     .hallTitle{
       margin:0;
       font-size:20px;
@@ -415,7 +319,6 @@
       line-height:1.15;
       overflow-wrap:anywhere;
     }
-
     .hallHint{
       margin:6px 0 0;
       color:var(--muted);
@@ -423,15 +326,12 @@
       line-height:1.4;
       overflow-wrap:anywhere;
     }
-
     .hallTools{
       display:flex;
       gap:8px;
       flex-wrap:wrap;
       align-items:center;
       justify-content:flex-end;
-      margin:0;
-      flex:none;
     }
 
     .filterBtn{
@@ -441,12 +341,10 @@
       font-size:13px;
       background:rgba(255,255,255,.03);
     }
-
     .filterBtn.active{
       background:linear-gradient(180deg, rgba(110,231,255,.18), rgba(167,139,250,.12));
       border-color:rgba(110,231,255,.45);
     }
-
     body[data-theme="light"] .filterBtn.active{
       background:linear-gradient(180deg, rgba(2,132,199,.12), rgba(124,58,237,.10));
       border-color:rgba(2,132,199,.35);
@@ -456,10 +354,8 @@
       display:grid;
       grid-template-columns:repeat(4,1fr);
       gap:10px;
-      margin:0;
-      flex:none;
+      margin-bottom:14px;
     }
-
     .miniStat{
       padding:10px 12px;
       border-radius:16px;
@@ -467,9 +363,9 @@
       background:rgba(255,255,255,.03);
       min-width:0;
     }
-
-    body[data-theme="light"] .miniStat{background:rgba(255,255,255,.72)}
-
+    body[data-theme="light"] .miniStat{
+      background:rgba(255,255,255,.72)
+    }
     .miniStat span{
       display:block;
       color:var(--muted);
@@ -477,7 +373,6 @@
       line-height:1.25;
       overflow-wrap:anywhere;
     }
-
     .miniStat b{
       display:block;
       margin-top:4px;
@@ -487,7 +382,7 @@
     }
 
     .toast{
-      margin:0;
+      margin-bottom:12px;
       border-radius:16px;
       padding:12px 13px;
       border:1px solid var(--line);
@@ -495,34 +390,15 @@
       font-size:12px;
       line-height:1.4;
       overflow-wrap:anywhere;
-      flex:none;
     }
-
     body[data-theme="light"] .toast{background:rgba(255,255,255,.72)}
     .toast.good{border-color:rgba(52,211,153,.28);background:rgba(52,211,153,.08)}
     .toast.bad{border-color:rgba(251,113,133,.28);background:rgba(251,113,133,.08)}
     .toast.warn{border-color:rgba(251,191,36,.28);background:rgba(251,191,36,.08)}
-
     .hidden{display:none !important}
 
-    .hall{
-      display:grid;
-      grid-template-columns:1fr 80px 1fr;
-      gap:14px;
-      align-items:start;
-      min-width:0;
-      margin:0;
-      flex:none;
-      min-height:0;
-    }
-
-    .side{
-      display:grid;
-      gap:10px;
-      min-width:0;
-      align-content:start;
-    }
-
+    .hall{display:grid;grid-template-columns:1fr 80px 1fr;gap:14px;align-items:start;min-width:0}
+    .side{display:grid;gap:10px;min-width:0}
     .aisle{
       min-height:100%;
       border-radius:20px;
@@ -537,14 +413,12 @@
       text-transform:uppercase;
       writing-mode:vertical-rl;
       transform:rotate(180deg);
-      padding:14px 0;
+      padding:14px 0
     }
-
     body[data-theme="light"] .aisle{
       border-color:rgba(15,23,42,.08);
-      background:linear-gradient(180deg, rgba(255,255,255,.55), rgba(255,255,255,.35));
+      background:linear-gradient(180deg, rgba(255,255,255,.55), rgba(255,255,255,.35))
     }
-
     @media (max-width:900px){
       .hall{grid-template-columns:1fr 1fr}
       .aisle{display:none}
@@ -561,8 +435,9 @@
       transition:.18s ease;
       min-width:0;
     }
-
-    body[data-theme="light"] .pc{background:linear-gradient(180deg, rgba(255,255,255,.88), rgba(255,255,255,.72))}
+    body[data-theme="light"] .pc{
+      background:linear-gradient(180deg, rgba(255,255,255,.88), rgba(255,255,255,.72))
+    }
     .pc:hover{transform:translateY(-2px)}
     .pc.active{border-color:rgba(110,231,255,.55);box-shadow:0 0 0 3px rgba(110,231,255,.08)}
     body[data-theme="light"] .pc.active{border-color:rgba(2,132,199,.35);box-shadow:0 0 0 3px rgba(2,132,199,.08)}
@@ -570,22 +445,18 @@
     .pc.free{box-shadow:inset 0 0 0 1px rgba(52,211,153,.14)}
     .pc.soon{box-shadow:inset 0 0 0 1px rgba(251,191,36,.14)}
     .pc.busy{box-shadow:inset 0 0 0 1px rgba(251,113,133,.14)}
-
     .pc::before{
       content:"";
       position:absolute;
       inset:-20% auto auto -10%;
-      width:160px;
-      height:110px;
+      width:160px;height:110px;
       border-radius:999px;
       filter:blur(18px);
-      opacity:.3;
+      opacity:.3
     }
-
     .pc.free::before{background:rgba(52,211,153,.25)}
     .pc.soon::before{background:rgba(251,191,36,.22)}
     .pc.busy::before{background:rgba(251,113,133,.22)}
-
     .pcTop{
       display:flex;
       justify-content:space-between;
@@ -594,7 +465,6 @@
       min-width:0;
       flex-wrap:wrap;
     }
-
     .pcName{
       font-size:17px;
       font-weight:1000;
@@ -604,7 +474,6 @@
       line-height:1.2;
       overflow-wrap:anywhere;
     }
-
     .statusTag{
       font-size:11px;
       font-weight:900;
@@ -618,11 +487,9 @@
       overflow-wrap:anywhere;
       flex:0 1 auto;
     }
-
     .statusTag.free{color:var(--free);background:rgba(52,211,153,.09);border-color:rgba(52,211,153,.25)}
     .statusTag.soon{color:var(--soon);background:rgba(251,191,36,.09);border-color:rgba(251,191,36,.25)}
     .statusTag.busy{color:var(--busy);background:rgba(251,113,133,.09);border-color:rgba(251,113,133,.25)}
-
     .pcMeta{
       margin-top:10px;
       display:grid;
@@ -631,31 +498,21 @@
       color:var(--muted);
       min-width:0;
     }
-
     .pcMeta div{
       min-width:0;
       overflow-wrap:anywhere;
       line-height:1.35;
     }
-
     .pcMeta b{color:var(--text)}
-
     .progress{
       height:8px;
       border-radius:999px;
       background:rgba(255,255,255,.06);
       overflow:hidden;
-      margin-top:6px;
+      margin-top:6px
     }
-
     body[data-theme="light"] .progress{background:rgba(15,23,42,.07)}
-
-    .bar{
-      height:100%;
-      background:linear-gradient(90deg, rgba(251,113,133,.8), rgba(251,191,36,.8));
-      width:0%;
-    }
-
+    .bar{height:100%;background:linear-gradient(90deg, rgba(251,113,133,.8), rgba(251,191,36,.8));width:0%}
     .pcBottom{
       display:flex;
       justify-content:space-between;
@@ -664,7 +521,6 @@
       margin-top:12px;
       min-width:0;
     }
-
     .mini{
       padding:8px 10px;
       border-radius:12px;
@@ -674,38 +530,25 @@
       text-align:center;
       overflow-wrap:anywhere;
     }
-
     .mini.primary{background:linear-gradient(180deg, rgba(110,231,255,.18), rgba(167,139,250,.10));border-color:rgba(110,231,255,.42)}
     body[data-theme="light"] .mini.primary{background:linear-gradient(180deg, rgba(2,132,199,.12), rgba(124,58,237,.08));border-color:rgba(2,132,199,.32)}
     .mini.soft{background:rgba(167,139,250,.10);border-color:rgba(167,139,250,.22)}
     .mini.bad{background:rgba(251,113,133,.10);border-color:rgba(251,113,133,.28)}
 
-    .sideCard{
-      border-radius:24px;
-      position:sticky;
-      top:86px;
-      min-width:0;
-      align-self:start;
-    }
-
-    @media (max-width:1120px){
-      .sideCard{position:static}
-    }
+    .sideCard{border-radius:24px;position:sticky;top:82px;min-width:0}
+    @media (max-width:1120px){.sideCard{position:static}}
 
     .topActionCluster{
       display:grid;
       gap:10px;
       margin-bottom:14px;
     }
-
     .topActionRow{
       display:grid;
       grid-template-columns:1fr 1fr;
       gap:8px;
     }
-
     .topActionRow.single{grid-template-columns:1fr}
-
     .tinyAction{
       padding:10px 12px;
       border-radius:14px;
@@ -714,12 +557,10 @@
       font-size:12px;
       background:rgba(255,255,255,.03);
     }
-
     .tinyAction.primary{
       background:linear-gradient(180deg, rgba(110,231,255,.18), rgba(167,139,250,.12));
       border-color:rgba(110,231,255,.42);
     }
-
     body[data-theme="light"] .tinyAction.primary{
       background:linear-gradient(180deg, rgba(2,132,199,.12), rgba(124,58,237,.08));
       border-color:rgba(2,132,199,.32);
@@ -733,22 +574,14 @@
       margin-bottom:14px;
       min-width:0;
     }
-
     body[data-theme="light"] .bigStatus{background:rgba(255,255,255,.72)}
-
     .bigStatus h3{
       margin:0 0 6px;
       font-size:20px;
       line-height:1.2;
       overflow-wrap:anywhere;
     }
-
-    .quickList{
-      display:grid;
-      gap:10px;
-      min-width:0;
-    }
-
+    .quickList{display:grid;gap:10px;min-width:0}
     .quickItem{
       border:1px solid var(--line);
       border-radius:18px;
@@ -760,29 +593,16 @@
       align-items:center;
       min-width:0;
     }
-
-    .quickItem > div{
-      min-width:0;
-      flex:1 1 auto;
-    }
-
+    .quickItem > div{min-width:0;flex:1 1 auto}
     .quickItem b,.quickItem small{
       overflow-wrap:anywhere;
       display:block;
       line-height:1.3;
     }
-
     body[data-theme="light"] .quickItem{background:rgba(255,255,255,.72)}
     .quickItem small{color:var(--muted);margin-top:3px}
 
-    .chipRow{
-      display:flex;
-      flex-wrap:wrap;
-      gap:8px;
-      margin-top:10px;
-      min-width:0;
-    }
-
+    .chipRow{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px;min-width:0}
     .chip{
       padding:7px 10px;
       border-radius:999px;
@@ -794,7 +614,6 @@
       overflow-wrap:anywhere;
       line-height:1.2;
     }
-
     body[data-theme="light"] .chip{background:rgba(255,255,255,.78)}
     .chip b{color:var(--text)}
 
@@ -805,9 +624,7 @@
       margin-top:10px;
       min-width:0;
     }
-
     .formRow > div{min-width:0}
-
     @media (max-width:520px){
       .formRow{grid-template-columns:1fr}
     }
@@ -820,7 +637,6 @@
       line-height:1.3;
       overflow-wrap:anywhere;
     }
-
     input,select{
       width:100%;
       padding:11px 12px;
@@ -832,19 +648,16 @@
       min-width:0;
       font:inherit;
     }
-
     body[data-theme="light"] input,
     body[data-theme="light"] select{background:#fff}
-
     input:focus,select:focus{
       border-color:rgba(110,231,255,.5);
-      box-shadow:0 0 0 3px rgba(110,231,255,.1);
+      box-shadow:0 0 0 3px rgba(110,231,255,.1)
     }
-
     body[data-theme="light"] input:focus,
     body[data-theme="light"] select:focus{
       border-color:rgba(2,132,199,.35);
-      box-shadow:0 0 0 3px rgba(2,132,199,.10);
+      box-shadow:0 0 0 3px rgba(2,132,199,.10)
     }
 
     .small{font-size:12px;line-height:1.35}
@@ -860,19 +673,17 @@
       line-height:1.45;
       overflow-wrap:anywhere;
     }
-
     body[data-theme="light"] .notice{
       border-color:rgba(2,132,199,.20);
-      background:rgba(2,132,199,.06);
+      background:rgba(2,132,199,.06)
     }
 
     .myBookings{
       display:grid;
       gap:10px;
       margin-top:14px;
-      min-width:0;
+      min-width:0
     }
-
     .bookingItem{
       padding:12px;
       border-radius:18px;
@@ -884,15 +695,9 @@
       align-items:center;
       min-width:0;
     }
-
-    .bookingItem > div{
-      min-width:0;
-      flex:1 1 auto;
-    }
-
+    .bookingItem > div{min-width:0;flex:1 1 auto}
     .bookingItem b,.bookingItem .meta{overflow-wrap:anywhere}
     body[data-theme="light"] .bookingItem{background:rgba(255,255,255,.72)}
-
     .bookingItem .meta{
       font-size:12px;
       color:var(--muted);
@@ -908,11 +713,9 @@
       align-items:center;
       justify-content:center;
       padding:16px;
-      z-index:80;
+      z-index:80
     }
-
     .backdrop.show{display:flex}
-
     .modal{
       width:min(560px,100%);
       border-radius:24px;
@@ -920,7 +723,6 @@
       max-height:min(90vh,900px);
       overflow:auto;
     }
-
     .modalHead{
       padding:16px 18px;
       border-bottom:1px solid var(--line);
@@ -930,7 +732,6 @@
       gap:10px;
       min-width:0;
     }
-
     .modalHead > div{min-width:0}
     .modalBody{padding:18px;min-width:0}
     .auth{display:grid;gap:10px;min-width:0}
@@ -942,142 +743,120 @@
     }
 
     @media (max-width:700px){
-      .wrap{padding:10px}
-      .headerShell{position:static}
-
-      .headerMain{
-        padding:12px;
-        flex-direction:column;
-        align-items:stretch;
+      .wrap{padding:10px;padding-bottom:max(10px, env(safe-area-inset-bottom))}
+      .headerShell{
+        top:6px;
+        border-radius:20px;
       }
-
+      .headerMain{
+        grid-template-columns:minmax(0,1fr) auto;
+        align-items:flex-start;
+        gap:10px;
+        padding:12px 12px 8px;
+      }
+      .headerMeta{
+        padding:0 12px 12px;
+        display:grid;
+        grid-template-columns:1fr 1fr;
+        gap:8px;
+      }
       .brand{
         width:100%;
         align-items:flex-start;
+        gap:10px;
       }
-
       h1{font-size:18px}
       .sub{font-size:11px}
-
       .topbar{
-        justify-content:flex-start;
-        width:100%;
+        justify-content:flex-end;
+        align-items:flex-start;
+        gap:6px;
       }
-
+      .topbar .btn,
+      .topbar .langTrigger{
+        padding:8px 10px;
+        min-height:38px;
+      }
       .pill,.langTrigger{max-width:100%}
-      .mobileHeaderDashboard{display:grid}
-
       .panelHead,.panelBody{padding:12px}
-
-      .mainHallPanel .panelBody{
-        gap:10px;
-        min-height:0;
-        height:auto;
-        align-content:start;
-        padding-top:12px;
-      }
-
-      .hallTopCompact,
-      .miniStatsRow{
-        display:none;
-      }
-
-      .hall{
-        margin-top:0;
-        align-items:start;
-        min-height:0;
-      }
-
-      .side{align-content:start}
-
       .pc{padding:12px}
       .pcName{font-size:15px}
       .statusTag{font-size:10px;padding:6px 8px}
-
       .quickItem{padding:10px;align-items:flex-start}
       .bookingItem{align-items:flex-start}
       .quickItem,.bookingItem{flex-direction:column}
       .quickItem button,.bookingItem button{width:100%}
-
+      .hallTopCompact{flex-direction:column;align-items:stretch}
+      .hallTools{justify-content:flex-start}
       .topActionRow{grid-template-columns:1fr}
-      .topActionCluster{display:none}
-
-      .layout{
-        gap:12px;
-        align-items:start;
-        margin-top:12px;
-      }
-
-      .sideCard{
-        order:2;
-        margin-top:0;
-      }
-
       .mobileBar{
         display:flex;
         position:sticky;
-        bottom:8px;
+        bottom:max(8px, env(safe-area-inset-bottom));
         z-index:35;
         padding:8px;
         gap:8px;
         border-radius:18px;
-        margin-top:10px;
+        margin-top:12px;
         backdrop-filter:blur(14px);
       }
-
-      .mobileBar .btn{
-        flex:1;
-        padding:12px 10px;
-      }
+      .mobileBar .btn{flex:1;padding:12px 10px}
     }
 
     @media (max-width:520px){
-      .wrap{padding:8px}
+      .wrap{padding:8px;padding-bottom:max(8px, env(safe-area-inset-bottom))}
       .headerShell{border-radius:18px}
-
       .logo{
-        width:48px;
-        height:48px;
-        flex-basis:48px;
+        width:46px;
+        height:46px;
+        flex-basis:46px;
       }
-
+      .headerMain{
+        padding:10px 10px 8px;
+        gap:8px;
+      }
+      .headerMeta{
+        padding:0 10px 10px;
+        grid-template-columns:1fr;
+      }
+      .headerMeta .pill b{
+        max-width:100%;
+      }
       h1{
         font-size:16px;
         line-height:1.15;
       }
-
+      .hallTitle{font-size:18px}
       .panelTitle{font-size:14px}
-
-      .notice,.toast,.small,.muted,label,.meta,.pcMeta,.chip,.pill,.langTrigger,.btn,.mini,.filterBtn,.tinyAction,.mobileQuickBtn{
+      .notice,.toast,.small,.muted,label,.meta,.pcMeta,.chip,.pill,.langTrigger,.btn,.mini,.filterBtn,.tinyAction{
         font-size:11px;
       }
-
-      .mobileHeaderStat b{font-size:16px}
+      .miniStat b{font-size:16px}
       .bigStatus h3{font-size:18px}
-
       .pcTop{gap:8px}
       .pcBottom{flex-wrap:wrap}
       .pcBottom .mini{flex:1 1 90px}
-
       .pill,.langTrigger{
         border-radius:16px;
         padding:8px 10px;
       }
-
       .langMenu{
-        left:0;
-        right:auto;
-        width:min(220px, calc(100vw - 32px));
+        left:auto;
+        right:0;
+        width:min(220px, calc(100vw - 24px));
       }
     }
 
     @media (max-width:380px){
-      .mobileHeaderStats{grid-template-columns:1fr}
-      .mobileHeaderFilters{grid-template-columns:1fr}
-      .mobileHeaderCompactRow{grid-template-columns:1fr}
-      .mobileHeaderActions{grid-template-columns:1fr}
+      .miniStatsRow{grid-template-columns:1fr}
       .hall{grid-template-columns:1fr}
       .rightSide,.leftSide{gap:8px}
+      .headerMain{
+        grid-template-columns:1fr;
+      }
+      .topbar{
+        justify-content:flex-start;
+      }
     }
   </style>
 </head>
@@ -1127,44 +906,17 @@
               </button>
             </div>
           </div>
-
-          <div class="pill"><span id="t_user"></span>: <b id="userPill">—</b></div>
-          <div class="pill"><span class="dot" id="cloudDot"></span><span id="t_cloud"></span>: <b id="cloudPill">…</b></div>
         </div>
       </div>
 
-      <div class="mobileHeaderDashboard">
-        <div class="mobileHeaderFilters">
-          <button class="filterBtn active" id="mFilterAll"></button>
-          <button class="filterBtn" id="mFilterFree"></button>
-          <button class="filterBtn" id="mFilterSoon"></button>
-        </div>
-
-        <div class="mobileHeaderStats">
-          <div class="mobileHeaderStat"><span id="m_t_statAll"></span><b id="mStatAll">10</b></div>
-          <div class="mobileHeaderStat"><span id="m_t_statFree"></span><b id="mStatFree">0</b></div>
-          <div class="mobileHeaderStat"><span id="m_t_statBusy"></span><b id="mStatBusy">0</b></div>
-          <div class="mobileHeaderStat"><span id="m_t_statSelected"></span><b id="mStatSelected">0</b></div>
-        </div>
-
-        <div class="mobileHeaderCompactRow">
-          <button class="mobileQuickBtn primary" id="mFindNowBtn"></button>
-          <button class="mobileQuickBtn" id="mQuickMenuBtn"></button>
-        </div>
-
-        <div class="mobileHeaderActions" id="mobileHeaderActions">
-          <button class="mobileQuickBtn" id="mToggleMultiBtn"></button>
-          <button class="mobileQuickBtn" id="mClearSelectedBtn"></button>
-          <button class="mobileQuickBtn" id="mOpenMyBtn"></button>
-          <button class="mobileQuickBtn" id="mOpenAdminBtn"></button>
-          <button class="mobileQuickBtn" id="mOpenAuthBtn"></button>
-          <button class="mobileQuickBtn hidden" id="mLogoutBtn"></button>
-        </div>
+      <div class="headerMeta">
+        <div class="pill"><span id="t_user"></span>: <b id="userPill">—</b></div>
+        <div class="pill"><span class="dot" id="cloudDot"></span><span id="t_cloud"></span>: <b id="cloudPill">…</b></div>
       </div>
     </header>
 
     <div class="layout">
-      <section class="panel glass mainHallPanel">
+      <section class="panel glass">
         <div class="panelBody">
           <div class="hallTopCompact">
             <div class="hallTopInfo">
@@ -1189,9 +941,9 @@
           </div>
 
           <div class="hall">
-            <div class="side" id="leftSide"></div>
+            <div class="side leftSide" id="leftSide"></div>
             <div class="aisle" id="t_aisle"></div>
-            <div class="side" id="rightSide"></div>
+            <div class="side rightSide" id="rightSide"></div>
           </div>
 
           <div class="mobileBar glass">
@@ -1381,7 +1133,6 @@
 
   let lang = localStorage.getItem(LANG_KEY) || 'ka';
   let theme = localStorage.getItem(THEME_KEY) || 'dark';
-  let mobileQuickMenuOpen = false;
 
   const LANG_META = {
     ru: { flag:'🇷🇺', label:'Русский', code:'RU' },
@@ -1398,7 +1149,6 @@
       all:'Все', free:'Свободные', soon:'Скоро освободятся',
       statAll:'Всего ПК', statFree:'Свободно сейчас', statBusy:'Занято', statSelected:'Выбрано',
       findNow:'⚡ Найти свободный сейчас', multiOff:'👥 Мультивыбор: OFF', multiOn:'👥 Мультивыбор: ON', clearSelected:'Сбросить выбор', my:'👤 Мои брони', admin:'🔐 Admin', auth:'🔑 Войти', logout:'🚪 Выйти', aisle:'ПРОХОД',
-      quickMenu:'⚙️ Быстрое меню', hideMenu:'✕ Скрыть меню',
       sidepanel:'Панель бронирования', sidehint:'Один ПК или сразу несколько.',
       singleSelectHint:'Выбери один ПК, чтобы увидеть быстрые действия.',
       multiSelectHint:'Мультивыбор включён. Отмечай ПК для групповой брони.',
@@ -1414,7 +1164,7 @@
       bookAt:'Забронировать на ближайшее', queue:'В очередь', exact:'Выбрать вручную', nearest:'Скоро будет свободен',
       loginNeeded:'Сначала войди в аккаунт.', enterNick:'Введи ник.', pickTime:'Выбери время.', booked:'✅ Бронь создана!', canceled:'Отменено.', noFree:'Сейчас нет свободных ПК.',
       authOk:'✅ Вход выполнен: ', authNeed:'Нужно войти, чтобы бронировать.', loginErr:'Введите email и пароль.', resetSent:'Письмо для сброса отправлено ✅',
-      fsErr:'Ошибка Firestore. Проверь Rules или блокировщик.', rules:'Firestore Rules не позволяют запись.', blocked:'Браузер или расширение блокирует Firebase.',
+      fsErr:'Firestore error. Check Rules or ad blocker.', rules:'Firestore Rules не позволяют запись.', blocked:'Браузер или расширение блокирует Firebase.',
       statusOk:'OK', statusLive:'LIVE', statusErr:'ERR', minutes:'мин', starts:'Начало', ends:'Конец', pc:'ПК', pcs:'ПК', remove:'Отменить', empty:'Пока ничего нет',
       taken:'Этот слот уже занят. Выбери другой.', queueHint:'Функция очереди сейчас бронирует на ближайшее освобождение.', busyUntil:'Занят до', guest:'Гость', saveNickHint:'Ник автоматически сохраняется для следующего входа.',
       multiHelp:'Когда мультивыбор включён, быстрые действия бронируют сразу все отмеченные ПК.', mobileMy:'Мои', mobileBook:'Бронь', adminDenied:'Ты не админ.',
@@ -1428,7 +1178,6 @@
       all:'All', free:'Free', soon:'Soon free',
       statAll:'Total PCs', statFree:'Free now', statBusy:'Busy', statSelected:'Selected',
       findNow:'⚡ Find free now', multiOff:'👥 Multi-select: OFF', multiOn:'👥 Multi-select: ON', clearSelected:'Clear selection', my:'👤 My bookings', admin:'🔐 Admin', auth:'🔑 Login', logout:'🚪 Logout', aisle:'AISLE',
-      quickMenu:'⚙️ Quick menu', hideMenu:'✕ Hide menu',
       sidepanel:'Booking panel', sidehint:'One PC or many PCs at once.',
       singleSelectHint:'Choose one PC to see quick actions.', multiSelectHint:'Multi-select is ON. Mark PCs for group booking.', selectedOne:'1 PC selected', selectedMany:'PCs selected', chooseAtLeastOne:'Choose at least one PC.',
       customtitle:'Exact time', customhint:'Works for one PC and multiple PCs too.', date:'Date', duration:'Duration', time:'Time', nick:'Nick', note:'Note', bookCustom:'Confirm booking', hideCustom:'Hide',
@@ -1455,7 +1204,6 @@
       all:'ყველა', free:'თავისუფალი', soon:'მალე თავისუფალი',
       statAll:'სულ PC', statFree:'ახლა თავისუფალი', statBusy:'დაკავებული', statSelected:'არჩეული',
       findNow:'⚡ იპოვე თავისუფალი ახლა', multiOff:'👥 Multi-select: OFF', multiOn:'👥 Multi-select: ON', clearSelected:'გასუფთავება', my:'👤 ჩემი ჯავშნები', admin:'🔐 Admin', auth:'🔑 შესვლა', logout:'🚪 გასვლა', aisle:'გასასვლელი',
-      quickMenu:'⚙️ სწრაფი მენიუ', hideMenu:'✕ მენიუს დამალვა',
       sidepanel:'ჯავშნის პანელი', sidehint:'ერთი PC ან რამდენიმე ერთად.',
       singleSelectHint:'აირჩიე ერთი PC სწრაფი მოქმედებებისთვის.', multiSelectHint:'Multi-select ჩართულია. მონიშნე PC-ები ჯგუფური ჯავშნისთვის.', selectedOne:'არჩეულია 1 PC', selectedMany:'არჩეულია PC', chooseAtLeastOne:'აირჩიე მინიმუმ ერთი PC.',
       customtitle:'ზუსტი დრო', customhint:'მუშაობს როგორც 1 PC-ზე, ისე რამდენიმეზე ერთად.',
@@ -1537,18 +1285,80 @@
     });
   }
 
-  function updateMobileQuickMenu() {
-    $('mobileHeaderActions').classList.toggle('show', mobileQuickMenuOpen);
-    $('mQuickMenuBtn').textContent = mobileQuickMenuOpen ? tr('hideMenu') : tr('quickMenu');
-  }
-
   function setFilterUI() {
     $('filterAll').classList.toggle('active', currentFilter === 'all');
     $('filterFree').classList.toggle('active', currentFilter === 'free');
     $('filterSoon').classList.toggle('active', currentFilter === 'soon');
-    $('mFilterAll').classList.toggle('active', currentFilter === 'all');
-    $('mFilterFree').classList.toggle('active', currentFilter === 'free');
-    $('mFilterSoon').classList.toggle('active', currentFilter === 'soon');
+  }
+
+  function setLangUI() {
+    document.documentElement.lang = lang;
+    document.title = tr('title');
+    $('t_title').textContent = tr('title');
+    $('t_headerSub').textContent = tr('sub');
+    $('t_user').textContent = tr('user');
+    $('t_cloud').textContent = tr('cloud');
+    $('t_livehall').textContent = tr('livehall');
+    $('t_livehint').textContent = tr('livehint');
+    $('filterAll').textContent = tr('all');
+    $('filterFree').textContent = tr('free');
+    $('filterSoon').textContent = tr('soon');
+    $('t_statAll').textContent = tr('statAll');
+    $('t_statFree').textContent = tr('statFree');
+    $('t_statBusy').textContent = tr('statBusy');
+    $('t_statSelected').textContent = tr('statSelected');
+    $('findNowBtn').textContent = tr('findNow');
+    $('toggleMultiBtn').textContent = multiMode ? tr('multiOn') : tr('multiOff');
+    $('clearSelectedBtn').textContent = tr('clearSelected');
+    $('openMyBtn').textContent = tr('my');
+    $('openAdminBtn').textContent = tr('admin');
+    $('openAuthBtn').textContent = tr('auth');
+    $('logoutBtn').textContent = tr('logout');
+    $('t_aisle').textContent = tr('aisle');
+    $('t_sidepanel').textContent = tr('sidepanel');
+    $('t_sidehint').textContent = tr('sidehint');
+    $('t_customtitle').textContent = tr('customtitle');
+    $('t_customhint').textContent = tr('customhint');
+    $('t_date').textContent = tr('date');
+    $('t_duration').textContent = tr('duration');
+    $('t_time').textContent = tr('time');
+    $('t_nick').textContent = tr('nick');
+    $('t_note').textContent = tr('note');
+    $('bookCustomBtn').textContent = tr('bookCustom');
+    $('hideCustomBtn').textContent = tr('hideCustom');
+    $('t_mybookings').textContent = tr('mybookings');
+    $('t_adminbookings').textContent = tr('adminBookings');
+    $('t_adminhint').textContent = tr('adminHint');
+    $('t_auth').textContent = tr('authTitle');
+    $('t_authhint').textContent = tr('authHint');
+    $('t_password').textContent = tr('password');
+    $('loginBtn').textContent = tr('login');
+    $('registerBtn').textContent = tr('register');
+    $('resetBtn').textContent = tr('reset');
+    $('t_confirmtitle').textContent = tr('confirmtitle');
+    $('t_confirmhint').textContent = tr('confirmhint');
+    $('confirmBookBtn').textContent = tr('confirm');
+    $('cancelConfirmBtn').textContent = tr('cancel');
+    $('mobileMyBtn').textContent = tr('mobileMy');
+    $('mobileBookBtn').textContent = tr('mobileBook');
+
+    applyTheme();
+    updateLangMenuUI();
+    setFilterUI();
+    renderStats();
+    renderHall();
+    renderSelected();
+    renderMyBookings();
+    renderAdminBookings();
+  }
+
+  function handleFsError(err) {
+    console.error(err);
+    const msg = String(err?.message || err?.code || err || '').toLowerCase();
+    if (msg.includes('permission')) toast(tr('rules'), 'bad');
+    else if (msg.includes('fetch') || msg.includes('network') || msg.includes('blocked')) toast(tr('blocked'), 'bad');
+    else toast(tr('fsErr'), 'bad');
+    setCloud(tr('statusErr'), false);
   }
 
   function progressFor(b) {
@@ -1581,21 +1391,6 @@
   const statusLabel = s => s.state === 'free' ? tr('freeTag') : s.state === 'soon' ? tr('soonTag') : tr('busyTag');
   const minsText = m => `${m} ${tr('minutes')}`;
 
-  function renderStats() {
-    const freeCount = ALL.filter(pc => getPcStatus(pc).state === 'free').length;
-    const busyCount = ALL.length - freeCount;
-
-    $('statAll').textContent = String(ALL.length);
-    $('statFree').textContent = String(freeCount);
-    $('statBusy').textContent = String(busyCount);
-    $('statSelected').textContent = String(selectedPCs.size);
-
-    $('mStatAll').textContent = String(ALL.length);
-    $('mStatFree').textContent = String(freeCount);
-    $('mStatBusy').textContent = String(busyCount);
-    $('mStatSelected').textContent = String(selectedPCs.size);
-  }
-
   function updateSelection(pc) {
     if (multiMode) {
       if (selectedPCs.has(pc)) selectedPCs.delete(pc);
@@ -1621,18 +1416,18 @@
 
     let meta = '';
     if (s.state === 'free') {
-      meta = `<div>${esc(tr('freeNow'))}</div>`;
+      meta = `<div>${tr('freeNow')}</div>`;
     } else if (s.active) {
       meta = `
-        <div>${esc(tr('playing'))}: <b>${esc(s.active.nick || tr('guest'))}</b></div>
-        <div>${esc(tr('freeAt'))}: <b>${esc(fmtHM(new Date(s.freeAtMs)))}</b></div>
-        <div>${esc(tr('endsIn'))}: <b>${esc(minsText(s.minsToFree))}</b></div>
+        <div>${tr('playing')}: <b>${esc(s.active.nick || tr('guest'))}</b></div>
+        <div>${tr('freeAt')}: <b>${fmtHM(new Date(s.freeAtMs))}</b></div>
+        <div>${tr('endsIn')}: <b>${minsText(s.minsToFree)}</b></div>
         <div class="progress"><div class="bar" style="width:${progressFor(s.active)}%"></div></div>
       `;
     } else {
       meta = `
-        <div>${esc(tr('freeAt'))}: <b>${esc(fmtHM(new Date(s.freeAtMs)))}</b></div>
-        <div>${esc(tr('endsIn'))}: <b>${esc(minsText(s.minsToFree))}</b></div>
+        <div>${tr('freeAt')}: <b>${fmtHM(new Date(s.freeAtMs))}</b></div>
+        <div>${tr('endsIn')}: <b>${minsText(s.minsToFree)}</b></div>
       `;
     }
 
@@ -1656,12 +1451,7 @@
     setTimeout(() => {
       const pick = el.querySelector('button[data-a="pick"]');
       const quick = el.querySelector('button[data-a="quick"]');
-
-      if (pick) pick.onclick = ev => {
-        ev.stopPropagation();
-        updateSelection(pc);
-      };
-
+      if (pick) pick.onclick = ev => { ev.stopPropagation(); updateSelection(pc); };
       if (quick) quick.onclick = ev => {
         ev.stopPropagation();
         updateSelection(pc);
@@ -1691,9 +1481,17 @@
     });
   }
 
+  function renderStats() {
+    const freeCount = ALL.filter(pc => getPcStatus(pc).state === 'free').length;
+    const busyCount = ALL.length - freeCount;
+    $('statAll').textContent = String(ALL.length);
+    $('statFree').textContent = String(freeCount);
+    $('statBusy').textContent = String(busyCount);
+    $('statSelected').textContent = String(selectedPCs.size);
+  }
+
   function renderSelected() {
     $('selectedChips').innerHTML = '';
-
     if (!selectedPCs.size) {
       $('selectedName').textContent = '—';
       $('selectedStatus').textContent = multiMode ? tr('multiSelectHint') : tr('singleSelectHint');
@@ -1732,7 +1530,6 @@
       actions.push({ label:tr('group2'), small:`${tr('pcs')}: ${names.join(', ')}`, fn:()=>openQuickConfirm(names, new Date(), 120) });
       actions.push({ label:tr('group3'), small:`${tr('pcs')}: ${names.join(', ')}`, fn:()=>openQuickConfirm(names, new Date(), 180) });
     }
-
     actions.push({ label:tr('exact'), small:tr('saveNickHint'), fn:()=>showCustom() });
 
     $('quickActions').innerHTML = '';
@@ -1788,11 +1585,44 @@
   const closeAuth = () => $('authBackdrop').classList.remove('show');
   const openConfirm = () => $('confirmBackdrop').classList.add('show');
   const closeConfirm = () => $('confirmBackdrop').classList.remove('show');
-
   const needLogin = () => {
     openAuth();
     $('authMsg').textContent = tr('loginNeeded');
   };
+
+  function openQuickConfirm(pcs, start, dur) {
+    if (!currentUser) return needLogin();
+    const nick = ($('nickInput').value || '').trim() || localStorage.getItem(NICK_KEY) || '';
+    if (!nick) return showCustom(true);
+    const safe = findNearestForAll(pcs, start, dur);
+    if (!safe) return toast(tr('taken'), 'bad');
+    pendingBooking = {
+      pcs:[...pcs],
+      startAtMs:safe.getTime(),
+      endAtMs:addMinutes(safe, dur).getTime(),
+      nick,
+      note:($('noteInput').value || '').trim()
+    };
+    fillConfirm();
+    openConfirm();
+  }
+
+  function openNearestConfirm(pcs) {
+    if (!currentUser) return needLogin();
+    const nick = ($('nickInput').value || '').trim() || localStorage.getItem(NICK_KEY) || '';
+    if (!nick) return showCustom(true);
+    const safe = findNearestForAll(pcs, new Date(), 120);
+    if (!safe) return toast(tr('taken'), 'bad');
+    pendingBooking = {
+      pcs:[...pcs],
+      startAtMs:safe.getTime(),
+      endAtMs:addMinutes(safe, 120).getTime(),
+      nick,
+      note:($('noteInput').value || '').trim()
+    };
+    fillConfirm();
+    openConfirm();
+  }
 
   function fillConfirm() {
     if (!pendingBooking) return;
@@ -1805,44 +1635,6 @@
       <b>${esc(tr('nick'))}:</b> ${esc(pendingBooking.nick)}
       ${pendingBooking.note ? `<br><b>${esc(tr('note'))}:</b> ${esc(pendingBooking.note)}` : ''}
     `;
-  }
-
-  function openQuickConfirm(pcs, start, dur) {
-    if (!currentUser) return needLogin();
-    const nick = ($('nickInput').value || '').trim() || localStorage.getItem(NICK_KEY) || '';
-    if (!nick) return showCustom(true);
-    const safe = findNearestForAll(pcs, start, dur);
-    if (!safe) return toast(tr('taken'), 'bad');
-
-    pendingBooking = {
-      pcs:[...pcs],
-      startAtMs:safe.getTime(),
-      endAtMs:addMinutes(safe, dur).getTime(),
-      nick,
-      note:($('noteInput').value || '').trim()
-    };
-
-    fillConfirm();
-    openConfirm();
-  }
-
-  function openNearestConfirm(pcs) {
-    if (!currentUser) return needLogin();
-    const nick = ($('nickInput').value || '').trim() || localStorage.getItem(NICK_KEY) || '';
-    if (!nick) return showCustom(true);
-    const safe = findNearestForAll(pcs, new Date(), 120);
-    if (!safe) return toast(tr('taken'), 'bad');
-
-    pendingBooking = {
-      pcs:[...pcs],
-      startAtMs:safe.getTime(),
-      endAtMs:addMinutes(safe, 120).getTime(),
-      nick,
-      note:($('noteInput').value || '').trim()
-    };
-
-    fillConfirm();
-    openConfirm();
   }
 
   function showCustom(focusNick=false) {
@@ -1860,7 +1652,6 @@
   function buildCustomTimes() {
     const sel = $('customTime');
     sel.innerHTML = '';
-
     if (!selectedPCs.size) {
       const o = document.createElement('option');
       o.value = '';
@@ -1883,7 +1674,6 @@
       const end = addMinutes(cur, dur);
       if (cur.getTime() < Date.now()) continue;
       if (!isFreeRangeForAll(pcs, cur.getTime(), end.getTime())) continue;
-
       const o = document.createElement('option');
       o.value = String(cur.getTime());
       o.textContent = `${fmtHM(cur)} → ${fmtHM(end)}`;
@@ -1900,7 +1690,6 @@
 
   async function createBooking(data) {
     if (!currentUser) return needLogin();
-
     const pcs = [...new Set((data.pcs || []).map(String))].slice(0, 10);
     const startAtMs = Number(data.startAtMs);
     const endAtMs = Number(data.endAtMs);
@@ -1913,7 +1702,6 @@
 
     try {
       await db.collection('users').doc(String(currentUser.uid)).set({ nick, updatedAtMs:Date.now() }, { merge:true });
-
       const batch = db.batch();
       pcs.forEach(pc => {
         const ref = db.collection('bookings').doc();
@@ -1928,7 +1716,6 @@
           createdAtMs:Date.now()
         });
       });
-
       await batch.commit();
       localStorage.setItem(NICK_KEY, nick);
       $('nickInput').value = nick;
@@ -2020,12 +1807,8 @@
   function updateUserUI() {
     $('userPill').textContent = currentUser ? (currentUser.email || currentUser.uid.slice(0,6)) : '—';
     isAdmin = !!(currentUser && ADMIN_EMAILS.includes(String(currentUser.email || '').toLowerCase()));
-
     $('openAuthBtn').classList.toggle('hidden', !!currentUser);
     $('logoutBtn').classList.toggle('hidden', !currentUser);
-    $('mOpenAuthBtn').classList.toggle('hidden', !!currentUser);
-    $('mLogoutBtn').classList.toggle('hidden', !currentUser);
-
     if (currentUser) $('authMsg').textContent = tr('authOk') + (currentUser.email || currentUser.uid.slice(0,6));
     renderAdminBookings();
   }
@@ -2041,7 +1824,6 @@
       selectedPc = free[0];
       selectedPCs = new Set([free[0]]);
     }
-
     renderStats();
     renderHall();
     renderSelected();
@@ -2051,7 +1833,6 @@
     if (unsub) {
       try { unsub(); } catch(_) {}
     }
-
     const { start, end } = dayBoundsNow();
     unsub = db.collection('bookings')
       .where('startAtMs', '<', end)
@@ -2094,91 +1875,6 @@
     setLangUI();
   }
 
-  function setLangUI() {
-    document.documentElement.lang = lang;
-    document.title = tr('title');
-
-    $('t_title').textContent = tr('title');
-    $('t_headerSub').textContent = tr('sub');
-    $('t_user').textContent = tr('user');
-    $('t_cloud').textContent = tr('cloud');
-
-    $('t_livehall').textContent = tr('livehall');
-    $('t_livehint').textContent = tr('livehint');
-
-    $('filterAll').textContent = tr('all');
-    $('filterFree').textContent = tr('free');
-    $('filterSoon').textContent = tr('soon');
-
-    $('mFilterAll').textContent = tr('all');
-    $('mFilterFree').textContent = tr('free');
-    $('mFilterSoon').textContent = tr('soon');
-
-    $('t_statAll').textContent = tr('statAll');
-    $('t_statFree').textContent = tr('statFree');
-    $('t_statBusy').textContent = tr('statBusy');
-    $('t_statSelected').textContent = tr('statSelected');
-
-    $('m_t_statAll').textContent = tr('statAll');
-    $('m_t_statFree').textContent = tr('statFree');
-    $('m_t_statBusy').textContent = tr('statBusy');
-    $('m_t_statSelected').textContent = tr('statSelected');
-
-    $('findNowBtn').textContent = tr('findNow');
-    $('toggleMultiBtn').textContent = multiMode ? tr('multiOn') : tr('multiOff');
-    $('clearSelectedBtn').textContent = tr('clearSelected');
-    $('openMyBtn').textContent = tr('my');
-    $('openAdminBtn').textContent = tr('admin');
-    $('openAuthBtn').textContent = tr('auth');
-    $('logoutBtn').textContent = tr('logout');
-
-    $('mFindNowBtn').textContent = tr('findNow');
-    $('mToggleMultiBtn').textContent = multiMode ? tr('multiOn') : tr('multiOff');
-    $('mClearSelectedBtn').textContent = tr('clearSelected');
-    $('mOpenMyBtn').textContent = tr('my');
-    $('mOpenAdminBtn').textContent = tr('admin');
-    $('mOpenAuthBtn').textContent = tr('auth');
-    $('mLogoutBtn').textContent = tr('logout');
-
-    $('t_aisle').textContent = tr('aisle');
-    $('t_sidepanel').textContent = tr('sidepanel');
-    $('t_sidehint').textContent = tr('sidehint');
-    $('t_customtitle').textContent = tr('customtitle');
-    $('t_customhint').textContent = tr('customhint');
-    $('t_date').textContent = tr('date');
-    $('t_duration').textContent = tr('duration');
-    $('t_time').textContent = tr('time');
-    $('t_nick').textContent = tr('nick');
-    $('t_note').textContent = tr('note');
-    $('bookCustomBtn').textContent = tr('bookCustom');
-    $('hideCustomBtn').textContent = tr('hideCustom');
-    $('t_mybookings').textContent = tr('mybookings');
-    $('t_adminbookings').textContent = tr('adminBookings');
-    $('t_adminhint').textContent = tr('adminHint');
-    $('t_auth').textContent = tr('authTitle');
-    $('t_authhint').textContent = tr('authHint');
-    $('t_password').textContent = tr('password');
-    $('loginBtn').textContent = tr('login');
-    $('registerBtn').textContent = tr('register');
-    $('resetBtn').textContent = tr('reset');
-    $('t_confirmtitle').textContent = tr('confirmtitle');
-    $('t_confirmhint').textContent = tr('confirmhint');
-    $('confirmBookBtn').textContent = tr('confirm');
-    $('cancelConfirmBtn').textContent = tr('cancel');
-    $('mobileMyBtn').textContent = tr('mobileMy');
-    $('mobileBookBtn').textContent = tr('mobileBook');
-
-    applyTheme();
-    updateLangMenuUI();
-    setFilterUI();
-    updateMobileQuickMenu();
-    renderStats();
-    renderHall();
-    renderSelected();
-    renderMyBookings();
-    renderAdminBookings();
-  }
-
   function bind() {
     document.querySelectorAll('.langOption').forEach(btn => {
       btn.onclick = () => setLanguage(btn.dataset.lang);
@@ -2199,25 +1895,25 @@
       applyTheme();
     };
 
-    $('mQuickMenuBtn').onclick = () => {
-      mobileQuickMenuOpen = !mobileQuickMenuOpen;
-      updateMobileQuickMenu();
+    $('filterAll').onclick = () => {
+      currentFilter = 'all';
+      setFilterUI();
+      renderHall();
     };
-
-    const setAllFilter = val => {
-      currentFilter = val;
+    $('filterFree').onclick = () => {
+      currentFilter = 'free';
+      setFilterUI();
+      renderHall();
+    };
+    $('filterSoon').onclick = () => {
+      currentFilter = 'soon';
       setFilterUI();
       renderHall();
     };
 
-    $('filterAll').onclick = () => setAllFilter('all');
-    $('filterFree').onclick = () => setAllFilter('free');
-    $('filterSoon').onclick = () => setAllFilter('soon');
-    $('mFilterAll').onclick = () => setAllFilter('all');
-    $('mFilterFree').onclick = () => setAllFilter('free');
-    $('mFilterSoon').onclick = () => setAllFilter('soon');
+    $('findNowBtn').onclick = findFreeNow;
 
-    const handleToggleMulti = () => {
+    $('toggleMultiBtn').onclick = () => {
       multiMode = !multiMode;
       if (!multiMode && selectedPCs.size > 1) {
         const first = [...selectedPCs][0];
@@ -2227,7 +1923,7 @@
       setLangUI();
     };
 
-    const handleClearSelected = () => {
+    $('clearSelectedBtn').onclick = () => {
       selectedPCs.clear();
       selectedPc = null;
       renderStats();
@@ -2236,41 +1932,25 @@
       buildCustomTimes();
     };
 
-    $('findNowBtn').onclick = findFreeNow;
-    $('toggleMultiBtn').onclick = handleToggleMulti;
-    $('clearSelectedBtn').onclick = handleClearSelected;
     $('openMyBtn').onclick = toggleMy;
-
-    $('mFindNowBtn').onclick = findFreeNow;
-    $('mToggleMultiBtn').onclick = handleToggleMulti;
-    $('mClearSelectedBtn').onclick = handleClearSelected;
-    $('mOpenMyBtn').onclick = toggleMy;
-
     $('mobileMyBtn').onclick = toggleMy;
+
     $('mobileBookBtn').onclick = () => {
       if (!selectedPCs.size) return toast(tr('chooseAtLeastOne'), 'warn');
       showCustom();
       $('customSection').scrollIntoView({behavior:'smooth', block:'start'});
     };
 
-    const handleAdminOpen = () => {
+    $('openAdminBtn').onclick = () => {
       if (!currentUser) return toast(tr('loginNeeded'), 'warn');
       if (!isAdmin) return toast(tr('adminDenied'), 'bad');
       $('adminSection').scrollIntoView({behavior:'smooth', block:'start'});
     };
 
-    $('openAdminBtn').onclick = handleAdminOpen;
-    $('mOpenAdminBtn').onclick = handleAdminOpen;
-
     $('openAuthBtn').onclick = openAuth;
-    $('mOpenAuthBtn').onclick = openAuth;
-
-    const handleLogout = async () => {
+    $('logoutBtn').onclick = async () => {
       try { await auth.signOut(); } catch(_) {}
     };
-
-    $('logoutBtn').onclick = handleLogout;
-    $('mLogoutBtn').onclick = handleLogout;
 
     $('closeAuthBtn').onclick = closeAuth;
     $('authBackdrop').onclick = e => {
@@ -2296,7 +1976,6 @@
       const startAtMs = Number($('customTime').value || 0);
       if (!startAtMs) return toast(tr('pickTime'), 'warn');
       const duration = Number($('customDuration').value || 60);
-
       pendingBooking = {
         pcs:[...selectedPCs],
         startAtMs,
@@ -2304,7 +1983,6 @@
         nick:($('nickInput').value || '').trim(),
         note:($('noteInput').value || '').trim()
       };
-
       fillConfirm();
       openConfirm();
     };
@@ -2317,7 +1995,6 @@
       const email = ($('authEmail').value || '').trim();
       const pass = ($('authPass').value || '').trim();
       if (!email || !pass) return $('authMsg').textContent = tr('loginErr');
-
       try {
         await auth.signInWithEmailAndPassword(email, pass);
         closeAuth();
@@ -2331,7 +2008,6 @@
       const email = ($('authEmail').value || '').trim();
       const pass = ($('authPass').value || '').trim();
       if (!email || !pass) return $('authMsg').textContent = tr('loginErr');
-
       try {
         await auth.createUserWithEmailAndPassword(email, pass);
         closeAuth();
@@ -2344,7 +2020,6 @@
     $('resetBtn').onclick = async () => {
       const email = ($('authEmail').value || '').trim();
       if (!email) return $('authMsg').textContent = tr('loginErr');
-
       try {
         await auth.sendPasswordResetEmail(email);
         $('authMsg').textContent = tr('resetSent');
