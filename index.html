@@ -348,11 +348,13 @@
       align-items:flex-start;
       flex-wrap:wrap;
       margin-bottom:14px;
+      min-height:0;
     }
 
     .hallTopInfo{
       min-width:0;
-      flex:1 1 360px;
+      flex:1 1 auto;
+      min-height:0;
     }
 
     .hallTitle{
@@ -377,6 +379,7 @@
       flex-wrap:wrap;
       align-items:center;
       justify-content:flex-end;
+      min-width:0;
     }
 
     .filterBtn{
@@ -956,15 +959,26 @@
       .quickItem button,.bookingItem button{width:100%}
 
       .hallTopCompact{
-        flex-direction:column;
+        display:grid;
+        grid-template-columns:1fr;
+        gap:10px;
         align-items:stretch;
+        margin-bottom:10px;
+      }
+
+      .hallTopInfo{
+        flex:none;
+        width:100%;
+        min-height:0;
       }
 
       .hallTools{
         display:grid;
-        grid-template-columns:repeat(3,1fr);
+        grid-template-columns:repeat(3,minmax(0,1fr));
         gap:8px;
         width:100%;
+        align-items:stretch;
+        justify-content:stretch;
       }
 
       .hallTools .filterBtn{
@@ -972,6 +986,10 @@
         justify-content:center;
         text-align:center;
         padding:10px 8px;
+      }
+
+      .miniStatsRow{
+        margin-top:0;
       }
 
       .topActionRow{
