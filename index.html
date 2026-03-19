@@ -24,8 +24,8 @@
       --accent:#6ee7ff;
       --accent2:#a78bfa;
       --shadow:0 18px 60px rgba(0,0,0,.45);
-      --glassA:rgba(255,255,255,.075);
-      --glassB:rgba(255,255,255,.035);
+      --glassA:rgba(255,255,255,.07);
+      --glassB:rgba(255,255,255,.03);
     }
 
     body[data-theme="light"]{
@@ -40,7 +40,7 @@
       --accent:#0284c7;
       --accent2:#7c3aed;
       --shadow:0 18px 45px rgba(15,23,42,.10);
-      --glassA:rgba(255,255,255,.9);
+      --glassA:rgba(255,255,255,.88);
       --glassB:rgba(255,255,255,.72);
     }
 
@@ -74,110 +74,60 @@
     .wrap{
       max-width:1360px;
       margin:0 auto;
-      padding:14px;
-      padding-bottom:max(14px, env(safe-area-inset-bottom));
+      padding:10px;
+      padding-bottom:max(10px, env(safe-area-inset-bottom));
     }
 
     .glass{
       background:linear-gradient(180deg, var(--glassA), var(--glassB));
       border:1px solid var(--line);
       box-shadow:var(--shadow);
-      backdrop-filter:blur(18px);
-      -webkit-backdrop-filter:blur(18px);
+      backdrop-filter:blur(16px);
+      -webkit-backdrop-filter:blur(16px);
     }
 
     .hidden{display:none !important}
 
     .headerShell{
-      border-radius:28px;
+      border-radius:24px;
       position:sticky;
-      top:10px;
+      top:8px;
       z-index:50;
-      overflow:hidden;
-      padding:0;
+      overflow:visible;
+      transition:all .22s ease;
     }
 
-    .hero{
-      position:relative;
-      padding:18px 18px 16px;
-      min-width:0;
+    .headerShell.compact{
+      border-radius:18px;
+      box-shadow:0 12px 34px rgba(0,0,0,.30);
     }
 
-    .hero::before{
-      content:"";
-      position:absolute;
-      inset:-20% auto auto -10%;
-      width:280px;
-      height:180px;
-      border-radius:999px;
-      background:radial-gradient(circle, rgba(110,231,255,.18), transparent 70%);
-      filter:blur(24px);
-      pointer-events:none;
-    }
-
-    .hero::after{
-      content:"";
-      position:absolute;
-      inset:auto -10% -35% auto;
-      width:320px;
-      height:220px;
-      border-radius:999px;
-      background:radial-gradient(circle, rgba(167,139,250,.16), transparent 70%);
-      filter:blur(28px);
-      pointer-events:none;
-    }
-
-    .heroGrid{
-      position:relative;
-      z-index:1;
+    .headerMain{
       display:grid;
       grid-template-columns:minmax(0,1fr) auto;
-      gap:16px;
+      gap:10px;
       align-items:start;
+      padding:12px 14px;
+      transition:padding .22s ease;
     }
 
-    .heroMain{
-      min-width:0;
-    }
-
-    .heroTopLine{
-      display:flex;
-      align-items:center;
+    .headerShell.compact .headerMain{
+      padding:8px 10px;
       gap:8px;
-      margin-bottom:10px;
-      color:#d8fff0;
-      font-size:13px;
-      font-weight:800;
-      letter-spacing:.03em;
     }
 
-    .liveDot{
-      width:10px;
-      height:10px;
-      border-radius:999px;
-      background:var(--free);
-      box-shadow:0 0 0 0 rgba(52,211,153,.4);
-      animation:pulse 1.8s infinite;
-      flex:0 0 10px;
-    }
-
-    @keyframes pulse{
-      70%{box-shadow:0 0 0 10px rgba(52,211,153,0)}
-      100%{box-shadow:0 0 0 0 rgba(52,211,153,0)}
-    }
-
-    .brandRow{
+    .brand{
       display:flex;
       align-items:flex-start;
-      gap:14px;
+      gap:10px;
       min-width:0;
     }
 
     .logo{
-      width:70px;
-      height:70px;
-      flex:0 0 70px;
-      border-radius:18px;
+      width:52px;
+      height:52px;
+      flex:0 0 52px;
+      border-radius:14px;
       background-image:url("./logo.png");
       background-repeat:no-repeat;
       background-position:center;
@@ -186,68 +136,101 @@
       border:none;
       box-shadow:none;
       overflow:hidden;
+      transition:all .22s ease;
       margin-top:2px;
     }
 
-    .heroText{
+    .headerShell.compact .logo{
+      width:38px;
+      height:38px;
+      flex-basis:38px;
+      border-radius:10px;
+      margin-top:0;
+    }
+
+    .brandText{
       min-width:0;
       flex:1 1 auto;
     }
 
+    .liveRow{
+      display:flex;
+      align-items:center;
+      gap:7px;
+      margin-bottom:6px;
+      font-size:12px;
+      font-weight:900;
+      color:#dffef0;
+      line-height:1;
+      transition:all .22s ease;
+    }
+
+    .headerShell.compact .liveRow{
+      margin-bottom:4px;
+      font-size:10px;
+    }
+
+    .liveDot{
+      width:9px;
+      height:9px;
+      border-radius:999px;
+      background:var(--free);
+      box-shadow:0 0 0 0 rgba(52,211,153,.35);
+      animation:pulse 1.8s infinite;
+      flex:0 0 9px;
+    }
+
+    @keyframes pulse{
+      70%{box-shadow:0 0 0 10px rgba(52,211,153,0)}
+      100%{box-shadow:0 0 0 0 rgba(52,211,153,0)}
+    }
+
     h1{
       margin:0;
-      font-size:20px;
+      font-size:17px;
       line-height:1.15;
       font-weight:1000;
       overflow-wrap:anywhere;
+      transition:font-size .22s ease;
     }
 
-    .heroSubtitle{
-      margin-top:8px;
-      color:var(--muted);
+    .headerShell.compact h1{
       font-size:14px;
-      line-height:1.45;
-      max-width:720px;
     }
 
-    .heroPills{
-      display:grid;
-      grid-template-columns:repeat(2, minmax(220px,1fr));
-      gap:10px;
-      margin-top:14px;
-      min-width:0;
-    }
-
-    .heroPill{
-      min-width:0;
+    .userInline{
+      margin-top:6px;
       display:flex;
       align-items:center;
-      gap:10px;
-      padding:12px 14px;
-      border-radius:999px;
-      border:1px solid var(--line);
-      background:rgba(255,255,255,.045);
+      gap:8px;
+      min-width:0;
       color:var(--muted);
       font-size:13px;
-      line-height:1.2;
+      font-weight:700;
+      transition:all .22s ease;
     }
 
-    body[data-theme="light"] .heroPill{
-      background:rgba(255,255,255,.78);
+    .headerShell.compact .userInline{
+      margin-top:4px;
+      font-size:11px;
+      gap:6px;
     }
 
-    .heroPill b{
+    .userInline b{
       color:var(--text);
-      font-weight:900;
-      overflow-wrap:anywhere;
+      max-width:100%;
+      overflow:hidden;
+      text-overflow:ellipsis;
+      white-space:nowrap;
     }
 
-    .heroActions{
+    .topbar{
       display:flex;
-      flex-direction:column;
-      gap:10px;
-      align-items:stretch;
-      min-width:84px;
+      align-items:flex-start;
+      justify-content:flex-end;
+      gap:6px;
+      min-width:0;
+      flex-wrap:wrap;
     }
 
     .iconBtn,.statusMini,.mini,.btn,.tinyAction,.filterBtn{
@@ -266,17 +249,23 @@
     }
 
     .iconBtn{
-      width:52px;
-      height:52px;
-      border-radius:16px;
+      width:34px;
+      height:34px;
+      border-radius:11px;
       display:flex;
       align-items:center;
       justify-content:center;
       cursor:pointer;
-      font-size:20px;
-      transition:.15s ease;
+      font-size:15px;
+      transition:.18s ease;
       padding:0;
-      align-self:flex-end;
+    }
+
+    .headerShell.compact .iconBtn{
+      width:28px;
+      height:28px;
+      border-radius:9px;
+      font-size:13px;
     }
 
     .iconBtn:hover{
@@ -295,21 +284,31 @@
     }
 
     .statusMini{
-      min-height:44px;
-      padding:10px 12px;
-      border-radius:16px;
+      height:34px;
+      padding:0 9px;
+      border-radius:11px;
       display:flex;
       align-items:center;
-      justify-content:center;
-      gap:8px;
-      font-size:12px;
+      gap:7px;
+      font-size:11px;
       color:var(--muted);
       white-space:nowrap;
+      transition:.18s ease;
       font-weight:800;
+    }
+
+    .headerShell.compact .statusMini{
+      height:28px;
+      padding:0 7px;
+      border-radius:9px;
+      font-size:10px;
     }
 
     .statusMini b{
       color:var(--text);
+      max-width:72px;
+      overflow:hidden;
+      text-overflow:ellipsis;
       white-space:nowrap;
     }
 
@@ -335,8 +334,8 @@
       position:absolute;
       top:calc(100% + 8px);
       right:0;
-      width:164px;
-      border-radius:18px;
+      width:150px;
+      border-radius:16px;
       padding:8px;
       display:none;
       z-index:70;
@@ -351,27 +350,18 @@
     }
 
     .langFlagBtn{
-      height:44px;
-      border-radius:14px;
+      height:38px;
+      border-radius:12px;
       border:1px solid var(--line);
       background:rgba(255,255,255,.04);
       color:var(--text);
-      font-size:22px;
+      font-size:20px;
       cursor:pointer;
       transition:.15s ease;
     }
 
     body[data-theme="light"] .langFlagBtn{
       background:rgba(255,255,255,.78);
-    }
-
-    .langFlagBtn:hover{
-      transform:translateY(-1px);
-      border-color:rgba(110,231,255,.45);
-    }
-
-    body[data-theme="light"] .langFlagBtn:hover{
-      border-color:rgba(2,132,199,.35);
     }
 
     .langFlagBtn.active{
@@ -386,17 +376,14 @@
 
     .layout{
       display:grid;
-      grid-template-columns:minmax(0,1fr) 380px;
-      gap:16px;
-      margin-top:14px;
+      grid-template-columns:minmax(0,1fr) 360px;
+      gap:14px;
+      margin-top:12px;
       min-width:0;
     }
 
-    @media (max-width:1180px){
-      .layout{grid-template-columns:1fr}
-    }
+    .panel{border-radius:22px;min-width:0}
 
-    .panel{border-radius:26px;min-width:0}
     .panelHead{
       padding:14px 16px;
       border-bottom:1px solid var(--line);
@@ -418,74 +405,71 @@
     }
 
     .panelBody{
-      padding:16px;
+      padding:14px;
       min-width:0;
     }
 
     .hallTopCompact{
       display:flex;
-      justify-content:space-between;
-      gap:12px;
+      justify-content:flex-end;
+      gap:10px;
       align-items:center;
       flex-wrap:wrap;
-      margin-bottom:14px;
+      margin-bottom:12px;
       min-height:0;
     }
 
     .hallTopInfo{
-      min-width:0;
-      flex:1 1 auto;
+      display:none !important;
     }
 
     .hallTitle{
-      margin:0;
-      font-size:22px;
-      font-weight:1000;
-      line-height:1.15;
-      overflow-wrap:anywhere;
+      display:none !important;
     }
 
     .hallTools{
       display:grid;
-      grid-template-columns:repeat(3, minmax(120px, 1fr));
-      gap:10px;
-      min-width:0;
-      width:min(100%, 480px);
+      grid-template-columns:repeat(3,minmax(82px,1fr));
+      gap:8px;
+      width:min(100%, 340px);
+      margin-left:auto;
     }
 
     .filterBtn{
-      padding:12px 16px;
-      border-radius:16px;
+      padding:9px 10px;
+      border-radius:14px;
       white-space:nowrap;
-      font-size:14px;
+      font-size:12px;
+      border:1px solid var(--line);
       color:var(--text);
       cursor:pointer;
       font-weight:900;
+      line-height:1.1;
       transition:.15s ease;
     }
 
     .filterBtn.active{
       background:linear-gradient(180deg, rgba(110,231,255,.18), rgba(167,139,250,.12));
       border-color:rgba(110,231,255,.45);
-      box-shadow:0 0 0 2px rgba(110,231,255,.08) inset;
+      box-shadow:0 0 0 2px rgba(110,231,255,.07) inset;
     }
 
     body[data-theme="light"] .filterBtn.active{
       background:linear-gradient(180deg, rgba(2,132,199,.12), rgba(124,58,237,.10));
       border-color:rgba(2,132,199,.35);
-      box-shadow:0 0 0 2px rgba(2,132,199,.08) inset;
+      box-shadow:0 0 0 2px rgba(2,132,199,.07) inset;
     }
 
     .miniStatsRow{
       display:grid;
       grid-template-columns:repeat(6,1fr);
-      gap:10px;
-      margin-bottom:16px;
+      gap:8px;
+      margin-bottom:14px;
     }
 
     .miniStat{
-      padding:10px 12px;
-      border-radius:18px;
+      padding:10px 11px;
+      border-radius:16px;
       border:1px solid var(--line);
       background:rgba(255,255,255,.03);
       min-width:0;
@@ -498,7 +482,7 @@
     .miniStat span{
       display:block;
       color:var(--muted);
-      font-size:11px;
+      font-size:10px;
       line-height:1.25;
       overflow-wrap:anywhere;
     }
@@ -506,8 +490,8 @@
     .miniStat b{
       display:block;
       margin-top:4px;
-      font-size:18px;
-      line-height:1.15;
+      font-size:17px;
+      line-height:1.1;
       overflow-wrap:anywhere;
     }
 
@@ -529,15 +513,15 @@
 
     .hall{
       display:grid;
-      grid-template-columns:repeat(2, minmax(0, 1fr));
-      gap:16px;
+      grid-template-columns:repeat(2,minmax(0,1fr));
+      gap:12px;
       align-items:start;
       min-width:0;
     }
 
     .side{
       display:grid;
-      gap:14px;
+      gap:12px;
       min-width:0;
     }
 
@@ -545,11 +529,11 @@
 
     .pc{
       position:relative;
-      padding:18px;
-      border-radius:28px;
+      padding:14px;
+      border-radius:24px;
       border:1px solid rgba(110,231,255,.14);
       background:
-        linear-gradient(180deg, rgba(255,255,255,.055), rgba(255,255,255,.03)),
+        linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,.03)),
         radial-gradient(140% 120% at 0% 0%, rgba(52,211,153,.08), transparent 60%),
         radial-gradient(140% 120% at 100% 100%, rgba(110,231,255,.08), transparent 60%);
       overflow:hidden;
@@ -563,7 +547,7 @@
 
     body[data-theme="light"] .pc{
       background:
-        linear-gradient(180deg, rgba(255,255,255,.92), rgba(255,255,255,.78)),
+        linear-gradient(180deg, rgba(255,255,255,.90), rgba(255,255,255,.76)),
         radial-gradient(140% 120% at 0% 0%, rgba(5,150,105,.07), transparent 60%),
         radial-gradient(140% 120% at 100% 100%, rgba(2,132,199,.06), transparent 60%);
     }
@@ -592,11 +576,11 @@
       content:"";
       position:absolute;
       inset:-28% auto auto -8%;
-      width:190px;
-      height:140px;
+      width:170px;
+      height:120px;
       border-radius:999px;
-      filter:blur(24px);
-      opacity:.38;
+      filter:blur(22px);
+      opacity:.36;
     }
 
     .pc.free::before{background:rgba(52,211,153,.22)}
@@ -606,26 +590,26 @@
     .pcTop{
       display:flex;
       justify-content:space-between;
-      gap:10px;
+      gap:8px;
       align-items:flex-start;
       min-width:0;
       flex-wrap:wrap;
     }
 
     .pcName{
-      font-size:24px;
+      font-size:18px;
       font-weight:1000;
       letter-spacing:.01em;
       min-width:0;
-      flex:1 1 140px;
+      flex:1 1 90px;
       line-height:1.1;
       overflow-wrap:anywhere;
     }
 
     .statusTag{
-      font-size:12px;
+      font-size:11px;
       font-weight:900;
-      padding:10px 14px;
+      padding:8px 11px;
       border-radius:999px;
       border:1px solid var(--line);
       white-space:normal;
@@ -655,13 +639,13 @@
     }
 
     .pcMeta{
-      margin-top:16px;
+      margin-top:12px;
       display:grid;
-      gap:8px;
-      font-size:14px;
+      gap:7px;
+      font-size:13px;
       color:var(--muted);
       min-width:0;
-      min-height:58px;
+      min-height:48px;
     }
 
     .pcMeta div{
@@ -691,8 +675,8 @@
     .pcBottom{
       display:grid;
       grid-template-columns:1fr;
-      gap:12px;
-      margin-top:18px;
+      gap:10px;
+      margin-top:14px;
       min-width:0;
     }
 
@@ -704,10 +688,9 @@
     }
 
     .mini{
-      width:100%;
-      padding:13px 14px;
-      border-radius:18px;
-      font-size:18px;
+      padding:11px 12px;
+      border-radius:16px;
+      font-size:15px;
       white-space:normal;
       line-height:1.2;
       text-align:center;
@@ -729,14 +712,10 @@
     .mini.bad{background:rgba(251,113,133,.10);border-color:rgba(251,113,133,.28)}
 
     .sideCard{
-      border-radius:24px;
+      border-radius:22px;
       position:sticky;
-      top:86px;
+      top:74px;
       min-width:0;
-    }
-
-    @media (max-width:1180px){
-      .sideCard{position:static}
     }
 
     .topActionCluster{
@@ -855,10 +834,6 @@
     }
 
     .formRow > div{min-width:0}
-
-    @media (max-width:640px){
-      .formRow{grid-template-columns:1fr}
-    }
 
     label{
       display:block;
@@ -990,81 +965,80 @@
     .auth{display:grid;gap:10px;min-width:0}
     .mobileBar{display:none}
 
-    @media (max-width:980px){
-      .miniStatsRow{grid-template-columns:repeat(3,1fr)}
+    @media (max-width:1180px){
+      .layout{grid-template-columns:1fr}
+      .sideCard{position:static}
     }
 
-    @media (max-width:820px){
-      .heroGrid{
-        grid-template-columns:1fr;
-      }
-
-      .heroActions{
-        display:grid;
-        grid-template-columns:repeat(4, minmax(0,1fr));
-        gap:10px;
-        min-width:0;
-      }
-
-      .iconBtn,.statusMini{
-        width:100%;
-        align-self:stretch;
-      }
-
-      .heroPills{
-        grid-template-columns:1fr;
-      }
-
-      .hall{
-        grid-template-columns:1fr 1fr;
-      }
+    @media (max-width:900px){
+      .miniStatsRow{grid-template-columns:repeat(3,1fr)}
     }
 
     @media (max-width:700px){
       .wrap{
-        padding:10px;
-        padding-bottom:max(10px, env(safe-area-inset-bottom));
+        padding:8px;
+        padding-bottom:max(8px, env(safe-area-inset-bottom));
       }
 
       .headerShell{
         top:6px;
-        border-radius:22px;
+        border-radius:20px;
       }
 
-      .hero{
-        padding:14px;
+      .headerMain{
+        grid-template-columns:minmax(0,1fr) auto;
+        padding:10px 10px;
+        gap:8px;
       }
 
-      .brandRow{
-        gap:12px;
+      .headerShell.compact .headerMain{
+        padding:7px 8px;
       }
 
       .logo{
-        width:58px;
-        height:58px;
-        flex-basis:58px;
+        width:42px;
+        height:42px;
+        flex-basis:42px;
       }
 
-      h1{font-size:18px}
-      .heroSubtitle{font-size:13px}
+      .headerShell.compact .logo{
+        width:30px;
+        height:30px;
+        flex-basis:30px;
+      }
 
-      .panelHead,.panelBody{padding:12px}
+      h1{font-size:15px}
+      .headerShell.compact h1{font-size:12px}
 
-      .hallTopCompact{
+      .userInline{
+        font-size:11px;
+      }
+
+      .topbar{
         display:grid;
-        grid-template-columns:1fr;
-        gap:10px;
+        grid-template-columns:repeat(4,minmax(0,1fr));
+        gap:6px;
+        align-content:start;
       }
 
+      .statusMini,.iconBtn{
+        width:100%;
+        justify-content:center;
+      }
+
+      .statusMini{
+        grid-column:1 / -1;
+      }
+
+      .panelBody{padding:12px}
       .hallTools{
         width:100%;
-        grid-template-columns:repeat(3, minmax(0,1fr));
+        grid-template-columns:repeat(3,minmax(0,1fr));
       }
 
-      .hallTools .filterBtn{
-        width:100%;
-        text-align:center;
-        padding:10px 8px;
+      .filterBtn{
+        padding:8px 6px;
+        font-size:11px;
       }
 
       .topActionRow{
@@ -1097,135 +1071,107 @@
         padding:12px 10px;
       }
 
+      .hall{
+        grid-template-columns:repeat(2,minmax(0,1fr));
+        gap:10px;
+      }
+
+      .side{
+        gap:10px;
+      }
+
       .pc{
-        padding:15px;
-        border-radius:24px;
+        padding:12px;
+        border-radius:22px;
       }
 
       .pcName{
-        font-size:18px;
+        font-size:16px;
       }
 
       .statusTag{
-        font-size:11px;
-        padding:8px 11px;
+        font-size:10px;
+        padding:7px 10px;
       }
 
       .pcMeta{
-        margin-top:12px;
-        font-size:13px;
-        min-height:44px;
+        font-size:12px;
+        min-height:40px;
+        margin-top:10px;
       }
 
       .mini{
-        font-size:16px;
-        padding:11px 12px;
-        border-radius:16px;
+        font-size:14px;
+        padding:10px 10px;
       }
     }
 
     @media (max-width:520px){
-      .wrap{
-        padding:8px;
-        padding-bottom:max(8px, env(safe-area-inset-bottom));
-      }
-
-      .headerShell{border-radius:20px}
-
-      h1{font-size:16px}
-      .hallTitle{font-size:18px}
-      .panelTitle{font-size:14px}
-
-      .notice,.toast,.small,.muted,label,.meta,.pcMeta,.chip,.filterBtn,.tinyAction,.btn,.mini,.statusMini,.heroSubtitle,.heroPill{
-        font-size:11px;
-      }
-
-      .miniStat b{font-size:16px}
-      .bigStatus h3{font-size:18px}
-      .pcTop{gap:8px}
-      .pcBottom{gap:10px}
-
       .miniStatsRow{grid-template-columns:repeat(2,1fr)}
-
-      .heroActions{
-        grid-template-columns:repeat(3, minmax(0,1fr));
-      }
-
-      .statusMini.userWide{
-        grid-column:1 / -1;
-      }
+      .panelTitle{font-size:14px}
+      .bigStatus h3{font-size:18px}
+      .notice,.toast,.small,.muted,label,.meta,.pcMeta,.chip,.filterBtn,.tinyAction,.btn,.mini,.statusMini{font-size:11px}
+      .miniStat b{font-size:16px}
+      .hall{grid-template-columns:repeat(2,minmax(0,1fr))}
     }
 
     @media (max-width:390px){
-      .miniStatsRow{grid-template-columns:1fr}
-      .hall{grid-template-columns:1fr}
-      .hallTools{grid-template-columns:1fr}
-      .heroActions{grid-template-columns:repeat(2, minmax(0,1fr))}
-      .heroPills{grid-template-columns:1fr}
+      .wrap{padding:6px;padding-bottom:max(6px, env(safe-area-inset-bottom))}
+      .hall{grid-template-columns:repeat(2,minmax(0,1fr))}
+      .miniStatsRow{grid-template-columns:repeat(2,1fr)}
+      .pc{padding:10px;border-radius:20px}
+      .pcName{font-size:15px}
+      .pcMeta{font-size:11px}
+      .mini{font-size:13px;padding:9px 8px}
+      .filterBtn{font-size:10px;padding:8px 4px}
+      .statusTag{font-size:9px;padding:6px 8px}
     }
   </style>
 </head>
 <body data-theme="dark">
   <div class="wrap">
-    <header class="headerShell glass">
-      <div class="hero">
-        <div class="heroGrid">
-          <div class="heroMain">
-            <div class="heroTopLine">
+    <header class="headerShell glass" id="headerShell">
+      <div class="headerMain">
+        <div class="brand">
+          <div class="logo"></div>
+
+          <div class="brandText">
+            <div class="liveRow">
               <span class="liveDot"></span>
               <span id="heroLiveText">LIVE</span>
             </div>
 
-            <div class="brandRow">
-              <div class="logo"></div>
+            <h1 id="t_title"></h1>
 
-              <div class="heroText">
-                <h1 id="t_title"></h1>
-                <div class="heroSubtitle" id="heroSubtitle">
-                  მოგესალმებით ტელეფონიდან და კომპიუტერიდან. შეამოწმეთ 10 PC-ის სტატუსი და დაჯავშნეთ სასურველი ადგილი.
-                </div>
+            <div class="userInline">
+              <span>👤</span>
+              <b id="userPill">—</b>
+            </div>
+          </div>
+        </div>
 
-                <div class="heroPills">
-                  <div class="heroPill">
-                    <span>👤</span>
-                    <span id="heroUserLabel">მომხმარებელი :</span>
-                    <b id="userPill">—</b>
-                  </div>
+        <div class="topbar">
+          <div class="statusMini" title="Cloud">
+            <span class="dot" id="cloudDot"></span>
+            <b id="cloudPill">...</b>
+          </div>
 
-                  <div class="heroPill">
-                    <span class="dot" id="cloudDot"></span>
-                    <span id="heroStatusLabel">სტატუსი :</span>
-                    <b id="cloudPill">...</b>
-                  </div>
-                </div>
+          <div class="langWrap">
+            <button class="iconBtn" id="langMenuBtn" type="button" title="Language">
+              <span id="langCurrentFlag">🇬🇪</span>
+            </button>
+
+            <div class="langMenu glass" id="langMenu">
+              <div class="langGrid">
+                <button class="langFlagBtn" data-lang="ka" type="button">🇬🇪</button>
+                <button class="langFlagBtn" data-lang="en" type="button">🇬🇧</button>
+                <button class="langFlagBtn" data-lang="ru" type="button">🇷🇺</button>
               </div>
             </div>
           </div>
 
-          <div class="heroActions">
-            <button class="iconBtn" id="themeToggleBtn" type="button" title="Theme"></button>
-
-            <div class="langWrap">
-              <button class="iconBtn" id="langMenuBtn" type="button" title="Language">
-                <span id="langCurrentFlag">🇬🇪</span>
-              </button>
-
-              <div class="langMenu glass" id="langMenu">
-                <div class="langGrid">
-                  <button class="langFlagBtn" data-lang="ka" type="button">🇬🇪</button>
-                  <button class="langFlagBtn" data-lang="en" type="button">🇬🇧</button>
-                  <button class="langFlagBtn" data-lang="ru" type="button">🇷🇺</button>
-                </div>
-              </div>
-            </div>
-
-            <div class="statusMini" id="cloudMiniBadge">
-              <span class="dot ok"></span>
-              <b id="heroLiveBadge">LIVE</b>
-            </div>
-
-            <button class="iconBtn danger hidden" id="logoutTopBtn" type="button" title="Logout">⎋</button>
-          </div>
+          <button class="iconBtn" id="themeToggleBtn" type="button" title="Theme"></button>
+          <button class="iconBtn danger hidden" id="logoutTopBtn" type="button" title="Logout">⎋</button>
         </div>
       </div>
     </header>
@@ -1260,8 +1206,6 @@
             <div class="side" id="leftSide"></div>
             <div class="side" id="rightSide"></div>
           </div>
-
-          <div class="aisle hidden" id="t_aisle"></div>
 
           <div class="mobileBar glass">
             <button class="btn" id="mobileMyBtn" type="button"></button>
@@ -1472,9 +1416,6 @@
   const T = {
     ru: {
       title:'Sakompiutere Gaming — Live Hall',
-      subtitle:'Добро пожаловать в Live Hall. Проверяйте статус 10 ПК и бронируйте нужное место.',
-      heroUser:'Пользователь :',
-      heroStatus:'Статус :',
       livehall:'Live Hall',
       all:'Все',
       free:'Свободные',
@@ -1528,7 +1469,7 @@
       soonFreeTag:'🟡 Скоро займётся',
       soonBusyTag:'🟠 Скоро освободится',
       busyTag:'🔴 Занят',
-      freeNow:'Сейчас свободен',
+      freeNow:'Свободен прямо сейчас',
       playing:'Сейчас играет',
       occupiedUntil:'Занят до',
       startsIn:'Начнётся через',
@@ -1578,9 +1519,6 @@
     },
     en: {
       title:'Sakompiutere Gaming — Live Hall',
-      subtitle:'Welcome to Live Hall. Check the status of all 10 PCs and book the one you need.',
-      heroUser:'User :',
-      heroStatus:'Status :',
       livehall:'Live Hall',
       all:'All',
       free:'Free',
@@ -1684,9 +1622,6 @@
     },
     ka: {
       title:'Sakompiutere Gaming — Live Hall',
-      subtitle:'მოგესალმებით ტელეფონიდან და კომპიუტერიდან. შეამოწმეთ 10 PC-ის სტატუსი და დაჯავშნეთ სასურველი ადგილი.',
-      heroUser:'მომხმარებელი :',
-      heroStatus:'სტატუსი :',
       livehall:'Live Hall',
       all:'ყველა',
       free:'თავისუფალი',
@@ -1827,7 +1762,6 @@
 
   const setCloud = (text, ok = null) => {
     $('cloudPill').textContent = text;
-    $('heroLiveBadge').textContent = text;
     if (ok === true) $('cloudDot').className = 'dot ok';
     else if (ok === false) $('cloudDot').className = 'dot err';
     else $('cloudDot').className = 'dot';
@@ -1865,10 +1799,6 @@
     document.title = tr('title');
     $('t_title').textContent = tr('title');
     $('t_livehall').textContent = tr('livehall');
-
-    $('heroSubtitle').textContent = tr('subtitle');
-    $('heroUserLabel').textContent = tr('heroUser');
-    $('heroStatusLabel').textContent = tr('heroStatus');
     $('heroLiveText').textContent = tr('statusLive');
 
     $('filterAll').textContent = tr('all');
@@ -1889,7 +1819,6 @@
     $('openAdminBtn').textContent = tr('admin');
     $('openAuthBtn').textContent = tr('auth');
     $('logoutBtn').textContent = tr('logout');
-    $('t_aisle').textContent = tr('aisle');
 
     $('t_sidepanel').textContent = tr('sidepanel');
     $('t_sidehint').textContent = tr('sidehint');
@@ -2596,6 +2525,13 @@
     try { await auth.signOut(); } catch(_) {}
   }
 
+  function updateHeaderCompact() {
+    const header = $('headerShell');
+    if (!header) return;
+    if (window.scrollY > 45) header.classList.add('compact');
+    else header.classList.remove('compact');
+  }
+
   function bind() {
     document.querySelectorAll('.langFlagBtn').forEach(btn => {
       btn.onclick = () => setLanguage(btn.dataset.lang);
@@ -2777,6 +2713,9 @@
       }
     });
 
+    window.addEventListener('scroll', updateHeaderCompact, { passive:true });
+    window.addEventListener('resize', updateHeaderCompact);
+
     window.addEventListener('beforeunload', () => {
       try { if (unsub) unsub(); } catch(_) {}
       clearInterval(timer);
@@ -2789,6 +2728,7 @@
     applyTexts();
     setCloud(tr('statusWait'), null);
     startTicker();
+    updateHeaderCompact();
 
     if (!db || !auth) {
       setCloud(tr('statusErr'), false);
