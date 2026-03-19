@@ -57,6 +57,7 @@
       word-wrap:break-word;
       overflow-wrap:anywhere;
     }
+
     body[data-theme="light"]{
       background:
         radial-gradient(1000px 600px at 10% -10%, rgba(2,132,199,.10), transparent 60%),
@@ -78,6 +79,7 @@
       box-shadow:var(--shadow);
       backdrop-filter:blur(12px)
     }
+
     body[data-theme="light"] .glass{
       background:linear-gradient(180deg, rgba(255,255,255,.88), rgba(255,255,255,.72))
     }
@@ -114,6 +116,7 @@
       min-width:0;
       flex:1 1 auto;
     }
+
     .brand > div:last-child{
       min-width:0;
       flex:1 1 auto;
@@ -228,6 +231,18 @@
       border-color:rgba(2,132,199,.35)
     }
 
+    .btn.primary,
+    .mini.primary{
+      background:linear-gradient(180deg, rgba(110,231,255,.18), rgba(167,139,250,.10));
+      border-color:rgba(110,231,255,.42);
+    }
+
+    body[data-theme="light"] .btn.primary,
+    body[data-theme="light"] .mini.primary{
+      background:linear-gradient(180deg, rgba(2,132,199,.12), rgba(124,58,237,.08));
+      border-color:rgba(2,132,199,.32);
+    }
+
     .langWrap{position:relative}
 
     .langTrigger{
@@ -250,6 +265,7 @@
       display:none;
       z-index:60;
     }
+
     .langMenu.show{display:block}
 
     .langOption{
@@ -263,6 +279,7 @@
       margin:0 0 6px;
       text-align:left;
     }
+
     .langOption:last-child{margin-bottom:0}
 
     .langLeft{
@@ -279,6 +296,7 @@
       border-color:rgba(110,231,255,.45);
       background:rgba(110,231,255,.10);
     }
+
     body[data-theme="light"] .langOption.active{
       border-color:rgba(2,132,199,.35);
       background:rgba(2,132,199,.08);
@@ -291,11 +309,13 @@
       background:#fff2;
       flex:0 0 8px
     }
+
     .dot.ok{
       background:var(--free);
       box-shadow:0 0 0 0 rgba(52,211,153,.35);
       animation:pulse 1.8s infinite
     }
+
     .dot.err{background:var(--busy)}
 
     @keyframes pulse{
@@ -310,6 +330,7 @@
       margin-top:14px;
       min-width:0
     }
+
     @media (max-width:1120px){
       .layout{grid-template-columns:1fr}
     }
@@ -402,7 +423,7 @@
 
     .miniStatsRow{
       display:grid;
-      grid-template-columns:repeat(4,1fr);
+      grid-template-columns:repeat(5,1fr);
       gap:10px;
       margin-bottom:14px;
     }
@@ -620,8 +641,6 @@
       overflow-wrap:anywhere;
     }
 
-    .mini.primary{background:linear-gradient(180deg, rgba(110,231,255,.18), rgba(167,139,250,.10));border-color:rgba(110,231,255,.42)}
-    body[data-theme="light"] .mini.primary{background:linear-gradient(180deg, rgba(2,132,199,.12), rgba(124,58,237,.08));border-color:rgba(2,132,199,.32)}
     .mini.soft{background:rgba(167,139,250,.10);border-color:rgba(167,139,250,.22)}
     .mini.bad{background:rgba(251,113,133,.10);border-color:rgba(251,113,133,.28)}
 
@@ -1125,7 +1144,7 @@
 
       <div class="headerStatus">
         <div class="pill"><span id="t_user"></span>: <b id="userPill">—</b></div>
-        <div class="pill"><span class="dot" id="cloudDot"></span><span id="t_cloud"></span>: <b id="cloudPill">…</b></div>
+        <div class="pill"><span class="dot" id="cloudDot"></span><span id="t_cloud"></span>: <b id="cloudPill">...</b></div>
       </div>
     </header>
 
@@ -1150,6 +1169,7 @@
           <div class="miniStatsRow">
             <div class="miniStat"><span id="t_statAll"></span><b id="statAll">10</b></div>
             <div class="miniStat"><span id="t_statFree"></span><b id="statFree">0</b></div>
+            <div class="miniStat"><span id="t_statSoon"></span><b id="statSoon">0</b></div>
             <div class="miniStat"><span id="t_statBusy"></span><b id="statBusy">0</b></div>
             <div class="miniStat"><span id="t_statSelected"></span><b id="statSelected">0</b></div>
           </div>
@@ -1204,7 +1224,7 @@
             <div class="quickList" id="quickActions"></div>
           </div>
 
-          <div id="customSection" style="margin-top:16px">
+          <div id="customSection" class="hidden" style="margin-top:16px">
             <div class="panelTitle" id="t_customtitle" style="margin-bottom:8px"></div>
             <div class="small muted" id="t_customhint"></div>
 
@@ -1332,6 +1352,7 @@
   const WORK_END_NEXTDAY = 3 * 60;
   const SLOT_STEP = 30;
   const SOON_MIN = 30;
+
   const LANG_KEY = 'sg_live_lang';
   const NICK_KEY = 'sg_live_nick';
   const THEME_KEY = 'sg_live_theme';
@@ -1343,7 +1364,12 @@
   const addMinutes = (d,m) => new Date(d.getTime() + m * 60000);
   const addDays = (d,x) => new Date(d.getTime() + x * 86400000);
   const overlaps = (a1,a2,b1,b2) => Math.max(a1,b1) < Math.min(a2,b2);
-  const esc = s => String(s ?? '').replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;').replaceAll('"','&quot;').replaceAll("'",'&#039;');
+  const esc = s => String(s ?? '')
+    .replaceAll('&','&amp;')
+    .replaceAll('<','&lt;')
+    .replaceAll('>','&gt;')
+    .replaceAll('"','&quot;')
+    .replaceAll("'",'&#039;');
 
   let lang = localStorage.getItem(LANG_KEY) || 'ka';
   let theme = localStorage.getItem(THEME_KEY) || 'dark';
@@ -1361,28 +1387,35 @@
       user:'Пользователь', cloud:'База',
       livehall:'Live Hall', livehint:'Быстрый режим для обычного игрока + мультивыбор ПК для команд.',
       all:'Все', free:'Свободные', soon:'Скоро освободятся',
-      statAll:'Всего ПК', statFree:'Свободно сейчас', statBusy:'Занято', statSelected:'Выбрано',
-      findNow:'⚡ Найти свободный сейчас', multiOff:'👥 Мультивыбор: OFF', multiOn:'👥 Мультивыбор: ON', clearSelected:'Сбросить выбор', my:'👤 Мои брони', admin:'🔐 Admin', auth:'🔑 Войти', logout:'🚪 Выйти', aisle:'ПРОХОД',
+      statAll:'Всего ПК', statFree:'Свободно сейчас', statSoon:'Скоро', statBusy:'Занято', statSelected:'Выбрано',
+      findNow:'⚡ Найти свободный сейчас', multiOff:'👥 Мультивыбор: OFF', multiOn:'👥 Мультивыбор: ON', clearSelected:'Сбросить выбор',
+      my:'👤 Мои брони', admin:'🔐 Admin', auth:'🔑 Войти', logout:'🚪 Выйти', aisle:'ПРОХОД',
       sidepanel:'Панель бронирования', sidehint:'Один ПК или сразу несколько.',
       singleSelectHint:'Выбери один ПК, чтобы увидеть быстрые действия.',
       multiSelectHint:'Мультивыбор включён. Отмечай ПК для групповой брони.',
       selectedOne:'Выбран 1 ПК', selectedMany:'Выбрано ПК', chooseAtLeastOne:'Выбери хотя бы один ПК.',
       customtitle:'Точное время', customhint:'Подходит и для 1 ПК, и для нескольких сразу.',
       date:'Дата', duration:'Длительность', time:'Время', nick:'Ник', note:'Комментарий', bookCustom:'Подтвердить бронь', hideCustom:'Скрыть',
-      mybookings:'Мои брони', adminBookings:'Admin панель', adminHint:'Все активные брони. Можно удалять.', authTitle:'Вход / Регистрация', authHint:'Email + пароль', password:'Пароль', login:'Войти', register:'Регистрация', reset:'Сбросить пароль',
+      mybookings:'Мои брони', adminBookings:'Admin панель', adminHint:'Все активные брони. Можно удалять.',
+      authTitle:'Вход / Регистрация', authHint:'Email + пароль', password:'Пароль', login:'Войти', register:'Регистрация', reset:'Сбросить пароль',
       confirmtitle:'Подтверждение', confirmhint:'Проверь детали перед записью', confirm:'Подтвердить', cancel:'Отмена',
-      freeTag:'🟢 Свободен', soonTag:'🟡 Скоро свободен', busyTag:'🔴 Занят',
+      freeTag:'🟢 Свободен', soonTag:'🟡 Скоро', busyTag:'🔴 Занят',
       freeNow:'Свободен прямо сейчас', playing:'Сейчас играет', freeAt:'Свободен в', endsIn:'Через',
+      occupiedUntil:'Занят до', bookedSoon:'Свободен сейчас, но скоро бронь',
       play1:'Играть сейчас • 1 час', play2:'Играть сейчас • 2 часа', play3:'Играть сейчас • 3 часа',
       group2:'Группой • 2 часа', group3:'Группой • 3 часа',
       bookAt:'Забронировать на ближайшее', queue:'В очередь', exact:'Выбрать вручную', nearest:'Скоро будет свободен',
       loginNeeded:'Сначала войди в аккаунт.', enterNick:'Введи ник.', pickTime:'Выбери время.', booked:'✅ Бронь создана!', canceled:'Отменено.', noFree:'Сейчас нет свободных ПК.',
-      authOk:'✅ Вход выполнен: ', authNeed:'Нужно войти, чтобы бронировать.', loginErr:'Введите email и пароль.', resetSent:'Письмо для сброса отправлено ✅',
-      fsErr:'Ошибка Firestore. Проверь Rules или блокировщик.', rules:'Firestore Rules не позволяют запись.', blocked:'Браузер или расширение блокирует Firebase.',
-      statusOk:'OK', statusLive:'LIVE', statusErr:'ERR', minutes:'мин', starts:'Начало', ends:'Конец', pc:'ПК', pcs:'ПК', remove:'Отменить', empty:'Пока ничего нет',
-      taken:'Этот слот уже занят. Выбери другой.', queueHint:'Функция очереди сейчас бронирует на ближайшее освобождение.', busyUntil:'Занят до', guest:'Гость', saveNickHint:'Ник автоматически сохраняется для следующего входа.',
-      multiHelp:'Когда мультивыбор включён, быстрые действия бронируют сразу все отмеченные ПК.', mobileMy:'Мои', mobileBook:'Бронь', adminDenied:'Ты не админ.',
-      themeDark:'🌙 Тёмная тема', themeLight:'☀️ Светлая тема'
+      authOk:'✅ Вход выполнен: ', authNeed:'Login required for booking.', loginErr:'Введите email и пароль.', resetSent:'Письмо для сброса отправлено ✅',
+      fsErr:'Firestore error. Проверь Rules или блокировщик.', rules:'Firestore Rules не позволяют запись.', blocked:'Браузер или расширение блокирует Firebase.',
+      statusOk:'OK', statusLive:'LIVE', statusErr:'ERR', statusWait:'...',
+      minutes:'мин', starts:'Начало', ends:'Конец', pc:'ПК', pcs:'ПК', remove:'Отменить', empty:'Пока ничего нет',
+      taken:'Этот слот уже занят. Выбери другой.', queueHint:'Функция очереди сейчас бронирует на ближайшее освобождение.', busyUntil:'Занят до', guest:'Гость',
+      saveNickHint:'Ник автоматически сохраняется для следующего входа.',
+      multiHelp:'Когда мультивыбор включён, быстрые действия бронируют сразу все отмеченные ПК.',
+      mobileMy:'Мои', mobileBook:'Бронь', adminDenied:'Ты не админ.',
+      themeDark:'🌙 Тёмная тема', themeLight:'☀️ Светлая тема',
+      noTimes:'Нет свободного времени'
     },
     en: {
       title:'Sakompiutere Gaming — Live Hall',
@@ -1390,25 +1423,35 @@
       user:'User', cloud:'Database',
       livehall:'Live Hall', livehint:'Quick mode for normal players + multi-select for teams.',
       all:'All', free:'Free', soon:'Soon free',
-      statAll:'Total PCs', statFree:'Free now', statBusy:'Busy', statSelected:'Selected',
-      findNow:'⚡ Find free now', multiOff:'👥 Multi-select: OFF', multiOn:'👥 Multi-select: ON', clearSelected:'Clear selection', my:'👤 My bookings', admin:'🔐 Admin', auth:'🔑 Login', logout:'🚪 Logout', aisle:'AISLE',
+      statAll:'Total PCs', statFree:'Free now', statSoon:'Soon', statBusy:'Busy', statSelected:'Selected',
+      findNow:'⚡ Find free now', multiOff:'👥 Multi-select: OFF', multiOn:'👥 Multi-select: ON', clearSelected:'Clear selection',
+      my:'👤 My bookings', admin:'🔐 Admin', auth:'🔑 Login', logout:'🚪 Logout', aisle:'AISLE',
       sidepanel:'Booking panel', sidehint:'One PC or many PCs at once.',
-      singleSelectHint:'Choose one PC to see quick actions.', multiSelectHint:'Multi-select is ON. Mark PCs for group booking.', selectedOne:'1 PC selected', selectedMany:'PCs selected', chooseAtLeastOne:'Choose at least one PC.',
-      customtitle:'Exact time', customhint:'Works for one PC and multiple PCs too.', date:'Date', duration:'Duration', time:'Time', nick:'Nick', note:'Note', bookCustom:'Confirm booking', hideCustom:'Hide',
-      mybookings:'My bookings', adminBookings:'Admin panel', adminHint:'All active bookings. Can delete.', authTitle:'Login / Register', authHint:'Email + password', password:'Password', login:'Login', register:'Register', reset:'Reset password',
+      singleSelectHint:'Choose one PC to see quick actions.',
+      multiSelectHint:'Multi-select is ON. Mark PCs for group booking.',
+      selectedOne:'1 PC selected', selectedMany:'PCs selected', chooseAtLeastOne:'Choose at least one PC.',
+      customtitle:'Exact time', customhint:'Works for one PC and multiple PCs too.',
+      date:'Date', duration:'Duration', time:'Time', nick:'Nick', note:'Note', bookCustom:'Confirm booking', hideCustom:'Hide',
+      mybookings:'My bookings', adminBookings:'Admin panel', adminHint:'All active bookings. Can delete.',
+      authTitle:'Login / Register', authHint:'Email + password', password:'Password', login:'Login', register:'Register', reset:'Reset password',
       confirmtitle:'Confirmation', confirmhint:'Check details before saving', confirm:'Confirm', cancel:'Cancel',
-      freeTag:'🟢 Free', soonTag:'🟡 Soon free', busyTag:'🔴 Busy',
+      freeTag:'🟢 Free', soonTag:'🟡 Soon', busyTag:'🔴 Busy',
       freeNow:'Free right now', playing:'Now playing', freeAt:'Free at', endsIn:'In',
+      occupiedUntil:'Busy until', bookedSoon:'Free now, but reserved soon',
       play1:'Play now • 1 hour', play2:'Play now • 2 hours', play3:'Play now • 3 hours',
       group2:'Group • 2 hours', group3:'Group • 3 hours',
       bookAt:'Book nearest free time', queue:'Queue', exact:'Choose manually', nearest:'Soon available',
       loginNeeded:'Please login first.', enterNick:'Enter your nickname.', pickTime:'Pick a time.', booked:'✅ Booking created!', canceled:'Canceled.', noFree:'No free PCs right now.',
       authOk:'✅ Logged in: ', authNeed:'Login is required for booking.', loginErr:'Enter email and password.', resetSent:'Password reset email sent ✅',
       fsErr:'Firestore error. Check Rules or ad blocker.', rules:'Firestore Rules do not allow this write.', blocked:'Browser or extension blocks Firebase.',
-      statusOk:'OK', statusLive:'LIVE', statusErr:'ERR', minutes:'min', starts:'Start', ends:'End', pc:'PC', pcs:'PCs', remove:'Cancel', empty:'Nothing yet',
-      taken:'This slot is already taken. Pick another one.', queueHint:'Queue action currently books the nearest release time.', busyUntil:'Busy until', guest:'Guest', saveNickHint:'Nick is saved automatically for next time.',
-      multiHelp:'When multi-select is ON, quick actions book all marked PCs.', mobileMy:'Mine', mobileBook:'Book', adminDenied:'You are not admin.',
-      themeDark:'🌙 Dark theme', themeLight:'☀️ Light theme'
+      statusOk:'OK', statusLive:'LIVE', statusErr:'ERR', statusWait:'...',
+      minutes:'min', starts:'Start', ends:'End', pc:'PC', pcs:'PCs', remove:'Cancel', empty:'Nothing yet',
+      taken:'This slot is already taken. Pick another one.', queueHint:'Queue action currently books the nearest release time.', busyUntil:'Busy until', guest:'Guest',
+      saveNickHint:'Nick is saved automatically for next time.',
+      multiHelp:'When multi-select is ON, quick actions book all marked PCs.',
+      mobileMy:'Mine', mobileBook:'Book', adminDenied:'You are not admin.',
+      themeDark:'🌙 Dark theme', themeLight:'☀️ Light theme',
+      noTimes:'No free time available'
     },
     ka: {
       title:'Sakompiutere Gaming — Live Hall',
@@ -1416,32 +1459,44 @@
       user:'მომხმარებელი', cloud:'ბაზა',
       livehall:'Live Hall', livehint:'სწრაფი რეჟიმი ჩვეულებრივი მოთამაშისთვის და multi-select გუნდებისთვის.',
       all:'ყველა', free:'თავისუფალი', soon:'მალე თავისუფალი',
-      statAll:'სულ PC', statFree:'ახლა თავისუფალი', statBusy:'დაკავებული', statSelected:'არჩეული',
-      findNow:'⚡ იპოვე თავისუფალი ახლა', multiOff:'👥 Multi-select: OFF', multiOn:'👥 Multi-select: ON', clearSelected:'გასუფთავება', my:'👤 ჩემი ჯავშნები', admin:'🔐 Admin', auth:'🔑 შესვლა', logout:'🚪 გასვლა', aisle:'გასასვლელი',
+      statAll:'სულ PC', statFree:'ახლა თავისუფალი', statSoon:'მალე', statBusy:'დაკავებული', statSelected:'არჩეული',
+      findNow:'⚡ იპოვე თავისუფალი ახლა', multiOff:'👥 Multi-select: OFF', multiOn:'👥 Multi-select: ON', clearSelected:'გასუფთავება',
+      my:'👤 ჩემი ჯავშნები', admin:'🔐 Admin', auth:'🔑 შესვლა', logout:'🚪 გასვლა', aisle:'გასასვლელი',
       sidepanel:'ჯავშნის პანელი', sidehint:'ერთი PC ან რამდენიმე ერთად.',
-      singleSelectHint:'აირჩიე ერთი PC სწრაფი მოქმედებებისთვის.', multiSelectHint:'Multi-select ჩართულია. მონიშნე PC-ები ჯგუფური ჯავშნისთვის.', selectedOne:'არჩეულია 1 PC', selectedMany:'არჩეულია PC', chooseAtLeastOne:'აირჩიე მინიმუმ ერთი PC.',
+      singleSelectHint:'აირჩიე ერთი PC სწრაფი მოქმედებებისთვის.',
+      multiSelectHint:'Multi-select ჩართულია. მონიშნე PC-ები ჯგუფური ჯავშნისთვის.',
+      selectedOne:'არჩეულია 1 PC', selectedMany:'არჩეულია PC', chooseAtLeastOne:'აირჩიე მინიმუმ ერთი PC.',
       customtitle:'ზუსტი დრო', customhint:'მუშაობს როგორც 1 PC-ზე, ისე რამდენიმეზე ერთად.',
       date:'თარიღი', duration:'ხანგრძლივობა', time:'დრო', nick:'ნიკი', note:'შენიშვნა', bookCustom:'ჯავშნის დადასტურება', hideCustom:'დამალვა',
-      mybookings:'ჩემი ჯავშნები', adminBookings:'Admin პანელი', adminHint:'ყველა აქტიური ჯავშანი. შესაძლებელია წაშლა.', authTitle:'შესვლა / რეგისტრაცია', authHint:'Email + პაროლი', password:'პაროლი', login:'შესვლა', register:'რეგისტრაცია', reset:'პაროლის აღდგენა',
+      mybookings:'ჩემი ჯავშნები', adminBookings:'Admin პანელი', adminHint:'ყველა აქტიური ჯავშანი. შესაძლებელია წაშლა.',
+      authTitle:'შესვლა / რეგისტრაცია', authHint:'Email + პაროლი', password:'პაროლი', login:'შესვლა', register:'რეგისტრაცია', reset:'პაროლის აღდგენა',
       confirmtitle:'დადასტურება', confirmhint:'შეამოწმე დეტალები', confirm:'დადასტურება', cancel:'გაუქმება',
-      freeTag:'🟢 თავისუფალია', soonTag:'🟡 მალე გათავისუფლდება', busyTag:'🔴 დაკავებულია',
+      freeTag:'🟢 თავისუფალია', soonTag:'🟡 მალე', busyTag:'🔴 დაკავებულია',
       freeNow:'ახლავე თავისუფალია', playing:'ახლა თამაშობს', freeAt:'თავისუფალი იქნება', endsIn:'დარჩა',
+      occupiedUntil:'დაკავებულია', bookedSoon:'ახლა თავისუფალია, მაგრამ მალე დაჯავშნულია',
       play1:'ითამაშე ახლა • 1 საათი', play2:'ითამაშე ახლა • 2 საათი', play3:'ითამაშე ახლა • 3 საათი',
       group2:'ჯგუფურად • 2 საათი', group3:'ჯგუფურად • 3 საათი',
       bookAt:'უახლოეს დროზე დაჯავშნა', queue:'რიგში ჩადგომა', exact:'ხელით არჩევა', nearest:'მალე თავისუფალი',
       loginNeeded:'ჯერ შედი ანგარიშში.', enterNick:'შეიყვანე ნიკი.', pickTime:'აირჩიე დრო.', booked:'✅ ჯავშანი შეიქმნა!', canceled:'გაუქმდა.', noFree:'ახლა თავისუფალი PC არ არის.',
       authOk:'✅ შესულია: ', authNeed:'ჯავშნისთვის საჭიროა შესვლა.', loginErr:'შეიყვანე email და პაროლი.', resetSent:'აღდგენის წერილი გაიგზავნა ✅',
       fsErr:'Firestore შეცდომა. შეამოწმე Rules ან ad blocker.', rules:'Firestore Rules არ უშვებს ჩანაწერს.', blocked:'ბრაუზერი ან გაფართოება ბლოკავს Firebase-ს.',
-      statusOk:'OK', statusLive:'LIVE', statusErr:'ERR', minutes:'წთ', starts:'დასაწყისი', ends:'დასასრული', pc:'PC', pcs:'PC-ები', remove:'გაუქმება', empty:'ჯერ არაფერია',
-      taken:'ეს დრო უკვე დაკავებულია. აირჩიე სხვა.', queueHint:'რიგის ღილაკი ახლა უახლოეს თავისუფალ დროს აჯავშნებს.', busyUntil:'დაკავებულია', guest:'სტუმარი', saveNickHint:'ნიკი ავტომატურად შეინახება.',
-      multiHelp:'როცა multi-select ჩართულია, სწრაფი მოქმედებები ყველა მონიშნულ PC-ზე მუშაობს.', mobileMy:'ჩემი', mobileBook:'ჯავშანი', adminDenied:'ადმინი არ ხარ.',
-      themeDark:'🌙 მუქი თემა', themeLight:'☀️ ღია თემა'
+      statusOk:'OK', statusLive:'LIVE', statusErr:'ERR', statusWait:'...',
+      minutes:'წთ', starts:'დასაწყისი', ends:'დასასრული', pc:'PC', pcs:'PC-ები', remove:'გაუქმება', empty:'ჯერ არაფერია',
+      taken:'ეს დრო უკვე დაკავებულია. აირჩიე სხვა.', queueHint:'რიგის ღილაკი ახლა უახლოეს თავისუფალ დროს აჯავშნებს.', busyUntil:'დაკავებულია', guest:'სტუმარი',
+      saveNickHint:'ნიკი ავტომატურად შეინახება.',
+      multiHelp:'როცა multi-select ჩართულია, სწრაფი მოქმედებები ყველა მონიშნულ PC-ზე მუშაობს.',
+      mobileMy:'ჩემი', mobileBook:'ჯავშანი', adminDenied:'ადმინი არ ხარ.',
+      themeDark:'🌙 მუქი თემა', themeLight:'☀️ ღია თემა',
+      noTimes:'თავისუფალი დრო ვერ მოიძებნა'
     }
   };
 
   const tr = k => (T[lang] && T[lang][k]) || T.ka[k] || k;
 
-  let app, auth, db;
+  let app = null;
+  let auth = null;
+  let db = null;
+
   let currentUser = null;
   let isAdmin = false;
   let allBookings = [];
@@ -1457,12 +1512,13 @@
     app = firebase.initializeApp(firebaseConfig);
     auth = firebase.auth();
     db = firebase.firestore();
-  } catch(e) {
-    console.error(e);
+  } catch (e) {
+    console.error('Firebase init failed:', e);
   }
 
   const toast = (msg, type='') => {
     const el = $('toast');
+    if (!el) return;
     el.textContent = msg;
     el.className = 'toast ' + type;
     el.classList.remove('hidden');
@@ -1470,9 +1526,11 @@
     el._t = setTimeout(() => el.classList.add('hidden'), 3200);
   };
 
-  const setCloud = (text, ok=true) => {
+  const setCloud = (text, ok = null) => {
     $('cloudPill').textContent = text;
-    $('cloudDot').className = 'dot ' + (ok ? 'ok' : 'err');
+    if (ok === true) $('cloudDot').className = 'dot ok';
+    else if (ok === false) $('cloudDot').className = 'dot err';
+    else $('cloudDot').className = 'dot';
   };
 
   const dayBoundsNow = () => {
@@ -1487,13 +1545,14 @@
     const themeColor = theme === 'light' ? '#eef4ff' : '#0b1020';
     const metaTheme = document.querySelector('meta[name="theme-color"]');
     if (metaTheme) metaTheme.setAttribute('content', themeColor);
-    if ($('themeToggleBtn')) $('themeToggleBtn').textContent = theme === 'dark' ? tr('themeLight') : tr('themeDark');
+    $('themeToggleBtn').textContent = theme === 'dark' ? tr('themeLight') : tr('themeDark');
   }
 
   function updateLangMenuUI() {
     const meta = LANG_META[lang] || LANG_META.ka;
     $('langCurrentFlag').textContent = meta.flag;
     $('langCurrentLabel').textContent = meta.label;
+
     document.querySelectorAll('.langOption').forEach(btn => {
       btn.classList.toggle('active', btn.dataset.lang === lang);
     });
@@ -1519,6 +1578,7 @@
     $('filterSoon').textContent = tr('soon');
     $('t_statAll').textContent = tr('statAll');
     $('t_statFree').textContent = tr('statFree');
+    $('t_statSoon').textContent = tr('statSoon');
     $('t_statBusy').textContent = tr('statBusy');
     $('t_statSelected').textContent = tr('statSelected');
     $('findNowBtn').textContent = tr('findNow');
@@ -1584,22 +1644,49 @@
   }
 
   function getPcBookings(pc) {
-    return allBookings.filter(b => b.pc === pc).sort((a,b)=>a.startAtMs-b.startAtMs);
+    return allBookings
+      .filter(b => b.pc === pc)
+      .sort((a,b) => a.startAtMs - b.startAtMs);
   }
 
   function getPcStatus(pc) {
     const now = Date.now();
     const future = getPcBookings(pc).filter(b => b.endAtMs > now);
     const active = future.find(b => b.startAtMs <= now && b.endAtMs > now);
+
     if (active) {
       const mins = Math.max(1, Math.ceil((active.endAtMs - now) / 60000));
-      return { state: mins <= SOON_MIN ? 'soon' : 'busy', active, next:null, freeAtMs:active.endAtMs, minsToFree:mins };
+      return {
+        state: mins <= SOON_MIN ? 'soon' : 'busy',
+        mode: 'occupied',
+        active,
+        next: null,
+        freeAtMs: active.endAtMs,
+        minsToFree: mins
+      };
     }
+
     const next = future.find(b => b.startAtMs > now);
     if (next && next.startAtMs - now <= SOON_MIN * 60000) {
-      return { state:'soon', active:null, next, freeAtMs:next.startAtMs, minsToFree:Math.max(1, Math.ceil((next.startAtMs - now) / 60000)) };
+      return {
+        state: 'soon',
+        mode: 'free_reserved_soon',
+        active: null,
+        next,
+        freeAtMs: now,
+        minsToFree: Math.max(1, Math.ceil((next.startAtMs - now) / 60000)),
+        nextStartMs: next.startAtMs
+      };
     }
-    return { state:'free', active:null, next, freeAtMs:now, minsToFree:0 };
+
+    return {
+      state: 'free',
+      mode: 'free',
+      active: null,
+      next,
+      freeAtMs: now,
+      minsToFree: 0
+    };
   }
 
   const statusLabel = s => s.state === 'free' ? tr('freeTag') : s.state === 'soon' ? tr('soonTag') : tr('busyTag');
@@ -1614,6 +1701,7 @@
       selectedPc = pc;
       selectedPCs = new Set([pc]);
     }
+
     renderStats();
     renderHall();
     renderSelected();
@@ -1621,26 +1709,28 @@
 
   function renderCard(pc) {
     const s = getPcStatus(pc);
+
     if (currentFilter === 'free' && s.state !== 'free') return null;
-    if (currentFilter === 'soon' && s.state === 'free') return null;
+    if (currentFilter === 'soon' && s.state !== 'soon') return null;
 
     const el = document.createElement('div');
     const selectedMulti = selectedPCs.has(pc);
     el.className = `pc ${s.state} ${selectedPc === pc ? 'active' : ''} ${selectedMulti ? 'selectedMulti' : ''}`;
 
     let meta = '';
-    if (s.state === 'free') {
+    if (s.mode === 'free') {
       meta = `<div>${tr('freeNow')}</div>`;
-    } else if (s.active) {
+    } else if (s.mode === 'occupied') {
       meta = `
         <div>${tr('playing')}: <b>${esc(s.active.nick || tr('guest'))}</b></div>
-        <div>${tr('freeAt')}: <b>${fmtHM(new Date(s.freeAtMs))}</b></div>
+        <div>${tr('occupiedUntil')}: <b>${fmtHM(new Date(s.freeAtMs))}</b></div>
         <div>${tr('endsIn')}: <b>${minsText(s.minsToFree)}</b></div>
         <div class="progress"><div class="bar" style="width:${progressFor(s.active)}%"></div></div>
       `;
-    } else {
+    } else if (s.mode === 'free_reserved_soon') {
       meta = `
-        <div>${tr('freeAt')}: <b>${fmtHM(new Date(s.freeAtMs))}</b></div>
+        <div>${tr('bookedSoon')}</div>
+        <div>${tr('starts')}: <b>${fmtHM(new Date(s.nextStartMs))}</b></div>
         <div>${tr('endsIn')}: <b>${minsText(s.minsToFree)}</b></div>
       `;
     }
@@ -1662,13 +1752,21 @@
       updateSelection(pc);
     });
 
-    setTimeout(() => {
-      const pick = el.querySelector('button[data-a="pick"]');
-      const quick = el.querySelector('button[data-a="quick"]');
-      if (pick) pick.onclick = ev => { ev.stopPropagation(); updateSelection(pc); };
-      if (quick) quick.onclick = ev => {
+    const pick = el.querySelector('button[data-a="pick"]');
+    const quick = el.querySelector('button[data-a="quick"]');
+
+    if (pick) {
+      pick.onclick = ev => {
         ev.stopPropagation();
         updateSelection(pc);
+      };
+    }
+
+    if (quick) {
+      quick.onclick = ev => {
+        ev.stopPropagation();
+        updateSelection(pc);
+
         if (multiMode) {
           if (!selectedPCs.size) return toast(tr('chooseAtLeastOne'), 'warn');
           showCustom();
@@ -1677,7 +1775,7 @@
           else openNearestConfirm([pc]);
         }
       };
-    }, 0);
+    }
 
     return el;
   }
@@ -1685,10 +1783,12 @@
   function renderHall() {
     $('leftSide').innerHTML = '';
     $('rightSide').innerHTML = '';
+
     LEFT.forEach(pc => {
       const c = renderCard(pc);
       if (c) $('leftSide').appendChild(c);
     });
+
     RIGHT.forEach(pc => {
       const c = renderCard(pc);
       if (c) $('rightSide').appendChild(c);
@@ -1697,15 +1797,19 @@
 
   function renderStats() {
     const freeCount = ALL.filter(pc => getPcStatus(pc).state === 'free').length;
-    const busyCount = ALL.length - freeCount;
+    const soonCount = ALL.filter(pc => getPcStatus(pc).state === 'soon').length;
+    const busyCount = ALL.filter(pc => getPcStatus(pc).state === 'busy').length;
+
     $('statAll').textContent = String(ALL.length);
     $('statFree').textContent = String(freeCount);
+    $('statSoon').textContent = String(soonCount);
     $('statBusy').textContent = String(busyCount);
     $('statSelected').textContent = String(selectedPCs.size);
   }
 
   function renderSelected() {
     $('selectedChips').innerHTML = '';
+
     if (!selectedPCs.size) {
       $('selectedName').textContent = '—';
       $('selectedStatus').textContent = multiMode ? tr('multiSelectHint') : tr('singleSelectHint');
@@ -1737,13 +1841,19 @@
         actions.push({ label:tr('play2'), small:`${tr('starts')}: ${fmtHM(new Date())}`, fn:()=>openQuickConfirm(names, new Date(), 120) });
         actions.push({ label:tr('play3'), small:`${tr('starts')}: ${fmtHM(new Date())}`, fn:()=>openQuickConfirm(names, new Date(), 180) });
       } else {
-        actions.push({ label:tr('bookAt'), small:`${tr('starts')}: ${fmtHM(new Date(s.freeAtMs))}`, fn:()=>openNearestConfirm(names) });
+        const nearest = findNearestForAll(names, new Date(), 120);
+        actions.push({
+          label:tr('bookAt'),
+          small: nearest ? `${tr('starts')}: ${fmtHM(nearest)}` : tr('taken'),
+          fn:()=>openNearestConfirm(names)
+        });
         actions.push({ label:tr('queue'), small:tr('queueHint'), fn:()=>openNearestConfirm(names) });
       }
     } else {
       actions.push({ label:tr('group2'), small:`${tr('pcs')}: ${names.join(', ')}`, fn:()=>openQuickConfirm(names, new Date(), 120) });
       actions.push({ label:tr('group3'), small:`${tr('pcs')}: ${names.join(', ')}`, fn:()=>openQuickConfirm(names, new Date(), 180) });
     }
+
     actions.push({ label:tr('exact'), small:tr('saveNickHint'), fn:()=>showCustom() });
 
     $('quickActions').innerHTML = '';
@@ -1786,9 +1896,11 @@
     let clamped = clampToOpen(earliest);
     let cur = roundUp(clamped || earliest);
     const until = addDays(new Date(), 5).getTime();
+
     while (cur && cur.getTime() < until) {
       const end = addMinutes(cur, dur);
-      const a = clampToOpen(cur), b = clampToOpen(end);
+      const a = clampToOpen(cur);
+      const b = clampToOpen(end);
       if (a && b && isFreeRangeForAll(pcs, cur.getTime(), end.getTime())) return cur;
       cur = addMinutes(cur, SLOT_STEP);
     }
@@ -1799,6 +1911,7 @@
   const closeAuth = () => $('authBackdrop').classList.remove('show');
   const openConfirm = () => $('confirmBackdrop').classList.add('show');
   const closeConfirm = () => $('confirmBackdrop').classList.remove('show');
+
   const needLogin = () => {
     openAuth();
     $('authMsg').textContent = tr('loginNeeded');
@@ -1806,10 +1919,13 @@
 
   function openQuickConfirm(pcs, start, dur) {
     if (!currentUser) return needLogin();
+
     const nick = ($('nickInput').value || '').trim() || localStorage.getItem(NICK_KEY) || '';
     if (!nick) return showCustom(true);
+
     const safe = findNearestForAll(pcs, start, dur);
     if (!safe) return toast(tr('taken'), 'bad');
+
     pendingBooking = {
       pcs:[...pcs],
       startAtMs:safe.getTime(),
@@ -1817,16 +1933,20 @@
       nick,
       note:($('noteInput').value || '').trim()
     };
+
     fillConfirm();
     openConfirm();
   }
 
   function openNearestConfirm(pcs) {
     if (!currentUser) return needLogin();
+
     const nick = ($('nickInput').value || '').trim() || localStorage.getItem(NICK_KEY) || '';
     if (!nick) return showCustom(true);
+
     const safe = findNearestForAll(pcs, new Date(), 120);
     if (!safe) return toast(tr('taken'), 'bad');
+
     pendingBooking = {
       pcs:[...pcs],
       startAtMs:safe.getTime(),
@@ -1834,6 +1954,7 @@
       nick,
       note:($('noteInput').value || '').trim()
     };
+
     fillConfirm();
     openConfirm();
   }
@@ -1842,6 +1963,7 @@
     if (!pendingBooking) return;
     const s = new Date(pendingBooking.startAtMs);
     const e = new Date(pendingBooking.endAtMs);
+
     $('confirmInfo').innerHTML = `
       <b>${esc(tr('pcs'))}:</b> ${esc(pendingBooking.pcs.join(', '))}<br>
       <b>${esc(tr('starts'))}:</b> ${esc(toISODate(s))} ${esc(fmtHM(s))}<br>
@@ -1866,6 +1988,7 @@
   function buildCustomTimes() {
     const sel = $('customTime');
     sel.innerHTML = '';
+
     if (!selectedPCs.size) {
       const o = document.createElement('option');
       o.value = '';
@@ -1888,6 +2011,7 @@
       const end = addMinutes(cur, dur);
       if (cur.getTime() < Date.now()) continue;
       if (!isFreeRangeForAll(pcs, cur.getTime(), end.getTime())) continue;
+
       const o = document.createElement('option');
       o.value = String(cur.getTime());
       o.textContent = `${fmtHM(cur)} → ${fmtHM(end)}`;
@@ -1897,13 +2021,14 @@
     if (!sel.children.length) {
       const o = document.createElement('option');
       o.value = '';
-      o.textContent = '—';
+      o.textContent = tr('noTimes');
       sel.appendChild(o);
     }
   }
 
   async function createBooking(data) {
     if (!currentUser) return needLogin();
+
     const pcs = [...new Set((data.pcs || []).map(String))].slice(0, 10);
     const startAtMs = Number(data.startAtMs);
     const endAtMs = Number(data.endAtMs);
@@ -1912,10 +2037,15 @@
 
     if (!pcs.length) return toast(tr('chooseAtLeastOne'), 'warn');
     if (!nick) return toast(tr('enterNick'), 'warn');
+    if (!startAtMs || !endAtMs || endAtMs <= startAtMs) return toast(tr('pickTime'), 'warn');
     if (!isFreeRangeForAll(pcs, startAtMs, endAtMs)) return toast(tr('taken'), 'bad');
 
     try {
-      await db.collection('users').doc(String(currentUser.uid)).set({ nick, updatedAtMs:Date.now() }, { merge:true });
+      await db.collection('users').doc(String(currentUser.uid)).set(
+        { nick, updatedAtMs:Date.now() },
+        { merge:true }
+      );
+
       const batch = db.batch();
       pcs.forEach(pc => {
         const ref = db.collection('bookings').doc();
@@ -1930,7 +2060,9 @@
           createdAtMs:Date.now()
         });
       });
+
       await batch.commit();
+
       localStorage.setItem(NICK_KEY, nick);
       $('nickInput').value = nick;
       toast(tr('booked'), 'good');
@@ -1956,7 +2088,7 @@
 
     const mine = allBookings
       .filter(b => b.uid === currentUser.uid && b.endAtMs > Date.now() - 86400000)
-      .sort((a,b)=>a.startAtMs-b.startAtMs);
+      .sort((a,b) => a.startAtMs - b.startAtMs);
 
     if (!mine.length) {
       box.innerHTML = `<div class="notice">${esc(tr('empty'))}</div>`;
@@ -1964,10 +2096,18 @@
     }
 
     mine.forEach(b => {
-      const s = new Date(b.startAtMs), e = new Date(b.endAtMs);
+      const s = new Date(b.startAtMs);
+      const e = new Date(b.endAtMs);
       const item = document.createElement('div');
       item.className = 'bookingItem';
-      item.innerHTML = `<div><b>${esc(b.pc)}</b><div class="meta">${esc(toISODate(s))} • ${esc(fmtHM(s))} → ${esc(fmtHM(e))}</div></div><button class="mini bad">${esc(tr('remove'))}</button>`;
+      item.innerHTML = `
+        <div>
+          <b>${esc(b.pc)}</b>
+          <div class="meta">${esc(toISODate(s))} • ${esc(fmtHM(s))} → ${esc(fmtHM(e))}</div>
+        </div>
+        <button class="mini bad">${esc(tr('remove'))}</button>
+      `;
+
       item.querySelector('button').onclick = async () => {
         if (!confirm(tr('remove') + '?')) return;
         try {
@@ -1977,6 +2117,7 @@
           handleFsError(e);
         }
       };
+
       box.appendChild(item);
     });
   }
@@ -1984,11 +2125,14 @@
   function renderAdminBookings() {
     const panel = $('adminSection');
     const box = $('adminBookings');
+
     panel.classList.toggle('hidden', !isAdmin);
     if (!isAdmin) return;
 
     box.innerHTML = '';
-    const list = allBookings.filter(b => b.endAtMs > Date.now()).sort((a,b)=>a.startAtMs-b.startAtMs);
+    const list = allBookings
+      .filter(b => b.endAtMs > Date.now())
+      .sort((a,b) => a.startAtMs - b.startAtMs);
 
     if (!list.length) {
       box.innerHTML = `<div class="notice">${esc(tr('empty'))}</div>`;
@@ -1996,10 +2140,18 @@
     }
 
     list.forEach(b => {
-      const s = new Date(b.startAtMs), e = new Date(b.endAtMs);
+      const s = new Date(b.startAtMs);
+      const e = new Date(b.endAtMs);
       const item = document.createElement('div');
       item.className = 'bookingItem';
-      item.innerHTML = `<div><b>${esc(b.pc)}</b><div class="meta">${esc(b.nick || '')} • ${esc(toISODate(s))} • ${esc(fmtHM(s))} → ${esc(fmtHM(e))}</div></div><button class="mini bad">${esc(tr('remove'))}</button>`;
+      item.innerHTML = `
+        <div>
+          <b>${esc(b.pc)}</b>
+          <div class="meta">${esc(b.nick || '')} • ${esc(toISODate(s))} • ${esc(fmtHM(s))} → ${esc(fmtHM(e))}</div>
+        </div>
+        <button class="mini bad">${esc(tr('remove'))}</button>
+      `;
+
       item.querySelector('button').onclick = async () => {
         if (!confirm(tr('remove') + '?')) return;
         try {
@@ -2009,6 +2161,7 @@
           handleFsError(e);
         }
       };
+
       box.appendChild(item);
     });
   }
@@ -2023,7 +2176,13 @@
     isAdmin = !!(currentUser && ADMIN_EMAILS.includes(String(currentUser.email || '').toLowerCase()));
     $('openAuthBtn').classList.toggle('hidden', !!currentUser);
     $('logoutBtn').classList.toggle('hidden', !currentUser);
-    if (currentUser) $('authMsg').textContent = tr('authOk') + (currentUser.email || currentUser.uid.slice(0,6));
+
+    if (currentUser) {
+      $('authMsg').textContent = tr('authOk') + (currentUser.email || currentUser.uid.slice(0,6));
+    } else {
+      $('authMsg').textContent = '—';
+    }
+
     renderAdminBookings();
   }
 
@@ -2038,22 +2197,27 @@
       selectedPc = free[0];
       selectedPCs = new Set([free[0]]);
     }
+
     renderStats();
     renderHall();
     renderSelected();
   }
 
   async function startRealtime() {
+    if (!db) return;
+
     if (unsub) {
       try { unsub(); } catch(_) {}
     }
+
     const { start, end } = dayBoundsNow();
+
     unsub = db.collection('bookings')
       .where('startAtMs', '<', end)
       .onSnapshot(snap => {
         allBookings = snap.docs
           .map(d => ({ id:d.id, ...d.data() }))
-          .map(x => ({ ...x, startAtMs:Number(x.startAtMs||0), endAtMs:Number(x.endAtMs||0) }))
+          .map(x => ({ ...x, startAtMs:Number(x.startAtMs || 0), endAtMs:Number(x.endAtMs || 0) }))
           .filter(x => x.endAtMs > start);
 
         setCloud(tr('statusLive'), true);
@@ -2114,11 +2278,13 @@
       setFilterUI();
       renderHall();
     };
+
     $('filterFree').onclick = () => {
       currentFilter = 'free';
       setFilterUI();
       renderHall();
     };
+
     $('filterSoon').onclick = () => {
       currentFilter = 'soon';
       setFilterUI();
@@ -2129,11 +2295,13 @@
 
     $('toggleMultiBtn').onclick = () => {
       multiMode = !multiMode;
+
       if (!multiMode && selectedPCs.size > 1) {
         const first = [...selectedPCs][0];
         selectedPCs = new Set(first ? [first] : []);
         selectedPc = first || null;
       }
+
       setLangUI();
     };
 
@@ -2150,6 +2318,7 @@
     $('mobileMyBtn').onclick = toggleMy;
 
     $('mobileBookBtn').onclick = () => {
+      if (!currentUser) return needLogin();
       if (!selectedPCs.size) return toast(tr('chooseAtLeastOne'), 'warn');
       showCustom();
       $('customSection').scrollIntoView({behavior:'smooth', block:'start'});
@@ -2162,7 +2331,9 @@
     };
 
     $('openAuthBtn').onclick = openAuth;
+
     $('logoutBtn').onclick = async () => {
+      if (!auth) return;
       try { await auth.signOut(); } catch(_) {}
     };
 
@@ -2179,17 +2350,25 @@
 
     $('customDate').value = toISODate(new Date());
     $('nickInput').value = localStorage.getItem(NICK_KEY) || '';
-    $('nickInput').addEventListener('input', () => localStorage.setItem(NICK_KEY, $('nickInput').value.trim()));
+
+    $('nickInput').addEventListener('input', () => {
+      localStorage.setItem(NICK_KEY, $('nickInput').value.trim());
+    });
+
     $('customDate').addEventListener('change', buildCustomTimes);
     $('customDuration').addEventListener('change', buildCustomTimes);
 
     $('hideCustomBtn').onclick = hideCustom;
 
     $('bookCustomBtn').onclick = () => {
+      if (!currentUser) return needLogin();
       if (!selectedPCs.size) return toast(tr('chooseAtLeastOne'), 'warn');
+
       const startAtMs = Number($('customTime').value || 0);
       if (!startAtMs) return toast(tr('pickTime'), 'warn');
+
       const duration = Number($('customDuration').value || 60);
+
       pendingBooking = {
         pcs:[...selectedPCs],
         startAtMs,
@@ -2197,6 +2376,7 @@
         nick:($('nickInput').value || '').trim(),
         note:($('noteInput').value || '').trim()
       };
+
       fillConfirm();
       openConfirm();
     };
@@ -2208,7 +2388,15 @@
     $('loginBtn').onclick = async () => {
       const email = ($('authEmail').value || '').trim();
       const pass = ($('authPass').value || '').trim();
-      if (!email || !pass) return $('authMsg').textContent = tr('loginErr');
+      if (!email || !pass) {
+        $('authMsg').textContent = tr('loginErr');
+        return;
+      }
+      if (!auth) {
+        $('authMsg').textContent = tr('fsErr');
+        return;
+      }
+
       try {
         await auth.signInWithEmailAndPassword(email, pass);
         closeAuth();
@@ -2221,7 +2409,15 @@
     $('registerBtn').onclick = async () => {
       const email = ($('authEmail').value || '').trim();
       const pass = ($('authPass').value || '').trim();
-      if (!email || !pass) return $('authMsg').textContent = tr('loginErr');
+      if (!email || !pass) {
+        $('authMsg').textContent = tr('loginErr');
+        return;
+      }
+      if (!auth) {
+        $('authMsg').textContent = tr('fsErr');
+        return;
+      }
+
       try {
         await auth.createUserWithEmailAndPassword(email, pass);
         closeAuth();
@@ -2233,7 +2429,15 @@
 
     $('resetBtn').onclick = async () => {
       const email = ($('authEmail').value || '').trim();
-      if (!email) return $('authMsg').textContent = tr('loginErr');
+      if (!email) {
+        $('authMsg').textContent = tr('loginErr');
+        return;
+      }
+      if (!auth) {
+        $('authMsg').textContent = tr('fsErr');
+        return;
+      }
+
       try {
         await auth.sendPasswordResetEmail(email);
         $('authMsg').textContent = tr('resetSent');
@@ -2250,15 +2454,27 @@
         closeLangMenu();
       }
     });
+
+    window.addEventListener('beforeunload', () => {
+      try { if (unsub) unsub(); } catch(_) {}
+      clearInterval(timer);
+    });
   }
 
   async function boot() {
     applyTheme();
-    setLangUI();
     bind();
-    setCloud(tr('statusOk'), true);
+    setLangUI();
+    setCloud(tr('statusWait'), null);
     startTicker();
-    if (db) startRealtime();
+
+    if (!db || !auth) {
+      setCloud(tr('statusErr'), false);
+      toast('Firebase init failed', 'bad');
+      return;
+    }
+
+    startRealtime();
 
     auth.onAuthStateChanged(async u => {
       currentUser = u || null;
