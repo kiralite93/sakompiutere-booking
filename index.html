@@ -43,6 +43,7 @@
     *{box-sizing:border-box}
     html,body{height:100%}
     html{-webkit-text-size-adjust:100%}
+
     body{
       margin:0;
       color:var(--text);
@@ -67,7 +68,7 @@
     }
 
     .wrap{
-      max-width:1320px;
+      max-width:1360px;
       margin:0 auto;
       padding:14px;
       padding-bottom:max(14px, env(safe-area-inset-bottom));
@@ -77,11 +78,11 @@
       background:linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.03));
       border:1px solid var(--line);
       box-shadow:var(--shadow);
-      backdrop-filter:blur(12px)
+      backdrop-filter:blur(12px);
     }
 
     body[data-theme="light"] .glass{
-      background:linear-gradient(180deg, rgba(255,255,255,.88), rgba(255,255,255,.72))
+      background:linear-gradient(180deg, rgba(255,255,255,.88), rgba(255,255,255,.72));
     }
 
     .headerShell{
@@ -95,7 +96,7 @@
     .headerMain{
       display:grid;
       grid-template-columns:minmax(0,1fr) auto;
-      gap:12px;
+      gap:14px;
       align-items:center;
       padding:14px 16px 10px;
       min-width:0;
@@ -114,19 +115,11 @@
       align-items:center;
       gap:12px;
       min-width:0;
-      flex:1 1 auto;
     }
 
-    .brand > div:last-child{
+    .brandText{
       min-width:0;
       flex:1 1 auto;
-    }
-
-    h1{
-      margin:0;
-      font-size:22px;
-      line-height:1.15;
-      overflow-wrap:anywhere;
     }
 
     .logo{
@@ -144,6 +137,13 @@
       overflow:hidden;
     }
 
+    h1{
+      margin:0;
+      font-size:22px;
+      line-height:1.15;
+      overflow-wrap:anywhere;
+    }
+
     .sub{
       margin:4px 0 0;
       color:var(--muted);
@@ -158,9 +158,10 @@
       align-items:center;
       justify-content:flex-end;
       min-width:0;
+      flex-wrap:wrap;
     }
 
-    .pill,.langTrigger{
+    .pill,.langTrigger,.compactBtn{
       display:flex;
       align-items:center;
       gap:8px;
@@ -176,8 +177,9 @@
     }
 
     body[data-theme="light"] .pill,
-    body[data-theme="light"] .langTrigger{
-      background:rgba(255,255,255,.75)
+    body[data-theme="light"] .langTrigger,
+    body[data-theme="light"] .compactBtn{
+      background:rgba(255,255,255,.78);
     }
 
     .pill{
@@ -186,19 +188,14 @@
       overflow:hidden;
     }
 
-    .pill b,
-    .pill span{
-      min-width:0;
-      overflow-wrap:anywhere;
-    }
-
     .pill b{
       overflow:hidden;
       text-overflow:ellipsis;
       white-space:nowrap;
+      color:var(--text);
     }
 
-    .btn,.mini,.langTrigger,.langOption,.filterBtn,.tinyAction{
+    .btn,.mini,.langTrigger,.langOption,.filterBtn,.tinyAction,.compactBtn{
       border:1px solid var(--line);
       background:rgba(255,255,255,.04);
       color:var(--text);
@@ -206,6 +203,7 @@
       transition:.15s ease;
       font-weight:800;
       min-width:0;
+      text-decoration:none;
     }
 
     body[data-theme="light"] .btn,
@@ -213,13 +211,14 @@
     body[data-theme="light"] .langTrigger,
     body[data-theme="light"] .langOption,
     body[data-theme="light"] .filterBtn,
-    body[data-theme="light"] .tinyAction{
-      background:rgba(255,255,255,.75)
+    body[data-theme="light"] .tinyAction,
+    body[data-theme="light"] .compactBtn{
+      background:rgba(255,255,255,.78);
     }
 
-    .btn:hover,.mini:hover,.langTrigger:hover,.langOption:hover,.filterBtn:hover,.tinyAction:hover{
+    .btn:hover,.mini:hover,.langTrigger:hover,.langOption:hover,.filterBtn:hover,.tinyAction:hover,.compactBtn:hover{
       transform:translateY(-1px);
-      border-color:rgba(110,231,255,.45)
+      border-color:rgba(110,231,255,.45);
     }
 
     body[data-theme="light"] .btn:hover,
@@ -227,20 +226,28 @@
     body[data-theme="light"] .langTrigger:hover,
     body[data-theme="light"] .langOption:hover,
     body[data-theme="light"] .filterBtn:hover,
-    body[data-theme="light"] .tinyAction:hover{
-      border-color:rgba(2,132,199,.35)
+    body[data-theme="light"] .tinyAction:hover,
+    body[data-theme="light"] .compactBtn:hover{
+      border-color:rgba(2,132,199,.35);
     }
 
-    .btn.primary,
-    .mini.primary{
+    .btn.primary,.mini.primary,.compactBtn.primary{
       background:linear-gradient(180deg, rgba(110,231,255,.18), rgba(167,139,250,.10));
       border-color:rgba(110,231,255,.42);
     }
 
     body[data-theme="light"] .btn.primary,
-    body[data-theme="light"] .mini.primary{
+    body[data-theme="light"] .mini.primary,
+    body[data-theme="light"] .compactBtn.primary{
       background:linear-gradient(180deg, rgba(2,132,199,.12), rgba(124,58,237,.08));
       border-color:rgba(2,132,199,.32);
+    }
+
+    .compactBtn{
+      padding:9px 12px;
+      border-radius:14px;
+      justify-content:center;
+      white-space:nowrap;
     }
 
     .langWrap{position:relative}
@@ -252,7 +259,7 @@
 
     .langTrigger .flag{
       font-size:15px;
-      line-height:1
+      line-height:1;
     }
 
     .langMenu{
@@ -307,13 +314,13 @@
       height:8px;
       border-radius:999px;
       background:#fff2;
-      flex:0 0 8px
+      flex:0 0 8px;
     }
 
     .dot.ok{
       background:var(--free);
       box-shadow:0 0 0 0 rgba(52,211,153,.35);
-      animation:pulse 1.8s infinite
+      animation:pulse 1.8s infinite;
     }
 
     .dot.err{background:var(--busy)}
@@ -325,13 +332,13 @@
 
     .layout{
       display:grid;
-      grid-template-columns:1fr 360px;
+      grid-template-columns:minmax(0,1fr) 380px;
       gap:16px;
       margin-top:14px;
-      min-width:0
+      min-width:0;
     }
 
-    @media (max-width:1120px){
+    @media (max-width:1180px){
       .layout{grid-template-columns:1fr}
     }
 
@@ -359,7 +366,7 @@
 
     .panelBody{
       padding:16px;
-      min-width:0
+      min-width:0;
     }
 
     .hallTopCompact{
@@ -375,7 +382,6 @@
     .hallTopInfo{
       min-width:0;
       flex:1 1 auto;
-      min-height:0;
     }
 
     .hallTitle{
@@ -423,7 +429,7 @@
 
     .miniStatsRow{
       display:grid;
-      grid-template-columns:repeat(5,1fr);
+      grid-template-columns:repeat(6,1fr);
       gap:10px;
       margin-bottom:14px;
     }
@@ -437,7 +443,7 @@
     }
 
     body[data-theme="light"] .miniStat{
-      background:rgba(255,255,255,.72)
+      background:rgba(255,255,255,.72);
     }
 
     .miniStat span{
@@ -478,13 +484,13 @@
       grid-template-columns:1fr 80px 1fr;
       gap:14px;
       align-items:start;
-      min-width:0
+      min-width:0;
     }
 
     .side{
       display:grid;
       gap:10px;
-      min-width:0
+      min-width:0;
     }
 
     .aisle{
@@ -501,15 +507,15 @@
       text-transform:uppercase;
       writing-mode:vertical-rl;
       transform:rotate(180deg);
-      padding:14px 0
+      padding:14px 0;
     }
 
     body[data-theme="light"] .aisle{
       border-color:rgba(15,23,42,.08);
-      background:linear-gradient(180deg, rgba(255,255,255,.55), rgba(255,255,255,.35))
+      background:linear-gradient(180deg, rgba(255,255,255,.55), rgba(255,255,255,.35));
     }
 
-    @media (max-width:900px){
+    @media (max-width:930px){
       .hall{grid-template-columns:1fr 1fr}
       .aisle{display:none}
     }
@@ -527,7 +533,7 @@
     }
 
     body[data-theme="light"] .pc{
-      background:linear-gradient(180deg, rgba(255,255,255,.88), rgba(255,255,255,.72))
+      background:linear-gradient(180deg, rgba(255,255,255,.88), rgba(255,255,255,.72));
     }
 
     .pc:hover{transform:translateY(-2px)}
@@ -542,10 +548,11 @@
       content:"";
       position:absolute;
       inset:-20% auto auto -10%;
-      width:160px;height:110px;
+      width:160px;
+      height:110px;
       border-radius:999px;
       filter:blur(18px);
-      opacity:.3
+      opacity:.3;
     }
 
     .pc.free::before{background:rgba(52,211,153,.25)}
@@ -611,7 +618,7 @@
       border-radius:999px;
       background:rgba(255,255,255,.06);
       overflow:hidden;
-      margin-top:6px
+      margin-top:6px;
     }
 
     body[data-theme="light"] .progress{background:rgba(15,23,42,.07)}
@@ -619,7 +626,7 @@
     .bar{
       height:100%;
       background:linear-gradient(90deg, rgba(251,113,133,.8), rgba(251,191,36,.8));
-      width:0%
+      width:0%;
     }
 
     .pcBottom{
@@ -648,10 +655,10 @@
       border-radius:24px;
       position:sticky;
       top:86px;
-      min-width:0
+      min-width:0;
     }
 
-    @media (max-width:1120px){
+    @media (max-width:1180px){
       .sideCard{position:static}
     }
 
@@ -709,7 +716,7 @@
     .quickList{
       display:grid;
       gap:10px;
-      min-width:0
+      min-width:0;
     }
 
     .quickItem{
@@ -726,7 +733,7 @@
 
     .quickItem > div{
       min-width:0;
-      flex:1 1 auto
+      flex:1 1 auto;
     }
 
     .quickItem b,.quickItem small{
@@ -743,7 +750,7 @@
       flex-wrap:wrap;
       gap:8px;
       margin-top:10px;
-      min-width:0
+      min-width:0;
     }
 
     .chip{
@@ -771,8 +778,12 @@
 
     .formRow > div{min-width:0}
 
-    @media (max-width:520px){
-      .formRow{grid-template-columns:1fr}
+    .formRow.three{
+      grid-template-columns:1fr 1fr 1fr;
+    }
+
+    @media (max-width:640px){
+      .formRow,.formRow.three{grid-template-columns:1fr}
     }
 
     label{
@@ -797,17 +808,19 @@
     }
 
     body[data-theme="light"] input,
-    body[data-theme="light"] select{background:#fff}
+    body[data-theme="light"] select{
+      background:#fff;
+    }
 
     input:focus,select:focus{
       border-color:rgba(110,231,255,.5);
-      box-shadow:0 0 0 3px rgba(110,231,255,.1)
+      box-shadow:0 0 0 3px rgba(110,231,255,.1);
     }
 
     body[data-theme="light"] input:focus,
     body[data-theme="light"] select:focus{
       border-color:rgba(2,132,199,.35);
-      box-shadow:0 0 0 3px rgba(2,132,199,.10)
+      box-shadow:0 0 0 3px rgba(2,132,199,.10);
     }
 
     .small{font-size:12px;line-height:1.35}
@@ -826,14 +839,14 @@
 
     body[data-theme="light"] .notice{
       border-color:rgba(2,132,199,.20);
-      background:rgba(2,132,199,.06)
+      background:rgba(2,132,199,.06);
     }
 
     .myBookings{
       display:grid;
       gap:10px;
       margin-top:14px;
-      min-width:0
+      min-width:0;
     }
 
     .bookingItem{
@@ -848,20 +861,24 @@
       min-width:0;
     }
 
-    .bookingItem > div{
-      min-width:0;
-      flex:1 1 auto
+    body[data-theme="light"] .bookingItem{
+      background:rgba(255,255,255,.72);
     }
 
-    .bookingItem b,.bookingItem .meta{overflow-wrap:anywhere}
-
-    body[data-theme="light"] .bookingItem{background:rgba(255,255,255,.72)}
+    .bookingItem > div{
+      min-width:0;
+      flex:1 1 auto;
+    }
 
     .bookingItem .meta{
       font-size:12px;
       color:var(--muted);
       margin-top:4px;
       line-height:1.35;
+    }
+
+    .searchBox{
+      margin-top:10px;
     }
 
     .backdrop{
@@ -872,7 +889,7 @@
       align-items:center;
       justify-content:center;
       padding:16px;
-      z-index:80
+      z-index:80;
     }
 
     .backdrop.show{display:flex}
@@ -895,14 +912,13 @@
       min-width:0;
     }
 
-    .modalHead > div{min-width:0}
     .modalBody{padding:18px;min-width:0}
     .auth{display:grid;gap:10px;min-width:0}
 
     .mobileBar{display:none}
 
-    @media (max-width:760px){
-      .miniStatsRow{grid-template-columns:repeat(2,1fr)}
+    @media (max-width:860px){
+      .miniStatsRow{grid-template-columns:repeat(3,1fr)}
     }
 
     @media (max-width:700px){
@@ -924,9 +940,14 @@
       }
 
       .brand{
-        width:100%;
         align-items:flex-start;
         gap:10px;
+      }
+
+      .logo{
+        width:48px;
+        height:48px;
+        flex-basis:48px;
       }
 
       h1{font-size:18px}
@@ -934,21 +955,23 @@
 
       .topbar{
         display:grid;
-        grid-template-columns:1fr 1fr;
+        grid-template-columns:repeat(3,minmax(0,1fr));
         gap:8px;
         width:100%;
       }
 
-      .topbar .btn,
-      .topbar .langWrap,
-      .topbar .langTrigger{
-        width:100%;
+      .topbar > *{
+        min-width:0;
       }
 
-      .topbar .btn,
-      .topbar .langTrigger{
+      .compactBtn,
+      .langTrigger{
+        width:100%;
         min-height:40px;
         justify-content:center;
+        border-radius:14px;
+        padding:9px 8px;
+        font-size:11px;
       }
 
       .headerStatus{
@@ -961,10 +984,7 @@
       .pill{
         width:100%;
         flex:none;
-      }
-
-      .pill b{
-        max-width:100%;
+        border-radius:16px;
       }
 
       .panelHead,.panelBody{padding:12px}
@@ -972,23 +992,19 @@
       .pcName{font-size:15px}
       .statusTag{font-size:10px;padding:6px 8px}
 
-      .quickItem{padding:10px;align-items:flex-start}
-      .bookingItem{align-items:flex-start}
-      .quickItem,.bookingItem{flex-direction:column}
-      .quickItem button,.bookingItem button{width:100%}
+      .quickItem,.bookingItem{
+        flex-direction:column;
+        align-items:flex-start;
+      }
+
+      .quickItem button,.bookingItem button{
+        width:100%;
+      }
 
       .hallTopCompact{
         display:grid;
         grid-template-columns:1fr;
         gap:10px;
-        align-items:stretch;
-        margin-bottom:10px;
-      }
-
-      .hallTopInfo{
-        flex:none;
-        width:100%;
-        min-height:0;
       }
 
       .hallTools{
@@ -996,8 +1012,6 @@
         grid-template-columns:repeat(3,minmax(0,1fr));
         gap:8px;
         width:100%;
-        align-items:stretch;
-        justify-content:stretch;
       }
 
       .hallTools .filterBtn{
@@ -1005,10 +1019,6 @@
         justify-content:center;
         text-align:center;
         padding:10px 8px;
-      }
-
-      .miniStatsRow{
-        margin-top:0;
       }
 
       .topActionRow{
@@ -1040,30 +1050,13 @@
       }
 
       .headerShell{border-radius:18px}
-
-      .logo{
-        width:46px;
-        height:46px;
-        flex-basis:46px;
-      }
-
-      .headerMain{
-        padding:10px 10px 8px;
-      }
-
-      .headerStatus{
-        padding:0 10px 10px;
-      }
-
-      h1{
-        font-size:16px;
-        line-height:1.15;
-      }
-
+      .headerMain{padding:10px 10px 8px}
+      .headerStatus{padding:0 10px 10px}
+      h1{font-size:16px;line-height:1.15}
       .hallTitle{font-size:18px}
       .panelTitle{font-size:14px}
 
-      .notice,.toast,.small,.muted,label,.meta,.pcMeta,.chip,.pill,.langTrigger,.btn,.mini,.filterBtn,.tinyAction{
+      .notice,.toast,.small,.muted,label,.meta,.pcMeta,.chip,.pill,.langTrigger,.btn,.mini,.filterBtn,.tinyAction,.compactBtn{
         font-size:11px;
       }
 
@@ -1073,23 +1066,20 @@
       .pcBottom{flex-wrap:wrap}
       .pcBottom .mini{flex:1 1 90px}
 
-      .pill,.langTrigger{
-        border-radius:16px;
-        padding:8px 10px;
-      }
-
       .langMenu{
         left:0;
         right:auto;
         width:min(220px, calc(100vw - 32px));
       }
+
+      .miniStatsRow{grid-template-columns:repeat(2,1fr)}
     }
 
-    @media (max-width:380px){
+    @media (max-width:390px){
       .miniStatsRow{grid-template-columns:1fr}
       .hall{grid-template-columns:1fr}
-      .leftSide,.rightSide{gap:8px}
       .hallTools{grid-template-columns:1fr}
+      .topbar{grid-template-columns:1fr}
     }
   </style>
 </head>
@@ -1099,14 +1089,14 @@
       <div class="headerMain">
         <div class="brand">
           <div class="logo" id="brandLogo"></div>
-          <div>
+          <div class="brandText">
             <h1 id="t_title"></h1>
             <div class="sub" id="t_headerSub"></div>
           </div>
         </div>
 
         <div class="topbar">
-          <button class="btn ghost" id="themeToggleBtn"></button>
+          <button class="compactBtn" id="themeToggleBtn" type="button"></button>
 
           <div class="langWrap">
             <button class="langTrigger" id="langMenuBtn" type="button">
@@ -1139,6 +1129,8 @@
               </button>
             </div>
           </div>
+
+          <button class="compactBtn primary" id="topQuickAuthBtn" type="button"></button>
         </div>
       </div>
 
@@ -1169,7 +1161,8 @@
           <div class="miniStatsRow">
             <div class="miniStat"><span id="t_statAll"></span><b id="statAll">10</b></div>
             <div class="miniStat"><span id="t_statFree"></span><b id="statFree">0</b></div>
-            <div class="miniStat"><span id="t_statSoon"></span><b id="statSoon">0</b></div>
+            <div class="miniStat"><span id="t_statSoonFree"></span><b id="statSoonFree">0</b></div>
+            <div class="miniStat"><span id="t_statSoonBusy"></span><b id="statSoonBusy">0</b></div>
             <div class="miniStat"><span id="t_statBusy"></span><b id="statBusy">0</b></div>
             <div class="miniStat"><span id="t_statSelected"></span><b id="statSelected">0</b></div>
           </div>
@@ -1181,8 +1174,8 @@
           </div>
 
           <div class="mobileBar glass">
-            <button class="btn ghost" id="mobileMyBtn"></button>
-            <button class="btn primary" id="mobileBookBtn"></button>
+            <button class="btn" id="mobileMyBtn" type="button"></button>
+            <button class="btn primary" id="mobileBookBtn" type="button"></button>
           </div>
         </div>
       </section>
@@ -1198,19 +1191,19 @@
         <div class="panelBody">
           <div class="topActionCluster">
             <div class="topActionRow single">
-              <button class="tinyAction primary" id="findNowBtn"></button>
+              <button class="tinyAction primary" id="findNowBtn" type="button"></button>
             </div>
             <div class="topActionRow">
-              <button class="tinyAction" id="toggleMultiBtn"></button>
-              <button class="tinyAction" id="clearSelectedBtn"></button>
+              <button class="tinyAction" id="toggleMultiBtn" type="button"></button>
+              <button class="tinyAction" id="clearSelectedBtn" type="button"></button>
             </div>
             <div class="topActionRow">
-              <button class="tinyAction" id="openMyBtn"></button>
-              <button class="tinyAction" id="openAdminBtn"></button>
+              <button class="tinyAction" id="openMyBtn" type="button"></button>
+              <button class="tinyAction" id="openAdminBtn" type="button"></button>
             </div>
             <div class="topActionRow">
-              <button class="tinyAction" id="openAuthBtn"></button>
-              <button class="tinyAction hidden" id="logoutBtn"></button>
+              <button class="tinyAction" id="openAuthBtn" type="button"></button>
+              <button class="tinyAction hidden" id="logoutBtn" type="button"></button>
             </div>
           </div>
 
@@ -1263,8 +1256,8 @@
             </div>
 
             <div class="topActionRow" style="margin-top:12px">
-              <button class="btn primary" id="bookCustomBtn"></button>
-              <button class="btn ghost" id="hideCustomBtn"></button>
+              <button class="btn primary" id="bookCustomBtn" type="button"></button>
+              <button class="btn" id="hideCustomBtn" type="button"></button>
             </div>
           </div>
 
@@ -1276,6 +1269,11 @@
           <div id="adminSection" class="hidden" style="margin-top:16px">
             <div class="panelTitle" id="t_adminbookings"></div>
             <div class="small muted" id="t_adminhint" style="margin-top:6px"></div>
+
+            <div class="searchBox">
+              <input id="adminSearch" />
+            </div>
+
             <div class="myBookings" id="adminBookings"></div>
           </div>
         </div>
@@ -1290,7 +1288,7 @@
           <div class="panelTitle" id="t_auth"></div>
           <div class="small muted" id="t_authhint"></div>
         </div>
-        <button class="btn ghost" id="closeAuthBtn">✕</button>
+        <button class="btn" id="closeAuthBtn" type="button">✕</button>
       </div>
       <div class="modalBody auth">
         <div>
@@ -1302,11 +1300,11 @@
           <input type="password" id="authPass" placeholder="******" />
         </div>
         <div class="topActionRow">
-          <button class="btn primary" id="loginBtn"></button>
-          <button class="btn ghost" id="registerBtn"></button>
+          <button class="btn primary" id="loginBtn" type="button"></button>
+          <button class="btn" id="registerBtn" type="button"></button>
         </div>
         <div class="topActionRow single">
-          <button class="btn ghost" id="resetBtn"></button>
+          <button class="btn" id="resetBtn" type="button"></button>
         </div>
         <div class="notice" id="authMsg">—</div>
       </div>
@@ -1320,13 +1318,13 @@
           <div class="panelTitle" id="t_confirmtitle"></div>
           <div class="small muted" id="t_confirmhint"></div>
         </div>
-        <button class="btn ghost" id="closeConfirmBtn">✕</button>
+        <button class="btn" id="closeConfirmBtn" type="button">✕</button>
       </div>
       <div class="modalBody">
         <div class="notice" id="confirmInfo"></div>
         <div class="topActionRow" style="margin-top:12px">
-          <button class="btn primary" id="confirmBookBtn"></button>
-          <button class="btn ghost" id="cancelConfirmBtn"></button>
+          <button class="btn primary" id="confirmBookBtn" type="button"></button>
+          <button class="btn" id="cancelConfirmBtn" type="button"></button>
         </div>
       </div>
     </div>
@@ -1348,6 +1346,7 @@
   const RIGHT = ["Lancelot","Fantomas","Soultaker","Pudge","Kratos"];
   const ALL = [...LEFT, ...RIGHT];
   const ADMIN_EMAILS = ['adjarelispeak@gmail.com','kiralite93@gmail.com'].map(x => x.toLowerCase());
+
   const WORK_START = 10 * 60;
   const WORK_END_NEXTDAY = 3 * 60;
   const SLOT_STEP = 30;
@@ -1384,110 +1383,338 @@
     ru: {
       title:'Sakompiutere Gaming — Live Hall',
       sub:'Удобно и на телефоне, и на ПК. Можно выбрать до 10 ПК.',
-      user:'Пользователь', cloud:'База',
-      livehall:'Live Hall', livehint:'Быстрый режим для обычного игрока + мультивыбор ПК для команд.',
-      all:'Все', free:'Свободные', soon:'Скоро освободятся',
-      statAll:'Всего ПК', statFree:'Свободно сейчас', statSoon:'Скоро', statBusy:'Занято', statSelected:'Выбрано',
-      findNow:'⚡ Найти свободный сейчас', multiOff:'👥 Мультивыбор: OFF', multiOn:'👥 Мультивыбор: ON', clearSelected:'Сбросить выбор',
-      my:'👤 Мои брони', admin:'🔐 Admin', auth:'🔑 Войти', logout:'🚪 Выйти', aisle:'ПРОХОД',
-      sidepanel:'Панель бронирования', sidehint:'Один ПК или сразу несколько.',
+      user:'Пользователь',
+      cloud:'База',
+      livehall:'Live Hall',
+      livehint:'Быстрый режим для обычного игрока + мультивыбор для команд.',
+      all:'Все',
+      free:'Свободные',
+      soon:'Скоро',
+      statAll:'Всего ПК',
+      statFree:'Свободны',
+      statSoonFree:'Скоро займутся',
+      statSoonBusy:'Скоро освободятся',
+      statBusy:'Заняты',
+      statSelected:'Выбрано',
+      findNow:'⚡ Найти свободный сейчас',
+      multiOff:'👥 Мультивыбор: OFF',
+      multiOn:'👥 Мультивыбор: ON',
+      clearSelected:'Сбросить выбор',
+      my:'👤 Мои брони',
+      admin:'🔐 Admin',
+      auth:'🔑 Войти',
+      logout:'🚪 Выйти',
+      topAuth:'Аккаунт',
+      topLogout:'Выйти',
+      aisle:'ПРОХОД',
+      sidepanel:'Панель бронирования',
+      sidehint:'Один ПК или сразу несколько.',
       singleSelectHint:'Выбери один ПК, чтобы увидеть быстрые действия.',
       multiSelectHint:'Мультивыбор включён. Отмечай ПК для групповой брони.',
-      selectedOne:'Выбран 1 ПК', selectedMany:'Выбрано ПК', chooseAtLeastOne:'Выбери хотя бы один ПК.',
-      customtitle:'Точное время', customhint:'Подходит и для 1 ПК, и для нескольких сразу.',
-      date:'Дата', duration:'Длительность', time:'Время', nick:'Ник', note:'Комментарий', bookCustom:'Подтвердить бронь', hideCustom:'Скрыть',
-      mybookings:'Мои брони', adminBookings:'Admin панель', adminHint:'Все активные брони. Можно удалять.',
-      authTitle:'Вход / Регистрация', authHint:'Email + пароль', password:'Пароль', login:'Войти', register:'Регистрация', reset:'Сбросить пароль',
-      confirmtitle:'Подтверждение', confirmhint:'Проверь детали перед записью', confirm:'Подтвердить', cancel:'Отмена',
-      freeTag:'🟢 Свободен', soonTag:'🟡 Скоро', busyTag:'🔴 Занят',
-      freeNow:'Свободен прямо сейчас', playing:'Сейчас играет', freeAt:'Свободен в', endsIn:'Через',
-      occupiedUntil:'Занят до', bookedSoon:'Свободен сейчас, но скоро бронь',
-      play1:'Играть сейчас • 1 час', play2:'Играть сейчас • 2 часа', play3:'Играть сейчас • 3 часа',
-      group2:'Группой • 2 часа', group3:'Группой • 3 часа',
-      bookAt:'Забронировать на ближайшее', queue:'В очередь', exact:'Выбрать вручную', nearest:'Скоро будет свободен',
-      loginNeeded:'Сначала войди в аккаунт.', enterNick:'Введи ник.', pickTime:'Выбери время.', booked:'✅ Бронь создана!', canceled:'Отменено.', noFree:'Сейчас нет свободных ПК.',
-      authOk:'✅ Вход выполнен: ', authNeed:'Login required for booking.', loginErr:'Введите email и пароль.', resetSent:'Письмо для сброса отправлено ✅',
-      fsErr:'Firestore error. Проверь Rules или блокировщик.', rules:'Firestore Rules не позволяют запись.', blocked:'Браузер или расширение блокирует Firebase.',
-      statusOk:'OK', statusLive:'LIVE', statusErr:'ERR', statusWait:'...',
-      minutes:'мин', starts:'Начало', ends:'Конец', pc:'ПК', pcs:'ПК', remove:'Отменить', empty:'Пока ничего нет',
-      taken:'Этот слот уже занят. Выбери другой.', queueHint:'Функция очереди сейчас бронирует на ближайшее освобождение.', busyUntil:'Занят до', guest:'Гость',
-      saveNickHint:'Ник автоматически сохраняется для следующего входа.',
+      selectedOne:'Выбран 1 ПК',
+      selectedMany:'Выбрано ПК',
+      chooseAtLeastOne:'Выбери хотя бы один ПК.',
+      customtitle:'Точное время',
+      customhint:'Подходит и для 1 ПК, и для нескольких сразу.',
+      date:'Дата',
+      duration:'Длительность',
+      time:'Время',
+      nick:'Ник',
+      note:'Комментарий',
+      bookCustom:'Подтвердить бронь',
+      hideCustom:'Скрыть',
+      mybookings:'Мои брони',
+      adminBookings:'Admin панель',
+      adminHint:'Все активные брони. Можно искать и удалять.',
+      adminSearch:'Поиск: ник / email / PC',
+      authTitle:'Вход / Регистрация',
+      authHint:'Email + пароль',
+      password:'Пароль',
+      login:'Войти',
+      register:'Регистрация',
+      reset:'Сбросить пароль',
+      confirmtitle:'Подтверждение',
+      confirmhint:'Проверь детали перед записью',
+      confirm:'Подтвердить',
+      cancel:'Отмена',
+      freeTag:'🟢 Свободен',
+      soonFreeTag:'🟡 Скоро займётся',
+      soonBusyTag:'🟠 Скоро освободится',
+      busyTag:'🔴 Занят',
+      freeNow:'Свободен прямо сейчас',
+      playing:'Сейчас играет',
+      occupiedUntil:'Занят до',
+      startsIn:'Начнётся через',
+      reservedAt:'Бронь с',
+      endsIn:'Осталось',
+      play1:'Играть сейчас • 1 час',
+      play2:'Играть сейчас • 2 часа',
+      play3:'Играть сейчас • 3 часа',
+      group2:'Группой • 2 часа',
+      group3:'Группой • 3 часа',
+      bookAt:'Забронировать ближайшее',
+      queue:'В очередь',
+      exact:'Выбрать вручную',
+      loginNeeded:'Сначала войди в аккаунт.',
+      enterNick:'Введи ник.',
+      pickTime:'Выбери время.',
+      booked:'✅ Бронь создана!',
+      canceled:'Отменено.',
+      noFree:'Сейчас нет свободных ПК.',
+      authOk:'✅ Вход выполнен: ',
+      authNeed:'Сначала войди в аккаунт для брони.',
+      loginErr:'Введите email и пароль.',
+      resetSent:'Письмо для сброса отправлено ✅',
+      fsErr:'Ошибка Firestore. Проверь Rules или блокировщик.',
+      rules:'Firestore Rules не позволяют запись.',
+      blocked:'Браузер или расширение блокирует Firebase.',
+      statusLive:'LIVE',
+      statusErr:'ERR',
+      statusWait:'...',
+      minutes:'мин',
+      starts:'Начало',
+      ends:'Конец',
+      pc:'ПК',
+      pcs:'ПК',
+      remove:'Отменить',
+      empty:'Пока ничего нет',
+      taken:'Этот слот уже занят. Выбери другой.',
+      queueHint:'Функция очереди сейчас бронирует на ближайшее освобождение.',
+      guest:'Гость',
+      saveNickHint:'Ник автоматически сохраняется.',
       multiHelp:'Когда мультивыбор включён, быстрые действия бронируют сразу все отмеченные ПК.',
-      mobileMy:'Мои', mobileBook:'Бронь', adminDenied:'Ты не админ.',
-      themeDark:'🌙 Тёмная тема', themeLight:'☀️ Светлая тема',
-      noTimes:'Нет свободного времени'
+      mobileMy:'Мои',
+      mobileBook:'Бронь',
+      adminDenied:'Ты не админ.',
+      themeDark:'🌙 Тёмная',
+      themeLight:'☀️ Светлая',
+      noTimes:'Нет свободного времени',
+      selectedList:'Выбрано',
+      nothingFound:'Ничего не найдено'
     },
     en: {
       title:'Sakompiutere Gaming — Live Hall',
       sub:'Comfortable on phone and desktop. Up to 10 PCs can be selected.',
-      user:'User', cloud:'Database',
-      livehall:'Live Hall', livehint:'Quick mode for normal players + multi-select for teams.',
-      all:'All', free:'Free', soon:'Soon free',
-      statAll:'Total PCs', statFree:'Free now', statSoon:'Soon', statBusy:'Busy', statSelected:'Selected',
-      findNow:'⚡ Find free now', multiOff:'👥 Multi-select: OFF', multiOn:'👥 Multi-select: ON', clearSelected:'Clear selection',
-      my:'👤 My bookings', admin:'🔐 Admin', auth:'🔑 Login', logout:'🚪 Logout', aisle:'AISLE',
-      sidepanel:'Booking panel', sidehint:'One PC or many PCs at once.',
+      user:'User',
+      cloud:'Database',
+      livehall:'Live Hall',
+      livehint:'Quick mode for normal players + multi-select for teams.',
+      all:'All',
+      free:'Free',
+      soon:'Soon',
+      statAll:'Total PCs',
+      statFree:'Free',
+      statSoonFree:'Soon reserved',
+      statSoonBusy:'Soon free',
+      statBusy:'Busy',
+      statSelected:'Selected',
+      findNow:'⚡ Find free now',
+      multiOff:'👥 Multi-select: OFF',
+      multiOn:'👥 Multi-select: ON',
+      clearSelected:'Clear selection',
+      my:'👤 My bookings',
+      admin:'🔐 Admin',
+      auth:'🔑 Login',
+      logout:'🚪 Logout',
+      topAuth:'Account',
+      topLogout:'Logout',
+      aisle:'AISLE',
+      sidepanel:'Booking panel',
+      sidehint:'One PC or many PCs at once.',
       singleSelectHint:'Choose one PC to see quick actions.',
       multiSelectHint:'Multi-select is ON. Mark PCs for group booking.',
-      selectedOne:'1 PC selected', selectedMany:'PCs selected', chooseAtLeastOne:'Choose at least one PC.',
-      customtitle:'Exact time', customhint:'Works for one PC and multiple PCs too.',
-      date:'Date', duration:'Duration', time:'Time', nick:'Nick', note:'Note', bookCustom:'Confirm booking', hideCustom:'Hide',
-      mybookings:'My bookings', adminBookings:'Admin panel', adminHint:'All active bookings. Can delete.',
-      authTitle:'Login / Register', authHint:'Email + password', password:'Password', login:'Login', register:'Register', reset:'Reset password',
-      confirmtitle:'Confirmation', confirmhint:'Check details before saving', confirm:'Confirm', cancel:'Cancel',
-      freeTag:'🟢 Free', soonTag:'🟡 Soon', busyTag:'🔴 Busy',
-      freeNow:'Free right now', playing:'Now playing', freeAt:'Free at', endsIn:'In',
-      occupiedUntil:'Busy until', bookedSoon:'Free now, but reserved soon',
-      play1:'Play now • 1 hour', play2:'Play now • 2 hours', play3:'Play now • 3 hours',
-      group2:'Group • 2 hours', group3:'Group • 3 hours',
-      bookAt:'Book nearest free time', queue:'Queue', exact:'Choose manually', nearest:'Soon available',
-      loginNeeded:'Please login first.', enterNick:'Enter your nickname.', pickTime:'Pick a time.', booked:'✅ Booking created!', canceled:'Canceled.', noFree:'No free PCs right now.',
-      authOk:'✅ Logged in: ', authNeed:'Login is required for booking.', loginErr:'Enter email and password.', resetSent:'Password reset email sent ✅',
-      fsErr:'Firestore error. Check Rules or ad blocker.', rules:'Firestore Rules do not allow this write.', blocked:'Browser or extension blocks Firebase.',
-      statusOk:'OK', statusLive:'LIVE', statusErr:'ERR', statusWait:'...',
-      minutes:'min', starts:'Start', ends:'End', pc:'PC', pcs:'PCs', remove:'Cancel', empty:'Nothing yet',
-      taken:'This slot is already taken. Pick another one.', queueHint:'Queue action currently books the nearest release time.', busyUntil:'Busy until', guest:'Guest',
-      saveNickHint:'Nick is saved automatically for next time.',
+      selectedOne:'1 PC selected',
+      selectedMany:'PCs selected',
+      chooseAtLeastOne:'Choose at least one PC.',
+      customtitle:'Exact time',
+      customhint:'Works for one PC and multiple PCs too.',
+      date:'Date',
+      duration:'Duration',
+      time:'Time',
+      nick:'Nick',
+      note:'Note',
+      bookCustom:'Confirm booking',
+      hideCustom:'Hide',
+      mybookings:'My bookings',
+      adminBookings:'Admin panel',
+      adminHint:'All active bookings. Search and delete available.',
+      adminSearch:'Search: nick / email / PC',
+      authTitle:'Login / Register',
+      authHint:'Email + password',
+      password:'Password',
+      login:'Login',
+      register:'Register',
+      reset:'Reset password',
+      confirmtitle:'Confirmation',
+      confirmhint:'Check details before saving',
+      confirm:'Confirm',
+      cancel:'Cancel',
+      freeTag:'🟢 Free',
+      soonFreeTag:'🟡 Soon reserved',
+      soonBusyTag:'🟠 Soon free',
+      busyTag:'🔴 Busy',
+      freeNow:'Free right now',
+      playing:'Now playing',
+      occupiedUntil:'Busy until',
+      startsIn:'Starts in',
+      reservedAt:'Reserved from',
+      endsIn:'Remaining',
+      play1:'Play now • 1 hour',
+      play2:'Play now • 2 hours',
+      play3:'Play now • 3 hours',
+      group2:'Group • 2 hours',
+      group3:'Group • 3 hours',
+      bookAt:'Book nearest free time',
+      queue:'Queue',
+      exact:'Choose manually',
+      loginNeeded:'Please login first.',
+      enterNick:'Enter your nickname.',
+      pickTime:'Pick a time.',
+      booked:'✅ Booking created!',
+      canceled:'Canceled.',
+      noFree:'No free PCs right now.',
+      authOk:'✅ Logged in: ',
+      authNeed:'Please login to book.',
+      loginErr:'Enter email and password.',
+      resetSent:'Password reset email sent ✅',
+      fsErr:'Firestore error. Check Rules or ad blocker.',
+      rules:'Firestore Rules do not allow this write.',
+      blocked:'Browser or extension blocks Firebase.',
+      statusLive:'LIVE',
+      statusErr:'ERR',
+      statusWait:'...',
+      minutes:'min',
+      starts:'Start',
+      ends:'End',
+      pc:'PC',
+      pcs:'PCs',
+      remove:'Cancel',
+      empty:'Nothing yet',
+      taken:'This slot is already taken. Pick another one.',
+      queueHint:'Queue currently books the nearest release time.',
+      guest:'Guest',
+      saveNickHint:'Nick is saved automatically.',
       multiHelp:'When multi-select is ON, quick actions book all marked PCs.',
-      mobileMy:'Mine', mobileBook:'Book', adminDenied:'You are not admin.',
-      themeDark:'🌙 Dark theme', themeLight:'☀️ Light theme',
-      noTimes:'No free time available'
+      mobileMy:'Mine',
+      mobileBook:'Book',
+      adminDenied:'You are not admin.',
+      themeDark:'🌙 Dark',
+      themeLight:'☀️ Light',
+      noTimes:'No free time available',
+      selectedList:'Selected',
+      nothingFound:'Nothing found'
     },
     ka: {
       title:'Sakompiutere Gaming — Live Hall',
       sub:'მორგებულია ტელეფონზეც და კომპიუტერზეც. შესაძლებელია 10 PC-მდე არჩევა.',
-      user:'მომხმარებელი', cloud:'ბაზა',
-      livehall:'Live Hall', livehint:'სწრაფი რეჟიმი ჩვეულებრივი მოთამაშისთვის და multi-select გუნდებისთვის.',
-      all:'ყველა', free:'თავისუფალი', soon:'მალე თავისუფალი',
-      statAll:'სულ PC', statFree:'ახლა თავისუფალი', statSoon:'მალე', statBusy:'დაკავებული', statSelected:'არჩეული',
-      findNow:'⚡ იპოვე თავისუფალი ახლა', multiOff:'👥 Multi-select: OFF', multiOn:'👥 Multi-select: ON', clearSelected:'გასუფთავება',
-      my:'👤 ჩემი ჯავშნები', admin:'🔐 Admin', auth:'🔑 შესვლა', logout:'🚪 გასვლა', aisle:'გასასვლელი',
-      sidepanel:'ჯავშნის პანელი', sidehint:'ერთი PC ან რამდენიმე ერთად.',
+      user:'მომხმარებელი',
+      cloud:'ბაზა',
+      livehall:'Live Hall',
+      livehint:'სწრაფი რეჟიმი ჩვეულებრივი მოთამაშისთვის და multi-select გუნდებისთვის.',
+      all:'ყველა',
+      free:'თავისუფალი',
+      soon:'მალე',
+      statAll:'სულ PC',
+      statFree:'თავისუფალი',
+      statSoonFree:'მალე დაიჯავშნება',
+      statSoonBusy:'მალე გათავისუფლდება',
+      statBusy:'დაკავებული',
+      statSelected:'არჩეული',
+      findNow:'⚡ იპოვე თავისუფალი ახლა',
+      multiOff:'👥 Multi-select: OFF',
+      multiOn:'👥 Multi-select: ON',
+      clearSelected:'გასუფთავება',
+      my:'👤 ჩემი ჯავშნები',
+      admin:'🔐 Admin',
+      auth:'🔑 შესვლა',
+      logout:'🚪 გასვლა',
+      topAuth:'ანგარიში',
+      topLogout:'გასვლა',
+      aisle:'გასასვლელი',
+      sidepanel:'ჯავშნის პანელი',
+      sidehint:'ერთი PC ან რამდენიმე ერთად.',
       singleSelectHint:'აირჩიე ერთი PC სწრაფი მოქმედებებისთვის.',
       multiSelectHint:'Multi-select ჩართულია. მონიშნე PC-ები ჯგუფური ჯავშნისთვის.',
-      selectedOne:'არჩეულია 1 PC', selectedMany:'არჩეულია PC', chooseAtLeastOne:'აირჩიე მინიმუმ ერთი PC.',
-      customtitle:'ზუსტი დრო', customhint:'მუშაობს როგორც 1 PC-ზე, ისე რამდენიმეზე ერთად.',
-      date:'თარიღი', duration:'ხანგრძლივობა', time:'დრო', nick:'ნიკი', note:'შენიშვნა', bookCustom:'ჯავშნის დადასტურება', hideCustom:'დამალვა',
-      mybookings:'ჩემი ჯავშნები', adminBookings:'Admin პანელი', adminHint:'ყველა აქტიური ჯავშანი. შესაძლებელია წაშლა.',
-      authTitle:'შესვლა / რეგისტრაცია', authHint:'Email + პაროლი', password:'პაროლი', login:'შესვლა', register:'რეგისტრაცია', reset:'პაროლის აღდგენა',
-      confirmtitle:'დადასტურება', confirmhint:'შეამოწმე დეტალები', confirm:'დადასტურება', cancel:'გაუქმება',
-      freeTag:'🟢 თავისუფალია', soonTag:'🟡 მალე', busyTag:'🔴 დაკავებულია',
-      freeNow:'ახლავე თავისუფალია', playing:'ახლა თამაშობს', freeAt:'თავისუფალი იქნება', endsIn:'დარჩა',
-      occupiedUntil:'დაკავებულია', bookedSoon:'ახლა თავისუფალია, მაგრამ მალე დაჯავშნულია',
-      play1:'ითამაშე ახლა • 1 საათი', play2:'ითამაშე ახლა • 2 საათი', play3:'ითამაშე ახლა • 3 საათი',
-      group2:'ჯგუფურად • 2 საათი', group3:'ჯგუფურად • 3 საათი',
-      bookAt:'უახლოეს დროზე დაჯავშნა', queue:'რიგში ჩადგომა', exact:'ხელით არჩევა', nearest:'მალე თავისუფალი',
-      loginNeeded:'ჯერ შედი ანგარიშში.', enterNick:'შეიყვანე ნიკი.', pickTime:'აირჩიე დრო.', booked:'✅ ჯავშანი შეიქმნა!', canceled:'გაუქმდა.', noFree:'ახლა თავისუფალი PC არ არის.',
-      authOk:'✅ შესულია: ', authNeed:'ჯავშნისთვის საჭიროა შესვლა.', loginErr:'შეიყვანე email და პაროლი.', resetSent:'აღდგენის წერილი გაიგზავნა ✅',
-      fsErr:'Firestore შეცდომა. შეამოწმე Rules ან ad blocker.', rules:'Firestore Rules არ უშვებს ჩანაწერს.', blocked:'ბრაუზერი ან გაფართოება ბლოკავს Firebase-ს.',
-      statusOk:'OK', statusLive:'LIVE', statusErr:'ERR', statusWait:'...',
-      minutes:'წთ', starts:'დასაწყისი', ends:'დასასრული', pc:'PC', pcs:'PC-ები', remove:'გაუქმება', empty:'ჯერ არაფერია',
-      taken:'ეს დრო უკვე დაკავებულია. აირჩიე სხვა.', queueHint:'რიგის ღილაკი ახლა უახლოეს თავისუფალ დროს აჯავშნებს.', busyUntil:'დაკავებულია', guest:'სტუმარი',
+      selectedOne:'არჩეულია 1 PC',
+      selectedMany:'არჩეულია PC',
+      chooseAtLeastOne:'აირჩიე მინიმუმ ერთი PC.',
+      customtitle:'ზუსტი დრო',
+      customhint:'მუშაობს როგორც 1 PC-ზე, ისე რამდენიმეზე ერთად.',
+      date:'თარიღი',
+      duration:'ხანგრძლივობა',
+      time:'დრო',
+      nick:'ნიკი',
+      note:'შენიშვნა',
+      bookCustom:'ჯავშნის დადასტურება',
+      hideCustom:'დამალვა',
+      mybookings:'ჩემი ჯავშნები',
+      adminBookings:'Admin პანელი',
+      adminHint:'ყველა აქტიური ჯავშანი. ძებნა და წაშლა შესაძლებელია.',
+      adminSearch:'ძებნა: ნიკი / email / PC',
+      authTitle:'შესვლა / რეგისტრაცია',
+      authHint:'Email + პაროლი',
+      password:'პაროლი',
+      login:'შესვლა',
+      register:'რეგისტრაცია',
+      reset:'პაროლის აღდგენა',
+      confirmtitle:'დადასტურება',
+      confirmhint:'შეამოწმე დეტალები',
+      confirm:'დადასტურება',
+      cancel:'გაუქმება',
+      freeTag:'🟢 თავისუფალია',
+      soonFreeTag:'🟡 მალე დაიჯავშნება',
+      soonBusyTag:'🟠 მალე გათავისუფლდება',
+      busyTag:'🔴 დაკავებულია',
+      freeNow:'ახლავე თავისუფალია',
+      playing:'ახლა თამაშობს',
+      occupiedUntil:'დაკავებულია',
+      startsIn:'დაიწყება',
+      reservedAt:'ჯავშანი იწყება',
+      endsIn:'დარჩა',
+      play1:'ითამაშე ახლა • 1 საათი',
+      play2:'ითამაშე ახლა • 2 საათი',
+      play3:'ითამაშე ახლა • 3 საათი',
+      group2:'ჯგუფურად • 2 საათი',
+      group3:'ჯგუფურად • 3 საათი',
+      bookAt:'უახლოეს დროზე დაჯავშნა',
+      queue:'რიგში ჩადგომა',
+      exact:'ხელით არჩევა',
+      loginNeeded:'ჯერ შედი ანგარიშში.',
+      enterNick:'შეიყვანე ნიკი.',
+      pickTime:'აირჩიე დრო.',
+      booked:'✅ ჯავშანი შეიქმნა!',
+      canceled:'გაუქმდა.',
+      noFree:'ახლა თავისუფალი PC არ არის.',
+      authOk:'✅ შესულია: ',
+      authNeed:'ჯავშნისთვის საჭიროა შესვლა.',
+      loginErr:'შეიყვანე email და პაროლი.',
+      resetSent:'აღდგენის წერილი გაიგზავნა ✅',
+      fsErr:'Firestore შეცდომა. შეამოწმე Rules ან ad blocker.',
+      rules:'Firestore Rules არ უშვებს ჩანაწერს.',
+      blocked:'ბრაუზერი ან გაფართოება ბლოკავს Firebase-ს.',
+      statusLive:'LIVE',
+      statusErr:'ERR',
+      statusWait:'...',
+      minutes:'წთ',
+      starts:'დასაწყისი',
+      ends:'დასასრული',
+      pc:'PC',
+      pcs:'PC-ები',
+      remove:'გაუქმება',
+      empty:'ჯერ არაფერია',
+      taken:'ეს დრო უკვე დაკავებულია. აირჩიე სხვა.',
+      queueHint:'რიგის ღილაკი ახლა უახლოეს თავისუფალ დროს აჯავშნებს.',
+      guest:'სტუმარი',
       saveNickHint:'ნიკი ავტომატურად შეინახება.',
       multiHelp:'როცა multi-select ჩართულია, სწრაფი მოქმედებები ყველა მონიშნულ PC-ზე მუშაობს.',
-      mobileMy:'ჩემი', mobileBook:'ჯავშანი', adminDenied:'ადმინი არ ხარ.',
-      themeDark:'🌙 მუქი თემა', themeLight:'☀️ ღია თემა',
-      noTimes:'თავისუფალი დრო ვერ მოიძებნა'
+      mobileMy:'ჩემი',
+      mobileBook:'ჯავშანი',
+      adminDenied:'ადმინი არ ხარ.',
+      themeDark:'🌙 მუქი',
+      themeLight:'☀️ ღია',
+      noTimes:'თავისუფალი დრო ვერ მოიძებნა',
+      selectedList:'არჩეულია',
+      nothingFound:'ვერ მოიძებნა'
     }
   };
 
@@ -1552,7 +1779,6 @@
     const meta = LANG_META[lang] || LANG_META.ka;
     $('langCurrentFlag').textContent = meta.flag;
     $('langCurrentLabel').textContent = meta.label;
-
     document.querySelectorAll('.langOption').forEach(btn => {
       btn.classList.toggle('active', btn.dataset.lang === lang);
     });
@@ -1564,7 +1790,7 @@
     $('filterSoon').classList.toggle('active', currentFilter === 'soon');
   }
 
-  function setLangUI() {
+  function applyTexts() {
     document.documentElement.lang = lang;
     document.title = tr('title');
     $('t_title').textContent = tr('title');
@@ -1573,14 +1799,18 @@
     $('t_cloud').textContent = tr('cloud');
     $('t_livehall').textContent = tr('livehall');
     $('t_livehint').textContent = tr('livehint');
+
     $('filterAll').textContent = tr('all');
     $('filterFree').textContent = tr('free');
     $('filterSoon').textContent = tr('soon');
+
     $('t_statAll').textContent = tr('statAll');
     $('t_statFree').textContent = tr('statFree');
-    $('t_statSoon').textContent = tr('statSoon');
+    $('t_statSoonFree').textContent = tr('statSoonFree');
+    $('t_statSoonBusy').textContent = tr('statSoonBusy');
     $('t_statBusy').textContent = tr('statBusy');
     $('t_statSelected').textContent = tr('statSelected');
+
     $('findNowBtn').textContent = tr('findNow');
     $('toggleMultiBtn').textContent = multiMode ? tr('multiOn') : tr('multiOff');
     $('clearSelectedBtn').textContent = tr('clearSelected');
@@ -1588,9 +1818,12 @@
     $('openAdminBtn').textContent = tr('admin');
     $('openAuthBtn').textContent = tr('auth');
     $('logoutBtn').textContent = tr('logout');
+    $('topQuickAuthBtn').textContent = currentUser ? tr('topLogout') : tr('topAuth');
     $('t_aisle').textContent = tr('aisle');
+
     $('t_sidepanel').textContent = tr('sidepanel');
     $('t_sidehint').textContent = tr('sidehint');
+
     $('t_customtitle').textContent = tr('customtitle');
     $('t_customhint').textContent = tr('customhint');
     $('t_date').textContent = tr('date');
@@ -1600,19 +1833,24 @@
     $('t_note').textContent = tr('note');
     $('bookCustomBtn').textContent = tr('bookCustom');
     $('hideCustomBtn').textContent = tr('hideCustom');
+
     $('t_mybookings').textContent = tr('mybookings');
     $('t_adminbookings').textContent = tr('adminBookings');
     $('t_adminhint').textContent = tr('adminHint');
+    $('adminSearch').placeholder = tr('adminSearch');
+
     $('t_auth').textContent = tr('authTitle');
     $('t_authhint').textContent = tr('authHint');
     $('t_password').textContent = tr('password');
     $('loginBtn').textContent = tr('login');
     $('registerBtn').textContent = tr('register');
     $('resetBtn').textContent = tr('reset');
+
     $('t_confirmtitle').textContent = tr('confirmtitle');
     $('t_confirmhint').textContent = tr('confirmhint');
     $('confirmBookBtn').textContent = tr('confirm');
     $('cancelConfirmBtn').textContent = tr('cancel');
+
     $('mobileMyBtn').textContent = tr('mobileMy');
     $('mobileBookBtn').textContent = tr('mobileBook');
 
@@ -1635,18 +1873,18 @@
     setCloud(tr('statusErr'), false);
   }
 
+  function getPcBookings(pc) {
+    return allBookings
+      .filter(b => b.pc === pc)
+      .sort((a,b) => a.startAtMs - b.startAtMs);
+  }
+
   function progressFor(b) {
     const now = Date.now();
     if (!b || !b.startAtMs || !b.endAtMs) return 0;
     if (now <= b.startAtMs) return 0;
     if (now >= b.endAtMs) return 100;
     return Math.max(0, Math.min(100, ((now - b.startAtMs) / (b.endAtMs - b.startAtMs)) * 100));
-  }
-
-  function getPcBookings(pc) {
-    return allBookings
-      .filter(b => b.pc === pc)
-      .sort((a,b) => a.startAtMs - b.startAtMs);
   }
 
   function getPcStatus(pc) {
@@ -1656,41 +1894,197 @@
 
     if (active) {
       const mins = Math.max(1, Math.ceil((active.endAtMs - now) / 60000));
+      if (mins <= SOON_MIN) {
+        return {
+          state:'soon',
+          subState:'soon_busy',
+          active,
+          freeAtMs:active.endAtMs,
+          minsToFree:mins
+        };
+      }
       return {
-        state: mins <= SOON_MIN ? 'soon' : 'busy',
-        mode: 'occupied',
+        state:'busy',
+        subState:'busy',
         active,
-        next: null,
-        freeAtMs: active.endAtMs,
-        minsToFree: mins
+        freeAtMs:active.endAtMs,
+        minsToFree:mins
       };
     }
 
     const next = future.find(b => b.startAtMs > now);
     if (next && next.startAtMs - now <= SOON_MIN * 60000) {
       return {
-        state: 'soon',
-        mode: 'free_reserved_soon',
-        active: null,
+        state:'soon',
+        subState:'soon_free',
         next,
-        freeAtMs: now,
-        minsToFree: Math.max(1, Math.ceil((next.startAtMs - now) / 60000)),
-        nextStartMs: next.startAtMs
+        nextStartMs:next.startAtMs,
+        minsToStart:Math.max(1, Math.ceil((next.startAtMs - now) / 60000))
       };
     }
 
     return {
-      state: 'free',
-      mode: 'free',
-      active: null,
-      next,
-      freeAtMs: now,
-      minsToFree: 0
+      state:'free',
+      subState:'free'
     };
   }
 
-  const statusLabel = s => s.state === 'free' ? tr('freeTag') : s.state === 'soon' ? tr('soonTag') : tr('busyTag');
-  const minsText = m => `${m} ${tr('minutes')}`;
+  function getDisplayTag(status) {
+    if (status.subState === 'soon_free') return tr('soonFreeTag');
+    if (status.subState === 'soon_busy') return tr('soonBusyTag');
+    if (status.state === 'busy') return tr('busyTag');
+    return tr('freeTag');
+  }
+
+  function isFreeRangeForAll(pcs, startMs, endMs) {
+    return pcs.every(pc => !getPcBookings(pc).some(b => overlaps(startMs, endMs, b.startAtMs, b.endAtMs)));
+  }
+
+  function clampToOpen(date) {
+    const d = new Date(date);
+    const base = new Date(d.getFullYear(), d.getMonth(), d.getDate(), 0,0,0,0);
+    const open = addMinutes(base, WORK_START);
+    const close = addDays(base, 1);
+    close.setHours(Math.floor(WORK_END_NEXTDAY / 60), WORK_END_NEXTDAY % 60, 0, 0);
+    if (d < open) return open;
+    if (d > close) return null;
+    return d;
+  }
+
+  function roundUp(date) {
+    const d = new Date(date);
+    d.setSeconds(0,0);
+    const m = d.getMinutes();
+    const extra = (SLOT_STEP - (m % SLOT_STEP)) % SLOT_STEP;
+    if (extra) d.setMinutes(m + extra);
+    return d;
+  }
+
+  function findNearestForAll(pcs, earliest, dur) {
+    let cur = roundUp(clampToOpen(earliest) || earliest);
+    const until = addDays(new Date(), 5).getTime();
+
+    while (cur && cur.getTime() < until) {
+      const end = addMinutes(cur, dur);
+      const a = clampToOpen(cur);
+      const b = clampToOpen(end);
+      if (a && b && isFreeRangeForAll(pcs, cur.getTime(), end.getTime())) return cur;
+      cur = addMinutes(cur, SLOT_STEP);
+    }
+    return null;
+  }
+
+  function rankFreeGroupCandidates(freeList) {
+    const indexMap = ALL.reduce((acc, name, idx) => {
+      acc[name] = idx;
+      return acc;
+    }, {});
+    return [...freeList].sort((a,b) => indexMap[a] - indexMap[b]);
+  }
+
+  function renderCard(pc) {
+    const s = getPcStatus(pc);
+
+    if (currentFilter === 'free' && s.state !== 'free') return null;
+    if (currentFilter === 'soon' && s.state !== 'soon') return null;
+
+    const el = document.createElement('div');
+    const selectedMulti = selectedPCs.has(pc);
+    el.className = `pc ${s.state} ${selectedPc === pc ? 'active' : ''} ${selectedMulti ? 'selectedMulti' : ''}`;
+
+    let meta = '';
+    if (s.subState === 'free') {
+      meta = `<div>${tr('freeNow')}</div>`;
+    } else if (s.subState === 'busy') {
+      meta = `
+        <div>${tr('playing')}: <b>${esc(s.active.nick || tr('guest'))}</b></div>
+        <div>${tr('occupiedUntil')}: <b>${fmtHM(new Date(s.freeAtMs))}</b></div>
+        <div>${tr('endsIn')}: <b>${s.minsToFree} ${tr('minutes')}</b></div>
+        <div class="progress"><div class="bar" style="width:${progressFor(s.active)}%"></div></div>
+      `;
+    } else if (s.subState === 'soon_busy') {
+      meta = `
+        <div>${tr('playing')}: <b>${esc(s.active.nick || tr('guest'))}</b></div>
+        <div>${tr('occupiedUntil')}: <b>${fmtHM(new Date(s.freeAtMs))}</b></div>
+        <div>${tr('endsIn')}: <b>${s.minsToFree} ${tr('minutes')}</b></div>
+        <div class="progress"><div class="bar" style="width:${progressFor(s.active)}%"></div></div>
+      `;
+    } else if (s.subState === 'soon_free') {
+      meta = `
+        <div>${tr('reservedAt')}: <b>${fmtHM(new Date(s.nextStartMs))}</b></div>
+        <div>${tr('startsIn')}: <b>${s.minsToStart} ${tr('minutes')}</b></div>
+      `;
+    }
+
+    el.innerHTML = `
+      <div class="pcTop">
+        <div class="pcName">${esc(pc)}</div>
+        <div class="statusTag ${s.state}">${esc(getDisplayTag(s))}</div>
+      </div>
+      <div class="pcMeta">${meta}</div>
+      <div class="pcBottom">
+        <button class="mini ${selectedMulti ? 'soft' : ''}" data-a="pick" type="button">${selectedMulti ? '✓' : '+'}</button>
+        <button class="mini ${s.state === 'free' ? 'primary' : ''}" data-a="quick" type="button">${multiMode ? '👥' : '→'}</button>
+      </div>
+    `;
+
+    el.addEventListener('click', e => {
+      if (e.target.closest('button')) return;
+      updateSelection(pc);
+    });
+
+    const pick = el.querySelector('[data-a="pick"]');
+    const quick = el.querySelector('[data-a="quick"]');
+
+    pick.onclick = ev => {
+      ev.stopPropagation();
+      updateSelection(pc);
+    };
+
+    quick.onclick = ev => {
+      ev.stopPropagation();
+      updateSelection(pc);
+
+      if (multiMode) {
+        if (!selectedPCs.size) return toast(tr('chooseAtLeastOne'), 'warn');
+        showCustom();
+      } else {
+        if (s.state === 'free') openQuickConfirm([pc], new Date(), 60);
+        else openNearestConfirm([pc]);
+      }
+    };
+
+    return el;
+  }
+
+  function renderHall() {
+    $('leftSide').innerHTML = '';
+    $('rightSide').innerHTML = '';
+
+    LEFT.forEach(pc => {
+      const card = renderCard(pc);
+      if (card) $('leftSide').appendChild(card);
+    });
+
+    RIGHT.forEach(pc => {
+      const card = renderCard(pc);
+      if (card) $('rightSide').appendChild(card);
+    });
+  }
+
+  function renderStats() {
+    const freeCount = ALL.filter(pc => getPcStatus(pc).subState === 'free').length;
+    const soonFreeCount = ALL.filter(pc => getPcStatus(pc).subState === 'soon_free').length;
+    const soonBusyCount = ALL.filter(pc => getPcStatus(pc).subState === 'soon_busy').length;
+    const busyCount = ALL.filter(pc => getPcStatus(pc).subState === 'busy').length;
+
+    $('statAll').textContent = ALL.length;
+    $('statFree').textContent = freeCount;
+    $('statSoonFree').textContent = soonFreeCount;
+    $('statSoonBusy').textContent = soonBusyCount;
+    $('statBusy').textContent = busyCount;
+    $('statSelected').textContent = selectedPCs.size;
+  }
 
   function updateSelection(pc) {
     if (multiMode) {
@@ -1705,106 +2099,6 @@
     renderStats();
     renderHall();
     renderSelected();
-  }
-
-  function renderCard(pc) {
-    const s = getPcStatus(pc);
-
-    if (currentFilter === 'free' && s.state !== 'free') return null;
-    if (currentFilter === 'soon' && s.state !== 'soon') return null;
-
-    const el = document.createElement('div');
-    const selectedMulti = selectedPCs.has(pc);
-    el.className = `pc ${s.state} ${selectedPc === pc ? 'active' : ''} ${selectedMulti ? 'selectedMulti' : ''}`;
-
-    let meta = '';
-    if (s.mode === 'free') {
-      meta = `<div>${tr('freeNow')}</div>`;
-    } else if (s.mode === 'occupied') {
-      meta = `
-        <div>${tr('playing')}: <b>${esc(s.active.nick || tr('guest'))}</b></div>
-        <div>${tr('occupiedUntil')}: <b>${fmtHM(new Date(s.freeAtMs))}</b></div>
-        <div>${tr('endsIn')}: <b>${minsText(s.minsToFree)}</b></div>
-        <div class="progress"><div class="bar" style="width:${progressFor(s.active)}%"></div></div>
-      `;
-    } else if (s.mode === 'free_reserved_soon') {
-      meta = `
-        <div>${tr('bookedSoon')}</div>
-        <div>${tr('starts')}: <b>${fmtHM(new Date(s.nextStartMs))}</b></div>
-        <div>${tr('endsIn')}: <b>${minsText(s.minsToFree)}</b></div>
-      `;
-    }
-
-    el.innerHTML = `
-      <div class="pcTop">
-        <div class="pcName">${esc(pc)}</div>
-        <div class="statusTag ${s.state}">${esc(statusLabel(s))}</div>
-      </div>
-      <div class="pcMeta">${meta}</div>
-      <div class="pcBottom">
-        <button class="mini ${selectedMulti ? 'soft' : ''}" data-a="pick">${selectedMulti ? '✓' : '+'}</button>
-        <button class="mini ${s.state === 'free' ? 'primary' : ''}" data-a="quick">${multiMode ? '👥' : '→'}</button>
-      </div>
-    `;
-
-    el.addEventListener('click', e => {
-      if (e.target.closest('button')) return;
-      updateSelection(pc);
-    });
-
-    const pick = el.querySelector('button[data-a="pick"]');
-    const quick = el.querySelector('button[data-a="quick"]');
-
-    if (pick) {
-      pick.onclick = ev => {
-        ev.stopPropagation();
-        updateSelection(pc);
-      };
-    }
-
-    if (quick) {
-      quick.onclick = ev => {
-        ev.stopPropagation();
-        updateSelection(pc);
-
-        if (multiMode) {
-          if (!selectedPCs.size) return toast(tr('chooseAtLeastOne'), 'warn');
-          showCustom();
-        } else {
-          if (s.state === 'free') openQuickConfirm([pc], new Date(), 60);
-          else openNearestConfirm([pc]);
-        }
-      };
-    }
-
-    return el;
-  }
-
-  function renderHall() {
-    $('leftSide').innerHTML = '';
-    $('rightSide').innerHTML = '';
-
-    LEFT.forEach(pc => {
-      const c = renderCard(pc);
-      if (c) $('leftSide').appendChild(c);
-    });
-
-    RIGHT.forEach(pc => {
-      const c = renderCard(pc);
-      if (c) $('rightSide').appendChild(c);
-    });
-  }
-
-  function renderStats() {
-    const freeCount = ALL.filter(pc => getPcStatus(pc).state === 'free').length;
-    const soonCount = ALL.filter(pc => getPcStatus(pc).state === 'soon').length;
-    const busyCount = ALL.filter(pc => getPcStatus(pc).state === 'busy').length;
-
-    $('statAll').textContent = String(ALL.length);
-    $('statFree').textContent = String(freeCount);
-    $('statSoon').textContent = String(soonCount);
-    $('statBusy').textContent = String(busyCount);
-    $('statSelected').textContent = String(selectedPCs.size);
   }
 
   function renderSelected() {
@@ -1823,7 +2117,7 @@
     const names = [...selectedPCs];
     $('selectedName').textContent = names.length === 1 ? names[0] : `${names.length} ${tr('pcs')}`;
     $('selectedStatus').textContent = multiMode
-      ? `${tr('selectedMany')}: ${names.length}. ${tr('multiHelp')}`
+      ? `${tr('selectedList')}: ${names.join(', ')}`
       : tr('selectedOne');
 
     names.forEach(pc => {
@@ -1847,142 +2141,43 @@
           small: nearest ? `${tr('starts')}: ${fmtHM(nearest)}` : tr('taken'),
           fn:()=>openNearestConfirm(names)
         });
-        actions.push({ label:tr('queue'), small:tr('queueHint'), fn:()=>openNearestConfirm(names) });
+        actions.push({
+          label:tr('queue'),
+          small:tr('queueHint'),
+          fn:()=>openNearestConfirm(names)
+        });
       }
     } else {
-      actions.push({ label:tr('group2'), small:`${tr('pcs')}: ${names.join(', ')}`, fn:()=>openQuickConfirm(names, new Date(), 120) });
-      actions.push({ label:tr('group3'), small:`${tr('pcs')}: ${names.join(', ')}`, fn:()=>openQuickConfirm(names, new Date(), 180) });
+      actions.push({
+        label:tr('group2'),
+        small:`${tr('pcs')}: ${names.join(', ')}`,
+        fn:()=>openQuickConfirm(names, new Date(), 120)
+      });
+      actions.push({
+        label:tr('group3'),
+        small:`${tr('pcs')}: ${names.join(', ')}`,
+        fn:()=>openQuickConfirm(names, new Date(), 180)
+      });
     }
 
     actions.push({ label:tr('exact'), small:tr('saveNickHint'), fn:()=>showCustom() });
 
     $('quickActions').innerHTML = '';
-    actions.forEach((a,i) => {
+    actions.forEach((a, i) => {
       const div = document.createElement('div');
       div.className = 'quickItem';
-      div.innerHTML = `<div><b>${esc(a.label)}</b><small>${esc(a.small)}</small></div><button class="mini ${i===0?'primary':''}">→</button>`;
+      div.innerHTML = `
+        <div>
+          <b>${esc(a.label)}</b>
+          <small>${esc(a.small)}</small>
+        </div>
+        <button class="mini ${i===0 ? 'primary' : ''}" type="button">→</button>
+      `;
       div.querySelector('button').onclick = a.fn;
       $('quickActions').appendChild(div);
     });
 
     buildCustomTimes();
-  }
-
-  function clampToOpen(date) {
-    const d = new Date(date);
-    const base = new Date(d.getFullYear(), d.getMonth(), d.getDate(), 0,0,0,0);
-    const open = addMinutes(base, WORK_START);
-    const close = addDays(base, 1);
-    close.setHours(Math.floor(WORK_END_NEXTDAY / 60), WORK_END_NEXTDAY % 60, 0, 0);
-    if (d < open) return open;
-    if (d > close) return null;
-    return d;
-  }
-
-  function roundUp(date) {
-    const d = new Date(date);
-    d.setSeconds(0,0);
-    const m = d.getMinutes();
-    const extra = (SLOT_STEP - (m % SLOT_STEP)) % SLOT_STEP;
-    if (extra) d.setMinutes(m + extra);
-    return d;
-  }
-
-  function isFreeRangeForAll(pcs, startMs, endMs) {
-    return pcs.every(pc => !getPcBookings(pc).some(b => overlaps(startMs, endMs, b.startAtMs, b.endAtMs)));
-  }
-
-  function findNearestForAll(pcs, earliest, dur) {
-    let clamped = clampToOpen(earliest);
-    let cur = roundUp(clamped || earliest);
-    const until = addDays(new Date(), 5).getTime();
-
-    while (cur && cur.getTime() < until) {
-      const end = addMinutes(cur, dur);
-      const a = clampToOpen(cur);
-      const b = clampToOpen(end);
-      if (a && b && isFreeRangeForAll(pcs, cur.getTime(), end.getTime())) return cur;
-      cur = addMinutes(cur, SLOT_STEP);
-    }
-    return null;
-  }
-
-  const openAuth = () => $('authBackdrop').classList.add('show');
-  const closeAuth = () => $('authBackdrop').classList.remove('show');
-  const openConfirm = () => $('confirmBackdrop').classList.add('show');
-  const closeConfirm = () => $('confirmBackdrop').classList.remove('show');
-
-  const needLogin = () => {
-    openAuth();
-    $('authMsg').textContent = tr('loginNeeded');
-  };
-
-  function openQuickConfirm(pcs, start, dur) {
-    if (!currentUser) return needLogin();
-
-    const nick = ($('nickInput').value || '').trim() || localStorage.getItem(NICK_KEY) || '';
-    if (!nick) return showCustom(true);
-
-    const safe = findNearestForAll(pcs, start, dur);
-    if (!safe) return toast(tr('taken'), 'bad');
-
-    pendingBooking = {
-      pcs:[...pcs],
-      startAtMs:safe.getTime(),
-      endAtMs:addMinutes(safe, dur).getTime(),
-      nick,
-      note:($('noteInput').value || '').trim()
-    };
-
-    fillConfirm();
-    openConfirm();
-  }
-
-  function openNearestConfirm(pcs) {
-    if (!currentUser) return needLogin();
-
-    const nick = ($('nickInput').value || '').trim() || localStorage.getItem(NICK_KEY) || '';
-    if (!nick) return showCustom(true);
-
-    const safe = findNearestForAll(pcs, new Date(), 120);
-    if (!safe) return toast(tr('taken'), 'bad');
-
-    pendingBooking = {
-      pcs:[...pcs],
-      startAtMs:safe.getTime(),
-      endAtMs:addMinutes(safe, 120).getTime(),
-      nick,
-      note:($('noteInput').value || '').trim()
-    };
-
-    fillConfirm();
-    openConfirm();
-  }
-
-  function fillConfirm() {
-    if (!pendingBooking) return;
-    const s = new Date(pendingBooking.startAtMs);
-    const e = new Date(pendingBooking.endAtMs);
-
-    $('confirmInfo').innerHTML = `
-      <b>${esc(tr('pcs'))}:</b> ${esc(pendingBooking.pcs.join(', '))}<br>
-      <b>${esc(tr('starts'))}:</b> ${esc(toISODate(s))} ${esc(fmtHM(s))}<br>
-      <b>${esc(tr('ends'))}:</b> ${esc(toISODate(e))} ${esc(fmtHM(e))}<br>
-      <b>${esc(tr('nick'))}:</b> ${esc(pendingBooking.nick)}
-      ${pendingBooking.note ? `<br><b>${esc(tr('note'))}:</b> ${esc(pendingBooking.note)}` : ''}
-    `;
-  }
-
-  function showCustom(focusNick=false) {
-    if (!selectedPCs.size) return toast(tr('chooseAtLeastOne'), 'warn');
-    $('customSection').classList.remove('hidden');
-    $('customDate').value = $('customDate').value || toISODate(new Date());
-    buildCustomTimes();
-    if (focusNick) setTimeout(() => $('nickInput').focus(), 50);
-  }
-
-  function hideCustom() {
-    $('customSection').classList.add('hidden');
   }
 
   function buildCustomTimes() {
@@ -2026,6 +2221,96 @@
     }
   }
 
+  function openAuth() {
+    $('authBackdrop').classList.add('show');
+  }
+
+  function closeAuth() {
+    $('authBackdrop').classList.remove('show');
+  }
+
+  function openConfirm() {
+    $('confirmBackdrop').classList.add('show');
+  }
+
+  function closeConfirm() {
+    $('confirmBackdrop').classList.remove('show');
+  }
+
+  function needLogin() {
+    openAuth();
+    $('authMsg').textContent = tr('loginNeeded');
+  }
+
+  function fillConfirm() {
+    if (!pendingBooking) return;
+
+    const s = new Date(pendingBooking.startAtMs);
+    const e = new Date(pendingBooking.endAtMs);
+
+    $('confirmInfo').innerHTML = `
+      <b>${esc(tr('pcs'))}:</b> ${esc(pendingBooking.pcs.join(', '))}<br>
+      <b>${esc(tr('starts'))}:</b> ${esc(toISODate(s))} ${esc(fmtHM(s))}<br>
+      <b>${esc(tr('ends'))}:</b> ${esc(toISODate(e))} ${esc(fmtHM(e))}<br>
+      <b>${esc(tr('nick'))}:</b> ${esc(pendingBooking.nick)}
+      ${pendingBooking.note ? `<br><b>${esc(tr('note'))}:</b> ${esc(pendingBooking.note)}` : ''}
+    `;
+  }
+
+  function showCustom(focusNick=false) {
+    if (!selectedPCs.size) return toast(tr('chooseAtLeastOne'), 'warn');
+    $('customSection').classList.remove('hidden');
+    $('customDate').value = $('customDate').value || toISODate(new Date());
+    buildCustomTimes();
+    if (focusNick) setTimeout(() => $('nickInput').focus(), 50);
+  }
+
+  function hideCustom() {
+    $('customSection').classList.add('hidden');
+  }
+
+  function openQuickConfirm(pcs, start, dur) {
+    if (!currentUser) return needLogin();
+
+    const nick = ($('nickInput').value || '').trim() || localStorage.getItem(NICK_KEY) || '';
+    if (!nick) return showCustom(true);
+
+    const safe = findNearestForAll(pcs, start, dur);
+    if (!safe) return toast(tr('taken'), 'bad');
+
+    pendingBooking = {
+      pcs:[...pcs],
+      startAtMs:safe.getTime(),
+      endAtMs:addMinutes(safe, dur).getTime(),
+      nick,
+      note:($('noteInput').value || '').trim()
+    };
+
+    fillConfirm();
+    openConfirm();
+  }
+
+  function openNearestConfirm(pcs) {
+    if (!currentUser) return needLogin();
+
+    const nick = ($('nickInput').value || '').trim() || localStorage.getItem(NICK_KEY) || '';
+    if (!nick) return showCustom(true);
+
+    const safe = findNearestForAll(pcs, new Date(), 120);
+    if (!safe) return toast(tr('taken'), 'bad');
+
+    pendingBooking = {
+      pcs:[...pcs],
+      startAtMs:safe.getTime(),
+      endAtMs:addMinutes(safe, 120).getTime(),
+      nick,
+      note:($('noteInput').value || '').trim()
+    };
+
+    fillConfirm();
+    openConfirm();
+  }
+
   async function createBooking(data) {
     if (!currentUser) return needLogin();
 
@@ -2047,6 +2332,7 @@
       );
 
       const batch = db.batch();
+
       pcs.forEach(pc => {
         const ref = db.collection('bookings').doc();
         batch.set(ref, {
@@ -2078,7 +2364,6 @@
 
   function renderMyBookings() {
     const box = $('myBookings');
-    if (!box) return;
     box.innerHTML = '';
 
     if (!currentUser) {
@@ -2105,7 +2390,7 @@
           <b>${esc(b.pc)}</b>
           <div class="meta">${esc(toISODate(s))} • ${esc(fmtHM(s))} → ${esc(fmtHM(e))}</div>
         </div>
-        <button class="mini bad">${esc(tr('remove'))}</button>
+        <button class="mini bad" type="button">${esc(tr('remove'))}</button>
       `;
 
       item.querySelector('button').onclick = async () => {
@@ -2129,13 +2414,27 @@
     panel.classList.toggle('hidden', !isAdmin);
     if (!isAdmin) return;
 
+    const q = String($('adminSearch').value || '').trim().toLowerCase();
     box.innerHTML = '';
-    const list = allBookings
+
+    let list = allBookings
       .filter(b => b.endAtMs > Date.now())
       .sort((a,b) => a.startAtMs - b.startAtMs);
 
+    if (q) {
+      list = list.filter(b => {
+        const hay = [
+          b.pc || '',
+          b.nick || '',
+          b.userEmail || '',
+          b.note || ''
+        ].join(' ').toLowerCase();
+        return hay.includes(q);
+      });
+    }
+
     if (!list.length) {
-      box.innerHTML = `<div class="notice">${esc(tr('empty'))}</div>`;
+      box.innerHTML = `<div class="notice">${esc(q ? tr('nothingFound') : tr('empty'))}</div>`;
       return;
     }
 
@@ -2147,9 +2446,10 @@
       item.innerHTML = `
         <div>
           <b>${esc(b.pc)}</b>
-          <div class="meta">${esc(b.nick || '')} • ${esc(toISODate(s))} • ${esc(fmtHM(s))} → ${esc(fmtHM(e))}</div>
+          <div class="meta">${esc(b.nick || '')} • ${esc(b.userEmail || '')}</div>
+          <div class="meta">${esc(toISODate(s))} • ${esc(fmtHM(s))} → ${esc(fmtHM(e))}</div>
         </div>
-        <button class="mini bad">${esc(tr('remove'))}</button>
+        <button class="mini bad" type="button">${esc(tr('remove'))}</button>
       `;
 
       item.querySelector('button').onclick = async () => {
@@ -2166,28 +2466,21 @@
     });
   }
 
-  function toggleMy() {
-    $('mySection').scrollIntoView({behavior:'smooth', block:'start'});
-    renderMyBookings();
-  }
-
   function updateUserUI() {
     $('userPill').textContent = currentUser ? (currentUser.email || currentUser.uid.slice(0,6)) : '—';
     isAdmin = !!(currentUser && ADMIN_EMAILS.includes(String(currentUser.email || '').toLowerCase()));
     $('openAuthBtn').classList.toggle('hidden', !!currentUser);
     $('logoutBtn').classList.toggle('hidden', !currentUser);
+    $('topQuickAuthBtn').textContent = currentUser ? tr('topLogout') : tr('topAuth');
 
-    if (currentUser) {
-      $('authMsg').textContent = tr('authOk') + (currentUser.email || currentUser.uid.slice(0,6));
-    } else {
-      $('authMsg').textContent = '—';
-    }
+    if (currentUser) $('authMsg').textContent = tr('authOk') + (currentUser.email || currentUser.uid.slice(0,6));
+    else $('authMsg').textContent = '—';
 
     renderAdminBookings();
   }
 
   function findFreeNow() {
-    const free = ALL.filter(pc => getPcStatus(pc).state === 'free');
+    const free = rankFreeGroupCandidates(ALL.filter(pc => getPcStatus(pc).state === 'free'));
     if (!free.length) return toast(tr('noFree'), 'warn');
 
     if (multiMode) {
@@ -2250,7 +2543,12 @@
     lang = newLang;
     localStorage.setItem(LANG_KEY, lang);
     closeLangMenu();
-    setLangUI();
+    applyTexts();
+  }
+
+  function toggleMy() {
+    $('mySection').scrollIntoView({behavior:'smooth', block:'start'});
+    renderMyBookings();
   }
 
   function bind() {
@@ -2271,6 +2569,15 @@
       theme = theme === 'dark' ? 'light' : 'dark';
       localStorage.setItem(THEME_KEY, theme);
       applyTheme();
+    };
+
+    $('topQuickAuthBtn').onclick = async () => {
+      if (!currentUser) {
+        openAuth();
+        return;
+      }
+      if (!auth) return;
+      try { await auth.signOut(); } catch(_) {}
     };
 
     $('filterAll').onclick = () => {
@@ -2295,14 +2602,12 @@
 
     $('toggleMultiBtn').onclick = () => {
       multiMode = !multiMode;
-
       if (!multiMode && selectedPCs.size > 1) {
         const first = [...selectedPCs][0];
         selectedPCs = new Set(first ? [first] : []);
         selectedPc = first || null;
       }
-
-      setLangUI();
+      applyTexts();
     };
 
     $('clearSelectedBtn').onclick = () => {
@@ -2357,6 +2662,7 @@
 
     $('customDate').addEventListener('change', buildCustomTimes);
     $('customDuration').addEventListener('change', buildCustomTimes);
+    $('adminSearch').addEventListener('input', renderAdminBookings);
 
     $('hideCustomBtn').onclick = hideCustom;
 
@@ -2388,14 +2694,8 @@
     $('loginBtn').onclick = async () => {
       const email = ($('authEmail').value || '').trim();
       const pass = ($('authPass').value || '').trim();
-      if (!email || !pass) {
-        $('authMsg').textContent = tr('loginErr');
-        return;
-      }
-      if (!auth) {
-        $('authMsg').textContent = tr('fsErr');
-        return;
-      }
+      if (!email || !pass) return $('authMsg').textContent = tr('loginErr');
+      if (!auth) return $('authMsg').textContent = tr('fsErr');
 
       try {
         await auth.signInWithEmailAndPassword(email, pass);
@@ -2409,14 +2709,8 @@
     $('registerBtn').onclick = async () => {
       const email = ($('authEmail').value || '').trim();
       const pass = ($('authPass').value || '').trim();
-      if (!email || !pass) {
-        $('authMsg').textContent = tr('loginErr');
-        return;
-      }
-      if (!auth) {
-        $('authMsg').textContent = tr('fsErr');
-        return;
-      }
+      if (!email || !pass) return $('authMsg').textContent = tr('loginErr');
+      if (!auth) return $('authMsg').textContent = tr('fsErr');
 
       try {
         await auth.createUserWithEmailAndPassword(email, pass);
@@ -2429,14 +2723,8 @@
 
     $('resetBtn').onclick = async () => {
       const email = ($('authEmail').value || '').trim();
-      if (!email) {
-        $('authMsg').textContent = tr('loginErr');
-        return;
-      }
-      if (!auth) {
-        $('authMsg').textContent = tr('fsErr');
-        return;
-      }
+      if (!email) return $('authMsg').textContent = tr('loginErr');
+      if (!auth) return $('authMsg').textContent = tr('fsErr');
 
       try {
         await auth.sendPasswordResetEmail(email);
@@ -2464,7 +2752,7 @@
   async function boot() {
     applyTheme();
     bind();
-    setLangUI();
+    applyTexts();
     setCloud(tr('statusWait'), null);
     startTicker();
 
@@ -2491,6 +2779,8 @@
           }
         } catch(_) {}
       }
+
+      applyTexts();
     });
   }
 
