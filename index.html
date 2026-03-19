@@ -96,17 +96,9 @@
     .headerMain{
       display:grid;
       grid-template-columns:minmax(0,1fr) auto;
-      gap:14px;
+      gap:12px;
       align-items:center;
-      padding:14px 16px 10px;
-      min-width:0;
-    }
-
-    .headerStatus{
-      display:flex;
-      flex-wrap:wrap;
-      gap:8px;
-      padding:0 16px 14px;
+      padding:14px 16px;
       min-width:0;
     }
 
@@ -140,173 +132,77 @@
     h1{
       margin:0;
       font-size:22px;
-      line-height:1.15;
-      overflow-wrap:anywhere;
-    }
-
-    .sub{
-      margin:4px 0 0;
-      color:var(--muted);
-      font-size:12px;
-      line-height:1.35;
+      line-height:1.1;
       overflow-wrap:anywhere;
     }
 
     .topbar{
       display:flex;
-      gap:8px;
       align-items:center;
       justify-content:flex-end;
+      gap:8px;
       min-width:0;
       flex-wrap:wrap;
     }
 
-    .pill,.langTrigger,.compactBtn{
+    .iconBtn,.statusMini{
+      border:1px solid var(--line);
+      background:rgba(255,255,255,.04);
+      color:var(--text);
+      min-width:0;
+    }
+
+    body[data-theme="light"] .iconBtn,
+    body[data-theme="light"] .statusMini{
+      background:rgba(255,255,255,.80);
+    }
+
+    .iconBtn{
+      width:40px;
+      height:40px;
+      border-radius:12px;
       display:flex;
       align-items:center;
-      gap:8px;
-      padding:8px 10px;
-      border-radius:999px;
-      border:1px solid var(--line);
-      background:rgba(255,255,255,.04);
-      font-size:12px;
-      color:var(--muted);
-      min-width:0;
-      max-width:100%;
-      line-height:1.2;
-    }
-
-    body[data-theme="light"] .pill,
-    body[data-theme="light"] .langTrigger,
-    body[data-theme="light"] .compactBtn{
-      background:rgba(255,255,255,.78);
-    }
-
-    .pill{
-      flex:1 1 220px;
-      min-width:0;
-      overflow:hidden;
-    }
-
-    .pill b{
-      overflow:hidden;
-      text-overflow:ellipsis;
-      white-space:nowrap;
-      color:var(--text);
-    }
-
-    .btn,.mini,.langTrigger,.langOption,.filterBtn,.tinyAction,.compactBtn{
-      border:1px solid var(--line);
-      background:rgba(255,255,255,.04);
-      color:var(--text);
+      justify-content:center;
       cursor:pointer;
+      font-size:16px;
       transition:.15s ease;
-      font-weight:800;
-      min-width:0;
-      text-decoration:none;
+      padding:0;
     }
 
-    body[data-theme="light"] .btn,
-    body[data-theme="light"] .mini,
-    body[data-theme="light"] .langTrigger,
-    body[data-theme="light"] .langOption,
-    body[data-theme="light"] .filterBtn,
-    body[data-theme="light"] .tinyAction,
-    body[data-theme="light"] .compactBtn{
-      background:rgba(255,255,255,.78);
-    }
-
-    .btn:hover,.mini:hover,.langTrigger:hover,.langOption:hover,.filterBtn:hover,.tinyAction:hover,.compactBtn:hover{
+    .iconBtn:hover{
       transform:translateY(-1px);
       border-color:rgba(110,231,255,.45);
     }
 
-    body[data-theme="light"] .btn:hover,
-    body[data-theme="light"] .mini:hover,
-    body[data-theme="light"] .langTrigger:hover,
-    body[data-theme="light"] .langOption:hover,
-    body[data-theme="light"] .filterBtn:hover,
-    body[data-theme="light"] .tinyAction:hover,
-    body[data-theme="light"] .compactBtn:hover{
+    body[data-theme="light"] .iconBtn:hover{
       border-color:rgba(2,132,199,.35);
     }
 
-    .btn.primary,.mini.primary,.compactBtn.primary{
-      background:linear-gradient(180deg, rgba(110,231,255,.18), rgba(167,139,250,.10));
-      border-color:rgba(110,231,255,.42);
+    .iconBtn.danger{
+      color:#fff;
+      background:rgba(251,113,133,.12);
+      border-color:rgba(251,113,133,.25);
     }
 
-    body[data-theme="light"] .btn.primary,
-    body[data-theme="light"] .mini.primary,
-    body[data-theme="light"] .compactBtn.primary{
-      background:linear-gradient(180deg, rgba(2,132,199,.12), rgba(124,58,237,.08));
-      border-color:rgba(2,132,199,.32);
-    }
-
-    .compactBtn{
-      padding:9px 12px;
-      border-radius:14px;
-      justify-content:center;
+    .statusMini{
+      height:40px;
+      padding:0 10px;
+      border-radius:12px;
+      display:flex;
+      align-items:center;
+      gap:8px;
+      font-size:12px;
+      color:var(--muted);
       white-space:nowrap;
     }
 
-    .langWrap{position:relative}
-
-    .langTrigger{
-      padding:8px 12px;
+    .statusMini b{
+      color:var(--text);
+      max-width:110px;
+      overflow:hidden;
+      text-overflow:ellipsis;
       white-space:nowrap;
-    }
-
-    .langTrigger .flag{
-      font-size:15px;
-      line-height:1;
-    }
-
-    .langMenu{
-      position:absolute;
-      top:calc(100% + 8px);
-      right:0;
-      width:180px;
-      border-radius:18px;
-      padding:8px;
-      display:none;
-      z-index:60;
-    }
-
-    .langMenu.show{display:block}
-
-    .langOption{
-      width:100%;
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:10px;
-      padding:10px 12px;
-      border-radius:14px;
-      margin:0 0 6px;
-      text-align:left;
-    }
-
-    .langOption:last-child{margin-bottom:0}
-
-    .langLeft{
-      display:flex;
-      align-items:center;
-      gap:10px;
-      min-width:0;
-    }
-
-    .langFlag{font-size:18px;line-height:1}
-    .langCode{color:var(--muted);font-size:11px;font-weight:700}
-
-    .langOption.active{
-      border-color:rgba(110,231,255,.45);
-      background:rgba(110,231,255,.10);
-    }
-
-    body[data-theme="light"] .langOption.active{
-      border-color:rgba(2,132,199,.35);
-      background:rgba(2,132,199,.08);
     }
 
     .dot{
@@ -328,6 +224,61 @@
     @keyframes pulse{
       70%{box-shadow:0 0 0 10px rgba(52,211,153,0)}
       100%{box-shadow:0 0 0 0 rgba(52,211,153,0)}
+    }
+
+    .langWrap{position:relative}
+
+    .langMenu{
+      position:absolute;
+      top:calc(100% + 8px);
+      right:0;
+      width:164px;
+      border-radius:18px;
+      padding:8px;
+      display:none;
+      z-index:70;
+    }
+
+    .langMenu.show{display:block}
+
+    .langGrid{
+      display:grid;
+      grid-template-columns:repeat(3,1fr);
+      gap:8px;
+    }
+
+    .langFlagBtn{
+      height:44px;
+      border-radius:14px;
+      border:1px solid var(--line);
+      background:rgba(255,255,255,.04);
+      color:var(--text);
+      font-size:22px;
+      cursor:pointer;
+      transition:.15s ease;
+    }
+
+    body[data-theme="light"] .langFlagBtn{
+      background:rgba(255,255,255,.78);
+    }
+
+    .langFlagBtn:hover{
+      transform:translateY(-1px);
+      border-color:rgba(110,231,255,.45);
+    }
+
+    body[data-theme="light"] .langFlagBtn:hover{
+      border-color:rgba(2,132,199,.35);
+    }
+
+    .langFlagBtn.active{
+      background:rgba(110,231,255,.10);
+      border-color:rgba(110,231,255,.45);
+    }
+
+    body[data-theme="light"] .langFlagBtn.active{
+      background:rgba(2,132,199,.08);
+      border-color:rgba(2,132,199,.35);
     }
 
     .layout{
@@ -392,14 +343,6 @@
       overflow-wrap:anywhere;
     }
 
-    .hallHint{
-      margin:6px 0 0;
-      color:var(--muted);
-      font-size:13px;
-      line-height:1.4;
-      overflow-wrap:anywhere;
-    }
-
     .hallTools{
       display:flex;
       gap:8px;
@@ -414,7 +357,15 @@
       border-radius:14px;
       white-space:nowrap;
       font-size:13px;
+      border:1px solid var(--line);
       background:rgba(255,255,255,.03);
+      color:var(--text);
+      cursor:pointer;
+      font-weight:800;
+    }
+
+    body[data-theme="light"] .filterBtn{
+      background:rgba(255,255,255,.78);
     }
 
     .filterBtn.active{
@@ -638,6 +589,22 @@
       min-width:0;
     }
 
+    .mini,.btn,.tinyAction{
+      border:1px solid var(--line);
+      background:rgba(255,255,255,.04);
+      color:var(--text);
+      cursor:pointer;
+      transition:.15s ease;
+      font-weight:800;
+      min-width:0;
+    }
+
+    body[data-theme="light"] .mini,
+    body[data-theme="light"] .btn,
+    body[data-theme="light"] .tinyAction{
+      background:rgba(255,255,255,.78);
+    }
+
     .mini{
       padding:8px 10px;
       border-radius:12px;
@@ -646,6 +613,17 @@
       line-height:1.2;
       text-align:center;
       overflow-wrap:anywhere;
+    }
+
+    .mini.primary,.btn.primary{
+      background:linear-gradient(180deg, rgba(110,231,255,.18), rgba(167,139,250,.10));
+      border-color:rgba(110,231,255,.42);
+    }
+
+    body[data-theme="light"] .mini.primary,
+    body[data-theme="light"] .btn.primary{
+      background:linear-gradient(180deg, rgba(2,132,199,.12), rgba(124,58,237,.08));
+      border-color:rgba(2,132,199,.32);
     }
 
     .mini.soft{background:rgba(167,139,250,.10);border-color:rgba(167,139,250,.22)}
@@ -731,6 +709,8 @@
       min-width:0;
     }
 
+    body[data-theme="light"] .quickItem{background:rgba(255,255,255,.72)}
+
     .quickItem > div{
       min-width:0;
       flex:1 1 auto;
@@ -742,7 +722,6 @@
       line-height:1.3;
     }
 
-    body[data-theme="light"] .quickItem{background:rgba(255,255,255,.72)}
     .quickItem small{color:var(--muted);margin-top:3px}
 
     .chipRow{
@@ -778,12 +757,8 @@
 
     .formRow > div{min-width:0}
 
-    .formRow.three{
-      grid-template-columns:1fr 1fr 1fr;
-    }
-
     @media (max-width:640px){
-      .formRow,.formRow.three{grid-template-columns:1fr}
+      .formRow{grid-template-columns:1fr}
     }
 
     label{
@@ -936,12 +911,11 @@
         grid-template-columns:1fr;
         gap:10px;
         align-items:stretch;
-        padding:12px 12px 8px;
+        padding:12px;
       }
 
       .brand{
-        align-items:flex-start;
-        gap:10px;
+        align-items:center;
       }
 
       .logo{
@@ -951,40 +925,18 @@
       }
 
       h1{font-size:18px}
-      .sub{font-size:11px}
 
       .topbar{
         display:grid;
-        grid-template-columns:repeat(3,minmax(0,1fr));
+        grid-template-columns:repeat(4,minmax(0,1fr));
         gap:8px;
         width:100%;
       }
 
-      .topbar > *{
-        min-width:0;
-      }
-
-      .compactBtn,
-      .langTrigger{
+      .statusMini,
+      .iconBtn{
         width:100%;
-        min-height:40px;
         justify-content:center;
-        border-radius:14px;
-        padding:9px 8px;
-        font-size:11px;
-      }
-
-      .headerStatus{
-        display:grid;
-        grid-template-columns:1fr;
-        gap:8px;
-        padding:0 12px 12px;
-      }
-
-      .pill{
-        width:100%;
-        flex:none;
-        border-radius:16px;
       }
 
       .panelHead,.panelBody{padding:12px}
@@ -1016,7 +968,6 @@
 
       .hallTools .filterBtn{
         width:100%;
-        justify-content:center;
         text-align:center;
         padding:10px 8px;
       }
@@ -1050,13 +1001,11 @@
       }
 
       .headerShell{border-radius:18px}
-      .headerMain{padding:10px 10px 8px}
-      .headerStatus{padding:0 10px 10px}
-      h1{font-size:16px;line-height:1.15}
+      h1{font-size:16px}
       .hallTitle{font-size:18px}
       .panelTitle{font-size:14px}
 
-      .notice,.toast,.small,.muted,label,.meta,.pcMeta,.chip,.pill,.langTrigger,.btn,.mini,.filterBtn,.tinyAction,.compactBtn{
+      .notice,.toast,.small,.muted,label,.meta,.pcMeta,.chip,.filterBtn,.tinyAction,.btn,.mini,.statusMini{
         font-size:11px;
       }
 
@@ -1067,9 +1016,8 @@
       .pcBottom .mini{flex:1 1 90px}
 
       .langMenu{
-        left:0;
-        right:auto;
-        width:min(220px, calc(100vw - 32px));
+        right:0;
+        width:160px;
       }
 
       .miniStatsRow{grid-template-columns:repeat(2,1fr)}
@@ -1079,7 +1027,7 @@
       .miniStatsRow{grid-template-columns:1fr}
       .hall{grid-template-columns:1fr}
       .hallTools{grid-template-columns:1fr}
-      .topbar{grid-template-columns:1fr}
+      .topbar{grid-template-columns:repeat(2,minmax(0,1fr))}
     }
   </style>
 </head>
@@ -1088,55 +1036,40 @@
     <header class="headerShell glass">
       <div class="headerMain">
         <div class="brand">
-          <div class="logo" id="brandLogo"></div>
+          <div class="logo"></div>
           <div class="brandText">
             <h1 id="t_title"></h1>
-            <div class="sub" id="t_headerSub"></div>
           </div>
         </div>
 
         <div class="topbar">
-          <button class="compactBtn" id="themeToggleBtn" type="button"></button>
+          <div class="statusMini" title="User">
+            <span>👤</span>
+            <b id="userPill">—</b>
+          </div>
+
+          <div class="statusMini" title="Cloud">
+            <span class="dot" id="cloudDot"></span>
+            <b id="cloudPill">...</b>
+          </div>
 
           <div class="langWrap">
-            <button class="langTrigger" id="langMenuBtn" type="button">
-              <span class="flag" id="langCurrentFlag">🇬🇪</span>
-              <span id="langCurrentLabel">ქართული</span>
-              <span>▾</span>
+            <button class="iconBtn" id="langMenuBtn" type="button" title="Language">
+              <span id="langCurrentFlag">🇬🇪</span>
             </button>
 
             <div class="langMenu glass" id="langMenu">
-              <button class="langOption" data-lang="ka" type="button">
-                <span class="langLeft">
-                  <span class="langFlag">🇬🇪</span>
-                  <span>ქართული</span>
-                </span>
-                <span class="langCode">KA</span>
-              </button>
-              <button class="langOption" data-lang="en" type="button">
-                <span class="langLeft">
-                  <span class="langFlag">🇬🇧</span>
-                  <span>English</span>
-                </span>
-                <span class="langCode">EN</span>
-              </button>
-              <button class="langOption" data-lang="ru" type="button">
-                <span class="langLeft">
-                  <span class="langFlag">🇷🇺</span>
-                  <span>Русский</span>
-                </span>
-                <span class="langCode">RU</span>
-              </button>
+              <div class="langGrid">
+                <button class="langFlagBtn" data-lang="ka" type="button">🇬🇪</button>
+                <button class="langFlagBtn" data-lang="en" type="button">🇬🇧</button>
+                <button class="langFlagBtn" data-lang="ru" type="button">🇷🇺</button>
+              </div>
             </div>
           </div>
 
-          <button class="compactBtn primary" id="topQuickAuthBtn" type="button"></button>
+          <button class="iconBtn" id="themeToggleBtn" type="button" title="Theme"></button>
+          <button class="iconBtn danger hidden" id="logoutTopBtn" type="button" title="Logout">⎋</button>
         </div>
-      </div>
-
-      <div class="headerStatus">
-        <div class="pill"><span id="t_user"></span>: <b id="userPill">—</b></div>
-        <div class="pill"><span class="dot" id="cloudDot"></span><span id="t_cloud"></span>: <b id="cloudPill">...</b></div>
       </div>
     </header>
 
@@ -1146,7 +1079,6 @@
           <div class="hallTopCompact">
             <div class="hallTopInfo">
               <h2 class="hallTitle" id="t_livehall"></h2>
-              <div class="hallHint" id="t_livehint"></div>
             </div>
 
             <div class="hallTools">
@@ -1374,19 +1306,15 @@
   let theme = localStorage.getItem(THEME_KEY) || 'dark';
 
   const LANG_META = {
-    ru: { flag:'🇷🇺', label:'Русский', code:'RU' },
-    en: { flag:'🇬🇧', label:'English', code:'EN' },
-    ka: { flag:'🇬🇪', label:'ქართული', code:'KA' }
+    ru: { flag:'🇷🇺' },
+    en: { flag:'🇬🇧' },
+    ka: { flag:'🇬🇪' }
   };
 
   const T = {
     ru: {
       title:'Sakompiutere Gaming — Live Hall',
-      sub:'Удобно и на телефоне, и на ПК. Можно выбрать до 10 ПК.',
-      user:'Пользователь',
-      cloud:'База',
       livehall:'Live Hall',
-      livehint:'Быстрый режим для обычного игрока + мультивыбор для команд.',
       all:'Все',
       free:'Свободные',
       soon:'Скоро',
@@ -1404,8 +1332,6 @@
       admin:'🔐 Admin',
       auth:'🔑 Войти',
       logout:'🚪 Выйти',
-      topAuth:'Аккаунт',
-      topLogout:'Выйти',
       aisle:'ПРОХОД',
       sidepanel:'Панель бронирования',
       sidehint:'Один ПК или сразу несколько.',
@@ -1474,7 +1400,6 @@
       minutes:'мин',
       starts:'Начало',
       ends:'Конец',
-      pc:'ПК',
       pcs:'ПК',
       remove:'Отменить',
       empty:'Пока ничего нет',
@@ -1486,19 +1411,13 @@
       mobileMy:'Мои',
       mobileBook:'Бронь',
       adminDenied:'Ты не админ.',
-      themeDark:'🌙 Тёмная',
-      themeLight:'☀️ Светлая',
       noTimes:'Нет свободного времени',
       selectedList:'Выбрано',
       nothingFound:'Ничего не найдено'
     },
     en: {
       title:'Sakompiutere Gaming — Live Hall',
-      sub:'Comfortable on phone and desktop. Up to 10 PCs can be selected.',
-      user:'User',
-      cloud:'Database',
       livehall:'Live Hall',
-      livehint:'Quick mode for normal players + multi-select for teams.',
       all:'All',
       free:'Free',
       soon:'Soon',
@@ -1516,8 +1435,6 @@
       admin:'🔐 Admin',
       auth:'🔑 Login',
       logout:'🚪 Logout',
-      topAuth:'Account',
-      topLogout:'Logout',
       aisle:'AISLE',
       sidepanel:'Booking panel',
       sidehint:'One PC or many PCs at once.',
@@ -1586,7 +1503,6 @@
       minutes:'min',
       starts:'Start',
       ends:'End',
-      pc:'PC',
       pcs:'PCs',
       remove:'Cancel',
       empty:'Nothing yet',
@@ -1598,19 +1514,13 @@
       mobileMy:'Mine',
       mobileBook:'Book',
       adminDenied:'You are not admin.',
-      themeDark:'🌙 Dark',
-      themeLight:'☀️ Light',
       noTimes:'No free time available',
       selectedList:'Selected',
       nothingFound:'Nothing found'
     },
     ka: {
       title:'Sakompiutere Gaming — Live Hall',
-      sub:'მორგებულია ტელეფონზეც და კომპიუტერზეც. შესაძლებელია 10 PC-მდე არჩევა.',
-      user:'მომხმარებელი',
-      cloud:'ბაზა',
       livehall:'Live Hall',
-      livehint:'სწრაფი რეჟიმი ჩვეულებრივი მოთამაშისთვის და multi-select გუნდებისთვის.',
       all:'ყველა',
       free:'თავისუფალი',
       soon:'მალე',
@@ -1628,8 +1538,6 @@
       admin:'🔐 Admin',
       auth:'🔑 შესვლა',
       logout:'🚪 გასვლა',
-      topAuth:'ანგარიში',
-      topLogout:'გასვლა',
       aisle:'გასასვლელი',
       sidepanel:'ჯავშნის პანელი',
       sidehint:'ერთი PC ან რამდენიმე ერთად.',
@@ -1698,7 +1606,6 @@
       minutes:'წთ',
       starts:'დასაწყისი',
       ends:'დასასრული',
-      pc:'PC',
       pcs:'PC-ები',
       remove:'გაუქმება',
       empty:'ჯერ არაფერია',
@@ -1710,8 +1617,6 @@
       mobileMy:'ჩემი',
       mobileBook:'ჯავშანი',
       adminDenied:'ადმინი არ ხარ.',
-      themeDark:'🌙 მუქი',
-      themeLight:'☀️ ღია',
       noTimes:'თავისუფალი დრო ვერ მოიძებნა',
       selectedList:'არჩეულია',
       nothingFound:'ვერ მოიძებნა'
@@ -1769,17 +1674,14 @@
 
   function applyTheme() {
     document.body.setAttribute('data-theme', theme);
-    const themeColor = theme === 'light' ? '#eef4ff' : '#0b1020';
     const metaTheme = document.querySelector('meta[name="theme-color"]');
-    if (metaTheme) metaTheme.setAttribute('content', themeColor);
-    $('themeToggleBtn').textContent = theme === 'dark' ? tr('themeLight') : tr('themeDark');
+    if (metaTheme) metaTheme.setAttribute('content', theme === 'light' ? '#eef4ff' : '#0b1020');
+    $('themeToggleBtn').textContent = theme === 'dark' ? '☀️' : '🌙';
   }
 
   function updateLangMenuUI() {
-    const meta = LANG_META[lang] || LANG_META.ka;
-    $('langCurrentFlag').textContent = meta.flag;
-    $('langCurrentLabel').textContent = meta.label;
-    document.querySelectorAll('.langOption').forEach(btn => {
+    $('langCurrentFlag').textContent = (LANG_META[lang] || LANG_META.ka).flag;
+    document.querySelectorAll('.langFlagBtn').forEach(btn => {
       btn.classList.toggle('active', btn.dataset.lang === lang);
     });
   }
@@ -1794,11 +1696,7 @@
     document.documentElement.lang = lang;
     document.title = tr('title');
     $('t_title').textContent = tr('title');
-    $('t_headerSub').textContent = tr('sub');
-    $('t_user').textContent = tr('user');
-    $('t_cloud').textContent = tr('cloud');
     $('t_livehall').textContent = tr('livehall');
-    $('t_livehint').textContent = tr('livehint');
 
     $('filterAll').textContent = tr('all');
     $('filterFree').textContent = tr('free');
@@ -1818,7 +1716,6 @@
     $('openAdminBtn').textContent = tr('admin');
     $('openAuthBtn').textContent = tr('auth');
     $('logoutBtn').textContent = tr('logout');
-    $('topQuickAuthBtn').textContent = currentUser ? tr('topLogout') : tr('topAuth');
     $('t_aisle').textContent = tr('aisle');
 
     $('t_sidepanel').textContent = tr('sidepanel');
@@ -1874,9 +1771,7 @@
   }
 
   function getPcBookings(pc) {
-    return allBookings
-      .filter(b => b.pc === pc)
-      .sort((a,b) => a.startAtMs - b.startAtMs);
+    return allBookings.filter(b => b.pc === pc).sort((a,b) => a.startAtMs - b.startAtMs);
   }
 
   function progressFor(b) {
@@ -1895,38 +1790,17 @@
     if (active) {
       const mins = Math.max(1, Math.ceil((active.endAtMs - now) / 60000));
       if (mins <= SOON_MIN) {
-        return {
-          state:'soon',
-          subState:'soon_busy',
-          active,
-          freeAtMs:active.endAtMs,
-          minsToFree:mins
-        };
+        return { state:'soon', subState:'soon_busy', active, freeAtMs:active.endAtMs, minsToFree:mins };
       }
-      return {
-        state:'busy',
-        subState:'busy',
-        active,
-        freeAtMs:active.endAtMs,
-        minsToFree:mins
-      };
+      return { state:'busy', subState:'busy', active, freeAtMs:active.endAtMs, minsToFree:mins };
     }
 
     const next = future.find(b => b.startAtMs > now);
     if (next && next.startAtMs - now <= SOON_MIN * 60000) {
-      return {
-        state:'soon',
-        subState:'soon_free',
-        next,
-        nextStartMs:next.startAtMs,
-        minsToStart:Math.max(1, Math.ceil((next.startAtMs - now) / 60000))
-      };
+      return { state:'soon', subState:'soon_free', next, nextStartMs:next.startAtMs, minsToStart:Math.max(1, Math.ceil((next.startAtMs - now) / 60000)) };
     }
 
-    return {
-      state:'free',
-      subState:'free'
-    };
+    return { state:'free', subState:'free' };
   }
 
   function getDisplayTag(status) {
@@ -1995,14 +1869,7 @@
     let meta = '';
     if (s.subState === 'free') {
       meta = `<div>${tr('freeNow')}</div>`;
-    } else if (s.subState === 'busy') {
-      meta = `
-        <div>${tr('playing')}: <b>${esc(s.active.nick || tr('guest'))}</b></div>
-        <div>${tr('occupiedUntil')}: <b>${fmtHM(new Date(s.freeAtMs))}</b></div>
-        <div>${tr('endsIn')}: <b>${s.minsToFree} ${tr('minutes')}</b></div>
-        <div class="progress"><div class="bar" style="width:${progressFor(s.active)}%"></div></div>
-      `;
-    } else if (s.subState === 'soon_busy') {
+    } else if (s.subState === 'busy' || s.subState === 'soon_busy') {
       meta = `
         <div>${tr('playing')}: <b>${esc(s.active.nick || tr('guest'))}</b></div>
         <div>${tr('occupiedUntil')}: <b>${fmtHM(new Date(s.freeAtMs))}</b></div>
@@ -2332,7 +2199,6 @@
       );
 
       const batch = db.batch();
-
       pcs.forEach(pc => {
         const ref = db.collection('bookings').doc();
         batch.set(ref, {
@@ -2469,9 +2335,10 @@
   function updateUserUI() {
     $('userPill').textContent = currentUser ? (currentUser.email || currentUser.uid.slice(0,6)) : '—';
     isAdmin = !!(currentUser && ADMIN_EMAILS.includes(String(currentUser.email || '').toLowerCase()));
+
     $('openAuthBtn').classList.toggle('hidden', !!currentUser);
     $('logoutBtn').classList.toggle('hidden', !currentUser);
-    $('topQuickAuthBtn').textContent = currentUser ? tr('topLogout') : tr('topAuth');
+    $('logoutTopBtn').classList.toggle('hidden', !currentUser);
 
     if (currentUser) $('authMsg').textContent = tr('authOk') + (currentUser.email || currentUser.uid.slice(0,6));
     else $('authMsg').textContent = '—';
@@ -2551,8 +2418,13 @@
     renderMyBookings();
   }
 
+  async function signOutNow() {
+    if (!auth) return;
+    try { await auth.signOut(); } catch(_) {}
+  }
+
   function bind() {
-    document.querySelectorAll('.langOption').forEach(btn => {
+    document.querySelectorAll('.langFlagBtn').forEach(btn => {
       btn.onclick = () => setLanguage(btn.dataset.lang);
     });
 
@@ -2571,14 +2443,8 @@
       applyTheme();
     };
 
-    $('topQuickAuthBtn').onclick = async () => {
-      if (!currentUser) {
-        openAuth();
-        return;
-      }
-      if (!auth) return;
-      try { await auth.signOut(); } catch(_) {}
-    };
+    $('logoutTopBtn').onclick = signOutNow;
+    $('logoutBtn').onclick = signOutNow;
 
     $('filterAll').onclick = () => {
       currentFilter = 'all';
@@ -2636,11 +2502,6 @@
     };
 
     $('openAuthBtn').onclick = openAuth;
-
-    $('logoutBtn').onclick = async () => {
-      if (!auth) return;
-      try { await auth.signOut(); } catch(_) {}
-    };
 
     $('closeAuthBtn').onclick = closeAuth;
     $('authBackdrop').onclick = e => {
