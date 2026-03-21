@@ -992,6 +992,19 @@
 
     .modalBody{padding:18px;min-width:0}
     .auth{display:grid;gap:10px;min-width:0}
+    /* ── History stat cards ── */
+    .histStat{
+      padding:10px 12px;
+      border-radius:14px;
+      border:1px solid var(--line);
+      background:rgba(255,255,255,.03);
+      min-width:0;
+    }
+    body[data-theme="light"] .histStat{background:rgba(255,255,255,.72)}
+    .histStat span{display:block;color:var(--muted);font-size:10px;line-height:1.3;overflow-wrap:anywhere}
+    .histStat b{display:block;margin-top:4px;font-size:16px;font-weight:900;line-height:1.1;overflow-wrap:anywhere}
+    .histStat b.accent{color:var(--accent)}
+
     /* ── Payment modal styles ── */
     .payAmount{font-size:26px;font-weight:1000;color:var(--free);text-align:center;padding:8px 0 4px;line-height:1}
     .payRow{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:8px;font-size:13px;flex-wrap:wrap}
@@ -1272,9 +1285,9 @@
         <div class="panelBody">
           <div class="topActionCluster">
             <div class="topActionRow single">
-              <button class="tinyAction primary" id="findNowBtn" type="button"></button>
+              <button class="tinyAction primary" id="findNowBtn" type="button" style="padding:13px 12px;font-size:13px"></button>
             </div>
-            <div class="topActionRow">
+            <div class="topActionRow hidden" id="multiRow">
               <button class="tinyAction" id="toggleMultiBtn" type="button"></button>
               <button class="tinyAction" id="clearSelectedBtn" type="button"></button>
             </div>
@@ -1353,6 +1366,12 @@
           <div id="mySection" style="margin-top:16px">
             <div class="panelTitle" id="t_mybookings"></div>
             <div class="myBookings" id="myBookings"></div>
+
+            <!-- History stats strip -->
+            <div id="historyStrip" class="hidden" style="margin-top:14px">
+              <div class="panelTitle" id="t_historyTitle" style="margin-bottom:10px"></div>
+              <div id="historyStats" style="display:grid;grid-template-columns:1fr 1fr;gap:8px"></div>
+            </div>
           </div>
 
           <div id="adminSection" class="hidden" style="margin-top:16px">
@@ -1506,11 +1525,11 @@
       soon:'Скоро',
       statAll:'Всего ПК',
       statFree:'Свободны',
-      statSoonFree:'Скоро займутся',
-      statSoonBusy:'Скоро освободятся',
+      statSoonFree:'Займутся',
+      statSoonBusy:'Освободятся',
       statBusy:'Заняты',
       statSelected:'Выбрано',
-      findNow:'⚡ Найти свободный сейчас',
+      findNow:'⚡ Найти свободный',
       multiOff:'👥 Мультивыбор: OFF',
       multiOn:'👥 Мультивыбор: ON',
       clearSelected:'Сбросить выбор',
@@ -1611,7 +1630,7 @@
       bookNowShort:'🎮 Играть сейчас',
       bookNextShort:'📅 Забронировать',
       onboardStep1:'1. Выбери свободный ПК',
-      onboardStep2:'2. Войди в аккаунт',
+      onboardStep2:'2. Войди 🔑 (кнопка вверху)',
       onboardStep3:'3. Подтверди бронь',
       workhours:'Работаем 24/7',
       cancelConfirmQ:'Отменить бронирование?',
@@ -1629,7 +1648,36 @@
       rejectBooking:'❌ Отклонить',
       paymentAmount:'Сумма:',
       paymentPending:'⏳ Ожидание оплаты',
-      gel:'₾'
+      gel:'₾',
+      historyTitle:'История посещений',
+      historyHours:'Всего часов в клубе:',
+      historyVisits:'Посещений:',
+      historyLastVisit:'Последний визит:',
+      historyEmpty:'История пока пуста.',
+      historyFav:'Любимый ПК:',
+      reminderMsg:'⏰ Твоя бронь заканчивается через 15 минут!',
+      blockPc:'🔒 Заблокировать PC',
+      unblockPc:'🔓 Разблокировать PC',
+      blockReason:'Причина (необязательно):',
+      blockedTag:'🔒 Заблокирован',
+      adminBookFor:'Бронь от имени администратора',
+      adminNickLabel:'Ник игрока:',
+      adminCreateBook:'Создать бронь',
+      dayRevenue:'Выручка за сегодня:',
+      dayBookings:'Броней сегодня:',
+      dayHours:'PC-часов продано:',
+      topPc:'Топ PC:',
+      usersTitle:'Пользователи',
+      userHours:'ч в клубе',
+      userVisits:'визит',
+      pricePerHour:'Цена за час (₾):',
+      priceUpdated:'✅ Цена обновлена!',
+      priceUpdate:'Сохранить цену',
+      adminTabNotif:'Уведомления',
+      adminTabBookings:'Брони',
+      adminTabStats:'Статистика',
+      adminTabUsers:'Пользователи',
+      adminTabSettings:'Настройки'
     },
     en: {
       title:'Sakompiutere Gaming — Live Hall',
@@ -1639,11 +1687,11 @@
       soon:'Soon',
       statAll:'Total PCs',
       statFree:'Free',
-      statSoonFree:'Soon reserved',
-      statSoonBusy:'Soon free',
+      statSoonFree:'Reserving',
+      statSoonBusy:'Freeing',
       statBusy:'Busy',
       statSelected:'Selected',
-      findNow:'⚡ Find free now',
+      findNow:'⚡ Find free PC',
       multiOff:'👥 Multi-select: OFF',
       multiOn:'👥 Multi-select: ON',
       clearSelected:'Clear selection',
@@ -1744,7 +1792,7 @@
       bookNowShort:'🎮 Book now',
       bookNextShort:'📅 Reserve',
       onboardStep1:'1. Choose a free PC',
-      onboardStep2:'2. Sign in to your account',
+      onboardStep2:'2. Sign in 🔑 (top right)',
       onboardStep3:'3. Confirm your booking',
       workhours:'Open 24/7',
       cancelConfirmQ:'Cancel this booking?',
@@ -1762,7 +1810,36 @@
       rejectBooking:'❌ Reject',
       paymentAmount:'Amount:',
       paymentPending:'⏳ Awaiting payment',
-      gel:'₾'
+      gel:'₾',
+      historyTitle:'Visit history',
+      historyHours:'Total hours at club:',
+      historyVisits:'Visits:',
+      historyLastVisit:'Last visit:',
+      historyEmpty:'No history yet.',
+      historyFav:'Favourite PC:',
+      reminderMsg:'⏰ Your booking ends in 15 minutes!',
+      blockPc:'🔒 Block PC',
+      unblockPc:'🔓 Unblock PC',
+      blockReason:'Reason (optional):',
+      blockedTag:'🔒 Blocked',
+      adminBookFor:'Admin booking',
+      adminNickLabel:'Player nick:',
+      adminCreateBook:'Create booking',
+      dayRevenue:'Revenue today:',
+      dayBookings:'Bookings today:',
+      dayHours:'PC-hours sold:',
+      topPc:'Top PC:',
+      usersTitle:'Users',
+      userHours:'h at club',
+      userVisits:'visit',
+      pricePerHour:'Price per hour (₾):',
+      priceUpdated:'✅ Price updated!',
+      priceUpdate:'Save price',
+      adminTabNotif:'Notifications',
+      adminTabBookings:'Bookings',
+      adminTabStats:'Statistics',
+      adminTabUsers:'Users',
+      adminTabSettings:'Settings'
     },
     ka: {
       title:'Sakompiutere Gaming — Live Hall',
@@ -1772,11 +1849,11 @@
       soon:'მალე',
       statAll:'სულ PC',
       statFree:'თავისუფალი',
-      statSoonFree:'მალე დაიჯავშნება',
-      statSoonBusy:'მალე გათავისუფლდება',
+      statSoonFree:'მალე დაიჯ.',
+      statSoonBusy:'მალე თავისუფ.',
       statBusy:'დაკავებული',
       statSelected:'არჩეული',
-      findNow:'⚡ იპოვე თავისუფალი ახლა',
+      findNow:'⚡ თავისუფალი PC',
       multiOff:'👥 Multi-select: OFF',
       multiOn:'👥 Multi-select: ON',
       clearSelected:'გასუფთავება',
@@ -1877,7 +1954,7 @@
       bookNowShort:'🎮 ახლა ითამაშე',
       bookNextShort:'📅 დაჯავშნე',
       onboardStep1:'1. აირჩიე თავისუფალი PC',
-      onboardStep2:'2. შედი ანგარიშში',
+      onboardStep2:'2. შედი 🔑 (ზემოთ მარჯვნივ)',
       onboardStep3:'3. დაადასტურე ჯავშანი',
       workhours:'ვმუშაობთ 24/7',
       cancelConfirmQ:'გავაუქმოთ ეს ჯავშანი?',
@@ -1895,7 +1972,36 @@
       rejectBooking:'❌ უარყოფა',
       paymentAmount:'თანხა:',
       paymentPending:'⏳ გადახდის მოლოდინი',
-      gel:'₾'
+      gel:'₾',
+      historyTitle:'ვიზიტების ისტორია',
+      historyHours:'სულ საათები კლუბში:',
+      historyVisits:'ვიზიტები:',
+      historyLastVisit:'ბოლო ვიზიტი:',
+      historyEmpty:'ისტორია ჯერ ცარიელია.',
+      historyFav:'საყვარელი PC:',
+      reminderMsg:'⏰ შენი ჯავშანი 15 წუთში მთავრდება!',
+      blockPc:'🔒 PC-ის დაბლოკვა',
+      unblockPc:'🔓 გახსნა',
+      blockReason:'მიზეზი (არასავალდებულო):',
+      blockedTag:'🔒 დაბლოკილია',
+      adminBookFor:'ადმინის ჯავშანი',
+      adminNickLabel:'მოთამაშის ნიკი:',
+      adminCreateBook:'ჯავშნის შექმნა',
+      dayRevenue:'შემოსავალი დღეს:',
+      dayBookings:'ჯავშნები დღეს:',
+      dayHours:'PC-საათები გაყიდული:',
+      topPc:'ტოპ PC:',
+      usersTitle:'მომხმარებლები',
+      userHours:'სთ კლუბში',
+      userVisits:'ვიზიტი',
+      pricePerHour:'ფასი საათში (₾):',
+      priceUpdated:'✅ ფასი განახლდა!',
+      priceUpdate:'ფასის შენახვა',
+      adminTabNotif:'შეტყობინებები',
+      adminTabBookings:'ჯავშნები',
+      adminTabStats:'სტატისტიკა',
+      adminTabUsers:'მომხმარებლები',
+      adminTabSettings:'პარამეტრები'
     }
   };
 
@@ -2023,6 +2129,8 @@
     $('adminSearch').placeholder     = tr('adminSearch');
     const tAdminNotif = $('t_adminnotif');
     if (tAdminNotif) tAdminNotif.textContent = tr('adminNotifLabel');
+    const tHist = $('t_historyTitle');
+    if (tHist) tHist.textContent = tr('historyTitle');
     const tAdminAll = $('t_adminall');
     if (tAdminAll) tAdminAll.textContent = tr('adminAllLabel');
 
@@ -2045,7 +2153,7 @@
     $('logoutTopBtn').classList.toggle('hidden', !currentUser);
     $('loginTopBtn').classList.toggle('hidden',  !!currentUser);
     $('authRow').classList.toggle('hidden',   !!currentUser);
-    $('logoutRow').classList.toggle('hidden', !currentUser);
+    // logoutRow always hidden — logout button is in header
     $('adminRow').classList.toggle('hidden',  !isAdmin);
 
     applyTheme();
@@ -2217,6 +2325,14 @@
       `;
     }
 
+    // In multi-mode show checkmark, otherwise show main CTA
+    const btnLabel = multiMode
+      ? (selectedMulti ? tr('pickedBtn') : tr('pickBtn'))
+      : (s.state === 'free' ? tr('playNowBtn') : tr('bookNextBtn'));
+    const btnClass = multiMode
+      ? (selectedMulti ? 'soft' : '')
+      : (s.state === 'free' ? 'primary' : '');
+
     el.innerHTML = `
       <div class="pcTop">
         <div class="pcName">${esc(pc)}</div>
@@ -2224,11 +2340,11 @@
       </div>
       <div class="pcMeta">${meta}</div>
       <div class="pcBottom">
-        <button class="mini ${selectedMulti ? 'soft' : ''}" data-a="pick" type="button">${selectedMulti ? tr('pickedBtn') : tr('pickBtn')}</button>
-        <button class="mini ${s.state === 'free' ? 'primary' : ''}" data-a="quick" type="button">${s.state === 'free' ? tr('playNowBtn') : tr('bookNextBtn')}</button>
+        <button class="mini ${btnClass}" data-a="main" type="button">${btnLabel}</button>
       </div>
     `;
 
+    // Click anywhere on card = select + scroll to panel
     el.addEventListener('click', e => {
       if (e.target.closest('button')) return;
       updateSelection(pc);
@@ -2237,25 +2353,22 @@
       }
     });
 
-    el.querySelector('[data-a="pick"]').onclick = ev => {
-      ev.stopPropagation();
-      updateSelection(pc);
-    };
-
-    el.querySelector('[data-a="quick"]').onclick = ev => {
+    el.querySelector('[data-a="main"]').onclick = ev => {
       ev.stopPropagation();
       updateSelection(pc);
 
       if (multiMode) {
-        if (!selectedPCs.size) return toast(tr('chooseAtLeastOne'), 'warn');
-        showCustom();
-      } else {
-        if (!currentUser) return openAuth();
-        const nick = ($('nickInput').value || '').trim() || localStorage.getItem(NICK_KEY) || '';
-        if (!nick) return showCustom(true);
-        if (s.state === 'free') openQuickConfirm([pc], new Date(), 60);
-        else openNearestConfirm([pc]);
+        // In multi-mode, just toggle selection — actions in side panel
+        if (window.innerWidth <= 1180) {
+          setTimeout(() => document.querySelector('.sideCard').scrollIntoView({behavior:'smooth', block:'start'}), 100);
+        }
+        return;
       }
+      if (!currentUser) return openAuth();
+      const nick = ($('nickInput').value || '').trim() || localStorage.getItem(NICK_KEY) || '';
+      if (!nick) return showCustom(true);
+      if (s.state === 'free') openQuickConfirm([pc], new Date(), 60);
+      else openNearestConfirm([pc]);
     };
 
     return el;
@@ -2308,6 +2421,9 @@
     renderHall();
     renderSelected();
     updateMobileBookBtn();
+    // Show multi/clear row only when something is selected
+    const mr = $('multiRow');
+    if (mr) mr.classList.toggle('hidden', selectedPCs.size === 0);
   }
 
   function clearSelection() {
@@ -2319,6 +2435,8 @@
     renderSelected();
     buildCustomTimes();
     updateMobileBookBtn();
+    const mr = $('multiRow');
+    if (mr) mr.classList.add('hidden');
   }
 
   // ─── Side panel ───────────────────────────────────────────────────────────
@@ -2355,66 +2473,99 @@
       $('selectedChips').appendChild(chip);
     });
 
-    const actions = [];
-    if (names.length === 1 && !multiMode) {
-      const s = getPcStatus(names[0]);
-      if (s.state === 'free') {
-        actions.push({ label:tr('play1'), small:`${tr('starts')}: ${fmtHM(new Date())}`,  fn:()=>openQuickConfirm(names, new Date(), 60)  });
-        actions.push({ label:tr('play2'), small:`${tr('starts')}: ${fmtHM(new Date())}`,  fn:()=>openQuickConfirm(names, new Date(), 120) });
-        actions.push({ label:tr('play3'), small:`${tr('starts')}: ${fmtHM(new Date())}`,  fn:()=>openQuickConfirm(names, new Date(), 180) });
-      } else {
-        const nearest = findNearestForAll(names, new Date(), 120);
-        actions.push({
-          label: tr('bookAt'),
-          small: nearest ? `${tr('starts')}: ${fmtHM(nearest)}` : tr('taken'),
-          fn:    () => openNearestConfirm(names)
-        });
-        actions.push({
-          label: tr('queue'),
-          small: tr('queueHint'),
-          fn:    () => openNearestConfirm(names)
-        });
-      }
-    } else {
-      actions.push({
-        label: tr('group2'),
-        small: `${tr('pcs')}: ${names.join(', ')}`,
-        fn:    () => openQuickConfirm(names, new Date(), 120)
-      });
-      actions.push({
-        label: tr('group3'),
-        small: `${tr('pcs')}: ${names.join(', ')}`,
-        fn:    () => openQuickConfirm(names, new Date(), 180)
-      });
-    }
-
-    actions.push({ label:tr('exact'), small:tr('saveNickHint'), fn:()=>showCustom() });
-
     $('quickActions').innerHTML = '';
 
-    // If not logged in, show a login nudge banner above actions
+    // If not logged in, show a clean login prompt
     if (!currentUser) {
       const nudge = document.createElement('div');
       nudge.className = 'notice';
-      nudge.style.marginBottom = '10px';
-      nudge.innerHTML = `<b>🔑</b> ${esc(tr('authNeed'))} <button class="mini primary" style="margin-top:8px;width:100%" type="button">${esc(tr('auth'))}</button>`;
+      nudge.style.marginBottom = '12px';
+      nudge.innerHTML = `<b>🔑</b> ${esc(tr('authNeed'))} <button class="btn primary" style="margin-top:10px;width:100%;padding:12px" type="button">${esc(tr('auth'))}</button>`;
       nudge.querySelector('button').onclick = openAuth;
       $('quickActions').appendChild(nudge);
+      return;
     }
 
-    actions.forEach((a, i) => {
-      const div = document.createElement('div');
-      div.className = 'quickItem';
-      div.innerHTML = `
-        <div>
-          <b>${esc(a.label)}</b>
-          <small>${esc(a.small)}</small>
-        </div>
-        <button class="mini ${i === 0 && currentUser ? 'primary' : ''}" type="button">→</button>
-      `;
-      div.querySelector('button').onclick = a.fn;
-      $('quickActions').appendChild(div);
-    });
+    if (names.length === 1 && !multiMode) {
+      const s = getPcStatus(names[0]);
+
+      if (s.state === 'free') {
+        // ── Quick duration chips ──────────────────────────────────
+        const durWrap = document.createElement('div');
+        durWrap.innerHTML = `<div class="small muted" style="margin-bottom:8px">${esc(tr('duration'))}:</div>`;
+        const grid = document.createElement('div');
+        grid.style.cssText = 'display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:12px';
+        [[60,'1 '+( lang==='en'?'h':lang==='ru'?'ч':'სთ')],[120,'2 '+(lang==='en'?'h':lang==='ru'?'ч':'სთ')],[180,'3 '+(lang==='en'?'h':lang==='ru'?'ч':'სთ')]].forEach(([dur,label]) => {
+          const btn = document.createElement('button');
+          btn.className = 'mini primary';
+          btn.type = 'button';
+          btn.textContent = label;
+          btn.style.cssText = 'padding:12px 8px;font-size:16px;font-weight:900';
+          btn.onclick = () => openQuickConfirm(names, new Date(), dur);
+          grid.appendChild(btn);
+        });
+        durWrap.appendChild(grid);
+        $('quickActions').appendChild(durWrap);
+
+        // Manual time option
+        const manualBtn = document.createElement('button');
+        manualBtn.className = 'mini';
+        manualBtn.type = 'button';
+        manualBtn.style.cssText = 'width:100%;margin-bottom:0';
+        manualBtn.textContent = '🕐 ' + tr('exact');
+        manualBtn.onclick = showCustom;
+        $('quickActions').appendChild(manualBtn);
+
+      } else {
+        // Busy PC — show nearest time
+        const nearest = findNearestForAll(names, new Date(), 60);
+        const nearestDiv = document.createElement('div');
+        nearestDiv.className = 'quickItem';
+        nearestDiv.innerHTML = `
+          <div>
+            <b>${esc(tr('bookAt'))}</b>
+            <small>${nearest ? tr('starts')+': '+fmtHM(nearest) : tr('taken')}</small>
+          </div>
+          <button class="mini primary" type="button">→</button>`;
+        nearestDiv.querySelector('button').onclick = () => openNearestConfirm(names);
+        $('quickActions').appendChild(nearestDiv);
+
+        const manualBtn2 = document.createElement('button');
+        manualBtn2.className = 'mini';
+        manualBtn2.type = 'button';
+        manualBtn2.style.cssText = 'width:100%;margin-top:8px';
+        manualBtn2.textContent = '🕐 ' + tr('exact');
+        manualBtn2.onclick = showCustom;
+        $('quickActions').appendChild(manualBtn2);
+      }
+
+    } else {
+      // Multi-select: group booking
+      const g2 = document.createElement('div');
+      g2.className = 'quickItem';
+      g2.innerHTML = `
+        <div><b>${esc(tr('group2'))}</b><small>${esc(tr('pcs'))}: ${esc(names.join(', '))}</small></div>
+        <button class="mini primary" type="button">→</button>`;
+      g2.querySelector('button').onclick = () => openQuickConfirm(names, new Date(), 120);
+      $('quickActions').appendChild(g2);
+
+      const g3 = document.createElement('div');
+      g3.className = 'quickItem';
+      g3.style.marginTop = '8px';
+      g3.innerHTML = `
+        <div><b>${esc(tr('group3'))}</b><small>${esc(tr('pcs'))}: ${esc(names.join(', '))}</small></div>
+        <button class="mini" type="button">→</button>`;
+      g3.querySelector('button').onclick = () => openQuickConfirm(names, new Date(), 180);
+      $('quickActions').appendChild(g3);
+
+      const manualBtn3 = document.createElement('button');
+      manualBtn3.className = 'mini';
+      manualBtn3.type = 'button';
+      manualBtn3.style.cssText = 'width:100%;margin-top:8px';
+      manualBtn3.textContent = '🕐 ' + tr('exact');
+      manualBtn3.onclick = showCustom;
+      $('quickActions').appendChild(manualBtn3);
+    }
 
     buildCustomTimes();
   }
@@ -2645,7 +2796,7 @@
         selectedPCs.clear(); selectedPc = null;
         renderStats(); renderHall(); renderSelected(); updateMobileBookBtn();
         $('mySection').scrollIntoView({ behavior:'smooth', block:'start' });
-        renderMyBookings(); renderAdminBookings();
+        renderMyBookings(); renderAdminBookings(); renderHistoryStats();
       } catch(err) {
         handleFsError(err);
         $('payDoneBtn').disabled = false;
@@ -2774,6 +2925,67 @@
       };
       box.appendChild(item);
     });
+
+    // ── History stats strip ────────────────────────────────────
+    renderHistoryStats();
+  }
+
+  function renderHistoryStats() {
+    const strip = $('historyStrip');
+    const statsBox = $('historyStats');
+    if (!strip || !statsBox || !currentUser) return;
+
+    // Use all bookings of this user (including past, up to last 90 days)
+    const nowMs = Date.now();
+    const ninetyDaysAgo = nowMs - 90 * 86400000;
+    const myAll = allBookings.filter(b =>
+      b.uid === currentUser.uid &&
+      b.endAtMs > ninetyDaysAgo &&
+      (b.status === 'confirmed' || !b.status || b.status === 'pending_payment' || b.status === 'payment_submitted')
+    );
+
+    if (!myAll.length) {
+      strip.classList.add('hidden');
+      return;
+    }
+
+    strip.classList.remove('hidden');
+    $('t_historyTitle').textContent = tr('historyTitle');
+
+    // Calculate stats
+    const pastBookings = myAll.filter(b => b.endAtMs <= nowMs);
+    const totalMinutes = pastBookings.reduce((sum, b) => sum + Math.round((b.endAtMs - b.startAtMs) / 60000), 0);
+    const totalHours = (totalMinutes / 60).toFixed(1);
+    const visits = pastBookings.length;
+
+    // Most used PC
+    const pcCount = {};
+    pastBookings.forEach(b => { pcCount[b.pc] = (pcCount[b.pc] || 0) + 1; });
+    const favPc = Object.entries(pcCount).sort((a,b) => b[1]-a[1])[0]?.[0] || '—';
+
+    // Last visit date
+    const lastVisit = pastBookings.length
+      ? toISODate(new Date(Math.max(...pastBookings.map(b => b.endAtMs))))
+      : '—';
+
+    statsBox.innerHTML = `
+      <div class="histStat">
+        <span>${esc(tr('historyHours'))}</span>
+        <b class="accent">${totalHours}h</b>
+      </div>
+      <div class="histStat">
+        <span>${esc(tr('historyVisits'))}</span>
+        <b>${visits}</b>
+      </div>
+      <div class="histStat">
+        <span>${esc(tr('historyFav'))}</span>
+        <b>${esc(favPc)}</b>
+      </div>
+      <div class="histStat">
+        <span>${esc(tr('historyLastVisit'))}</span>
+        <b style="font-size:12px">${esc(lastVisit)}</b>
+      </div>
+    `;
   }
 
   // ─── Admin bookings ───────────────────────────────────────────────────────
@@ -2858,7 +3070,8 @@
 
     // Side panel rows
     $('authRow').classList.toggle('hidden',   loggedIn);
-    $('logoutRow').classList.toggle('hidden', !loggedIn);
+    // logoutRow always hidden — logout is in header
+    $('logoutRow').classList.add('hidden');
 
     // Admin row — only for admins
     $('adminRow').classList.toggle('hidden', !isAdmin);
@@ -2880,6 +3093,7 @@
     renderAdminBookings();
     renderMyBookings();
     renderSelected();
+    renderHistoryStats();
 
     // Start/stop notification listener based on admin status
     if (isAdmin) {
@@ -3033,6 +3247,28 @@
   }
 
   // ─── Ticker — only ticks when tab is visible ──────────────────────────────
+  // Track which bookings we've already reminded about
+  const _remindedIds = new Set();
+
+  function checkReminders() {
+    if (!currentUser) return;
+    const nowMs = Date.now();
+    const WARN_MS = 15 * 60000; // 15 minutes
+
+    allBookings.forEach(b => {
+      if (b.uid !== currentUser.uid) return;
+      if (_remindedIds.has(b.id)) return;
+      if (b.status === 'pending_payment') return;
+
+      const timeLeft = b.endAtMs - nowMs;
+      if (timeLeft > 0 && timeLeft <= WARN_MS && b.startAtMs <= nowMs) {
+        _remindedIds.add(b.id);
+        const minsLeft = Math.ceil(timeLeft / 60000);
+        toast(tr('reminderMsg').replace('15', String(minsLeft)), 'warn');
+      }
+    });
+  }
+
   function startTicker() {
     clearInterval(timer);
 
@@ -3041,9 +3277,17 @@
       renderStats();
       renderHall();
       renderSelected();
+      checkReminders();
     };
 
     timer = setInterval(tick, 30000);
+
+    // Also check reminders every minute for accuracy
+    setInterval(() => {
+      if (document.visibilityState === 'hidden') return;
+      checkReminders();
+    }, 60000);
+
     document.addEventListener('visibilitychange', tick);
 
     // Immediately tick when page becomes visible after being hidden
