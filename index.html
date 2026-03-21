@@ -1275,10 +1275,14 @@
               <div>
                 <label id="t_duration"></label>
                 <select id="customDuration">
+                  <option value="30">30 min</option>
                   <option value="60">1h</option>
+                  <option value="90">1h 30min</option>
                   <option value="120">2h</option>
                   <option value="180">3h</option>
                   <option value="240">4h</option>
+                  <option value="300">5h</option>
+                  <option value="360">6h</option>
                 </select>
               </div>
             </div>
@@ -1399,11 +1403,11 @@
 
   const ADMIN_EMAILS = ['adjarelispeak@gmail.com','kiralite93@gmail.com'].map(x => x.toLowerCase());
 
-  const WORK_START        = 10 * 60; // minutes from midnight
-  const WORK_END_NEXTDAY  = 3  * 60; // minutes from midnight (next day)
+  // 24/7 — no opening/closing hours
   const SLOT_STEP         = 30;
   const SOON_MIN          = 30;
   const MAX_BOOKING_DAYS  = 7;       // how far ahead booking is allowed
+  const MIN_SESSION_MIN   = 30;      // minimum session duration
 
   const LANG_KEY  = 'sg_live_lang';
   const NICK_KEY  = 'sg_live_nick';
@@ -1548,7 +1552,7 @@
       onboardStep1:'1. Выбери свободный ПК',
       onboardStep2:'2. Войди в аккаунт',
       onboardStep3:'3. Подтверди бронь',
-      workhours:'Режим работы: 10:00 — 03:00',
+      workhours:'Работаем 24/7',
       cancelConfirmQ:'Отменить бронирование?'
     },
     en: {
@@ -1666,7 +1670,7 @@
       onboardStep1:'1. Choose a free PC',
       onboardStep2:'2. Sign in to your account',
       onboardStep3:'3. Confirm your booking',
-      workhours:'Open: 10:00 — 03:00',
+      workhours:'Open 24/7',
       cancelConfirmQ:'Cancel this booking?'
     },
     ka: {
@@ -1784,7 +1788,7 @@
       onboardStep1:'1. აირჩიე თავისუფალი PC',
       onboardStep2:'2. შედი ანგარიშში',
       onboardStep3:'3. დაადასტურე ჯავშანი',
-      workhours:'სამუშაო საათები: 10:00 — 03:00',
+      workhours:'ვმუშაობთ 24/7',
       cancelConfirmQ:'გავაუქმოთ ეს ჯავშანი?'
     }
   };
@@ -2017,8 +2021,9 @@
   }
 
   function isFreeRangeForAll(pcs, startMs, endMs) {
-    // Guard against NaN / invalid timestamps
-    if (!Number.isFinite(startMs) || !Number.isFinite(endMs) || endMs <= startMs) return false;
+    // Guard against NaN / invalid timestamps and minimum session length
+    if (!Number.isFinite(startMs) || !Number.isFinite(endMs)) return false;
+    if (endMs - startMs < MIN_SESSION_MIN * 60000) return false;
     return pcs.every(pc =>
       !getPcBookings(pc).some(b =>
         Number.isFinite(b.startAtMs) && Number.isFinite(b.endAtMs) &&
@@ -2027,27 +2032,18 @@
     );
   }
 
-  /** Returns Date for the opening time of the workday that contains `date`,
-   *  or null if `date` is in the dead zone between close and open.
-   */
-  function getWorkBoundsForDay(date) {
-    const d    = new Date(date);
-    const base = new Date(d.getFullYear(), d.getMonth(), d.getDate(), 0, 0, 0, 0);
-    const open  = addMinutes(base, WORK_START);
-    // close = next-day 03:00
-    const close = addMinutes(addDays(base, 1), WORK_END_NEXTDAY);
-    return { open, close };
+  // 24/7 — always open, no clamping needed
+  function getWorkBoundsForDay(_date) {
+    // Open = now, Close = far in the future (no restriction)
+    return {
+      open:  new Date(0),
+      close: new Date(Date.now() + (MAX_BOOKING_DAYS + 2) * 86400000)
+    };
   }
 
-  /** Clamps a Date to [open, close) for its workday.
-   *  Returns null if date is outside the workday window.
-   */
   function clampToOpen(date) {
-    const d = new Date(date);
-    const { open, close } = getWorkBoundsForDay(d);
-    if (d >= close) return null; // after today's close — caller should try next day
-    if (d < open)   return open; // before open — snap to open
-    return d;
+    // 24/7: always within bounds — just return the date as-is
+    return new Date(date);
   }
 
   function roundUp(date) {
@@ -2061,33 +2057,14 @@
 
   function findNearestForAll(pcs, earliest, dur) {
     const limit = addDays(new Date(), MAX_BOOKING_DAYS).getTime();
-    let cur     = roundUp(new Date(Math.max(earliest.getTime(), Date.now())));
+    // Start from the later of: earliest requested time or now (rounded up to slot)
+    let cur = roundUp(new Date(Math.max(earliest.getTime(), Date.now())));
 
     while (cur.getTime() < limit) {
-      // Clamp to open hours; if null, jump to next workday open
-      const clamped = clampToOpen(cur);
-      if (!clamped) {
-        // Jump to next day's open time
-        const { open } = getWorkBoundsForDay(addDays(cur, 1));
-        cur = open;
-        continue;
-      }
-      cur = roundUp(clamped);
-
       const end = addMinutes(cur, dur);
-      const { close } = getWorkBoundsForDay(cur);
-
-      if (end > close) {
-        // Session would extend past close — jump to next workday
-        const { open } = getWorkBoundsForDay(addDays(cur, 1));
-        cur = open;
-        continue;
-      }
-
       if (isFreeRangeForAll(pcs, cur.getTime(), end.getTime())) {
         return cur;
       }
-
       cur = addMinutes(cur, SLOT_STEP);
     }
 
@@ -2350,8 +2327,8 @@
     const [y, m, d] = dateKey.split('-').map(Number);
 
     const base  = new Date(y, m - 1, d, 0, 0, 0, 0);
-    const open  = addMinutes(base, WORK_START);
-    const close = addMinutes(addDays(base, 1), WORK_END_NEXTDAY);
+    const open  = base;                              // 00:00 — 24/7
+    const close = addDays(base, 1);                  // 24:00 same day
 
     for (let cur = new Date(open); addMinutes(cur, dur) <= close; cur = addMinutes(cur, SLOT_STEP)) {
       if (cur.getTime() < Date.now()) continue;
@@ -2728,11 +2705,8 @@
 
     const { startMs, endMs } = queryWindow();
 
-    // Two-sided range query so Firestore only fetches relevant documents.
-    // Composite index required: startAtMs ASC + endAtMs ASC
-    // If the index is missing, Firestore will show a link in the console.
     // Single-field query — no composite index required.
-    // We filter the other end client-side (negligible cost for ~10 PCs / 7 days).
+    // Past bookings (endAtMs <= startMs) are filtered client-side.
     unsub = db.collection('bookings')
       .where('startAtMs', '<', endMs)
       .onSnapshot(snap => {
