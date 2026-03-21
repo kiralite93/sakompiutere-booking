@@ -944,6 +944,18 @@
 
     .modalBody{padding:18px;min-width:0}
     .auth{display:grid;gap:10px;min-width:0}
+    /* ── Payment modal styles ── */
+    .payAmount{font-size:26px;font-weight:1000;color:var(--free);text-align:center;padding:8px 0 4px;line-height:1}
+    .payRow{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:8px;font-size:13px;flex-wrap:wrap}
+    .payRow:last-child{margin-bottom:0}
+    .payLabel{color:var(--muted);flex-shrink:0}
+    .payVal{font-weight:800;text-align:right;overflow-wrap:anywhere;max-width:65%}
+    .payCard{border:1px solid var(--line);border-radius:18px;padding:14px;background:rgba(255,255,255,.03);margin-bottom:12px}
+    body[data-theme="light"] .payCard{background:rgba(255,255,255,.72)}
+    .copyBtn{cursor:pointer;padding:5px 9px;border-radius:10px;border:1px solid var(--line);background:rgba(255,255,255,.05);font-size:11px;font-weight:800;color:var(--muted);transition:.15s}
+    .copyBtn:hover{border-color:rgba(110,231,255,.4);color:var(--text)}
+    body[data-theme="light"] .copyBtn{background:rgba(255,255,255,.8)}
+    .pendingChip{display:inline-block;padding:4px 10px;border-radius:999px;background:rgba(251,191,36,.12);border:1px solid rgba(251,191,36,.3);color:var(--soon);font-size:11px;font-weight:900}
     .mobileBar{display:none}
 
     @media (max-width:1180px){
@@ -1354,6 +1366,20 @@
     </div>
   </div>
 
+  <!-- ── Payment modal ── -->
+  <div class="backdrop" id="payBackdrop">
+    <div class="modal glass">
+      <div class="modalHead">
+        <div>
+          <div class="panelTitle" id="t_payTitle"></div>
+          <div class="small muted" id="t_payHint"></div>
+        </div>
+        <button class="btn" id="closePayBtn" type="button">✕</button>
+      </div>
+      <div class="modalBody" id="payBody" style="min-width:0"></div>
+    </div>
+  </div>
+
 <script>
 (() => {
   const firebaseConfig = {
@@ -1372,6 +1398,13 @@
   const VALID_PCS = new Set(ALL);
 
   const ADMIN_EMAILS = ['adjarelispeak@gmail.com','kiralite93@gmail.com'].map(x => x.toLowerCase());
+
+  // ─── Payment config ───────────────────────────────────────────
+  const PRICE_PER_HOUR = 5;  // GEL per PC per hour
+  const PAYMENT_BANKS = [
+    { name:'Bank of Georgia', short:'BOG', holder:'Ruslan Tedoradze', account:'GE24BG0000000541600654' }
+  ];
+  // TBC will be added later
 
   // 24/7 — no opening/closing hours
   const SLOT_STEP         = 30;
@@ -1524,7 +1557,22 @@
       onboardStep2:'2. Войди в аккаунт',
       onboardStep3:'3. Подтверди бронь',
       workhours:'Работаем 24/7',
-      cancelConfirmQ:'Отменить бронирование?'
+      cancelConfirmQ:'Отменить бронирование?',
+      payTitle:'Оплата бронирования',
+      payHint:'Переведи сумму на счёт и нажми кнопку ниже.',
+      payAmount:'К оплате:',
+      payHolder:'Получатель:',
+      payAccount:'Номер счёта:',
+      payCopied:'Скопировано ✓',
+      payDone:'✅ Заявка отправлена! Ожидай подтверждения админа.',
+      payConfirmBtn:'Я оплатил — отправить заявку',
+      payCancel:'Отмена',
+      pendingTag:'⏳ Ожидает оплаты',
+      confirmBooking:'✅ Подтвердить бронь',
+      rejectBooking:'❌ Отклонить',
+      paymentAmount:'Сумма:',
+      paymentPending:'⏳ Ожидание оплаты',
+      gel:'₾'
     },
     en: {
       title:'Sakompiutere Gaming — Live Hall',
@@ -1642,7 +1690,22 @@
       onboardStep2:'2. Sign in to your account',
       onboardStep3:'3. Confirm your booking',
       workhours:'Open 24/7',
-      cancelConfirmQ:'Cancel this booking?'
+      cancelConfirmQ:'Cancel this booking?',
+      payTitle:'Booking payment',
+      payHint:'Transfer the amount to the account and click the button below.',
+      payAmount:'Amount to pay:',
+      payHolder:'Recipient:',
+      payAccount:'Account number:',
+      payCopied:'Copied ✓',
+      payDone:'✅ Request sent! Waiting for admin confirmation.',
+      payConfirmBtn:'I paid — send request',
+      payCancel:'Cancel',
+      pendingTag:'⏳ Awaiting payment',
+      confirmBooking:'✅ Confirm booking',
+      rejectBooking:'❌ Reject',
+      paymentAmount:'Amount:',
+      paymentPending:'⏳ Awaiting payment',
+      gel:'₾'
     },
     ka: {
       title:'Sakompiutere Gaming — Live Hall',
@@ -1760,7 +1823,22 @@
       onboardStep2:'2. შედი ანგარიშში',
       onboardStep3:'3. დაადასტურე ჯავშანი',
       workhours:'ვმუშაობთ 24/7',
-      cancelConfirmQ:'გავაუქმოთ ეს ჯავშანი?'
+      cancelConfirmQ:'გავაუქმოთ ეს ჯავშანი?',
+      payTitle:'ჯავშნის გადახდა',
+      payHint:'გადაიხადე და დააჭირე ღილაკს.',
+      payAmount:'გადასახდელი:',
+      payHolder:'მიმღები:',
+      payAccount:'ანგარიშის ნომერი:',
+      payCopied:'დაკოპირდა ✓',
+      payDone:'✅ განაცხადი გაიგზავნა! დაელოდე ადმინს.',
+      payConfirmBtn:'გადავიხადე — განაცხადის გაგზავნა',
+      payCancel:'გაუქმება',
+      pendingTag:'⏳ გადახდის მოლოდინი',
+      confirmBooking:'✅ ჯავშნის დადასტურება',
+      rejectBooking:'❌ უარყოფა',
+      paymentAmount:'თანხა:',
+      paymentPending:'⏳ გადახდის მოლოდინი',
+      gel:'₾'
     }
   };
 
@@ -1866,6 +1944,8 @@
     $('openAdminBtn').textContent = tr('admin');
     $('openAuthBtn').textContent  = tr('auth');
     $('logoutBtn').textContent    = tr('logout');
+    // Sync mobile book button label to current auth state
+    $('mobileBookBtn').textContent = currentUser ? tr('mobileBook') : tr('auth');
 
     $('t_sidepanel').textContent = tr('sidepanel');
     $('t_sidehint').textContent  = tr('workhours');
@@ -1944,7 +2024,7 @@
   // ─── Booking helpers ──────────────────────────────────────────────────────
   function getPcBookings(pc) {
     return allBookings
-      .filter(b => b.pc === pc)
+      .filter(b => b.pc === pc && b.status !== 'rejected')
       .sort((a, b) => a.startAtMs - b.startAtMs);
   }
 
@@ -1984,9 +2064,12 @@
   }
 
   function getDisplayTag(status) {
-    if (status.subState === 'soon_free')  return tr('soonFreeTag');
-    if (status.subState === 'soon_busy')  return tr('soonBusyTag');
-    if (status.state    === 'busy')       return tr('busyTag');
+    if (status.subState === 'soon_free') return tr('soonFreeTag');
+    if (status.subState === 'soon_busy') return tr('soonBusyTag');
+    if (status.state === 'busy' && status.active &&
+        (status.active.status === 'pending_payment' || status.active.status === 'payment_submitted'))
+      return tr('pendingTag');
+    if (status.state === 'busy') return tr('busyTag');
     return tr('freeTag');
   }
 
@@ -2403,92 +2486,176 @@
     openConfirm();
   }
 
+  // ─── Payment helpers ─────────────────────────────────────────────────────
+  const openPayModal  = () => $('payBackdrop').classList.add('show');
+  const closePayModal = () => $('payBackdrop').classList.remove('show');
+
+  function calcPrice(numPcs, startMs, endMs) {
+    const hours = (endMs - startMs) / 3600000;
+    return Math.round(numPcs * hours * PRICE_PER_HOUR * 100) / 100;
+  }
+
+  function fmtDur(startMs, endMs) {
+    const m = Math.round((endMs - startMs) / 60000);
+    const h = Math.floor(m / 60), min = m % 60;
+    if (h === 0) return m + ' ' + tr('minutes');
+    if (min === 0) return h + ' ' + (lang === 'en' ? 'h' : lang === 'ru' ? 'ч' : 'სთ');
+    return h + ':' + String(min).padStart(2,'0');
+  }
+
+  function showPayModal(bookingData) {
+    const { pcs, startAtMs, endAtMs, nick, note, allIds } = bookingData;
+    const total = calcPrice(pcs.length, startAtMs, endAtMs);
+    const s = new Date(startAtMs), e = new Date(endAtMs);
+
+    $('t_payTitle').textContent = tr('payTitle');
+    $('t_payHint').textContent  = tr('payHint');
+
+    const bankHtml = PAYMENT_BANKS.map(bank => `
+      <div class="payCard">
+        <div class="payRow"><span class="payLabel">${esc(tr('payHolder'))}</span><span class="payVal">${esc(bank.holder)}</span></div>
+        <div class="payRow">
+          <span class="payLabel">${esc(tr('payAccount'))}</span>
+          <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;justify-content:flex-end">
+            <span class="payVal" style="font-size:12px;letter-spacing:.02em">${esc(bank.account)}</span>
+            <button class="copyBtn" id="copyBtn_${esc(bank.short)}" type="button">📋 Copy</button>
+          </div>
+        </div>
+        <div class="payRow"><span class="payLabel" style="opacity:.6">${esc(bank.name)}</span><span class="pendingChip">${esc(bank.short)}</span></div>
+      </div>`).join('');
+
+    $('payBody').innerHTML = `
+      <div class="payCard" style="border-color:rgba(52,211,153,.35);background:rgba(52,211,153,.07);margin-bottom:12px;text-align:center">
+        <div class="payAmount">${total} ₾</div>
+        <div style="font-size:11px;opacity:.6;margin-top:4px">${esc(pcs.join(', '))} · ${esc(fmtDur(startAtMs,endAtMs))} · ${esc(fmtHM(s))}–${esc(fmtHM(e))}</div>
+      </div>
+      ${bankHtml}
+      <div class="notice" style="margin-bottom:14px">${esc(tr('payHint'))}</div>
+      <div class="topActionRow">
+        <button class="btn primary" id="payDoneBtn" type="button">${esc(tr('payConfirmBtn'))}</button>
+        <button class="btn" id="payCancelBtn" type="button">${esc(tr('payCancel'))}</button>
+      </div>`;
+
+    // Wire copy buttons
+    PAYMENT_BANKS.forEach(bank => {
+      const btn = $('copyBtn_' + bank.short);
+      if (btn) btn.onclick = () => {
+        navigator.clipboard.writeText(bank.account).then(() => {
+          btn.textContent = tr('payCopied');
+          setTimeout(() => { btn.textContent = '📋 Copy'; }, 1800);
+        }).catch(() => {
+          btn.textContent = bank.account; // fallback: show account
+        });
+      };
+    });
+
+    $('payCancelBtn').onclick = () => {
+      closePayModal();
+      // Delete the pending booking docs
+      if (allIds && allIds.length) {
+        const b = db.batch();
+        allIds.forEach(id => b.delete(db.collection('bookings').doc(id)));
+        b.commit().catch(() => {});
+      }
+    };
+
+    $('payDoneBtn').onclick = async () => {
+      $('payDoneBtn').disabled = true;
+      $('payDoneBtn').textContent = '...';
+      try {
+        // Mark as payment_submitted
+        const b2 = db.batch();
+        allIds.forEach(id => b2.update(db.collection('bookings').doc(id), { status: 'payment_submitted' }));
+        await b2.commit();
+
+        // Notify admin
+        await db.collection('notifications').add({
+          type:        'payment_submitted',
+          uid:         String(currentUser.uid),
+          userEmail:   String(currentUser.email || ''),
+          nick, pcs: pcs.join(', '), note: note || '',
+          startAtMs, endAtMs,
+          startFmt:    toISODate(s) + ' ' + fmtHM(s),
+          endFmt:      fmtHM(e),
+          amountGEL:   total,
+          bookingIds:  allIds,
+          createdAtMs: Date.now(),
+          read:        false
+        });
+
+        toast(tr('payDone'), 'good');
+        closePayModal();
+        selectedPCs.clear(); selectedPc = null;
+        renderStats(); renderHall(); renderSelected(); updateMobileBookBtn();
+        $('mySection').scrollIntoView({ behavior:'smooth', block:'start' });
+        renderMyBookings(); renderAdminBookings();
+      } catch(err) {
+        handleFsError(err);
+        $('payDoneBtn').disabled = false;
+        $('payDoneBtn').textContent = tr('payConfirmBtn');
+      }
+    };
+
+    openPayModal();
+  }
+
   // ─── Create booking ───────────────────────────────────────────────────────
   async function createBooking(data) {
     if (!currentUser) return needLogin();
 
     const nowMs = Date.now();
-    const latestAllowedStartMs = addDays(new Date(), MAX_BOOKING_DAYS).getTime();
+    const latestMs = addDays(new Date(), MAX_BOOKING_DAYS).getTime();
 
-    // Sanitise & validate
     const pcs      = [...new Set((data.pcs || []).map(String).filter(p => VALID_PCS.has(p)))].slice(0, 10);
     const startAtMs = Number(data.startAtMs);
     const endAtMs   = Number(data.endAtMs);
     const nick      = String(data.nick || '').trim().slice(0, 32);
     const note      = String(data.note || '').trim().slice(0, 120);
 
-    if (!pcs.length)                                              return toast(tr('chooseAtLeastOne'), 'warn');
-    if (!nick)                                                    return toast(tr('enterNick'),        'warn');
+    if (!pcs.length)        return toast(tr('chooseAtLeastOne'), 'warn');
+    if (!nick)              return toast(tr('enterNick'), 'warn');
     if (!Number.isFinite(startAtMs) || !Number.isFinite(endAtMs) || endAtMs <= startAtMs)
-                                                                  return toast(tr('invalidData'),      'warn');
-    if (startAtMs < nowMs - 60000)                                return toast(tr('invalidData'),      'warn');
-    if (startAtMs > latestAllowedStartMs)                         return toast(tr('invalidData'),      'warn');
-    if (endAtMs - startAtMs < MIN_SESSION_MIN * 60000)            return toast(tr('invalidData'),      'warn');
-    if (endAtMs - startAtMs > MAX_SESSION_MIN * 60000)            return toast(tr('invalidData'),      'warn');
+                            return toast(tr('invalidData'), 'warn');
+    if (startAtMs < nowMs - 60000)   return toast(tr('invalidData'), 'warn');
+    if (startAtMs > latestMs)        return toast(tr('invalidData'), 'warn');
+    if (endAtMs - startAtMs < MIN_SESSION_MIN * 60000) return toast(tr('invalidData'), 'warn');
+    if (endAtMs - startAtMs > MAX_SESSION_MIN * 60000) return toast(tr('invalidData'), 'warn');
 
-    // Re-check availability right before writing (race condition guard)
     if (!isFreeRangeForAll(pcs, startAtMs, endAtMs)) return toast(tr('taken'), 'bad');
 
     try {
       await db.collection('users').doc(String(currentUser.uid)).set(
-        { nick, updatedAtMs: Date.now() },
-        { merge: true }
+        { nick, updatedAtMs: Date.now() }, { merge: true }
       );
-
-      const batch = db.batch();
-      pcs.forEach(pc => {
-        const ref = db.collection('bookings').doc();
-        batch.set(ref, {
-          uid:        String(currentUser.uid),
-          userEmail:  String(currentUser.email || ''),
-          nick,
-          pc,
-          note,
-          startAtMs,
-          endAtMs,
-          createdAtMs: Date.now()
-        });
-      });
-
-      await batch.commit();
-
-      // ── Admin notification ─────────────────────────────────────
-      try {
-        const s = new Date(startAtMs);
-        const e = new Date(endAtMs);
-        await db.collection('notifications').add({
-          type:       'new_booking',
-          uid:        String(currentUser.uid),
-          userEmail:  String(currentUser.email || ''),
-          nick,
-          pcs:        pcs.join(', '),
-          note,
-          startAtMs,
-          endAtMs,
-          startFmt:   `${toISODate(s)} ${fmtHM(s)}`,
-          endFmt:     fmtHM(e),
-          createdAtMs: Date.now(),
-          read:       false
-        });
-      } catch (_) { /* notification failure is non-fatal */ }
-      // ─────────────────────────────────────────────────────────────
 
       localStorage.setItem(NICK_KEY, nick);
       $('nickInput').value = nick;
-      toast(tr('booked'), 'good');
+
+      // ── Write slots as pending_payment (blocks the time) ──────
+      const total  = calcPrice(pcs.length, startAtMs, endAtMs);
+      const allIds = [];
+      const batch  = db.batch();
+      pcs.forEach(pc => {
+        const ref = db.collection('bookings').doc();
+        allIds.push(ref.id);
+        batch.set(ref, {
+          uid:        String(currentUser.uid),
+          userEmail:  String(currentUser.email || ''),
+          nick, pc, note, startAtMs, endAtMs,
+          createdAtMs: Date.now(),
+          status:     'pending_payment',
+          amountGEL:  total
+        });
+      });
+      await batch.commit();
+
       closeConfirm();
       hideCustom();
       pendingBooking = null;
-      // Clear selection so hall resets cleanly
-      selectedPCs.clear();
-      selectedPc = null;
-      renderStats();
-      renderHall();
-      renderSelected();
-      updateMobileBookBtn();
-      $('mySection').scrollIntoView({ behavior:'smooth', block:'start' });
-      renderMyBookings();
-      renderAdminBookings();
+
+      // ── Show payment modal ─────────────────────────────────────
+      showPayModal({ pcs, startAtMs, endAtMs, nick, note, allIds });
+
     } catch (e) {
       handleFsError(e);
     }
@@ -2523,13 +2690,18 @@
       const item = document.createElement('div');
       item.className = 'bookingItem';
       const nowMs = Date.now();
-      const isActive = b.startAtMs <= nowMs && b.endAtMs > nowMs;
-      const isFuture = b.startAtMs > nowMs;
-      const statusDot = isActive ? '🟢' : (isFuture ? '🟡' : '⚪');
+      const isActive  = b.startAtMs <= nowMs && b.endAtMs > nowMs;
+      const isFuture  = b.startAtMs > nowMs;
+      const isPending = b.status === 'pending_payment' || b.status === 'payment_submitted';
+      const dot = isPending ? '⏳' : isActive ? '🟢' : isFuture ? '🟡' : '⚪';
+      const pendingLine = isPending
+        ? `<div class="meta" style="color:var(--soon);font-weight:800">${esc(tr('paymentPending'))}${b.amountGEL ? ' · ' + b.amountGEL + ' ₾' : ''}</div>`
+        : '';
       item.innerHTML = `
         <div>
-          <b>${statusDot} ${esc(b.pc)}</b>
+          <b>${dot} ${esc(b.pc)}</b>
           <div class="meta">${esc(toISODate(s))} • ${esc(fmtHM(s))} → ${esc(fmtHM(e))}</div>
+          ${pendingLine}
           ${b.note ? `<div class="meta">${esc(b.note)}</div>` : ''}
         </div>
         <button class="mini bad" type="button">${esc(tr('remove'))}</button>
@@ -2752,23 +2924,53 @@
     }
     docs.forEach(doc => {
       const d   = doc.data();
+      const isPay = d.type === 'payment_submitted';
       const div = document.createElement('div');
       div.className = 'bookingItem';
-      div.style.cssText = 'background:rgba(110,231,255,.06);border-color:rgba(110,231,255,.2);';
+      div.style.cssText = isPay
+        ? 'background:rgba(251,191,36,.08);border-color:rgba(251,191,36,.3);flex-wrap:wrap;gap:10px'
+        : 'background:rgba(110,231,255,.06);border-color:rgba(110,231,255,.2)';
       div.innerHTML = `
-        <div>
-          <b>🔔 ${esc(d.nick || '?')} — ${esc(d.pcs || '')}</b>
+        <div style="min-width:0;flex:1 1 auto">
+          <b>${isPay ? '💳' : '🔔'} ${esc(d.nick || '?')} — ${esc(d.pcs || '')}</b>
           <div class="meta">${esc(d.startFmt || '')} → ${esc(d.endFmt || '')}</div>
+          ${isPay && d.amountGEL ? `<div class="meta" style="color:var(--free);font-weight:900">💰 ${d.amountGEL} ₾</div>` : ''}
           ${d.note ? `<div class="meta">💬 ${esc(d.note)}</div>` : ''}
           <div class="meta" style="opacity:.6">${esc(d.userEmail || '')}</div>
         </div>
-        <button class="mini" style="font-size:10px;padding:6px 8px;flex-shrink:0" type="button">✓ OK</button>
-      `;
-      div.querySelector('button').onclick = async () => {
+        <div style="display:flex;flex-direction:column;gap:6px;flex-shrink:0">
+          ${isPay ? `
+            <button class="mini primary" style="font-size:11px;padding:7px 10px;white-space:nowrap" data-act="confirm" type="button">${esc(tr('confirmBooking'))}</button>
+            <button class="mini bad"     style="font-size:11px;padding:7px 10px;white-space:nowrap" data-act="reject"  type="button">${esc(tr('rejectBooking'))}</button>
+          ` : `
+            <button class="mini" style="font-size:10px;padding:6px 8px" data-act="read" type="button">✓ OK</button>
+          `}
+        </div>`;
+
+      div.querySelector('[data-act="confirm"]')?.addEventListener('click', async () => {
         try {
           await db.collection('notifications').doc(doc.id).update({ read: true });
-        } catch(_) {}
-      };
+          const b3 = db.batch();
+          (d.bookingIds || []).forEach(id => b3.update(db.collection('bookings').doc(id), { status: 'confirmed' }));
+          await b3.commit();
+          toast('✅ Бронь подтверждена!', 'good');
+        } catch(e) { handleFsError(e); }
+      });
+
+      div.querySelector('[data-act="reject"]')?.addEventListener('click', async () => {
+        try {
+          await db.collection('notifications').doc(doc.id).update({ read: true });
+          const b4 = db.batch();
+          (d.bookingIds || []).forEach(id => b4.delete(db.collection('bookings').doc(id)));
+          await b4.commit();
+          toast('❌ Бронь отклонена.', 'warn');
+        } catch(e) { handleFsError(e); }
+      });
+
+      div.querySelector('[data-act="read"]')?.addEventListener('click', async () => {
+        try { await db.collection('notifications').doc(doc.id).update({ read: true }); } catch(_) {}
+      });
+
       box.appendChild(div);
     });
   }
@@ -2966,8 +3168,11 @@
       }
     };
 
+    $('closePayBtn').onclick = closePayModal;
+    $('payBackdrop').onclick = e => { if (e.target === $('payBackdrop')) closePayModal(); };
+
     document.addEventListener('keydown', e => {
-      if (e.key === 'Escape') { closeAuth(); closeConfirm(); closeLangMenu(); }
+      if (e.key === 'Escape') { closeAuth(); closeConfirm(); closePayModal(); closeLangMenu(); }
     });
 
     window.addEventListener('scroll', updateHeaderCompact, { passive:true });
