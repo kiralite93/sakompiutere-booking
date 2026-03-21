@@ -6,6 +6,8 @@
   <title>Sakompiutere Gaming — Live Hall</title>
   <meta name="theme-color" content="#0b1020" />
   <link rel="icon" href="data:," />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="dns-prefetch" href="https://www.gstatic.com" />
 
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
@@ -44,7 +46,7 @@
       --glassB:rgba(255,255,255,.72);
     }
 
-    *{box-sizing:border-box}
+    *{box-sizing:border-box;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}
     html,body{height:100%}
     html{-webkit-text-size-adjust:100%}
 
@@ -61,6 +63,9 @@
       transition:background .2s ease,color .2s ease;
       word-wrap:break-word;
       overflow-wrap:anywhere;
+      overscroll-behavior-y:none;
+      -webkit-tap-highlight-color:transparent;
+      touch-action:pan-y;
     }
 
     body[data-theme="light"]{
@@ -94,7 +99,9 @@
       top:8px;
       z-index:50;
       overflow:visible;
-      transition:all .22s ease;
+      transition:border-radius .22s ease, box-shadow .22s ease;
+      transform:translateZ(0);
+      will-change:transform;
     }
 
     .headerShell.compact{
@@ -310,11 +317,19 @@
       width:150px;
       border-radius:16px;
       padding:8px;
-      display:none;
       z-index:70;
+      opacity:0;
+      pointer-events:none;
+      transform:translateY(-6px) scale(.97);
+      transition:opacity .16s ease, transform .16s ease;
+      transform-origin:top right;
     }
 
-    .langMenu.show{display:block}
+    .langMenu.show{
+      opacity:1;
+      pointer-events:auto;
+      transform:translateY(0) scale(1);
+    }
 
     .langGrid{
       display:grid;
@@ -468,6 +483,10 @@
       overflow-wrap:anywhere;
     }
 
+    @keyframes slideDown{
+      from{transform:translateY(-6px);opacity:0}
+      to{transform:translateY(0);opacity:1}
+    }
     .toast{
       margin-bottom:12px;
       border-radius:16px;
@@ -477,6 +496,7 @@
       font-size:12px;
       line-height:1.4;
       overflow-wrap:anywhere;
+      animation:slideDown .22s ease;
     }
 
     body[data-theme="light"] .toast{background:rgba(255,255,255,.72)}
@@ -525,7 +545,9 @@
         radial-gradient(140% 120% at 100% 100%, rgba(2,132,199,.06), transparent 60%);
     }
 
-    .pc:hover{transform:translateY(-2px)}
+    @media (hover:hover) and (pointer:fine){
+      .pc:hover{transform:translateY(-2px) translateZ(0)}
+    }
 
     .pc.active{
       border-color:rgba(110,231,255,.55);
@@ -683,6 +705,13 @@
 
     .mini.soft{background:rgba(167,139,250,.10);border-color:rgba(167,139,250,.22)}
     .mini.bad{background:rgba(251,113,133,.10);border-color:rgba(251,113,133,.28)}
+
+    /* Touch press feedback */
+    .mini:active,.btn:active,.tinyAction:active,.filterBtn:active,.iconBtn:active{
+      transform:scale(.96);
+      opacity:.82;
+      transition-duration:.06s !important;
+    }
     .pcCta{font-size:13px;padding:10px 12px;width:100%}
 
     .sideCard{
@@ -759,6 +788,11 @@
       gap:10px;
       align-items:center;
       min-width:0;
+      transition:border-color .15s ease, background .15s ease;
+    }
+    @media (hover:hover) and (pointer:fine){
+      .quickItem:hover{border-color:rgba(110,231,255,.25);background:rgba(255,255,255,.05)}
+      body[data-theme="light"] .quickItem:hover{border-color:rgba(2,132,199,.2)}
     }
 
     body[data-theme="light"] .quickItem{background:rgba(255,255,255,.72)}
@@ -828,6 +862,7 @@
       outline:none;
       min-width:0;
       font:inherit;
+      transition:border-color .15s ease, box-shadow .15s ease;
     }
 
     body[data-theme="light"] input,
@@ -915,15 +950,28 @@
       position:fixed;
       inset:0;
       background:rgba(0,0,0,.6);
-      display:none;
+      display:flex;
       align-items:center;
       justify-content:center;
       padding:16px;
       z-index:80;
+      opacity:0;
+      pointer-events:none;
+      transition:opacity .2s ease;
     }
-
-    .backdrop.show{display:flex}
-
+    .backdrop.show{
+      opacity:1;
+      pointer-events:auto;
+    }
+    .backdrop .modal{
+      transform:translateY(14px) scale(.97);
+      opacity:0;
+      transition:transform .24s cubic-bezier(.34,1.4,.64,1), opacity .2s ease;
+    }
+    .backdrop.show .modal{
+      transform:translateY(0) scale(1);
+      opacity:1;
+    }
     .modal{
       width:min(560px,100%);
       border-radius:24px;
@@ -957,6 +1005,14 @@
     body[data-theme="light"] .copyBtn{background:rgba(255,255,255,.8)}
     .pendingChip{display:inline-block;padding:4px 10px;border-radius:999px;background:rgba(251,191,36,.12);border:1px solid rgba(251,191,36,.3);color:var(--soon);font-size:11px;font-weight:900}
     .mobileBar{display:none}
+
+    @media (prefers-reduced-motion:reduce){
+      *,*::before,*::after{
+        animation-duration:.01ms !important;
+        animation-iteration-count:1 !important;
+        transition-duration:.01ms !important;
+      }
+    }
 
     @media (max-width:1180px){
       .layout{grid-template-columns:1fr}
@@ -1057,6 +1113,7 @@
         border-radius:18px;
         margin-top:14px;
         backdrop-filter:blur(14px);
+        -webkit-backdrop-filter:blur(14px);
       }
 
       .mobileBar .btn{
@@ -2988,6 +3045,11 @@
 
     timer = setInterval(tick, 30000);
     document.addEventListener('visibilitychange', tick);
+
+    // Immediately tick when page becomes visible after being hidden
+    document.addEventListener('visibilitychange', () => {
+      if (document.visibilityState === 'visible') tick();
+    });
   }
 
   // ─── Lang menu ────────────────────────────────────────────────────────────
@@ -3176,7 +3238,11 @@
     });
 
     window.addEventListener('scroll', updateHeaderCompact, { passive:true });
-    window.addEventListener('resize', updateHeaderCompact);
+    let resizeTimer;
+    window.addEventListener('resize', () => {
+      clearTimeout(resizeTimer);
+      resizeTimer = setTimeout(updateHeaderCompact, 60);
+    });
 
     window.addEventListener('beforeunload', () => {
       try { if (unsub) unsub(); } catch (_) {}
