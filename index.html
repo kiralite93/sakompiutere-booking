@@ -1148,6 +1148,7 @@
           </div>
 
           <button class="iconBtn" id="themeToggleBtn" type="button" title="Theme"></button>
+          <button class="iconBtn" id="loginTopBtn" type="button" title="Login">🔑</button>
           <button class="iconBtn danger hidden" id="logoutTopBtn" type="button" title="Logout">⎋</button>
         </div>
       </div>
@@ -1843,7 +1844,7 @@
   function applyTexts() {
     document.documentElement.lang = lang;
     document.title = tr('title');
-    $('t_title').textContent      = tr('title');
+    $('t_title').textContent      = 'Sakompiutere Gaming';
     $('t_livehall').textContent   = tr('livehall');
     if ($('heroLiveText')) $('heroLiveText').textContent = tr('statusLive');
 
@@ -1865,8 +1866,6 @@
     $('openAdminBtn').textContent = tr('admin');
     $('openAuthBtn').textContent  = tr('auth');
     $('logoutBtn').textContent    = tr('logout');
-    // Sync mobile book button label to current auth state
-    $('mobileBookBtn').textContent = currentUser ? tr('mobileBook') : tr('auth');
 
     $('t_sidepanel').textContent = tr('sidepanel');
     $('t_sidehint').textContent  = tr('workhours');
@@ -1907,6 +1906,7 @@
 
     // Re-apply auth-dependent visibility (needed after lang change)
     $('logoutTopBtn').classList.toggle('hidden', !currentUser);
+    $('loginTopBtn').classList.toggle('hidden',  !!currentUser);
     $('authRow').classList.toggle('hidden',   !!currentUser);
     $('logoutRow').classList.toggle('hidden', !currentUser);
     $('adminRow').classList.toggle('hidden',  !isAdmin);
@@ -2625,6 +2625,7 @@
       ? (currentUser.email || currentUser.uid.slice(0, 6))
       : '—';
     $('logoutTopBtn').classList.toggle('hidden', !loggedIn);
+    $('loginTopBtn').classList.toggle('hidden',  loggedIn);
 
     // Side panel rows
     $('authRow').classList.toggle('hidden',   loggedIn);
@@ -2834,6 +2835,7 @@
 
     $('logoutTopBtn').onclick = signOutNow;
     $('logoutBtn').onclick    = signOutNow;
+    $('loginTopBtn').onclick  = openAuth;
 
     $('filterAll').onclick  = () => { currentFilter = 'all';  setFilterUI(); renderHall(); };
     $('filterFree').onclick = () => { currentFilter = 'free'; setFilterUI(); renderHall(); };
