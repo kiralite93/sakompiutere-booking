@@ -2395,34 +2395,67 @@
     `;
 
     // Long press (500ms) = enter multi-select mode
+    // Uses movement threshold so finger micro-movement doesn't cancel it
     let _pressTimer = null;
-    const _startPress = () => {
-      el.classList.add('pressing');
-      _pressTimer = setTimeout(() => {
-        el.classList.remove('pressing');
-        if (!multiMode) {
-          multiMode = true;
-          applyTexts();
-        }
-        updateSelection(pc);
-        updateMultiBadge();
-        // Haptic feedback on mobile
-        if (navigator.vibrate) navigator.vibrate(40);
-      }, 500);
+    let _pressX = 0, _pressY = 0;
+    const MOVE_THRESHOLD = 12; // px — ignore tiny finger movements
+
+    const _triggerMulti = () => {
+      el.classList.remove('pressing');
+      if (!multiMode) {
+        multiMode = true;
+        applyTexts();
+      }
+      updateSelection(pc);
+      updateMultiBadge();
+      if (navigator.vibrate) navigator.vibrate(50);
     };
+
+    const _startPress = (x, y) => {
+      _pressX = x; _pressY = y;
+      el.classList.add('pressing');
+      _pressTimer = setTimeout(_triggerMulti, 500);
+    };
+
+    const _movePress = (x, y) => {
+      // Only cancel if moved significantly (not just jitter)
+      if (Math.abs(x - _pressX) > MOVE_THRESHOLD || Math.abs(y - _pressY) > MOVE_THRESHOLD) {
+        clearTimeout(_pressTimer);
+        el.classList.remove('pressing');
+      }
+    };
+
     const _cancelPress = () => {
       clearTimeout(_pressTimer);
       el.classList.remove('pressing');
     };
-    el.addEventListener('pointerdown', _startPress);
-    el.addEventListener('pointerup',   _cancelPress);
-    el.addEventListener('pointerleave',_cancelPress);
-    el.addEventListener('pointermove', _cancelPress);
-    el.addEventListener('contextmenu', e => e.preventDefault()); // prevent context menu on long press
 
-    // Short click on card body = select (no scroll, no modal)
+    // Touch events (iOS/Android — more reliable than pointer on mobile)
+    el.addEventListener('touchstart', e => {
+      const t = e.touches[0];
+      _startPress(t.clientX, t.clientY);
+    }, { passive: true });
+
+    el.addEventListener('touchmove', e => {
+      const t = e.touches[0];
+      _movePress(t.clientX, t.clientY);
+    }, { passive: true });
+
+    el.addEventListener('touchend',    _cancelPress, { passive: true });
+    el.addEventListener('touchcancel', _cancelPress, { passive: true });
+
+    // Mouse events (desktop)
+    el.addEventListener('mousedown', e => { if (e.button === 0) _startPress(e.clientX, e.clientY); });
+    el.addEventListener('mousemove', e => _movePress(e.clientX, e.clientY));
+    el.addEventListener('mouseup',   _cancelPress);
+    el.addEventListener('mouseleave',_cancelPress);
+    el.addEventListener('contextmenu', e => e.preventDefault());
+
+    // Short click/tap on card body = select (no scroll, no modal)
     el.addEventListener('click', e => {
       if (e.target.closest('button')) return;
+      // If long press just triggered multi-mode, ignore this click
+      if (_pressTimer === null && multiMode && !selectedPCs.has(pc)) return;
       updateSelection(pc);
       if (multiMode) updateMultiBadge();
     });
