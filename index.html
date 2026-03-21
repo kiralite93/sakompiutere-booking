@@ -710,6 +710,7 @@
 
     .mini.soft{background:rgba(167,139,250,.10);border-color:rgba(167,139,250,.22)}
     .mini.bad{background:rgba(251,113,133,.10);border-color:rgba(251,113,133,.28)}
+    .pcCta{font-size:13px;padding:10px 12px;width:100%}
 
     .sideCard{
       border-radius:22px;
@@ -874,6 +875,13 @@
 
     .small{font-size:12px;line-height:1.35}
     .muted{color:var(--muted)}
+
+    .onboard{
+      font-size:12px;
+      color:var(--muted);
+      line-height:1.7;
+      padding:4px 2px;
+    }
 
     .notice{
       border:1px dashed rgba(110,231,255,.3);
@@ -1308,6 +1316,10 @@
             <div class="panelTitle" id="t_adminbookings"></div>
             <div class="small muted" id="t_adminhint" style="margin-top:6px"></div>
 
+            <div style="margin-top:12px;margin-bottom:4px" class="small" id="t_adminnotif"></div>
+            <div class="myBookings" id="adminNotifBox" style="margin-top:6px"></div>
+
+            <div style="margin-top:14px;margin-bottom:4px" class="small muted" id="t_adminall"></div>
             <div class="searchBox">
               <input id="adminSearch" />
             </div>
@@ -1523,7 +1535,21 @@
       noTimes:'Нет свободного времени',
       selectedList:'Выбрано',
       nothingFound:'Ничего не найдено',
-      invalidData:'Некорректные данные брони.'
+      invalidData:'Некорректные данные брони.',
+      pickBtn:'+ Выбрать',
+      pickedBtn:'✓ Выбрано',
+      playNowBtn:'🎮 Играть сейчас',
+      bookNextBtn:'📅 Забронировать',
+      noNewNotif:'Новых бронирований нет',
+      adminNotifLabel:'🔔 Новые бронирования:',
+      adminAllLabel:'📋 Все активные брони:',
+      bookNowShort:'🎮 Играть сейчас',
+      bookNextShort:'📅 Забронировать',
+      onboardStep1:'1. Выбери свободный ПК',
+      onboardStep2:'2. Войди в аккаунт',
+      onboardStep3:'3. Подтверди бронь',
+      workhours:'Режим работы: 10:00 — 03:00',
+      cancelConfirmQ:'Отменить бронирование?'
     },
     en: {
       title:'Sakompiutere Gaming — Live Hall',
@@ -1627,7 +1653,21 @@
       noTimes:'No free time available',
       selectedList:'Selected',
       nothingFound:'Nothing found',
-      invalidData:'Invalid booking data.'
+      invalidData:'Invalid booking data.',
+      pickBtn:'+ Select',
+      pickedBtn:'✓ Selected',
+      playNowBtn:'🎮 Play now',
+      bookNextBtn:'📅 Reserve',
+      noNewNotif:'No new bookings',
+      adminNotifLabel:'🔔 New bookings:',
+      adminAllLabel:'📋 All active bookings:',
+      bookNowShort:'🎮 Book now',
+      bookNextShort:'📅 Reserve',
+      onboardStep1:'1. Choose a free PC',
+      onboardStep2:'2. Sign in to your account',
+      onboardStep3:'3. Confirm your booking',
+      workhours:'Open: 10:00 — 03:00',
+      cancelConfirmQ:'Cancel this booking?'
     },
     ka: {
       title:'Sakompiutere Gaming — Live Hall',
@@ -1731,7 +1771,21 @@
       noTimes:'თავისუფალი დრო ვერ მოიძებნა',
       selectedList:'არჩეულია',
       nothingFound:'ვერ მოიძებნა',
-      invalidData:'ჯავშნის მონაცემები არასწორია.'
+      invalidData:'ჯავშნის მონაცემები არასწორია.',
+      pickBtn:'+ არჩევა',
+      pickedBtn:'✓ არჩეულია',
+      playNowBtn:'🎮 ახლა ითამაშე',
+      bookNextBtn:'📅 დაჯავშნე',
+      noNewNotif:'ახალი ჯავშნები არ არის',
+      adminNotifLabel:'🔔 ახალი ჯავშნები:',
+      adminAllLabel:'📋 ყველა აქტიური ჯავშანი:',
+      bookNowShort:'🎮 ახლა ითამაშე',
+      bookNextShort:'📅 დაჯავშნე',
+      onboardStep1:'1. აირჩიე თავისუფალი PC',
+      onboardStep2:'2. შედი ანგარიშში',
+      onboardStep3:'3. დაადასტურე ჯავშანი',
+      workhours:'სამუშაო საათები: 10:00 — 03:00',
+      cancelConfirmQ:'გავაუქმოთ ეს ჯავშანი?'
     }
   };
 
@@ -1841,7 +1895,7 @@
     $('mobileBookBtn').textContent = currentUser ? tr('mobileBook') : tr('auth');
 
     $('t_sidepanel').textContent = tr('sidepanel');
-    $('t_sidehint').textContent  = tr('sidehint');
+    $('t_sidehint').textContent  = tr('workhours');
 
     $('t_customtitle').textContent = tr('customtitle');
     $('t_customhint').textContent  = tr('customhint');
@@ -1857,6 +1911,10 @@
     $('t_adminbookings').textContent = tr('adminBookings');
     $('t_adminhint').textContent     = tr('adminHint');
     $('adminSearch').placeholder     = tr('adminSearch');
+    const tAdminNotif = $('t_adminnotif');
+    if (tAdminNotif) tAdminNotif.textContent = tr('adminNotifLabel');
+    const tAdminAll = $('t_adminall');
+    if (tAdminAll) tAdminAll.textContent = tr('adminAllLabel');
 
     $('t_auth').textContent     = tr('authTitle');
     $('t_authhint').textContent = tr('authHint');
@@ -1871,7 +1929,7 @@
     $('cancelConfirmBtn').textContent = tr('cancel');
 
     $('mobileMyBtn').textContent   = tr('mobileMy');
-    $('mobileBookBtn').textContent = currentUser ? tr('mobileBook') : tr('auth');
+    // mobileBookBtn — keep in sync with auth + selection state
 
     // Re-apply auth-dependent visibility (needed after lang change)
     $('logoutTopBtn').classList.toggle('hidden', !currentUser);
@@ -1887,6 +1945,7 @@
     renderSelected();
     renderMyBookings();
     renderAdminBookings();
+    if (typeof updateMobileBookBtn === 'function') updateMobileBookBtn();
   }
 
   // Full re-render of all dynamic panels (call after lang change etc.)
@@ -2078,14 +2137,17 @@
       </div>
       <div class="pcMeta">${meta}</div>
       <div class="pcBottom">
-        <button class="mini ${selectedMulti ? 'soft' : ''}" data-a="pick" type="button">${selectedMulti ? '✓' : '+'}</button>
-        <button class="mini ${s.state === 'free' ? 'primary' : ''}" data-a="quick" type="button">${multiMode ? '👥' : '→'}</button>
+        <button class="mini ${selectedMulti ? 'soft' : ''}" data-a="pick" type="button">${selectedMulti ? tr('pickedBtn') : tr('pickBtn')}</button>
+        <button class="mini ${s.state === 'free' ? 'primary' : ''}" data-a="quick" type="button">${s.state === 'free' ? tr('playNowBtn') : tr('bookNextBtn')}</button>
       </div>
     `;
 
     el.addEventListener('click', e => {
       if (e.target.closest('button')) return;
       updateSelection(pc);
+      if (window.innerWidth <= 1180) {
+        setTimeout(() => document.querySelector('.sideCard').scrollIntoView({behavior:'smooth', block:'start'}), 100);
+      }
     });
 
     el.querySelector('[data-a="pick"]').onclick = ev => {
@@ -2101,6 +2163,9 @@
         if (!selectedPCs.size) return toast(tr('chooseAtLeastOne'), 'warn');
         showCustom();
       } else {
+        if (!currentUser) return openAuth();
+        const nick = ($('nickInput').value || '').trim() || localStorage.getItem(NICK_KEY) || '';
+        if (!nick) return showCustom(true);
         if (s.state === 'free') openQuickConfirm([pc], new Date(), 60);
         else openNearestConfirm([pc]);
       }
@@ -2155,15 +2220,18 @@
     renderStats();
     renderHall();
     renderSelected();
+    updateMobileBookBtn();
   }
 
   function clearSelection() {
     selectedPCs.clear();
     selectedPc = null;
+    hideCustom();
     renderStats();
     renderHall();
     renderSelected();
     buildCustomTimes();
+    updateMobileBookBtn();
   }
 
   // ─── Side panel ───────────────────────────────────────────────────────────
@@ -2171,8 +2239,15 @@
     $('selectedChips').innerHTML = '';
 
     if (!selectedPCs.size) {
-      $('selectedName').textContent   = '—';
-      $('selectedStatus').textContent = multiMode ? tr('multiSelectHint') : tr('singleSelectHint');
+      $('selectedName').textContent   = tr('sidepanel');
+      $('selectedStatus').textContent = '';
+      $('selectedChips').innerHTML    = `
+        <div style="font-size:12px;color:var(--muted);line-height:1.7;padding:4px 0">
+          <div>👆 ${esc(tr('onboardStep1'))}</div>
+          <div>${currentUser ? '✅' : '🔑'} ${esc(tr('onboardStep2'))}</div>
+          <div>✔️ ${esc(tr('onboardStep3'))}</div>
+          <div style="margin-top:8px;opacity:.65">⏰ ${esc(tr('workhours'))}</div>
+        </div>`;
       $('selectedActions').classList.add('hidden');
       buildCustomTimes();
       return;
@@ -2415,11 +2490,40 @@
 
       await batch.commit();
 
+      // ── Admin notification ─────────────────────────────────────
+      try {
+        const s = new Date(startAtMs);
+        const e = new Date(endAtMs);
+        await db.collection('notifications').add({
+          type:       'new_booking',
+          uid:        String(currentUser.uid),
+          userEmail:  String(currentUser.email || ''),
+          nick,
+          pcs:        pcs.join(', '),
+          note,
+          startAtMs,
+          endAtMs,
+          startFmt:   `${toISODate(s)} ${fmtHM(s)}`,
+          endFmt:     fmtHM(e),
+          createdAtMs: Date.now(),
+          read:       false
+        });
+      } catch (_) { /* notification failure is non-fatal */ }
+      // ─────────────────────────────────────────────────────────────
+
       localStorage.setItem(NICK_KEY, nick);
       $('nickInput').value = nick;
       toast(tr('booked'), 'good');
       closeConfirm();
+      hideCustom();
       pendingBooking = null;
+      // Clear selection so hall resets cleanly
+      selectedPCs.clear();
+      selectedPc = null;
+      renderStats();
+      renderHall();
+      renderSelected();
+      updateMobileBookBtn();
       $('mySection').scrollIntoView({ behavior:'smooth', block:'start' });
       renderMyBookings();
       renderAdminBookings();
@@ -2456,15 +2560,20 @@
       const e    = new Date(b.endAtMs);
       const item = document.createElement('div');
       item.className = 'bookingItem';
+      const nowMs = Date.now();
+      const isActive = b.startAtMs <= nowMs && b.endAtMs > nowMs;
+      const isFuture = b.startAtMs > nowMs;
+      const statusDot = isActive ? '🟢' : (isFuture ? '🟡' : '⚪');
       item.innerHTML = `
         <div>
-          <b>${esc(b.pc)}</b>
+          <b>${statusDot} ${esc(b.pc)}</b>
           <div class="meta">${esc(toISODate(s))} • ${esc(fmtHM(s))} → ${esc(fmtHM(e))}</div>
+          ${b.note ? `<div class="meta">${esc(b.note)}</div>` : ''}
         </div>
         <button class="mini bad" type="button">${esc(tr('remove'))}</button>
       `;
       item.querySelector('button').onclick = async () => {
-        if (!confirm(tr('remove') + '?')) return;
+        if (!confirm(tr('cancelConfirmQ'))) return;
         try {
           await db.collection('bookings').doc(b.id).delete();
           toast(tr('canceled'), 'good');
@@ -2518,7 +2627,7 @@
         <button class="mini bad" type="button">${esc(tr('remove'))}</button>
       `;
       item.querySelector('button').onclick = async () => {
-        if (!confirm(tr('remove') + '?')) return;
+        if (!confirm(tr('cancelConfirmQ'))) return;
         try {
           await db.collection('bookings').doc(b.id).delete();
           toast(tr('canceled'), 'good');
@@ -2528,6 +2637,20 @@
       };
       box.appendChild(item);
     });
+  }
+
+  // ─── Mobile book button smart label ─────────────────────────────────────
+  function updateMobileBookBtn() {
+    if (!currentUser) {
+      $('mobileBookBtn').textContent = tr('auth');
+      return;
+    }
+    const cnt = selectedPCs.size;
+    if (cnt === 0) {
+      $('mobileBookBtn').textContent = tr('mobileBook');
+    } else {
+      $('mobileBookBtn').textContent = `${tr('mobileBook')} (${cnt} PC)`;
+    }
   }
 
   // ─── Auth state ───────────────────────────────────────────────────────────
@@ -2560,11 +2683,20 @@
       : '—';
 
     // Mobile book button label
-    $('mobileBookBtn').textContent = loggedIn ? tr('mobileBook') : tr('auth');
+    updateMobileBookBtn();
 
     renderAdminBookings();
     renderMyBookings();
     renderSelected();
+
+    // Start/stop notification listener based on admin status
+    if (isAdmin) {
+      startNotifListener();
+    } else {
+      if (unsubNotif) { try { unsubNotif(); } catch(_){} unsubNotif = null; }
+      const btn = $('openAdminBtn');
+      if (btn) btn.textContent = tr('admin');
+    }
   }
 
   // ─── Find free now ────────────────────────────────────────────────────────
@@ -2599,9 +2731,10 @@
     // Two-sided range query so Firestore only fetches relevant documents.
     // Composite index required: startAtMs ASC + endAtMs ASC
     // If the index is missing, Firestore will show a link in the console.
+    // Single-field query — no composite index required.
+    // We filter the other end client-side (negligible cost for ~10 PCs / 7 days).
     unsub = db.collection('bookings')
-      .where('endAtMs',   '>', startMs)   // booking hasn't ended before our window
-      .where('startAtMs', '<', endMs)     // booking starts before our window ends
+      .where('startAtMs', '<', endMs)
       .onSnapshot(snap => {
         allBookings = snap.docs
           .map(d => ({ id: d.id, ...d.data() }))
@@ -2610,7 +2743,12 @@
             startAtMs: Number(x.startAtMs || 0),
             endAtMs:   Number(x.endAtMs   || 0)
           }))
-          .filter(x => Number.isFinite(x.startAtMs) && Number.isFinite(x.endAtMs) && x.endAtMs > x.startAtMs);
+          .filter(x =>
+            Number.isFinite(x.startAtMs) &&
+            Number.isFinite(x.endAtMs)   &&
+            x.endAtMs > x.startAtMs      &&
+            x.endAtMs > startMs           // discard fully-past bookings client-side
+          );
 
         setCloud(tr('statusLive'), true);
         renderStats();
@@ -2619,6 +2757,60 @@
         renderMyBookings();
         renderAdminBookings();
       }, handleFsError);
+  }
+
+  // ─── Admin notifications listener ───────────────────────────────────────
+  let unsubNotif = null;
+
+  function startNotifListener() {
+    if (!db || !isAdmin) return;
+    if (unsubNotif) { try { unsubNotif(); } catch(_){} unsubNotif = null; }
+
+    unsubNotif = db.collection('notifications')
+      .where('read', '==', false)
+      .orderBy('createdAtMs', 'desc')
+      .limit(20)
+      .onSnapshot(snap => {
+        const count = snap.docs.length;
+        const btn = $('openAdminBtn');
+        if (btn) {
+          btn.textContent = count > 0
+            ? `🔐 Admin 🔴${count}`
+            : tr('admin');
+        }
+        renderNotifications(snap.docs);
+      }, () => {}); // silent fail — no index needed for simple queries
+  }
+
+  function renderNotifications(docs) {
+    const box = $('adminNotifBox');
+    if (!box) return;
+    box.innerHTML = '';
+    if (!docs || !docs.length) {
+      box.innerHTML = `<div class="notice" style="font-size:11px">✅ ${esc(tr('noNewNotif'))}</div>`;
+      return;
+    }
+    docs.forEach(doc => {
+      const d   = doc.data();
+      const div = document.createElement('div');
+      div.className = 'bookingItem';
+      div.style.cssText = 'background:rgba(110,231,255,.06);border-color:rgba(110,231,255,.2);';
+      div.innerHTML = `
+        <div>
+          <b>🔔 ${esc(d.nick || '?')} — ${esc(d.pcs || '')}</b>
+          <div class="meta">${esc(d.startFmt || '')} → ${esc(d.endFmt || '')}</div>
+          ${d.note ? `<div class="meta">💬 ${esc(d.note)}</div>` : ''}
+          <div class="meta" style="opacity:.6">${esc(d.userEmail || '')}</div>
+        </div>
+        <button class="mini" style="font-size:10px;padding:6px 8px;flex-shrink:0" type="button">✓ OK</button>
+      `;
+      div.querySelector('button').onclick = async () => {
+        try {
+          await db.collection('notifications').doc(doc.id).update({ read: true });
+        } catch(_) {}
+      };
+      box.appendChild(div);
+    });
   }
 
   // ─── Ticker — only ticks when tab is visible ──────────────────────────────
@@ -2822,6 +3014,7 @@
 
     window.addEventListener('beforeunload', () => {
       try { if (unsub) unsub(); } catch (_) {}
+      try { if (unsubNotif) unsubNotif(); } catch (_) {}
       clearInterval(timer);
     });
   }
