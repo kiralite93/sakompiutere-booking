@@ -712,6 +712,7 @@
     .mini.bad{background:rgba(251,113,133,.10);border-color:rgba(251,113,133,.28)}
     .pcCta{font-size:13px;padding:10px 12px;width:100%}
 
+
     .sideCard{
       border-radius:22px;
       position:sticky;
@@ -1179,6 +1180,7 @@
           </div>
 
           <button class="iconBtn" id="themeToggleBtn" type="button" title="Theme"></button>
+          <button class="iconBtn" id="loginTopBtn" type="button" title="Login">🔑</button>
           <button class="iconBtn danger hidden" id="logoutTopBtn" type="button" title="Logout">⎋</button>
         </div>
       </div>
@@ -1245,7 +1247,7 @@
             <div class="topActionRow single hidden" id="adminRow">
               <button class="tinyAction" id="openAdminBtn" type="button"></button>
             </div>
-            <div class="topActionRow single" id="authRow">
+            <div class="topActionRow single hidden" id="authRow">
               <button class="tinyAction" id="openAuthBtn" type="button"></button>
             </div>
             <div class="topActionRow single hidden" id="logoutRow">
@@ -1294,7 +1296,7 @@
               </div>
               <div>
                 <label id="t_nick"></label>
-                <input id="nickInput" placeholder="KiraLite" />
+                <input id="nickInput" placeholder="KiraLite" autocomplete="nickname" spellcheck="false" />
               </div>
             </div>
 
@@ -1439,6 +1441,7 @@
   const T = {
     ru: {
       title:'Sakompiutere Gaming — Live Hall',
+      clubName:'Sakompiutere Gaming',
       livehall:'Live Hall',
       all:'Все',
       free:'Свободные',
@@ -1550,13 +1553,25 @@
       bookNowShort:'🎮 Играть сейчас',
       bookNextShort:'📅 Забронировать',
       onboardStep1:'1. Выбери свободный ПК',
-      onboardStep2:'2. Войди в аккаунт',
+      onboardStep2:'2. Войди (кнопка 🔑 вверху)',
       onboardStep3:'3. Подтверди бронь',
       workhours:'Работаем 24/7',
-      cancelConfirmQ:'Отменить бронирование?'
+      cancelConfirmQ:'Отменить бронирование?',
+      loginToBook:'Чтобы забронировать PC — войди в аккаунт через кнопку 🔑 вверху справа.'
+      pickDur:'Выбери длительность:',
+      pickPcCount:'Сколько ПК нужно?',
+      groupBook:'👥 Забронировать для группы',
+      playNow:'⚡ Играть прямо сейчас',
+      bookLater:'🕐 Забронировать на потом',
+      nickPlaceholder:'Твой ник (сохранится)',
+      confirmFor:'Бронь для:',
+      confirmPc:'PC:',
+      confirmTime:'Время:',
+      confirmDur:'Длительность:',
     },
     en: {
       title:'Sakompiutere Gaming — Live Hall',
+      clubName:'Sakompiutere Gaming',
       livehall:'Live Hall',
       all:'All',
       free:'Free',
@@ -1668,13 +1683,25 @@
       bookNowShort:'🎮 Book now',
       bookNextShort:'📅 Reserve',
       onboardStep1:'1. Choose a free PC',
-      onboardStep2:'2. Sign in to your account',
+      onboardStep2:'2. Sign in (🔑 top right)',
       onboardStep3:'3. Confirm your booking',
       workhours:'Open 24/7',
-      cancelConfirmQ:'Cancel this booking?'
+      cancelConfirmQ:'Cancel this booking?',
+      loginToBook:'To book a PC — sign in using the 🔑 button in the top right corner.'
+      pickDur:'Choose duration:',
+      pickPcCount:'How many PCs?',
+      groupBook:'👥 Book for a group',
+      playNow:'⚡ Play right now',
+      bookLater:'🕐 Book for later',
+      nickPlaceholder:'Your nickname (saved)',
+      confirmFor:'Booking for:',
+      confirmPc:'PC:',
+      confirmTime:'Time:',
+      confirmDur:'Duration:',
     },
     ka: {
       title:'Sakompiutere Gaming — Live Hall',
+      clubName:'Sakompiutere Gaming',
       livehall:'Live Hall',
       all:'ყველა',
       free:'თავისუფალი',
@@ -1786,10 +1813,21 @@
       bookNowShort:'🎮 ახლა ითამაშე',
       bookNextShort:'📅 დაჯავშნე',
       onboardStep1:'1. აირჩიე თავისუფალი PC',
-      onboardStep2:'2. შედი ანგარიშში',
+      onboardStep2:'2. შედი (🔑 ზედა კუთხეში)',
       onboardStep3:'3. დაადასტურე ჯავშანი',
       workhours:'ვმუშაობთ 24/7',
-      cancelConfirmQ:'გავაუქმოთ ეს ჯავშანი?'
+      cancelConfirmQ:'გავაუქმოთ ეს ჯავშანი?',
+      loginToBook:'PC-ის დასაჯავშნად — შედი 🔑 ღილაკით ზედა მარჯვენა კუთხეში.'
+      pickDur:'აირჩიე ხანგრძლივობა:',
+      pickPcCount:'რამდენი PC გჭირდება?',
+      groupBook:'👥 ჯგუფური ჯავშანი',
+      playNow:'⚡ ახლავე ითამაშე',
+      bookLater:'🕐 წინასწარ დაჯავშნე',
+      nickPlaceholder:'შენი ნიკი (შეინახება)',
+      confirmFor:'ჯავშანი:',
+      confirmPc:'PC:',
+      confirmTime:'დრო:',
+      confirmDur:'ხანგრძლივობა:',
     }
   };
 
@@ -1873,7 +1911,7 @@
   function applyTexts() {
     document.documentElement.lang = lang;
     document.title = tr('title');
-    $('t_title').textContent      = tr('title');
+    $('t_title').textContent      = tr('clubName') || 'Sakompiutere Gaming';
     $('t_livehall').textContent   = tr('livehall');
     $('heroLiveText').textContent = tr('statusLive');
 
@@ -1895,9 +1933,6 @@
     $('openAdminBtn').textContent = tr('admin');
     $('openAuthBtn').textContent  = tr('auth');
     $('logoutBtn').textContent    = tr('logout');
-    // Sync mobile book button label to current auth state
-    $('mobileBookBtn').textContent = currentUser ? tr('mobileBook') : tr('auth');
-
     $('t_sidepanel').textContent = tr('sidepanel');
     $('t_sidehint').textContent  = tr('workhours');
 
@@ -1935,9 +1970,11 @@
     $('mobileMyBtn').textContent   = tr('mobileMy');
     // mobileBookBtn — keep in sync with auth + selection state
 
+
     // Re-apply auth-dependent visibility (needed after lang change)
     $('logoutTopBtn').classList.toggle('hidden', !currentUser);
-    $('authRow').classList.toggle('hidden',   !!currentUser);
+    $('loginTopBtn').classList.toggle('hidden',  !!currentUser);
+    // authRow is always hidden — login is in header only
     $('logoutRow').classList.toggle('hidden', !currentUser);
     $('adminRow').classList.toggle('hidden',  !isAdmin);
 
@@ -2151,6 +2188,7 @@
     return el;
   }
 
+
   function renderHall() {
     $('leftSide').innerHTML  = '';
     $('rightSide').innerHTML = '';
@@ -2282,12 +2320,15 @@
 
     $('quickActions').innerHTML = '';
 
-    // If not logged in, show a login nudge banner above actions
+    // If not logged in, show explanation + login button above actions
     if (!currentUser) {
       const nudge = document.createElement('div');
       nudge.className = 'notice';
-      nudge.style.marginBottom = '10px';
-      nudge.innerHTML = `<b>🔑</b> ${esc(tr('authNeed'))} <button class="mini primary" style="margin-top:8px;width:100%" type="button">${esc(tr('auth'))}</button>`;
+      nudge.style.cssText = 'margin-bottom:12px;border-color:rgba(110,231,255,.3);';
+      nudge.innerHTML = `
+        <div style="margin-bottom:10px;line-height:1.5">${esc(tr('loginToBook'))}</div>
+        <button class="btn primary" style="width:100%;padding:12px" type="button">🔑 ${esc(tr('auth'))}</button>
+      `;
       nudge.querySelector('button').onclick = openAuth;
       $('quickActions').appendChild(nudge);
     }
@@ -2429,7 +2470,7 @@
   async function createBooking(data) {
     if (!currentUser) return needLogin();
 
-    // Sanitise & validate
+    // For quickMode, startAtMs/endAtMs were set by the dur-picker callback
     const pcs      = [...new Set((data.pcs || []).map(String).filter(p => VALID_PCS.has(p)))].slice(0, 10);
     const startAtMs = Number(data.startAtMs);
     const endAtMs   = Number(data.endAtMs);
@@ -2517,7 +2558,10 @@
     if (!currentUser) {
       const n = document.createElement('div');
       n.className = 'notice';
-      n.innerHTML = `🔑 ${esc(tr('authNeed'))} <button class="mini primary" style="margin-top:8px;width:100%" type="button">${esc(tr('auth'))}</button>`;
+      n.innerHTML = `
+        <div style="margin-bottom:10px;line-height:1.5">${esc(tr('loginToBook'))}</div>
+        <button class="btn primary" style="width:100%;padding:12px" type="button">🔑 ${esc(tr('auth'))}</button>
+      `;
       n.querySelector('button').onclick = openAuth;
       box.appendChild(n);
       return;
@@ -2640,9 +2684,11 @@
       ? (currentUser.email || currentUser.uid.slice(0, 6))
       : '—';
     $('logoutTopBtn').classList.toggle('hidden', !loggedIn);
+    $('loginTopBtn').classList.toggle('hidden',  loggedIn);
 
     // Side panel rows
-    $('authRow').classList.toggle('hidden',   loggedIn);
+    // Login button is in header only — authRow always hidden
+    $('authRow').classList.add('hidden');
     $('logoutRow').classList.toggle('hidden', !loggedIn);
 
     // Admin row — only for admins
@@ -2849,6 +2895,8 @@
 
     $('logoutTopBtn').onclick = signOutNow;
     $('logoutBtn').onclick    = signOutNow;
+    $('loginTopBtn').onclick  = openAuth;
+
 
     $('filterAll').onclick  = () => { currentFilter = 'all';  setFilterUI(); renderHall(); };
     $('filterFree').onclick = () => { currentFilter = 'free'; setFilterUI(); renderHall(); };
