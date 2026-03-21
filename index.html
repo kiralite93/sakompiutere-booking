@@ -1231,13 +1231,17 @@
               <button class="tinyAction" id="toggleMultiBtn" type="button"></button>
               <button class="tinyAction" id="clearSelectedBtn" type="button"></button>
             </div>
-            <div class="topActionRow">
+            <div class="topActionRow single" id="myRow">
               <button class="tinyAction" id="openMyBtn" type="button"></button>
+            </div>
+            <div class="topActionRow single hidden" id="adminRow">
               <button class="tinyAction" id="openAdminBtn" type="button"></button>
             </div>
-            <div class="topActionRow">
+            <div class="topActionRow single" id="authRow">
               <button class="tinyAction" id="openAuthBtn" type="button"></button>
-              <button class="tinyAction hidden" id="logoutBtn" type="button"></button>
+            </div>
+            <div class="topActionRow single hidden" id="logoutRow">
+              <button class="tinyAction" id="logoutBtn" type="button"></button>
             </div>
           </div>
 
@@ -1833,6 +1837,8 @@
     $('openAdminBtn').textContent = tr('admin');
     $('openAuthBtn').textContent  = tr('auth');
     $('logoutBtn').textContent    = tr('logout');
+    // Sync mobile book button label to current auth state
+    $('mobileBookBtn').textContent = currentUser ? tr('mobileBook') : tr('auth');
 
     $('t_sidepanel').textContent = tr('sidepanel');
     $('t_sidehint').textContent  = tr('sidehint');
@@ -1865,11 +1871,26 @@
     $('cancelConfirmBtn').textContent = tr('cancel');
 
     $('mobileMyBtn').textContent   = tr('mobileMy');
-    $('mobileBookBtn').textContent = tr('mobileBook');
+    $('mobileBookBtn').textContent = currentUser ? tr('mobileBook') : tr('auth');
+
+    // Re-apply auth-dependent visibility (needed after lang change)
+    $('logoutTopBtn').classList.toggle('hidden', !currentUser);
+    $('authRow').classList.toggle('hidden',   !!currentUser);
+    $('logoutRow').classList.toggle('hidden', !currentUser);
+    $('adminRow').classList.toggle('hidden',  !isAdmin);
 
     applyTheme();
     updateLangMenuUI();
     setFilterUI();
+    renderStats();
+    renderHall();
+    renderSelected();
+    renderMyBookings();
+    renderAdminBookings();
+  }
+
+  // Full re-render of all dynamic panels (call after lang change etc.)
+  function renderAll() {
     renderStats();
     renderHall();
     renderSelected();
@@ -2208,6 +2229,17 @@
     actions.push({ label:tr('exact'), small:tr('saveNickHint'), fn:()=>showCustom() });
 
     $('quickActions').innerHTML = '';
+
+    // If not logged in, show a login nudge banner above actions
+    if (!currentUser) {
+      const nudge = document.createElement('div');
+      nudge.className = 'notice';
+      nudge.style.marginBottom = '10px';
+      nudge.innerHTML = `<b>🔑</b> ${esc(tr('authNeed'))} <button class="mini primary" style="margin-top:8px;width:100%" type="button">${esc(tr('auth'))}</button>`;
+      nudge.querySelector('button').onclick = openAuth;
+      $('quickActions').appendChild(nudge);
+    }
+
     actions.forEach((a, i) => {
       const div = document.createElement('div');
       div.className = 'quickItem';
@@ -2216,7 +2248,7 @@
           <b>${esc(a.label)}</b>
           <small>${esc(a.small)}</small>
         </div>
-        <button class="mini ${i === 0 ? 'primary' : ''}" type="button">→</button>
+        <button class="mini ${i === 0 && currentUser ? 'primary' : ''}" type="button">→</button>
       `;
       div.querySelector('button').onclick = a.fn;
       $('quickActions').appendChild(div);
@@ -2292,6 +2324,7 @@
   }
 
   function showCustom(focusNick = false) {
+    if (!currentUser) return openAuth();
     if (!selectedPCs.size) return toast(tr('chooseAtLeastOne'), 'warn');
     $('customSection').classList.remove('hidden');
     if (!$('customDate').value) $('customDate').value = toISODate(new Date());
@@ -2401,7 +2434,11 @@
     box.innerHTML = '';
 
     if (!currentUser) {
-      box.innerHTML = `<div class="notice">${esc(tr('authNeed'))}</div>`;
+      const n = document.createElement('div');
+      n.className = 'notice';
+      n.innerHTML = `🔑 ${esc(tr('authNeed'))} <button class="mini primary" style="margin-top:8px;width:100%" type="button">${esc(tr('auth'))}</button>`;
+      n.querySelector('button').onclick = openAuth;
+      box.appendChild(n);
       return;
     }
 
@@ -2495,20 +2532,39 @@
 
   // ─── Auth state ───────────────────────────────────────────────────────────
   function updateUserUI() {
-    $('userPill').textContent = currentUser
-      ? (currentUser.email || currentUser.uid.slice(0, 6))
-      : '—';
+    const loggedIn = !!currentUser;
     isAdmin = !!(currentUser && ADMIN_EMAILS.includes(String(currentUser.email || '').toLowerCase()));
 
-    $('openAuthBtn').classList.toggle('hidden',    !!currentUser);
-    $('logoutBtn').classList.toggle('hidden',      !currentUser);
-    $('logoutTopBtn').classList.toggle('hidden',   !currentUser);
+    // Header pill + top logout btn
+    $('userPill').textContent = loggedIn
+      ? (currentUser.email || currentUser.uid.slice(0, 6))
+      : '—';
+    $('logoutTopBtn').classList.toggle('hidden', !loggedIn);
 
-    $('authMsg').textContent = currentUser
+    // Side panel rows
+    $('authRow').classList.toggle('hidden',   loggedIn);
+    $('logoutRow').classList.toggle('hidden', !loggedIn);
+
+    // Admin row — only for admins
+    $('adminRow').classList.toggle('hidden', !isAdmin);
+
+    // Close booking form + clear nick on logout
+    if (!loggedIn) {
+      $('customSection').classList.add('hidden');
+      $('nickInput').value = '';
+    }
+
+    // Auth modal message
+    $('authMsg').textContent = loggedIn
       ? tr('authOk') + (currentUser.email || currentUser.uid.slice(0, 6))
       : '—';
 
+    // Mobile book button label
+    $('mobileBookBtn').textContent = loggedIn ? tr('mobileBook') : tr('auth');
+
     renderAdminBookings();
+    renderMyBookings();
+    renderSelected();
   }
 
   // ─── Find free now ────────────────────────────────────────────────────────
@@ -2650,15 +2706,14 @@
     $('mobileMyBtn').onclick  = toggleMy;
 
     $('mobileBookBtn').onclick = () => {
-      if (!currentUser) return needLogin();
+      if (!currentUser) return openAuth();
       if (!selectedPCs.size) return toast(tr('chooseAtLeastOne'), 'warn');
       showCustom();
       $('customSection').scrollIntoView({ behavior:'smooth', block:'start' });
     };
 
     $('openAdminBtn').onclick = () => {
-      if (!currentUser) return toast(tr('loginNeeded'), 'warn');
-      if (!isAdmin)     return toast(tr('adminDenied'), 'bad');
+      if (!isAdmin) return;
       $('adminSection').scrollIntoView({ behavior:'smooth', block:'start' });
     };
 
@@ -2791,7 +2846,6 @@
     auth.onAuthStateChanged(async u => {
       currentUser = u || null;
       updateUserUI();
-      renderMyBookings();
 
       if (currentUser && !$('nickInput').value.trim()) {
         try {
@@ -2803,8 +2857,6 @@
           }
         } catch (_) {}
       }
-
-      applyTexts();
     });
   }
 
