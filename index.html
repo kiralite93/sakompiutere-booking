@@ -151,37 +151,10 @@
     .brandText{
       min-width:0;
       flex:1 1 auto;
-    }
-
-    .liveRow{
       display:flex;
-      align-items:center;
-      gap:7px;
-      margin-bottom:6px;
-      font-size:12px;
-      font-weight:900;
-      color:#dffef0;
-      line-height:1;
-      transition:all .22s ease;
+      flex-direction:column;
+      justify-content:center;
     }
-
-    .headerShell.compact .liveRow{
-      margin-bottom:4px;
-      font-size:10px;
-    }
-
-    .liveDot{
-      width:9px;
-      height:9px;
-      border-radius:999px;
-      background:var(--free);
-      box-shadow:0 0 0 0 rgba(52,211,153,.35);
-      animation:pulse 1.8s infinite;
-      flex:0 0 9px;
-    }
-
-    @keyframes pulse{
-      70%{box-shadow:0 0 0 10px rgba(52,211,153,0)}
       100%{box-shadow:0 0 0 0 rgba(52,211,153,0)}
     }
 
@@ -1144,10 +1117,6 @@
           <div class="logo"></div>
 
           <div class="brandText">
-            <div class="liveRow">
-              <span class="liveDot"></span>
-              <span id="heroLiveText">LIVE</span>
-            </div>
 
             <h1 id="t_title"></h1>
 
@@ -1159,8 +1128,8 @@
         </div>
 
         <div class="topbar">
-          <div class="statusMini" title="Cloud">
-            <span class="dot" id="cloudDot"></span>
+          <div class="statusMini statusMiniCloud" title="Cloud sync">
+            <span class="cloudState" id="cloudDot" aria-hidden="true">☁</span>
             <b id="cloudPill">...</b>
           </div>
 
@@ -1408,6 +1377,7 @@
   const SOON_MIN          = 30;
   const MAX_BOOKING_DAYS  = 7;       // how far ahead booking is allowed
   const MIN_SESSION_MIN   = 30;      // minimum session duration
+  const MAX_SESSION_MIN   = 360;     // maximum session duration
 
   const LANG_KEY  = 'sg_live_lang';
   const NICK_KEY  = 'sg_live_nick';
@@ -1875,7 +1845,7 @@
     document.title = tr('title');
     $('t_title').textContent      = tr('title');
     $('t_livehall').textContent   = tr('livehall');
-    $('heroLiveText').textContent = tr('statusLive');
+    if ($('heroLiveText')) $('heroLiveText').textContent = tr('statusLive');
 
     $('filterAll').textContent  = tr('all');
     $('filterFree').textContent = tr('free');
@@ -2313,6 +2283,14 @@
     const sel = $('customTime');
     sel.innerHTML = '';
 
+    const today = new Date();
+    const minDate = toISODate(today);
+    const maxDate = toISODate(addDays(today, MAX_BOOKING_DAYS));
+    $('customDate').min = minDate;
+    $('customDate').max = maxDate;
+    if (!$('customDate').value || $('customDate').value < minDate) $('customDate').value = minDate;
+    if ($('customDate').value > maxDate) $('customDate').value = maxDate;
+
     if (!selectedPCs.size) {
       const o = document.createElement('option');
       o.value = '';
@@ -2429,6 +2407,9 @@
   async function createBooking(data) {
     if (!currentUser) return needLogin();
 
+    const nowMs = Date.now();
+    const latestAllowedStartMs = addDays(new Date(), MAX_BOOKING_DAYS).getTime();
+
     // Sanitise & validate
     const pcs      = [...new Set((data.pcs || []).map(String).filter(p => VALID_PCS.has(p)))].slice(0, 10);
     const startAtMs = Number(data.startAtMs);
@@ -2440,6 +2421,10 @@
     if (!nick)                                                    return toast(tr('enterNick'),        'warn');
     if (!Number.isFinite(startAtMs) || !Number.isFinite(endAtMs) || endAtMs <= startAtMs)
                                                                   return toast(tr('invalidData'),      'warn');
+    if (startAtMs < nowMs - 60000)                                return toast(tr('invalidData'),      'warn');
+    if (startAtMs > latestAllowedStartMs)                         return toast(tr('invalidData'),      'warn');
+    if (endAtMs - startAtMs < MIN_SESSION_MIN * 60000)            return toast(tr('invalidData'),      'warn');
+    if (endAtMs - startAtMs > MAX_SESSION_MIN * 60000)            return toast(tr('invalidData'),      'warn');
 
     // Re-check availability right before writing (race condition guard)
     if (!isFreeRangeForAll(pcs, startAtMs, endAtMs)) return toast(tr('taken'), 'bad');
@@ -2626,7 +2611,7 @@
     if (cnt === 0) {
       $('mobileBookBtn').textContent = tr('mobileBook');
     } else {
-      $('mobileBookBtn').textContent = `${tr('mobileBook')} (${cnt} PC)`;
+      $('mobileBookBtn').textContent = `${tr('mobileBook')} (${cnt} ${tr('pcs')})`;
     }
   }
 
@@ -2742,18 +2727,18 @@
 
     unsubNotif = db.collection('notifications')
       .where('read', '==', false)
-      .orderBy('createdAtMs', 'desc')
-      .limit(20)
+      .limit(50)
       .onSnapshot(snap => {
-        const count = snap.docs.length;
+        const docs = [...snap.docs].sort((a, b) => Number(b.data().createdAtMs || 0) - Number(a.data().createdAtMs || 0)).slice(0, 20);
+        const count = docs.length;
         const btn = $('openAdminBtn');
         if (btn) {
           btn.textContent = count > 0
             ? `🔐 Admin 🔴${count}`
             : tr('admin');
         }
-        renderNotifications(snap.docs);
-      }, () => {}); // silent fail — no index needed for simple queries
+        renderNotifications(docs);
+      }, () => {});
   }
 
   function renderNotifications(docs) {
