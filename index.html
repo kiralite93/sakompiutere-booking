@@ -992,6 +992,49 @@
 
     .modalBody{padding:18px;min-width:0}
     .auth{display:grid;gap:10px;min-width:0}
+    /* ── Multi-select badge ── */
+    .multiSelectBadge{
+      position:fixed;
+      bottom:max(80px, calc(env(safe-area-inset-bottom) + 80px));
+      left:50%;
+      transform:translateX(-50%) translateY(20px);
+      opacity:0;
+      pointer-events:none;
+      transition:opacity .22s ease, transform .22s ease;
+      z-index:60;
+      background:linear-gradient(135deg, rgba(167,139,250,.95), rgba(110,231,255,.9));
+      color:#fff;
+      font-weight:900;
+      font-size:13px;
+      padding:10px 20px;
+      border-radius:999px;
+      box-shadow:0 8px 24px rgba(0,0,0,.35);
+      white-space:nowrap;
+      display:flex;
+      align-items:center;
+      gap:10px;
+    }
+    .multiSelectBadge.show{
+      opacity:1;
+      pointer-events:auto;
+      transform:translateX(-50%) translateY(0);
+    }
+    .multiSelectBadge button{
+      background:rgba(255,255,255,.25);
+      border:none;
+      color:#fff;
+      font-weight:900;
+      font-size:12px;
+      padding:4px 10px;
+      border-radius:999px;
+      cursor:pointer;
+    }
+    /* Long-press visual feedback on PC card */
+    .pc.pressing{
+      transform:scale(.97);
+      transition:transform .1s ease;
+    }
+
     /* ── History stat cards ── */
     .histStat{
       padding:10px 12px;
@@ -1440,6 +1483,13 @@
         </div>
       </div>
     </div>
+  </div>
+
+  <!-- ── Multi-select floating badge ── -->
+  <div class="multiSelectBadge glass" id="multiSelectBadge">
+    <span id="multiSelectCount"></span>
+    <button id="multiSelectBookBtn" type="button"></button>
+    <button id="multiSelectClearBtn" type="button">✕</button>
   </div>
 
   <!-- ── Payment modal ── -->
@@ -2344,13 +2394,37 @@
       </div>
     `;
 
-    // Click anywhere on card = select + scroll to panel
+    // Long press (500ms) = enter multi-select mode
+    let _pressTimer = null;
+    const _startPress = () => {
+      el.classList.add('pressing');
+      _pressTimer = setTimeout(() => {
+        el.classList.remove('pressing');
+        if (!multiMode) {
+          multiMode = true;
+          applyTexts();
+        }
+        updateSelection(pc);
+        updateMultiBadge();
+        // Haptic feedback on mobile
+        if (navigator.vibrate) navigator.vibrate(40);
+      }, 500);
+    };
+    const _cancelPress = () => {
+      clearTimeout(_pressTimer);
+      el.classList.remove('pressing');
+    };
+    el.addEventListener('pointerdown', _startPress);
+    el.addEventListener('pointerup',   _cancelPress);
+    el.addEventListener('pointerleave',_cancelPress);
+    el.addEventListener('pointermove', _cancelPress);
+    el.addEventListener('contextmenu', e => e.preventDefault()); // prevent context menu on long press
+
+    // Short click on card body = select (no scroll, no modal)
     el.addEventListener('click', e => {
       if (e.target.closest('button')) return;
       updateSelection(pc);
-      if (window.innerWidth <= 1180) {
-        setTimeout(() => document.querySelector('.sideCard').scrollIntoView({behavior:'smooth', block:'start'}), 100);
-      }
+      if (multiMode) updateMultiBadge();
     });
 
     el.querySelector('[data-a="main"]').onclick = ev => {
@@ -2358,11 +2432,12 @@
       updateSelection(pc);
 
       if (multiMode) {
-        // In multi-mode, just toggle selection — actions in side panel
-        if (window.innerWidth <= 1180) {
-          setTimeout(() => document.querySelector('.sideCard').scrollIntoView({behavior:'smooth', block:'start'}), 100);
-        }
+        // Multi-mode: toggle selected, show count badge, no modal
         return;
+      }
+      // Single mode: open confirm directly — scroll only on mobile
+      if (window.innerWidth <= 1180) {
+        setTimeout(() => document.querySelector('.sideCard').scrollIntoView({behavior:'smooth', block:'start'}), 80);
       }
       if (!currentUser) return openAuth();
       const nick = ($('nickInput').value || '').trim() || localStorage.getItem(NICK_KEY) || '';
@@ -2424,6 +2499,22 @@
     // Show multi/clear row only when something is selected
     const mr = $('multiRow');
     if (mr) mr.classList.toggle('hidden', selectedPCs.size === 0);
+    updateMultiBadge();
+  }
+
+  function updateMultiBadge() {
+    const badge = $('multiSelectBadge');
+    const countEl = $('multiSelectCount');
+    if (!badge || !countEl) return;
+    if (multiMode && selectedPCs.size > 0) {
+      const n = selectedPCs.size;
+      countEl.textContent = n + ' PC ' + (tr('selectedMany') || 'выбрано');
+      badge.classList.add('show');
+      const bookBtn = $('multiSelectBookBtn');
+      if (bookBtn) bookBtn.textContent = tr('bookCustom') || 'Забронировать';
+    } else {
+      badge.classList.remove('show');
+    }
   }
 
   function clearSelection() {
@@ -2437,6 +2528,8 @@
     updateMobileBookBtn();
     const mr = $('multiRow');
     if (mr) mr.classList.add('hidden');
+    const badge = $('multiSelectBadge');
+    if (badge) badge.classList.remove('show');
   }
 
   // ─── Side panel ───────────────────────────────────────────────────────────
@@ -2446,13 +2539,21 @@
     if (!selectedPCs.size) {
       $('selectedName').textContent   = tr('sidepanel');
       $('selectedStatus').textContent = '';
-      $('selectedChips').innerHTML    = `
-        <div style="font-size:12px;color:var(--muted);line-height:1.7;padding:4px 0">
-          <div>👆 ${esc(tr('onboardStep1'))}</div>
-          <div>${currentUser ? '✅' : '🔑'} ${esc(tr('onboardStep2'))}</div>
-          <div>✔️ ${esc(tr('onboardStep3'))}</div>
-          <div style="margin-top:8px;opacity:.65">⏰ ${esc(tr('workhours'))}</div>
-        </div>`;
+      if (multiMode) {
+        $('selectedChips').innerHTML = `
+          <div style="font-size:12px;color:var(--muted);line-height:1.7;padding:4px 0">
+            <div>👆 ${esc(tr('multiSelectHint'))}</div>
+            <div style="margin-top:6px;opacity:.65;font-size:11px">💡 ${lang==='ru'?'Зажми карточку для входа в режим':'Long press a card to select'}</div>
+          </div>`;
+      } else {
+        $('selectedChips').innerHTML = `
+          <div style="font-size:12px;color:var(--muted);line-height:1.7;padding:4px 0">
+            <div>👆 ${esc(tr('onboardStep1'))}</div>
+            <div>${currentUser ? '✅' : '🔑'} ${esc(tr('onboardStep2'))}</div>
+            <div>✔️ ${esc(tr('onboardStep3'))}</div>
+            <div style="margin-top:8px;opacity:.65">⏰ ${esc(tr('workhours'))}</div>
+          </div>`;
+      }
       $('selectedActions').classList.add('hidden');
       buildCustomTimes();
       return;
@@ -3353,15 +3454,34 @@
 
     $('toggleMultiBtn').onclick = () => {
       multiMode = !multiMode;
-      if (!multiMode && selectedPCs.size > 1) {
-        const first = [...selectedPCs][0];
-        selectedPCs = new Set(first ? [first] : []);
-        selectedPc  = first || null;
+      if (!multiMode) {
+        // Exit multi-mode: keep first selection only
+        if (selectedPCs.size > 1) {
+          const first = [...selectedPCs][0];
+          selectedPCs = new Set(first ? [first] : []);
+          selectedPc  = first || null;
+        }
+        const badge = $('multiSelectBadge');
+        if (badge) badge.classList.remove('show');
       }
       applyTexts();
     };
 
     $('clearSelectedBtn').onclick = clearSelection;
+
+    // ── Multi-select floating badge buttons ──────────────────────
+    $('multiSelectBookBtn').onclick = () => {
+      if (!selectedPCs.size) return;
+      if (!currentUser) return openAuth();
+      // Scroll to side panel and show booking form
+      showCustom();
+      document.querySelector('.sideCard').scrollIntoView({behavior:'smooth', block:'start'});
+    };
+    $('multiSelectClearBtn').onclick = () => {
+      multiMode = false;
+      clearSelection();
+      applyTexts();
+    };
 
     $('openMyBtn').onclick    = toggleMy;
     $('mobileMyBtn').onclick  = toggleMy;
