@@ -1376,27 +1376,30 @@
     measurementId: "G-H2HKS025KH"
   };
 
-  const LEFT = ["Bishop","Godzilla","Elf","Kadita","Orc"];
+  const LEFT  = ["Bishop","Godzilla","Elf","Kadita","Orc"];
   const RIGHT = ["Lancelot","Fantomas","Soultaker","Pudge","Kratos"];
-  const ALL = [...LEFT, ...RIGHT];
+  const ALL   = [...LEFT, ...RIGHT];
+  const VALID_PCS = new Set(ALL);
+
   const ADMIN_EMAILS = ['adjarelispeak@gmail.com','kiralite93@gmail.com'].map(x => x.toLowerCase());
 
-  const WORK_START = 10 * 60;
-  const WORK_END_NEXTDAY = 3 * 60;
-  const SLOT_STEP = 30;
-  const SOON_MIN = 30;
+  const WORK_START        = 10 * 60; // minutes from midnight
+  const WORK_END_NEXTDAY  = 3  * 60; // minutes from midnight (next day)
+  const SLOT_STEP         = 30;
+  const SOON_MIN          = 30;
+  const MAX_BOOKING_DAYS  = 7;       // how far ahead booking is allowed
 
-  const LANG_KEY = 'sg_live_lang';
-  const NICK_KEY = 'sg_live_nick';
+  const LANG_KEY  = 'sg_live_lang';
+  const NICK_KEY  = 'sg_live_nick';
   const THEME_KEY = 'sg_live_theme';
 
-  const $ = id => document.getElementById(id);
-  const pad = n => String(n).padStart(2, '0');
-  const fmtHM = d => `${pad(d.getHours())}:${pad(d.getMinutes())}`;
+  const $    = id => document.getElementById(id);
+  const pad  = n  => String(n).padStart(2, '0');
+  const fmtHM     = d => `${pad(d.getHours())}:${pad(d.getMinutes())}`;
   const toISODate = d => `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`;
-  const addMinutes = (d,m) => new Date(d.getTime() + m * 60000);
-  const addDays = (d,x) => new Date(d.getTime() + x * 86400000);
-  const overlaps = (a1,a2,b1,b2) => Math.max(a1,b1) < Math.min(a2,b2);
+  const addMinutes = (d, m) => new Date(d.getTime() + m * 60000);
+  const addDays    = (d, x) => new Date(d.getTime() + x * 86400000);
+  const overlaps   = (a1, a2, b1, b2) => Math.max(a1, b1) < Math.min(a2, b2);
   const esc = s => String(s ?? '')
     .replaceAll('&','&amp;')
     .replaceAll('<','&lt;')
@@ -1404,7 +1407,7 @@
     .replaceAll('"','&quot;')
     .replaceAll("'",'&#039;');
 
-  let lang = localStorage.getItem(LANG_KEY) || 'ka';
+  let lang  = localStorage.getItem(LANG_KEY)  || 'ka';
   let theme = localStorage.getItem(THEME_KEY) || 'dark';
 
   const LANG_META = {
@@ -1515,7 +1518,8 @@
       adminDenied:'Ты не админ.',
       noTimes:'Нет свободного времени',
       selectedList:'Выбрано',
-      nothingFound:'Ничего не найдено'
+      nothingFound:'Ничего не найдено',
+      invalidData:'Некорректные данные брони.'
     },
     en: {
       title:'Sakompiutere Gaming — Live Hall',
@@ -1618,7 +1622,8 @@
       adminDenied:'You are not admin.',
       noTimes:'No free time available',
       selectedList:'Selected',
-      nothingFound:'Nothing found'
+      nothingFound:'Nothing found',
+      invalidData:'Invalid booking data.'
     },
     ka: {
       title:'Sakompiutere Gaming — Live Hall',
@@ -1721,7 +1726,8 @@
       adminDenied:'ადმინი არ ხარ.',
       noTimes:'თავისუფალი დრო ვერ მოიძებნა',
       selectedList:'არჩეულია',
-      nothingFound:'ვერ მოიძებნა'
+      nothingFound:'ვერ მოიძებნა',
+      invalidData:'ჯავშნის მონაცემები არასწორია.'
     }
   };
 
@@ -1729,28 +1735,30 @@
 
   let app = null;
   let auth = null;
-  let db = null;
+  let db   = null;
 
-  let currentUser = null;
-  let isAdmin = false;
-  let allBookings = [];
-  let selectedPc = null;
-  let selectedPCs = new Set();
-  let multiMode = false;
+  let currentUser  = null;
+  let isAdmin      = false;
+  let allBookings  = [];
+  let selectedPc   = null;
+  let selectedPCs  = new Set();
+  let multiMode    = false;
   let currentFilter = 'all';
   let pendingBooking = null;
-  let unsub = null;
-  let timer = null;
+  let unsub  = null;
+  let timer  = null;
+  let adminSearchTimer = null;
 
   try {
-    app = firebase.initializeApp(firebaseConfig);
+    app  = firebase.initializeApp(firebaseConfig);
     auth = firebase.auth();
-    db = firebase.firestore();
+    db   = firebase.firestore();
   } catch (e) {
     console.error('Firebase init failed:', e);
   }
 
-  const toast = (msg, type='') => {
+  // ─── Toast ────────────────────────────────────────────────────────────────
+  const toast = (msg, type = '') => {
     const el = $('toast');
     if (!el) return;
     el.textContent = msg;
@@ -1762,17 +1770,23 @@
 
   const setCloud = (text, ok = null) => {
     $('cloudPill').textContent = text;
-    if (ok === true) $('cloudDot').className = 'dot ok';
+    if (ok === true)  $('cloudDot').className = 'dot ok';
     else if (ok === false) $('cloudDot').className = 'dot err';
     else $('cloudDot').className = 'dot';
   };
 
-  const dayBoundsNow = () => {
-    const now = new Date();
-    const s = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 0,0,0,0);
-    const e = addDays(s, 2);
-    return { start:s.getTime(), end:e.getTime() };
-  };
+  // ─── Time helpers ─────────────────────────────────────────────────────────
+
+  /** Returns { startMs, endMs } for the full window we query from Firestore.
+   *  Window: from midnight today → midnight today + MAX_BOOKING_DAYS + 1
+   */
+  function queryWindow() {
+    const now  = new Date();
+    const todayMidnight = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 0, 0, 0, 0);
+    const startMs = todayMidnight.getTime();
+    const endMs   = addDays(todayMidnight, MAX_BOOKING_DAYS + 1).getTime();
+    return { startMs, endMs };
+  }
 
   function applyTheme() {
     document.body.setAttribute('data-theme', theme);
@@ -1797,60 +1811,60 @@
   function applyTexts() {
     document.documentElement.lang = lang;
     document.title = tr('title');
-    $('t_title').textContent = tr('title');
-    $('t_livehall').textContent = tr('livehall');
+    $('t_title').textContent      = tr('title');
+    $('t_livehall').textContent   = tr('livehall');
     $('heroLiveText').textContent = tr('statusLive');
 
-    $('filterAll').textContent = tr('all');
+    $('filterAll').textContent  = tr('all');
     $('filterFree').textContent = tr('free');
     $('filterSoon').textContent = tr('soon');
 
-    $('t_statAll').textContent = tr('statAll');
-    $('t_statFree').textContent = tr('statFree');
+    $('t_statAll').textContent      = tr('statAll');
+    $('t_statFree').textContent     = tr('statFree');
     $('t_statSoonFree').textContent = tr('statSoonFree');
     $('t_statSoonBusy').textContent = tr('statSoonBusy');
-    $('t_statBusy').textContent = tr('statBusy');
+    $('t_statBusy').textContent     = tr('statBusy');
     $('t_statSelected').textContent = tr('statSelected');
 
-    $('findNowBtn').textContent = tr('findNow');
+    $('findNowBtn').textContent    = tr('findNow');
     $('toggleMultiBtn').textContent = multiMode ? tr('multiOn') : tr('multiOff');
     $('clearSelectedBtn').textContent = tr('clearSelected');
-    $('openMyBtn').textContent = tr('my');
+    $('openMyBtn').textContent    = tr('my');
     $('openAdminBtn').textContent = tr('admin');
-    $('openAuthBtn').textContent = tr('auth');
-    $('logoutBtn').textContent = tr('logout');
+    $('openAuthBtn').textContent  = tr('auth');
+    $('logoutBtn').textContent    = tr('logout');
 
     $('t_sidepanel').textContent = tr('sidepanel');
-    $('t_sidehint').textContent = tr('sidehint');
+    $('t_sidehint').textContent  = tr('sidehint');
 
     $('t_customtitle').textContent = tr('customtitle');
-    $('t_customhint').textContent = tr('customhint');
-    $('t_date').textContent = tr('date');
-    $('t_duration').textContent = tr('duration');
-    $('t_time').textContent = tr('time');
-    $('t_nick').textContent = tr('nick');
-    $('t_note').textContent = tr('note');
+    $('t_customhint').textContent  = tr('customhint');
+    $('t_date').textContent      = tr('date');
+    $('t_duration').textContent  = tr('duration');
+    $('t_time').textContent      = tr('time');
+    $('t_nick').textContent      = tr('nick');
+    $('t_note').textContent      = tr('note');
     $('bookCustomBtn').textContent = tr('bookCustom');
     $('hideCustomBtn').textContent = tr('hideCustom');
 
-    $('t_mybookings').textContent = tr('mybookings');
+    $('t_mybookings').textContent    = tr('mybookings');
     $('t_adminbookings').textContent = tr('adminBookings');
-    $('t_adminhint').textContent = tr('adminHint');
-    $('adminSearch').placeholder = tr('adminSearch');
+    $('t_adminhint').textContent     = tr('adminHint');
+    $('adminSearch').placeholder     = tr('adminSearch');
 
-    $('t_auth').textContent = tr('authTitle');
+    $('t_auth').textContent     = tr('authTitle');
     $('t_authhint').textContent = tr('authHint');
     $('t_password').textContent = tr('password');
-    $('loginBtn').textContent = tr('login');
+    $('loginBtn').textContent   = tr('login');
     $('registerBtn').textContent = tr('register');
-    $('resetBtn').textContent = tr('reset');
+    $('resetBtn').textContent   = tr('reset');
 
     $('t_confirmtitle').textContent = tr('confirmtitle');
-    $('t_confirmhint').textContent = tr('confirmhint');
+    $('t_confirmhint').textContent  = tr('confirmhint');
     $('confirmBookBtn').textContent = tr('confirm');
     $('cancelConfirmBtn').textContent = tr('cancel');
 
-    $('mobileMyBtn').textContent = tr('mobileMy');
+    $('mobileMyBtn').textContent   = tr('mobileMy');
     $('mobileBookBtn').textContent = tr('mobileBook');
 
     applyTheme();
@@ -1863,29 +1877,35 @@
     renderAdminBookings();
   }
 
+  // ─── Error handler ────────────────────────────────────────────────────────
   function handleFsError(err) {
     console.error(err);
     const msg = String(err?.message || err?.code || err || '').toLowerCase();
-    if (msg.includes('permission')) toast(tr('rules'), 'bad');
+    if (msg.includes('permission'))                                    toast(tr('rules'),   'bad');
     else if (msg.includes('fetch') || msg.includes('network') || msg.includes('blocked')) toast(tr('blocked'), 'bad');
     else toast(tr('fsErr'), 'bad');
     setCloud(tr('statusErr'), false);
   }
 
+  // ─── Booking helpers ──────────────────────────────────────────────────────
   function getPcBookings(pc) {
-    return allBookings.filter(b => b.pc === pc).sort((a,b) => a.startAtMs - b.startAtMs);
+    return allBookings
+      .filter(b => b.pc === pc)
+      .sort((a, b) => a.startAtMs - b.startAtMs);
   }
 
   function progressFor(b) {
     const now = Date.now();
-    if (!b || !b.startAtMs || !b.endAtMs) return 0;
+    if (!b || !Number.isFinite(b.startAtMs) || !Number.isFinite(b.endAtMs)) return 0;
     if (now <= b.startAtMs) return 0;
-    if (now >= b.endAtMs) return 100;
-    return Math.max(0, Math.min(100, ((now - b.startAtMs) / (b.endAtMs - b.startAtMs)) * 100));
+    if (now >= b.endAtMs)   return 100;
+    return Math.max(0, Math.min(100,
+      ((now - b.startAtMs) / (b.endAtMs - b.startAtMs)) * 100
+    ));
   }
 
   function getPcStatus(pc) {
-    const now = Date.now();
+    const now    = Date.now();
     const future = getPcBookings(pc).filter(b => b.endAtMs > now);
     const active = future.find(b => b.startAtMs <= now && b.endAtMs > now);
 
@@ -1899,54 +1919,98 @@
 
     const next = future.find(b => b.startAtMs > now);
     if (next && next.startAtMs - now <= SOON_MIN * 60000) {
-      return { state:'soon', subState:'soon_free', next, nextStartMs:next.startAtMs, minsToStart:Math.max(1, Math.ceil((next.startAtMs - now) / 60000)) };
+      return {
+        state:'soon', subState:'soon_free', next,
+        nextStartMs: next.startAtMs,
+        minsToStart: Math.max(1, Math.ceil((next.startAtMs - now) / 60000))
+      };
     }
 
     return { state:'free', subState:'free' };
   }
 
   function getDisplayTag(status) {
-    if (status.subState === 'soon_free') return tr('soonFreeTag');
-    if (status.subState === 'soon_busy') return tr('soonBusyTag');
-    if (status.state === 'busy') return tr('busyTag');
+    if (status.subState === 'soon_free')  return tr('soonFreeTag');
+    if (status.subState === 'soon_busy')  return tr('soonBusyTag');
+    if (status.state    === 'busy')       return tr('busyTag');
     return tr('freeTag');
   }
 
   function isFreeRangeForAll(pcs, startMs, endMs) {
-    return pcs.every(pc => !getPcBookings(pc).some(b => overlaps(startMs, endMs, b.startAtMs, b.endAtMs)));
+    // Guard against NaN / invalid timestamps
+    if (!Number.isFinite(startMs) || !Number.isFinite(endMs) || endMs <= startMs) return false;
+    return pcs.every(pc =>
+      !getPcBookings(pc).some(b =>
+        Number.isFinite(b.startAtMs) && Number.isFinite(b.endAtMs) &&
+        overlaps(startMs, endMs, b.startAtMs, b.endAtMs)
+      )
+    );
   }
 
+  /** Returns Date for the opening time of the workday that contains `date`,
+   *  or null if `date` is in the dead zone between close and open.
+   */
+  function getWorkBoundsForDay(date) {
+    const d    = new Date(date);
+    const base = new Date(d.getFullYear(), d.getMonth(), d.getDate(), 0, 0, 0, 0);
+    const open  = addMinutes(base, WORK_START);
+    // close = next-day 03:00
+    const close = addMinutes(addDays(base, 1), WORK_END_NEXTDAY);
+    return { open, close };
+  }
+
+  /** Clamps a Date to [open, close) for its workday.
+   *  Returns null if date is outside the workday window.
+   */
   function clampToOpen(date) {
     const d = new Date(date);
-    const base = new Date(d.getFullYear(), d.getMonth(), d.getDate(), 0,0,0,0);
-    const open = addMinutes(base, WORK_START);
-    const close = addDays(base, 1);
-    close.setHours(Math.floor(WORK_END_NEXTDAY / 60), WORK_END_NEXTDAY % 60, 0, 0);
-    if (d < open) return open;
-    if (d > close) return null;
+    const { open, close } = getWorkBoundsForDay(d);
+    if (d >= close) return null; // after today's close — caller should try next day
+    if (d < open)   return open; // before open — snap to open
     return d;
   }
 
   function roundUp(date) {
     const d = new Date(date);
-    d.setSeconds(0,0);
-    const m = d.getMinutes();
+    d.setSeconds(0, 0);
+    const m     = d.getMinutes();
     const extra = (SLOT_STEP - (m % SLOT_STEP)) % SLOT_STEP;
     if (extra) d.setMinutes(m + extra);
     return d;
   }
 
   function findNearestForAll(pcs, earliest, dur) {
-    let cur = roundUp(clampToOpen(earliest) || earliest);
-    const until = addDays(new Date(), 5).getTime();
+    const limit = addDays(new Date(), MAX_BOOKING_DAYS).getTime();
+    let cur     = roundUp(new Date(Math.max(earliest.getTime(), Date.now())));
 
-    while (cur && cur.getTime() < until) {
+    while (cur.getTime() < limit) {
+      // Clamp to open hours; if null, jump to next workday open
+      const clamped = clampToOpen(cur);
+      if (!clamped) {
+        // Jump to next day's open time
+        const { open } = getWorkBoundsForDay(addDays(cur, 1));
+        cur = open;
+        continue;
+      }
+      cur = roundUp(clamped);
+
       const end = addMinutes(cur, dur);
-      const a = clampToOpen(cur);
-      const b = clampToOpen(end);
-      if (a && b && isFreeRangeForAll(pcs, cur.getTime(), end.getTime())) return cur;
+      const { close } = getWorkBoundsForDay(cur);
+
+      if (end > close) {
+        // Session would extend past close — jump to next workday
+        const { open } = getWorkBoundsForDay(addDays(cur, 1));
+        cur = open;
+        continue;
+      }
+
+      if (isFreeRangeForAll(pcs, cur.getTime(), end.getTime())) {
+        return cur;
+      }
+
       cur = addMinutes(cur, SLOT_STEP);
     }
+
     return null;
   }
 
@@ -1955,16 +2019,17 @@
       acc[name] = idx;
       return acc;
     }, {});
-    return [...freeList].sort((a,b) => indexMap[a] - indexMap[b]);
+    return [...freeList].sort((a, b) => indexMap[a] - indexMap[b]);
   }
 
+  // ─── Hall rendering ───────────────────────────────────────────────────────
   function renderCard(pc) {
     const s = getPcStatus(pc);
 
     if (currentFilter === 'free' && s.state !== 'free') return null;
     if (currentFilter === 'soon' && s.state !== 'soon') return null;
 
-    const el = document.createElement('div');
+    const el            = document.createElement('div');
     const selectedMulti = selectedPCs.has(pc);
     el.className = `pc ${s.state} ${selectedPc === pc ? 'active' : ''} ${selectedMulti ? 'selectedMulti' : ''}`;
 
@@ -2002,15 +2067,12 @@
       updateSelection(pc);
     });
 
-    const pick = el.querySelector('[data-a="pick"]');
-    const quick = el.querySelector('[data-a="quick"]');
-
-    pick.onclick = ev => {
+    el.querySelector('[data-a="pick"]').onclick = ev => {
       ev.stopPropagation();
       updateSelection(pc);
     };
 
-    quick.onclick = ev => {
+    el.querySelector('[data-a="quick"]').onclick = ev => {
       ev.stopPropagation();
       updateSelection(pc);
 
@@ -2027,7 +2089,7 @@
   }
 
   function renderHall() {
-    $('leftSide').innerHTML = '';
+    $('leftSide').innerHTML  = '';
     $('rightSide').innerHTML = '';
 
     LEFT.forEach(pc => {
@@ -2042,26 +2104,30 @@
   }
 
   function renderStats() {
-    const freeCount = ALL.filter(pc => getPcStatus(pc).subState === 'free').length;
+    const freeCount     = ALL.filter(pc => getPcStatus(pc).subState === 'free').length;
     const soonFreeCount = ALL.filter(pc => getPcStatus(pc).subState === 'soon_free').length;
     const soonBusyCount = ALL.filter(pc => getPcStatus(pc).subState === 'soon_busy').length;
-    const busyCount = ALL.filter(pc => getPcStatus(pc).subState === 'busy').length;
+    const busyCount     = ALL.filter(pc => getPcStatus(pc).subState === 'busy').length;
 
-    $('statAll').textContent = ALL.length;
-    $('statFree').textContent = freeCount;
+    $('statAll').textContent      = ALL.length;
+    $('statFree').textContent     = freeCount;
     $('statSoonFree').textContent = soonFreeCount;
     $('statSoonBusy').textContent = soonBusyCount;
-    $('statBusy').textContent = busyCount;
+    $('statBusy').textContent     = busyCount;
     $('statSelected').textContent = selectedPCs.size;
   }
 
+  // ─── Selection ────────────────────────────────────────────────────────────
   function updateSelection(pc) {
     if (multiMode) {
-      if (selectedPCs.has(pc)) selectedPCs.delete(pc);
-      else if (selectedPCs.size < 10) selectedPCs.add(pc);
+      if (selectedPCs.has(pc)) {
+        selectedPCs.delete(pc);
+      } else if (selectedPCs.size < 10) {
+        selectedPCs.add(pc);
+      }
       selectedPc = selectedPCs.size ? [...selectedPCs][0] : null;
     } else {
-      selectedPc = pc;
+      selectedPc  = pc;
       selectedPCs = new Set([pc]);
     }
 
@@ -2070,11 +2136,21 @@
     renderSelected();
   }
 
+  function clearSelection() {
+    selectedPCs.clear();
+    selectedPc = null;
+    renderStats();
+    renderHall();
+    renderSelected();
+    buildCustomTimes();
+  }
+
+  // ─── Side panel ───────────────────────────────────────────────────────────
   function renderSelected() {
     $('selectedChips').innerHTML = '';
 
     if (!selectedPCs.size) {
-      $('selectedName').textContent = '—';
+      $('selectedName').textContent   = '—';
       $('selectedStatus').textContent = multiMode ? tr('multiSelectHint') : tr('singleSelectHint');
       $('selectedActions').classList.add('hidden');
       buildCustomTimes();
@@ -2084,7 +2160,7 @@
     $('selectedActions').classList.remove('hidden');
 
     const names = [...selectedPCs];
-    $('selectedName').textContent = names.length === 1 ? names[0] : `${names.length} ${tr('pcs')}`;
+    $('selectedName').textContent   = names.length === 1 ? names[0] : `${names.length} ${tr('pcs')}`;
     $('selectedStatus').textContent = multiMode
       ? `${tr('selectedList')}: ${names.join(', ')}`
       : tr('selectedOne');
@@ -2100,32 +2176,32 @@
     if (names.length === 1 && !multiMode) {
       const s = getPcStatus(names[0]);
       if (s.state === 'free') {
-        actions.push({ label:tr('play1'), small:`${tr('starts')}: ${fmtHM(new Date())}`, fn:()=>openQuickConfirm(names, new Date(), 60) });
-        actions.push({ label:tr('play2'), small:`${tr('starts')}: ${fmtHM(new Date())}`, fn:()=>openQuickConfirm(names, new Date(), 120) });
-        actions.push({ label:tr('play3'), small:`${tr('starts')}: ${fmtHM(new Date())}`, fn:()=>openQuickConfirm(names, new Date(), 180) });
+        actions.push({ label:tr('play1'), small:`${tr('starts')}: ${fmtHM(new Date())}`,  fn:()=>openQuickConfirm(names, new Date(), 60)  });
+        actions.push({ label:tr('play2'), small:`${tr('starts')}: ${fmtHM(new Date())}`,  fn:()=>openQuickConfirm(names, new Date(), 120) });
+        actions.push({ label:tr('play3'), small:`${tr('starts')}: ${fmtHM(new Date())}`,  fn:()=>openQuickConfirm(names, new Date(), 180) });
       } else {
         const nearest = findNearestForAll(names, new Date(), 120);
         actions.push({
-          label:tr('bookAt'),
+          label: tr('bookAt'),
           small: nearest ? `${tr('starts')}: ${fmtHM(nearest)}` : tr('taken'),
-          fn:()=>openNearestConfirm(names)
+          fn:    () => openNearestConfirm(names)
         });
         actions.push({
-          label:tr('queue'),
-          small:tr('queueHint'),
-          fn:()=>openNearestConfirm(names)
+          label: tr('queue'),
+          small: tr('queueHint'),
+          fn:    () => openNearestConfirm(names)
         });
       }
     } else {
       actions.push({
-        label:tr('group2'),
-        small:`${tr('pcs')}: ${names.join(', ')}`,
-        fn:()=>openQuickConfirm(names, new Date(), 120)
+        label: tr('group2'),
+        small: `${tr('pcs')}: ${names.join(', ')}`,
+        fn:    () => openQuickConfirm(names, new Date(), 120)
       });
       actions.push({
-        label:tr('group3'),
-        small:`${tr('pcs')}: ${names.join(', ')}`,
-        fn:()=>openQuickConfirm(names, new Date(), 180)
+        label: tr('group3'),
+        small: `${tr('pcs')}: ${names.join(', ')}`,
+        fn:    () => openQuickConfirm(names, new Date(), 180)
       });
     }
 
@@ -2140,7 +2216,7 @@
           <b>${esc(a.label)}</b>
           <small>${esc(a.small)}</small>
         </div>
-        <button class="mini ${i===0 ? 'primary' : ''}" type="button">→</button>
+        <button class="mini ${i === 0 ? 'primary' : ''}" type="button">→</button>
       `;
       div.querySelector('button').onclick = a.fn;
       $('quickActions').appendChild(div);
@@ -2161,19 +2237,18 @@
       return;
     }
 
-    const pcs = [...selectedPCs];
+    const pcs     = [...selectedPCs];
     const dateKey = $('customDate').value || toISODate(new Date());
-    const dur = Number($('customDuration').value || 60);
+    const dur     = Number($('customDuration').value) || 60;
+    const [y, m, d] = dateKey.split('-').map(Number);
 
-    const [y,m,d] = dateKey.split('-').map(Number);
-    const base = new Date(y, m-1, d, 0, 0, 0, 0);
-    const open = addMinutes(base, WORK_START);
-    const close = addDays(base, 1);
-    close.setHours(Math.floor(WORK_END_NEXTDAY / 60), WORK_END_NEXTDAY % 60, 0, 0);
+    const base  = new Date(y, m - 1, d, 0, 0, 0, 0);
+    const open  = addMinutes(base, WORK_START);
+    const close = addMinutes(addDays(base, 1), WORK_END_NEXTDAY);
 
     for (let cur = new Date(open); addMinutes(cur, dur) <= close; cur = addMinutes(cur, SLOT_STEP)) {
-      const end = addMinutes(cur, dur);
       if (cur.getTime() < Date.now()) continue;
+      const end = addMinutes(cur, dur);
       if (!isFreeRangeForAll(pcs, cur.getTime(), end.getTime())) continue;
 
       const o = document.createElement('option');
@@ -2190,30 +2265,20 @@
     }
   }
 
-  function openAuth() {
-    $('authBackdrop').classList.add('show');
-  }
-
-  function closeAuth() {
-    $('authBackdrop').classList.remove('show');
-  }
-
-  function openConfirm() {
-    $('confirmBackdrop').classList.add('show');
-  }
-
-  function closeConfirm() {
-    $('confirmBackdrop').classList.remove('show');
-  }
+  // ─── Auth modals ──────────────────────────────────────────────────────────
+  const openAuth    = () => $('authBackdrop').classList.add('show');
+  const closeAuth   = () => $('authBackdrop').classList.remove('show');
+  const openConfirm  = () => $('confirmBackdrop').classList.add('show');
+  const closeConfirm = () => $('confirmBackdrop').classList.remove('show');
 
   function needLogin() {
     openAuth();
     $('authMsg').textContent = tr('loginNeeded');
   }
 
+  // ─── Confirm dialog ───────────────────────────────────────────────────────
   function fillConfirm() {
     if (!pendingBooking) return;
-
     const s = new Date(pendingBooking.startAtMs);
     const e = new Date(pendingBooking.endAtMs);
 
@@ -2226,21 +2291,19 @@
     `;
   }
 
-  function showCustom(focusNick=false) {
+  function showCustom(focusNick = false) {
     if (!selectedPCs.size) return toast(tr('chooseAtLeastOne'), 'warn');
     $('customSection').classList.remove('hidden');
-    $('customDate').value = $('customDate').value || toISODate(new Date());
+    if (!$('customDate').value) $('customDate').value = toISODate(new Date());
     buildCustomTimes();
     if (focusNick) setTimeout(() => $('nickInput').focus(), 50);
   }
 
-  function hideCustom() {
-    $('customSection').classList.add('hidden');
-  }
+  const hideCustom = () => $('customSection').classList.add('hidden');
 
+  // ─── Quick confirm helpers ────────────────────────────────────────────────
   function openQuickConfirm(pcs, start, dur) {
     if (!currentUser) return needLogin();
-
     const nick = ($('nickInput').value || '').trim() || localStorage.getItem(NICK_KEY) || '';
     if (!nick) return showCustom(true);
 
@@ -2248,20 +2311,18 @@
     if (!safe) return toast(tr('taken'), 'bad');
 
     pendingBooking = {
-      pcs:[...pcs],
-      startAtMs:safe.getTime(),
-      endAtMs:addMinutes(safe, dur).getTime(),
+      pcs:      [...pcs],
+      startAtMs: safe.getTime(),
+      endAtMs:   addMinutes(safe, dur).getTime(),
       nick,
-      note:($('noteInput').value || '').trim()
+      note: ($('noteInput').value || '').trim()
     };
-
     fillConfirm();
     openConfirm();
   }
 
   function openNearestConfirm(pcs) {
     if (!currentUser) return needLogin();
-
     const nick = ($('nickInput').value || '').trim() || localStorage.getItem(NICK_KEY) || '';
     if (!nick) return showCustom(true);
 
@@ -2269,49 +2330,53 @@
     if (!safe) return toast(tr('taken'), 'bad');
 
     pendingBooking = {
-      pcs:[...pcs],
-      startAtMs:safe.getTime(),
-      endAtMs:addMinutes(safe, 120).getTime(),
+      pcs:      [...pcs],
+      startAtMs: safe.getTime(),
+      endAtMs:   addMinutes(safe, 120).getTime(),
       nick,
-      note:($('noteInput').value || '').trim()
+      note: ($('noteInput').value || '').trim()
     };
-
     fillConfirm();
     openConfirm();
   }
 
+  // ─── Create booking ───────────────────────────────────────────────────────
   async function createBooking(data) {
     if (!currentUser) return needLogin();
 
-    const pcs = [...new Set((data.pcs || []).map(String))].slice(0, 10);
+    // Sanitise & validate
+    const pcs      = [...new Set((data.pcs || []).map(String).filter(p => VALID_PCS.has(p)))].slice(0, 10);
     const startAtMs = Number(data.startAtMs);
-    const endAtMs = Number(data.endAtMs);
-    const nick = String(data.nick || '').trim().slice(0, 32);
-    const note = String(data.note || '').trim().slice(0, 120);
+    const endAtMs   = Number(data.endAtMs);
+    const nick      = String(data.nick || '').trim().slice(0, 32);
+    const note      = String(data.note || '').trim().slice(0, 120);
 
-    if (!pcs.length) return toast(tr('chooseAtLeastOne'), 'warn');
-    if (!nick) return toast(tr('enterNick'), 'warn');
-    if (!startAtMs || !endAtMs || endAtMs <= startAtMs) return toast(tr('pickTime'), 'warn');
+    if (!pcs.length)                                              return toast(tr('chooseAtLeastOne'), 'warn');
+    if (!nick)                                                    return toast(tr('enterNick'),        'warn');
+    if (!Number.isFinite(startAtMs) || !Number.isFinite(endAtMs) || endAtMs <= startAtMs)
+                                                                  return toast(tr('invalidData'),      'warn');
+
+    // Re-check availability right before writing (race condition guard)
     if (!isFreeRangeForAll(pcs, startAtMs, endAtMs)) return toast(tr('taken'), 'bad');
 
     try {
       await db.collection('users').doc(String(currentUser.uid)).set(
-        { nick, updatedAtMs:Date.now() },
-        { merge:true }
+        { nick, updatedAtMs: Date.now() },
+        { merge: true }
       );
 
       const batch = db.batch();
       pcs.forEach(pc => {
         const ref = db.collection('bookings').doc();
         batch.set(ref, {
-          uid:String(currentUser.uid),
-          userEmail:String(currentUser.email || ''),
+          uid:        String(currentUser.uid),
+          userEmail:  String(currentUser.email || ''),
           nick,
           pc,
           note,
           startAtMs,
           endAtMs,
-          createdAtMs:Date.now()
+          createdAtMs: Date.now()
         });
       });
 
@@ -2322,14 +2387,15 @@
       toast(tr('booked'), 'good');
       closeConfirm();
       pendingBooking = null;
-      $('mySection').scrollIntoView({behavior:'smooth', block:'start'});
+      $('mySection').scrollIntoView({ behavior:'smooth', block:'start' });
       renderMyBookings();
       renderAdminBookings();
-    } catch(e) {
+    } catch (e) {
       handleFsError(e);
     }
   }
 
+  // ─── My bookings ──────────────────────────────────────────────────────────
   function renderMyBookings() {
     const box = $('myBookings');
     box.innerHTML = '';
@@ -2341,7 +2407,7 @@
 
     const mine = allBookings
       .filter(b => b.uid === currentUser.uid && b.endAtMs > Date.now() - 86400000)
-      .sort((a,b) => a.startAtMs - b.startAtMs);
+      .sort((a, b) => a.startAtMs - b.startAtMs);
 
     if (!mine.length) {
       box.innerHTML = `<div class="notice">${esc(tr('empty'))}</div>`;
@@ -2349,8 +2415,8 @@
     }
 
     mine.forEach(b => {
-      const s = new Date(b.startAtMs);
-      const e = new Date(b.endAtMs);
+      const s    = new Date(b.startAtMs);
+      const e    = new Date(b.endAtMs);
       const item = document.createElement('div');
       item.className = 'bookingItem';
       item.innerHTML = `
@@ -2360,43 +2426,38 @@
         </div>
         <button class="mini bad" type="button">${esc(tr('remove'))}</button>
       `;
-
       item.querySelector('button').onclick = async () => {
         if (!confirm(tr('remove') + '?')) return;
         try {
           await db.collection('bookings').doc(b.id).delete();
           toast(tr('canceled'), 'good');
-        } catch(e) {
+        } catch (e) {
           handleFsError(e);
         }
       };
-
       box.appendChild(item);
     });
   }
 
+  // ─── Admin bookings ───────────────────────────────────────────────────────
   function renderAdminBookings() {
     const panel = $('adminSection');
-    const box = $('adminBookings');
+    const box   = $('adminBookings');
 
     panel.classList.toggle('hidden', !isAdmin);
     if (!isAdmin) return;
 
-    const q = String($('adminSearch').value || '').trim().toLowerCase();
+    const q    = String($('adminSearch').value || '').trim().toLowerCase();
     box.innerHTML = '';
 
     let list = allBookings
       .filter(b => b.endAtMs > Date.now())
-      .sort((a,b) => a.startAtMs - b.startAtMs);
+      .sort((a, b) => a.startAtMs - b.startAtMs);
 
     if (q) {
       list = list.filter(b => {
-        const hay = [
-          b.pc || '',
-          b.nick || '',
-          b.userEmail || '',
-          b.note || ''
-        ].join(' ').toLowerCase();
+        const hay = [b.pc || '', b.nick || '', b.userEmail || '', b.note || '']
+          .join(' ').toLowerCase();
         return hay.includes(q);
       });
     }
@@ -2407,8 +2468,8 @@
     }
 
     list.forEach(b => {
-      const s = new Date(b.startAtMs);
-      const e = new Date(b.endAtMs);
+      const s    = new Date(b.startAtMs);
+      const e    = new Date(b.endAtMs);
       const item = document.createElement('div');
       item.className = 'bookingItem';
       item.innerHTML = `
@@ -2419,44 +2480,47 @@
         </div>
         <button class="mini bad" type="button">${esc(tr('remove'))}</button>
       `;
-
       item.querySelector('button').onclick = async () => {
         if (!confirm(tr('remove') + '?')) return;
         try {
           await db.collection('bookings').doc(b.id).delete();
           toast(tr('canceled'), 'good');
-        } catch(e) {
+        } catch (e) {
           handleFsError(e);
         }
       };
-
       box.appendChild(item);
     });
   }
 
+  // ─── Auth state ───────────────────────────────────────────────────────────
   function updateUserUI() {
-    $('userPill').textContent = currentUser ? (currentUser.email || currentUser.uid.slice(0,6)) : '—';
+    $('userPill').textContent = currentUser
+      ? (currentUser.email || currentUser.uid.slice(0, 6))
+      : '—';
     isAdmin = !!(currentUser && ADMIN_EMAILS.includes(String(currentUser.email || '').toLowerCase()));
 
-    $('openAuthBtn').classList.toggle('hidden', !!currentUser);
-    $('logoutBtn').classList.toggle('hidden', !currentUser);
-    $('logoutTopBtn').classList.toggle('hidden', !currentUser);
+    $('openAuthBtn').classList.toggle('hidden',    !!currentUser);
+    $('logoutBtn').classList.toggle('hidden',      !currentUser);
+    $('logoutTopBtn').classList.toggle('hidden',   !currentUser);
 
-    if (currentUser) $('authMsg').textContent = tr('authOk') + (currentUser.email || currentUser.uid.slice(0,6));
-    else $('authMsg').textContent = '—';
+    $('authMsg').textContent = currentUser
+      ? tr('authOk') + (currentUser.email || currentUser.uid.slice(0, 6))
+      : '—';
 
     renderAdminBookings();
   }
 
+  // ─── Find free now ────────────────────────────────────────────────────────
   function findFreeNow() {
     const free = rankFreeGroupCandidates(ALL.filter(pc => getPcStatus(pc).state === 'free'));
     if (!free.length) return toast(tr('noFree'), 'warn');
 
     if (multiMode) {
       selectedPCs = new Set(free.slice(0, 3));
-      selectedPc = [...selectedPCs][0] || null;
+      selectedPc  = [...selectedPCs][0] || null;
     } else {
-      selectedPc = free[0];
+      selectedPc  = free[0];
       selectedPCs = new Set([free[0]]);
     }
 
@@ -2465,22 +2529,32 @@
     renderSelected();
   }
 
+  // ─── Realtime listener ────────────────────────────────────────────────────
   async function startRealtime() {
     if (!db) return;
 
     if (unsub) {
-      try { unsub(); } catch(_) {}
+      try { unsub(); } catch (_) {}
+      unsub = null;
     }
 
-    const { start, end } = dayBoundsNow();
+    const { startMs, endMs } = queryWindow();
 
+    // Two-sided range query so Firestore only fetches relevant documents.
+    // Composite index required: startAtMs ASC + endAtMs ASC
+    // If the index is missing, Firestore will show a link in the console.
     unsub = db.collection('bookings')
-      .where('startAtMs', '<', end)
+      .where('endAtMs',   '>', startMs)   // booking hasn't ended before our window
+      .where('startAtMs', '<', endMs)     // booking starts before our window ends
       .onSnapshot(snap => {
         allBookings = snap.docs
-          .map(d => ({ id:d.id, ...d.data() }))
-          .map(x => ({ ...x, startAtMs:Number(x.startAtMs || 0), endAtMs:Number(x.endAtMs || 0) }))
-          .filter(x => x.endAtMs > start);
+          .map(d => ({ id: d.id, ...d.data() }))
+          .map(x => ({
+            ...x,
+            startAtMs: Number(x.startAtMs || 0),
+            endAtMs:   Number(x.endAtMs   || 0)
+          }))
+          .filter(x => Number.isFinite(x.startAtMs) && Number.isFinite(x.endAtMs) && x.endAtMs > x.startAtMs);
 
         setCloud(tr('statusLive'), true);
         renderStats();
@@ -2491,22 +2565,24 @@
       }, handleFsError);
   }
 
+  // ─── Ticker — only ticks when tab is visible ──────────────────────────────
   function startTicker() {
     clearInterval(timer);
-    timer = setInterval(() => {
+
+    const tick = () => {
+      if (document.visibilityState === 'hidden') return;
       renderStats();
       renderHall();
       renderSelected();
-    }, 30000);
+    };
+
+    timer = setInterval(tick, 30000);
+    document.addEventListener('visibilitychange', tick);
   }
 
-  function closeLangMenu() {
-    $('langMenu').classList.remove('show');
-  }
-
-  function toggleLangMenu() {
-    $('langMenu').classList.toggle('show');
-  }
+  // ─── Lang menu ────────────────────────────────────────────────────────────
+  const closeLangMenu  = ()  => $('langMenu').classList.remove('show');
+  const toggleLangMenu = ()  => $('langMenu').classList.toggle('show');
 
   function setLanguage(newLang) {
     lang = newLang;
@@ -2515,33 +2591,30 @@
     applyTexts();
   }
 
+  // ─── Misc UI helpers ──────────────────────────────────────────────────────
   function toggleMy() {
-    $('mySection').scrollIntoView({behavior:'smooth', block:'start'});
+    $('mySection').scrollIntoView({ behavior:'smooth', block:'start' });
     renderMyBookings();
   }
 
   async function signOutNow() {
     if (!auth) return;
-    try { await auth.signOut(); } catch(_) {}
+    try { await auth.signOut(); } catch (_) {}
   }
 
   function updateHeaderCompact() {
     const header = $('headerShell');
     if (!header) return;
-    if (window.scrollY > 45) header.classList.add('compact');
-    else header.classList.remove('compact');
+    header.classList.toggle('compact', window.scrollY > 45);
   }
 
+  // ─── Event bindings ───────────────────────────────────────────────────────
   function bind() {
     document.querySelectorAll('.langFlagBtn').forEach(btn => {
       btn.onclick = () => setLanguage(btn.dataset.lang);
     });
 
-    $('langMenuBtn').onclick = e => {
-      e.stopPropagation();
-      toggleLangMenu();
-    };
-
+    $('langMenuBtn').onclick = e => { e.stopPropagation(); toggleLangMenu(); };
     document.addEventListener('click', e => {
       if (!e.target.closest('.langWrap')) closeLangMenu();
     });
@@ -2553,25 +2626,11 @@
     };
 
     $('logoutTopBtn').onclick = signOutNow;
-    $('logoutBtn').onclick = signOutNow;
+    $('logoutBtn').onclick    = signOutNow;
 
-    $('filterAll').onclick = () => {
-      currentFilter = 'all';
-      setFilterUI();
-      renderHall();
-    };
-
-    $('filterFree').onclick = () => {
-      currentFilter = 'free';
-      setFilterUI();
-      renderHall();
-    };
-
-    $('filterSoon').onclick = () => {
-      currentFilter = 'soon';
-      setFilterUI();
-      renderHall();
-    };
+    $('filterAll').onclick  = () => { currentFilter = 'all';  setFilterUI(); renderHall(); };
+    $('filterFree').onclick = () => { currentFilter = 'free'; setFilterUI(); renderHall(); };
+    $('filterSoon').onclick = () => { currentFilter = 'soon'; setFilterUI(); renderHall(); };
 
     $('findNowBtn').onclick = findFreeNow;
 
@@ -2580,59 +2639,55 @@
       if (!multiMode && selectedPCs.size > 1) {
         const first = [...selectedPCs][0];
         selectedPCs = new Set(first ? [first] : []);
-        selectedPc = first || null;
+        selectedPc  = first || null;
       }
       applyTexts();
     };
 
-    $('clearSelectedBtn').onclick = () => {
-      selectedPCs.clear();
-      selectedPc = null;
-      renderStats();
-      renderHall();
-      renderSelected();
-      buildCustomTimes();
-    };
+    $('clearSelectedBtn').onclick = clearSelection;
 
-    $('openMyBtn').onclick = toggleMy;
-    $('mobileMyBtn').onclick = toggleMy;
+    $('openMyBtn').onclick    = toggleMy;
+    $('mobileMyBtn').onclick  = toggleMy;
 
     $('mobileBookBtn').onclick = () => {
       if (!currentUser) return needLogin();
       if (!selectedPCs.size) return toast(tr('chooseAtLeastOne'), 'warn');
       showCustom();
-      $('customSection').scrollIntoView({behavior:'smooth', block:'start'});
+      $('customSection').scrollIntoView({ behavior:'smooth', block:'start' });
     };
 
     $('openAdminBtn').onclick = () => {
       if (!currentUser) return toast(tr('loginNeeded'), 'warn');
-      if (!isAdmin) return toast(tr('adminDenied'), 'bad');
-      $('adminSection').scrollIntoView({behavior:'smooth', block:'start'});
+      if (!isAdmin)     return toast(tr('adminDenied'), 'bad');
+      $('adminSection').scrollIntoView({ behavior:'smooth', block:'start' });
     };
 
     $('openAuthBtn').onclick = openAuth;
 
-    $('closeAuthBtn').onclick = closeAuth;
-    $('authBackdrop').onclick = e => {
-      if (e.target === $('authBackdrop')) closeAuth();
-    };
+    $('closeAuthBtn').onclick   = closeAuth;
+    $('authBackdrop').onclick   = e => { if (e.target === $('authBackdrop'))    closeAuth(); };
 
-    $('closeConfirmBtn').onclick = closeConfirm;
+    $('closeConfirmBtn').onclick  = closeConfirm;
     $('cancelConfirmBtn').onclick = closeConfirm;
-    $('confirmBackdrop').onclick = e => {
-      if (e.target === $('confirmBackdrop')) closeConfirm();
-    };
+    $('confirmBackdrop').onclick  = e => { if (e.target === $('confirmBackdrop')) closeConfirm(); };
 
+    // Date default
     $('customDate').value = toISODate(new Date());
-    $('nickInput').value = localStorage.getItem(NICK_KEY) || '';
 
+    // Nick from localStorage
+    $('nickInput').value = localStorage.getItem(NICK_KEY) || '';
     $('nickInput').addEventListener('input', () => {
       localStorage.setItem(NICK_KEY, $('nickInput').value.trim());
     });
 
     $('customDate').addEventListener('change', buildCustomTimes);
     $('customDuration').addEventListener('change', buildCustomTimes);
-    $('adminSearch').addEventListener('input', renderAdminBookings);
+
+    // Debounced admin search
+    $('adminSearch').addEventListener('input', () => {
+      clearTimeout(adminSearchTimer);
+      adminSearchTimer = setTimeout(renderAdminBookings, 220);
+    });
 
     $('hideCustomBtn').onclick = hideCustom;
 
@@ -2640,19 +2695,20 @@
       if (!currentUser) return needLogin();
       if (!selectedPCs.size) return toast(tr('chooseAtLeastOne'), 'warn');
 
-      const startAtMs = Number($('customTime').value || 0);
-      if (!startAtMs) return toast(tr('pickTime'), 'warn');
+      const startAtMs  = Number($('customTime').value || 0);
+      if (!startAtMs)  return toast(tr('pickTime'), 'warn');
 
-      const duration = Number($('customDuration').value || 60);
+      const duration   = Number($('customDuration').value) || 60;
+      const nick       = ($('nickInput').value || '').trim();
+      if (!nick)        return toast(tr('enterNick'), 'warn');
 
       pendingBooking = {
-        pcs:[...selectedPCs],
+        pcs:      [...selectedPCs],
         startAtMs,
-        endAtMs:startAtMs + duration * 60000,
-        nick:($('nickInput').value || '').trim(),
-        note:($('noteInput').value || '').trim()
+        endAtMs:  startAtMs + duration * 60000,
+        nick,
+        note: ($('noteInput').value || '').trim()
       };
-
       fillConfirm();
       openConfirm();
     };
@@ -2663,14 +2719,13 @@
 
     $('loginBtn').onclick = async () => {
       const email = ($('authEmail').value || '').trim();
-      const pass = ($('authPass').value || '').trim();
+      const pass  = ($('authPass').value  || '').trim();
       if (!email || !pass) return $('authMsg').textContent = tr('loginErr');
-      if (!auth) return $('authMsg').textContent = tr('fsErr');
-
+      if (!auth)           return $('authMsg').textContent = tr('fsErr');
       try {
         await auth.signInWithEmailAndPassword(email, pass);
         closeAuth();
-      } catch(e) {
+      } catch (e) {
         console.error(e);
         $('authMsg').textContent = e.message || tr('fsErr');
       }
@@ -2678,14 +2733,13 @@
 
     $('registerBtn').onclick = async () => {
       const email = ($('authEmail').value || '').trim();
-      const pass = ($('authPass').value || '').trim();
+      const pass  = ($('authPass').value  || '').trim();
       if (!email || !pass) return $('authMsg').textContent = tr('loginErr');
-      if (!auth) return $('authMsg').textContent = tr('fsErr');
-
+      if (!auth)           return $('authMsg').textContent = tr('fsErr');
       try {
         await auth.createUserWithEmailAndPassword(email, pass);
         closeAuth();
-      } catch(e) {
+      } catch (e) {
         console.error(e);
         $('authMsg').textContent = e.message || tr('fsErr');
       }
@@ -2694,34 +2748,30 @@
     $('resetBtn').onclick = async () => {
       const email = ($('authEmail').value || '').trim();
       if (!email) return $('authMsg').textContent = tr('loginErr');
-      if (!auth) return $('authMsg').textContent = tr('fsErr');
-
+      if (!auth)  return $('authMsg').textContent = tr('fsErr');
       try {
         await auth.sendPasswordResetEmail(email);
         $('authMsg').textContent = tr('resetSent');
-      } catch(e) {
+      } catch (e) {
         console.error(e);
         $('authMsg').textContent = e.message || tr('fsErr');
       }
     };
 
     document.addEventListener('keydown', e => {
-      if (e.key === 'Escape') {
-        closeAuth();
-        closeConfirm();
-        closeLangMenu();
-      }
+      if (e.key === 'Escape') { closeAuth(); closeConfirm(); closeLangMenu(); }
     });
 
     window.addEventListener('scroll', updateHeaderCompact, { passive:true });
     window.addEventListener('resize', updateHeaderCompact);
 
     window.addEventListener('beforeunload', () => {
-      try { if (unsub) unsub(); } catch(_) {}
+      try { if (unsub) unsub(); } catch (_) {}
       clearInterval(timer);
     });
   }
 
+  // ─── Boot ─────────────────────────────────────────────────────────────────
   async function boot() {
     applyTheme();
     bind();
@@ -2745,13 +2795,13 @@
 
       if (currentUser && !$('nickInput').value.trim()) {
         try {
-          const doc = await db.collection('users').doc(String(currentUser.uid)).get();
+          const doc  = await db.collection('users').doc(String(currentUser.uid)).get();
           const nick = doc.exists ? (doc.data().nick || '') : '';
           if (nick) {
             $('nickInput').value = nick;
             localStorage.setItem(NICK_KEY, nick);
           }
-        } catch(_) {}
+        } catch (_) {}
       }
 
       applyTexts();
