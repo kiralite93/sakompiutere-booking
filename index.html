@@ -331,7 +331,8 @@ html { scroll-behavior:smooth; }
 * { margin:0; padding:0; box-sizing:border-box; }
 body, #root { background:var(--bg); color:var(--tx); font-family:'DM Sans',sans-serif; min-height:100vh; transition:background .22s ease, color .22s ease; }
 @media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation:none !important; transition:none !important; scroll-behavior:auto !important; } }
-body { line-height:1.4; -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility; overscroll-behavior-y:contain; }
+body { line-height:1.4; -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility; overscroll-behavior-y:contain; overflow-x:hidden; }
+#root, .app, .content { overflow-x:hidden; }
 img, svg { display:block; max-width:100%; }
 button, input, textarea, select { font:inherit; }
 button:focus-visible, input:focus-visible, textarea:focus-visible, select:focus-visible, [tabindex]:focus-visible { outline:2px solid var(--sky); outline-offset:2px; }
@@ -362,19 +363,25 @@ body.light .theme-switch:active .knob { transform:translateX(22px) scale(.97); }
 .amb-2 { width:260px; height:260px; background:var(--coral); opacity:.032; bottom:-60px; right:-60px; }
 
 /* Header */
-.hdr { position:sticky; top:0; z-index:100; background:rgba(22,27,38,.88); backdrop-filter:blur(20px); border-bottom:1px solid var(--s3); padding:9px 12px; display:flex; align-items:center; justify-content:space-between; gap:6px; }
-.hdr-brand { font-family:Nunito; font-weight:900; font-size:13px; background:linear-gradient(135deg,var(--teal),var(--sky)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; white-space:nowrap; }
-.hdr-right { display:flex; gap:5px; align-items:center; }
-.hdr-user { display:flex; align-items:center; gap:4px; background:var(--s2); border:1px solid var(--s3); border-radius:8px; padding:3px 9px 3px 5px; font-size:11px; font-weight:600; font-family:Nunito; color:var(--tx); }
-.hdr-btn { background:none; border:none; color:var(--tx2); font-size:17px; cursor:pointer; padding:3px; position:relative; border-radius:7px; }
+.hdr { position:sticky; top:0; z-index:100; display:flex; align-items:center; justify-content:space-between; gap:8px; padding:10px 10px 9px; background:linear-gradient(180deg, rgba(18,24,38,.78), rgba(12,17,29,.62)); backdrop-filter:blur(22px) saturate(150%); -webkit-backdrop-filter:blur(22px) saturate(150%); border-bottom:1px solid rgba(255,255,255,.08); box-shadow:0 12px 34px rgba(0,0,0,.18); position:sticky; overflow:hidden; }
+.hdr::before { content:""; position:absolute; inset:0; pointer-events:none; background:linear-gradient(180deg, rgba(255,255,255,.14), rgba(255,255,255,.03) 42%, rgba(255,255,255,0)); }
+.hdr-left { display:flex; align-items:center; gap:8px; min-width:0; flex:1 1 auto; position:relative; z-index:1; }
+.hdr-logo { height:20px; flex:0 0 auto; }
+.hdr-brand { min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; line-height:1; font-family:Nunito; font-weight:900; font-size:clamp(11px, 3.3vw, 13px); letter-spacing:.1px; background:linear-gradient(135deg,var(--teal),var(--sky)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; }
+.hdr-right { display:flex; gap:4px; align-items:center; justify-content:flex-end; flex:0 0 auto; min-width:0; position:relative; z-index:1; }
+.hdr-user { display:flex; align-items:center; gap:5px; min-width:0; max-width:108px; background:rgba(255,255,255,.05); border:1px solid rgba(255,255,255,.08); border-radius:999px; padding:3px 8px 3px 5px; font-size:11px; font-weight:700; font-family:Nunito; color:var(--tx); backdrop-filter:blur(10px); -webkit-backdrop-filter:blur(10px); }
+.hdr-user span { min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+.hdr-btn { width:30px; height:30px; display:inline-flex; align-items:center; justify-content:center; background:rgba(255,255,255,.04); border:1px solid rgba(255,255,255,.07); color:var(--tx2); font-size:15px; cursor:pointer; padding:0; position:relative; border-radius:10px; flex:0 0 auto; }
 .hdr-btn:active { transform:scale(.88); }
-.badge { position:absolute; top:-2px; right:-3px; background:var(--coral); color:#fff; font-size:7px; font-weight:700; min-width:13px; height:13px; border-radius:7px; display:flex; align-items:center; justify-content:center; font-family:Nunito; border:2px solid var(--s1); }
+@media (max-width: 390px) { .hdr { padding:8px 8px 7px; gap:6px; } .hdr-user { max-width:74px; padding-right:6px; } .hdr-user span { font-size:10px; } .hdr-btn { width:28px; height:28px; font-size:14px; } .hdr-logo { height:18px; } .theme-switch { width:44px; height:24px; } .theme-switch .knob { width:18px; height:18px; top:2px; left:2px; font-size:10px; } body.light .theme-switch .knob { transform:translateX(20px); } body.light .theme-switch:active .knob { transform:translateX(20px) scale(.97); } }
+@media (max-width: 350px) { .hdr-user span { display:none; } .hdr-user { max-width:none; padding-right:5px; } .hdr-brand { font-size:11px; } }
+.badge { position:absolute; top:-2px; right:-3px; background:var(--coral); color:#fff; font-size:9px; font-weight:800; min-width:16px; height:16px; border-radius:8px; display:flex; align-items:center; justify-content:center; font-family:Nunito; border:2px solid var(--s1); }
 
 /* Bottom nav */
 .bnav { position:fixed; bottom:0; left:50%; transform:translateX(-50%); width:100%; max-width:480px; z-index:100; background:rgba(22,27,38,.92); backdrop-filter:blur(20px); border-top:1px solid var(--s3); display:flex; padding:4px 2px 8px; gap:1px; }
-.bnav button { flex:1; background:none; border:none; color:var(--tx2); display:flex; flex-direction:column; align-items:center; font-size:8px; font-family:'DM Sans'; font-weight:600; cursor:pointer; padding:3px 0; border-radius:6px; transition:all .12s; position:relative; }
+.bnav button { flex:1; background:none; border:none; color:var(--tx2); display:flex; flex-direction:column; align-items:center; font-size:10px; font-family:'DM Sans'; font-weight:700; cursor:pointer; padding:5px 0; border-radius:8px; transition:all .12s; position:relative; min-height:44px; justify-content:center; }
 .bnav button.act { color:var(--teal); background:var(--t1); }
-.bnav button .ti { font-size:17px; }
+.bnav button .ti { font-size:19px; }
 .bnav button:active { transform:scale(.88); }
 .bnav .dot { position:absolute; top:0; right:calc(50% - 10px); width:5px; height:5px; background:var(--coral); border-radius:50%; }
 
@@ -407,7 +414,7 @@ body.light .theme-switch:active .knob { transform:translateX(22px) scale(.97); }
 .btn-gold { background:linear-gradient(135deg,#ffd93d,#f0c929); color:var(--bg); }
 .btn-lav { background:linear-gradient(135deg,#c084fc,#a855f7); color:#fff; }
 .btn-ghost { background:var(--s3); color:var(--tx); }
-.btn-sm { padding:4px 10px; font-size:10px; border-radius:8px; }
+.btn-sm { padding:6px 12px; font-size:11px; border-radius:8px; min-height:36px; }
 
 /* Inputs */
 .inp { width:100%; background:var(--s1); border:1.5px solid var(--s3); border-radius:10px; padding:9px 12px; color:var(--tx); font-family:'DM Sans'; font-size:12px; outline:none; }
@@ -552,7 +559,7 @@ textarea.inp { resize:vertical; min-height:50px; }
 .dash-card .dv { font-family:Nunito; font-weight:900; font-size:20px; }
 .dash-card .dl { font-size:8px; color:var(--tx2); font-weight:600; }
 .usage-bar { display:flex; align-items:center; gap:5px; margin-bottom:4px; }
-.usage-bar .un { font-size:9px; width:68px; font-weight:600; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+.usage-bar .un { font-size:10px; width:78px; font-weight:700; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
 .usage-bar .ub { flex:1; height:3px; background:var(--s3); border-radius:2px; overflow:hidden; }
 .usage-bar .ub .uf { height:100%; border-radius:2px; }
 
@@ -576,7 +583,11 @@ textarea.inp { resize:vertical; min-height:50px; }
 .issue-btn .issue-icon { font-size:18px; display:block; margin-bottom:1px; }
 .section-title { font-family:Nunito; font-weight:700; font-size:11px; color:var(--tx2); margin:10px 0 5px; }
 .empty { text-align:center; color:var(--tx2); padding:30px 0; font-size:11px; }
-.multi-fab { position:fixed; bottom:64px; left:50%; transform:translateX(-50%); z-index:50; }
+.multi-fab { position:fixed; bottom:64px; left:50%; transform:translateX(-50%); z-index:50; width:min(calc(100vw - 20px), 420px); }
+.multi-fab-inner { width:100%; background:rgba(15,18,25,.92); border:1px solid rgba(255,255,255,.08); border-radius:16px; padding:8px 12px; display:flex; align-items:center; justify-content:space-between; gap:8px; box-shadow:0 8px 32px rgba(0,0,0,.5); backdrop-filter:blur(16px); -webkit-backdrop-filter:blur(16px); }
+.multi-fab-icons { display:flex; gap:4px; min-width:0; flex:1 1 auto; overflow:hidden; flex-wrap:nowrap; }
+.multi-fab-count { font-size:11px; color:var(--tx2); font-weight:700; flex:0 0 auto; }
+@media (max-width: 390px) { .multi-fab { bottom:62px; width:min(calc(100vw - 14px), 420px); } .multi-fab-inner { padding:7px 10px; gap:6px; } }
 .lb-row { display:flex; align-items:center; gap:7px; padding:6px 8px; background:var(--s2); border:1px solid var(--s3); border-radius:9px; margin-bottom:4px; }
 .lb-row.me { border-color:rgba(78,205,196,.25); background:var(--t1); }
 .reply-card { display:flex; gap:5px; padding:5px 0; border-bottom:1px solid var(--s3); }
@@ -1309,23 +1320,21 @@ textarea.inp { resize:vertical; min-height:50px; }
       const now = Date.now();
       const normalized = normalizeBookingRange(t0, t1, (Number(t1) - Number(t0)) / 36e5 || 1, 6e4);
       const durationMs = Math.max(15 * 6e4, Math.round(normalized.endTs - normalized.startTs));
-      const resolvedStartTs = findNextAvailableStart(bookings, pid, normalized.startTs, durationMs, null, 6e4);
-      const resolved = normalizeBookingRange(resolvedStartTs, resolvedStartTs + durationMs, durationMs / 36e5, 6e4);
-      const startTs = resolved.startTs;
-      const endTs = resolved.endTs;
-      const hrs = resolved.hrs;
+      const requested = normalizeBookingRange(normalized.startTs, normalized.startTs + durationMs, durationMs / 36e5, 6e4);
+      const startTs = requested.startTs;
+      const endTs = requested.endTs;
+      const hrs = requested.hrs;
       if (!Number.isFinite(startTs) || !Number.isFinite(endTs)) return showToast("\u274C Invalid time");
       if (startTs < now) return showToast("\u274C Start time is in the past");
       if (hrs <= 0) return showToast("\u274C Invalid");
-      if (hasBookingConflict(bookings, pid, startTs, endTs))
-        return showToast("\u274C " + L("conflict"));
-      if (startTs !== normalized.startTs) {
-        showToast(`\u23ED\uFE0F ${lang === "ka" ? "\u10D0\u10D5\u10E2\u10DD\u10DB\u10D0\u10E2\u10E3\u10E0\u10D0\u10D3 \u10D2\u10D0\u10D3\u10D0\u10E2\u10D0\u10DC\u10D8\u10DA\u10D8\u10D0" : "Auto-moved"}: ${fmtWhen(startTs, lang)}`);
+      if (hasBookingConflict(bookings, pid, startTs, endTs)) {
+        const nextStartTs = findNextAvailableStart(bookings, pid, startTs, durationMs, null, 6e4);
+        const suggestion = Number.isFinite(nextStartTs) && nextStartTs !== startTs ? ` ${lang === "ka" ? "\u10E8\u10D4\u10DB\u10D3\u10D4\u10D2\u10D8 \u10D7\u10D0\u10D5\u10D8\u10E1\u10E3\u10E4\u10D0\u10DA\u10D8:" : "Next free:"} ${fmtWhen(nextStartTs, lang)}` : "";
+        return showToast("\u274C " + L("conflict") + suggestion);
       }
       const calc = calcPrice(hrs, user, startTs);
-      const bk = { id: uid(), pid, uid: user.id, un: user.nick, t0: startTs, t1: endTs, price: calc.final, coins: calc.coins, hrs: Math.round(hrs * 100) / 100, s: "pending", ca: Date.now() };
+      const bk = { id: uid(), pid, uid: user.id, un: user.nick, t0: startTs, t1: endTs, price: calc.final, coins: calc.coins, hrs: Math.round(hrs * 100) / 100, s: "pending", ca: Date.now(), counted: false };
       setBookings((bs) => [...bs, bk]);
-      updUser(user.id, (u) => ({ ...u, bk: u.bk + 1 }));
       addNotif(user.id, "\u{1F4CB}", `Booked ${(_a = ALL_PCS.find((p) => p.id === pid)) == null ? void 0 : _a.name}`);
       setSheetData(bk);
       setSheet("pay");
@@ -1338,6 +1347,10 @@ textarea.inp { resize:vertical; min-height:50px; }
         const nb = { ...bk };
         if (action === "approve") {
           nb.s = "active";
+          if (!bk.counted) {
+            nb.counted = true;
+            updUser(bk.uid, (u) => ({ ...u, bk: u.bk + 1 }));
+          }
           addNotif(bk.uid, "\u2705", "Approved");
         } else if (action === "reject") {
           nb.s = "rejected";
@@ -1432,7 +1445,7 @@ textarea.inp { resize:vertical; min-height:50px; }
         "div",
         {
           className: `pc-card pc-${visualState} ${isFree ? "free-glow" : ""} ${isMy ? "my-active" : ""} ${sel ? "multi-sel" : ""}`,
-          style: { animationDelay: `${idx * 0.05}s`, paddingLeft: multi && !isGuest ? 30 : 10 },
+          style: { animationDelay: `${idx * 0.05}s` },
           onClick: () => {
             if (multi && !isGuest) setMultiSel((s) => s.includes(pc.id) ? s.filter((x) => x !== pc.id) : [...s, pc.id]);
             else {
@@ -1447,7 +1460,7 @@ textarea.inp { resize:vertical; min-height:50px; }
         /* @__PURE__ */ React.createElement("div", { className: "glow", style: { background: isFree ? "rgba(52,211,153,.7)" : isBusy ? "rgba(255,76,76,.78)" : "rgba(251,191,36,.7)", top: "-18px", right: "-18px" } }),
         !isGuest && isHot && !isYou && /* @__PURE__ */ React.createElement("div", { className: "pc-badge", style: { background: "var(--c1)", color: "var(--coral)" } }, "\u{1F525}HOT"),
         !isGuest && isYou && /* @__PURE__ */ React.createElement("div", { className: "pc-badge", style: { background: "var(--g1)", color: "var(--gold)" } }, "\u2605YOU"),
-        multi && !isGuest && /* @__PURE__ */ React.createElement("div", { style: { position: "absolute", top: 7, left: 7, width: 18, height: 18, borderRadius: "50%", border: sel ? "2.5px solid var(--teal)" : "2px solid var(--s4)", background: sel ? "var(--teal)" : "rgba(12,17,29,.85)", display: "flex", alignItems: "center", justifyContent: "center", color: sel ? "#0f1219" : "transparent", fontSize: 12, fontWeight: 900, zIndex: 4 } }, "\u2713"),
+        multi && !isGuest && /* @__PURE__ */ React.createElement("div", { style: { position: "absolute", top: 8, left: 8, width: 16, height: 16, borderRadius: "50%", border: sel ? "2px solid var(--teal)" : "1.5px solid var(--s4)", background: sel ? "var(--teal)" : "rgba(12,17,29,.82)", display: "flex", alignItems: "center", justifyContent: "center", color: sel ? "#0f1219" : "transparent", fontSize: 10, fontWeight: 900, zIndex: 4, boxShadow: "0 2px 8px rgba(0,0,0,.24)" } }, "\u2713"),
         /* @__PURE__ */ React.createElement("div", { className: "pc-topline" }, /* @__PURE__ */ React.createElement("div", { className: "pc-mini-id", style: { background: `${pc.c}22`, color: pc.c } }, pc.side, idx + 1), /* @__PURE__ */ React.createElement("div", { className: "pc-name-wrap" }, /* @__PURE__ */ React.createElement("div", { className: "pc-name" }, /* @__PURE__ */ React.createElement("span", { className: "pc-name-icon" }, pc.icon), pc.name), /* @__PURE__ */ React.createElement("div", { className: "pc-meta" }, isGuest ? lang === "ka" ? "\u10D3\u10D4\u10E2\u10D0\u10DA\u10D4\u10D1\u10D8\u10E1\u10D7\u10D5\u10D8\u10E1 \u10E8\u10D4\u10D4\u10EE\u10D4\u10D7" : "Tap for details" : lang === "ka" ? "\u10D3\u10D4\u10E2\u10D0\u10DA\u10D4\u10D1\u10D8 / \u10EF\u10D0\u10D5\u10E8\u10D0\u10DC\u10D8" : "Details / booking"))),
         /* @__PURE__ */ React.createElement("div", { className: "pc-visual", "aria-hidden": "true" }, /* @__PURE__ */ React.createElement("div", { className: "pc-room-grid" }), /* @__PURE__ */ React.createElement("div", { className: "pc-desk" }), /* @__PURE__ */ React.createElement("div", { className: "pc-monitor" }, /* @__PURE__ */ React.createElement("div", { className: "pc-screen" })), /* @__PURE__ */ React.createElement("div", { className: "pc-keyboard" }), isBusy && /* @__PURE__ */ React.createElement("div", { className: "pc-player" }, /* @__PURE__ */ React.createElement("div", { className: "pc-player-head" }), /* @__PURE__ */ React.createElement("div", { className: "pc-player-body" })), /* @__PURE__ */ React.createElement("div", { className: "pc-chair" })),
         /* @__PURE__ */ React.createElement("div", { className: "pc-bottom" }, /* @__PURE__ */ React.createElement("div", { className: "pc-status", style: { color: isFree ? "var(--teal)" : info.s === "soon" ? "var(--gold)" : "var(--coral)" } }, L(info.s === "busy" ? "busy" : info.s)), isGuest ? /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement("div", { style: { fontSize: 9, fontWeight: 700, color: isFree ? "var(--teal)" : info.s === "soon" ? "var(--gold)" : "var(--coral)", marginTop: 4, lineHeight: 1.35 } }, guestMain), /* @__PURE__ */ React.createElement("div", { style: { fontSize: 8, color: "var(--tx2)", marginTop: 3, lineHeight: 1.35 } }, guestSub)) : isBusy && info.bk ? /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement("div", { className: "pc-user" }, "\u{1F3AE} ", info.bk.un), /* @__PURE__ */ React.createElement("div", { className: "pc-prog" }, /* @__PURE__ */ React.createElement("div", { className: "pc-prog-fill", style: { width: `${prog}%` } })), /* @__PURE__ */ React.createElement("div", { className: "pc-time" }, remStr)) : isFree ? /* @__PURE__ */ React.createElement("div", { style: { fontSize: 8, color: "var(--teal)", opacity: 0.75, marginTop: 4 } }, lang === "ka" ? "\u10DB\u10EC\u10D5\u10D0\u10DC\u10D4 \u10DB\u10DD\u10DC\u10D8\u10E2\u10DD\u10E0\u10D8 = \u10D7\u10D0\u10D5\u10D8\u10E1\u10E3\u10E4\u10D0\u10DA\u10D8" : "Green monitor = free") : info.s === "soon" && info.bk ? /* @__PURE__ */ React.createElement("div", { style: { fontSize: 8, color: "var(--gold)", marginTop: 4, lineHeight: 1.35 } }, info.bk.un, " \xB7 ", fmtWhen(info.bk.t0, lang)) : null, /* @__PURE__ */ React.createElement("div", { style: { flex: 1 } }), !isGuest && info.q > 1 && /* @__PURE__ */ React.createElement("div", { className: "pc-queue" }, "\u{1F4CB} ", info.q, " ", L("queued")))
@@ -1471,10 +1484,10 @@ textarea.inp { resize:vertical; min-height:50px; }
         const rp = filterPcs(RIGHT_PCS)[row];
         const rowBorder = row < 4 ? "1px solid rgba(37,45,64,.3)" : "none";
         return /* @__PURE__ */ React.createElement(React.Fragment, { key: row }, /* @__PURE__ */ React.createElement("div", { className: "hall-cell left", style: { borderBottom: rowBorder } }, lp ? /* @__PURE__ */ React.createElement(PcCard, { pc: lp, idx: row }) : /* @__PURE__ */ React.createElement("div", { className: "pc-slot-empty" })), /* @__PURE__ */ React.createElement("div", { className: "hall-aisle-cell", style: { borderBottom: rowBorder } }), /* @__PURE__ */ React.createElement("div", { className: "hall-cell right", style: { borderBottom: rowBorder } }, rp ? /* @__PURE__ */ React.createElement(PcCard, { pc: rp, idx: row }) : /* @__PURE__ */ React.createElement("div", { className: "pc-slot-empty" })));
-      }))), multi && multiSel.length > 0 && /* @__PURE__ */ React.createElement("div", { className: "multi-fab" }, /* @__PURE__ */ React.createElement("div", { style: { background: "var(--s1)", border: "1px solid var(--s3)", borderRadius: 16, padding: "8px 14px", display: "flex", alignItems: "center", gap: 8, boxShadow: "0 8px 32px rgba(0,0,0,.5)" } }, /* @__PURE__ */ React.createElement("div", { style: { display: "flex", gap: 2 } }, multiSel.slice(0, 4).map((pid) => {
+      }))), multi && multiSel.length > 0 && /* @__PURE__ */ React.createElement("div", { className: "multi-fab" }, /* @__PURE__ */ React.createElement("div", { className: "multi-fab-inner" }, /* @__PURE__ */ React.createElement("div", { className: "multi-fab-icons" }, multiSel.slice(0, 4).map((pid) => {
         const p = ALL_PCS.find((x) => x.id === pid);
         return /* @__PURE__ */ React.createElement("span", { key: pid, style: { fontSize: 16 } }, p == null ? void 0 : p.icon);
-      }), multiSel.length > 4 && /* @__PURE__ */ React.createElement("span", { style: { fontSize: 11, color: "var(--tx2)", fontWeight: 700 } }, "+", multiSel.length - 4)), /* @__PURE__ */ React.createElement("button", { className: "btn btn-teal", onClick: () => {
+      }), multiSel.length > 4 && /* @__PURE__ */ React.createElement("span", { className: "multi-fab-count" }, "+", multiSel.length - 4)), /* @__PURE__ */ React.createElement("button", { className: "btn btn-teal btn-sm", style: { flex: "0 0 auto", whiteSpace: "nowrap" }, onClick: () => {
         setSheetData({ pids: [...multiSel] });
         setSheet("book");
         setBkDur(1);
@@ -1926,7 +1939,7 @@ textarea.inp { resize:vertical; min-height:50px; }
         tmrw.setHours(10, 0, 0, 0);
         quickStarts.push({ label: lang === "ka" ? "\u10EE\u10D5\u10D0\u10DA 10:00" : "Tomorrow 10:00", ts: tmrw.getTime() });
         const requestedEditRange = normalizeBookingRange(new Date(bkT0).getTime(), new Date(bkT1).getTime(), bkDur, 6e4);
-        const editPlan = getResolvedBookingRange(bookings, [bk.pid], requestedEditRange, { autoShift: true, minLeadMs: 6e4, excludeIdByPid: { [bk.pid]: bk.id } });
+        const editPlan = getResolvedBookingRange(bookings, [bk.pid], requestedEditRange, { autoShift: false, minLeadMs: 6e4, excludeIdByPid: { [bk.pid]: bk.id } });
         const startTs = editPlan.range.startTs;
         const endTs = editPlan.range.endTs;
         const hrs = editPlan.range.hrs;
@@ -1942,16 +1955,16 @@ textarea.inp { resize:vertical; min-height:50px; }
           if (!Number.isFinite(startTs) || !Number.isFinite(endTs)) return showToast("\u274C Invalid time");
           if (startTs < Date.now()) return showToast("\u274C Start time is in the past");
           if (hrs <= 0) return showToast("\u274C Invalid time");
-          if (conflict) return showToast("\u274C " + L("conflict"));
+          if (conflict) {
+            const nextStartTs = findNextAvailableStart(bookings, bk.pid, requestedEditRange.startTs, Math.max(15 * 6e4, Math.round(requestedEditRange.endTs - requestedEditRange.startTs)), bk.id, 6e4);
+            const suggestion = Number.isFinite(nextStartTs) && nextStartTs !== requestedEditRange.startTs ? ` ${lang === "ka" ? "\u10E8\u10D4\u10DB\u10D3\u10D4\u10D2\u10D8 \u10D7\u10D0\u10D5\u10D8\u10E1\u10E3\u10E4\u10D0\u10DA\u10D8:" : "Next free:"} ${fmtWhen(nextStartTs, lang)}` : "";
+            return showToast("\u274C " + L("conflict") + suggestion);
+          }
           setBookings((bs) => bs.map((b) => {
             if (b.id !== bk.id) return b;
             return { ...b, t0: startTs, t1: endTs, hrs: Math.round(hrs * 100) / 100, price: calc.final, coins: calc.coins };
           }));
           setSheet(null);
-          if (editAutoShifted) {
-            showToast(`\u23ED\uFE0F ${lang === "ka" ? "\u10E3\u10D0\u10EE\u10DA\u10DD\u10D4\u10E1 \u10D7\u10D0\u10D5\u10D8\u10E1\u10E3\u10E4\u10D0\u10DA \u10E4\u10D0\u10DC\u10EF\u10D0\u10E0\u10D0\u10E8\u10D8 \u10D2\u10D0\u10D3\u10D0\u10D8\u10E2\u10D0\u10DC\u10D0" : "Moved to nearest free slot"}: ${fmtWhen(startTs, lang)}`);
-            return;
-          }
           showToast("\u2705 " + (lang === "ka" ? "\u10EF\u10D0\u10D5\u10E8\u10D0\u10DC\u10D8 \u10D2\u10D0\u10DC\u10D0\u10EE\u10DA\u10D3\u10D0" : "Booking updated"));
         };
         return /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement("div", { className: "overlay", onClick: close }), /* @__PURE__ */ React.createElement("div", { className: "sheet" }, /* @__PURE__ */ React.createElement("div", { className: "sheet-bar" }), /* @__PURE__ */ React.createElement("h3", null, "\u270F\uFE0F ", lang === "ka" ? "\u10EF\u10D0\u10D5\u10E8\u10DC\u10D8\u10E1 \u10E0\u10D4\u10D3\u10D0\u10E5\u10E2\u10D8\u10E0\u10D4\u10D1\u10D0" : "Edit Booking"), /* @__PURE__ */ React.createElement("div", { style: { display: "flex", alignItems: "center", gap: 6, marginBottom: 10, background: "var(--s2)", borderRadius: 10, padding: 8 } }, /* @__PURE__ */ React.createElement("span", { style: { fontSize: 20 } }, pc == null ? void 0 : pc.icon), /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("div", { style: { fontWeight: 700, fontSize: 11 } }, pc == null ? void 0 : pc.name), /* @__PURE__ */ React.createElement("div", { style: { fontSize: 8, color: "var(--tx2)" } }, lang === "ka" ? "\u10EB\u10D5\u10D4\u10DA\u10D8:" : "Was:", " ", fmtDate(bk.t0, lang), " ", fmt(bk.t0), "\u2013", fmt(bk.t1))), /* @__PURE__ */ React.createElement(StatusPill, { status: bk.s, L })), /* @__PURE__ */ React.createElement("div", { style: { fontSize: 9, color: "var(--tx2)", fontWeight: 600, marginBottom: 4 } }, lang === "ka" ? "\u10E1\u10EC\u10E0\u10D0\u10E4\u10D8 \u10D3\u10D0\u10EC\u10E7\u10D4\u10D1\u10D0:" : "Quick start:"), /* @__PURE__ */ React.createElement("div", { style: { display: "flex", gap: 3, marginBottom: 8, flexWrap: "wrap" } }, quickStarts.map((q, i) => /* @__PURE__ */ React.createElement("button", { key: i, className: "ftab", onClick: () => setStart(q.ts), style: { fontSize: 9, padding: "3px 8px" } }, q.label))), /* @__PURE__ */ React.createElement("div", { style: { display: "flex", flexDirection: "column", gap: 5, marginBottom: 8 } }, /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("div", { style: { fontSize: 9, color: "var(--tx2)", fontWeight: 600, marginBottom: 2 } }, lang === "ka" ? "\u10D3\u10D0\u10EC\u10E7\u10D4\u10D1\u10D0" : "Start"), /* @__PURE__ */ React.createElement("input", { className: "inp", type: "datetime-local", value: bkT0, onChange: (e) => {
@@ -2009,7 +2022,7 @@ textarea.inp { resize:vertical; min-height:50px; }
       if (e.key === "Enter") submitAuth();
     };
     if (authLoading) return /* @__PURE__ */ React.createElement("div", { className: "app landing" }, /* @__PURE__ */ React.createElement("style", null, CSS), /* @__PURE__ */ React.createElement("div", { style: { display: "flex", alignItems: "center", justifyContent: "center", minHeight: "100vh", flexDirection: "column", gap: 12 } }, /* @__PURE__ */ React.createElement("img", { src: LOGO_LG, alt: "Sakompiutere N1 Gaming logo", style: { height: 56, opacity: 0.6 } }), /* @__PURE__ */ React.createElement("div", { style: { fontFamily: "Nunito", fontWeight: 800, fontSize: 14, color: "var(--tx2)" } }, "Loading...")));
-    if (!user) return /* @__PURE__ */ React.createElement("div", { className: "app" }, /* @__PURE__ */ React.createElement("style", null, CSS), /* @__PURE__ */ React.createElement("div", { className: "amb amb-1" }), /* @__PURE__ */ React.createElement("div", { className: "amb amb-2" }), /* @__PURE__ */ React.createElement("div", { className: "hdr" }, /* @__PURE__ */ React.createElement("div", { style: { display: "flex", alignItems: "center", gap: 5 } }, /* @__PURE__ */ React.createElement("img", { src: LOGO_SM, alt: "Sakompiutere N1 Gaming", style: { height: 20 } }), /* @__PURE__ */ React.createElement("div", { className: "hdr-brand" }, L("brand"))), /* @__PURE__ */ React.createElement("div", { className: "hdr-right" }, /* @__PURE__ */ React.createElement("div", { className: "theme-switch", onClick: toggleTheme, title: theme === "light" ? "Day" : "Night" }, /* @__PURE__ */ React.createElement("div", { className: "knob" }, theme === "light" ? "\u2600\uFE0F" : "\u{1F319}")), /* @__PURE__ */ React.createElement("button", { className: "hdr-btn", onClick: () => setLang(lang === "en" ? "ka" : "en") }, lang === "en" ? "\u{1F1EC}\u{1F1EA}" : "\u{1F1EC}\u{1F1E7}"))), /* @__PURE__ */ React.createElement("div", { className: "content", style: { paddingBottom: 20 } }, renderGuestHome(), /* @__PURE__ */ React.createElement("div", { id: "guestAuthCard", className: "card", style: { marginTop: 12 } }, /* @__PURE__ */ React.createElement("div", { style: { fontFamily: "Nunito", fontWeight: 900, fontSize: 16, marginBottom: 4 } }, authMode === "login" ? `\u{1F511} ${L("login")}` : `\u2728 ${L("register")}`), /* @__PURE__ */ React.createElement("div", { style: { fontSize: 10, color: "var(--tx2)", marginBottom: 10 } }, lang === "ka" ? "\u10E8\u10D4\u10D3\u10D8\u10D7 \u10D3\u10D0\u10EF\u10D0\u10D5\u10E8\u10DC\u10D8\u10E1\u10D7\u10D5\u10D8\u10E1, \u10E1\u10E0\u10E3\u10DA\u10D8 \u10D2\u10D0\u10DC\u10E0\u10D8\u10D2\u10D8\u10E1\u10D0 \u10D3\u10D0 \u10DE\u10E0\u10DD\u10E4\u10D8\u10DA\u10D8\u10E1 \u10E4\u10E3\u10DC\u10E5\u10EA\u10D8\u10D4\u10D1\u10D8\u10E1\u10D7\u10D5\u10D8\u10E1." : "Log in for booking, full timeline, and profile features."), /* @__PURE__ */ React.createElement("div", { style: { display: "flex", gap: 4, marginBottom: 8 } }, /* @__PURE__ */ React.createElement("button", { className: `ftab ${authMode === "login" ? "act" : ""}`, style: { flex: 1 }, onClick: () => {
+    if (!user) return /* @__PURE__ */ React.createElement("div", { className: "app" }, /* @__PURE__ */ React.createElement("style", null, CSS), /* @__PURE__ */ React.createElement("div", { className: "amb amb-1" }), /* @__PURE__ */ React.createElement("div", { className: "amb amb-2" }), /* @__PURE__ */ React.createElement("div", { className: "hdr" }, /* @__PURE__ */ React.createElement("div", { className: "hdr-left" }, /* @__PURE__ */ React.createElement("img", { src: LOGO_SM, alt: "Sakompiutere N1 Gaming", className: "hdr-logo" }), /* @__PURE__ */ React.createElement("div", { className: "hdr-brand", title: L("brand") }, L("brand"))), /* @__PURE__ */ React.createElement("div", { className: "hdr-right" }, /* @__PURE__ */ React.createElement("div", { className: "theme-switch", onClick: toggleTheme, title: theme === "light" ? "Day" : "Night" }, /* @__PURE__ */ React.createElement("div", { className: "knob" }, theme === "light" ? "\u2600\uFE0F" : "\u{1F319}")), /* @__PURE__ */ React.createElement("button", { className: "hdr-btn", onClick: () => setLang(lang === "en" ? "ka" : "en") }, lang === "en" ? "\u{1F1EC}\u{1F1EA}" : "\u{1F1EC}\u{1F1E7}"))), /* @__PURE__ */ React.createElement("div", { className: "content", style: { paddingBottom: 20 } }, renderGuestHome(), /* @__PURE__ */ React.createElement("div", { id: "guestAuthCard", className: "card", style: { marginTop: 12 } }, /* @__PURE__ */ React.createElement("div", { style: { fontFamily: "Nunito", fontWeight: 900, fontSize: 16, marginBottom: 4 } }, authMode === "login" ? `\u{1F511} ${L("login")}` : `\u2728 ${L("register")}`), /* @__PURE__ */ React.createElement("div", { style: { fontSize: 10, color: "var(--tx2)", marginBottom: 10 } }, lang === "ka" ? "\u10E8\u10D4\u10D3\u10D8\u10D7 \u10D3\u10D0\u10EF\u10D0\u10D5\u10E8\u10DC\u10D8\u10E1\u10D7\u10D5\u10D8\u10E1, \u10E1\u10E0\u10E3\u10DA\u10D8 \u10D2\u10D0\u10DC\u10E0\u10D8\u10D2\u10D8\u10E1\u10D0 \u10D3\u10D0 \u10DE\u10E0\u10DD\u10E4\u10D8\u10DA\u10D8\u10E1 \u10E4\u10E3\u10DC\u10E5\u10EA\u10D8\u10D4\u10D1\u10D8\u10E1\u10D7\u10D5\u10D8\u10E1." : "Log in for booking, full timeline, and profile features."), /* @__PURE__ */ React.createElement("div", { style: { display: "flex", gap: 4, marginBottom: 8 } }, /* @__PURE__ */ React.createElement("button", { className: `ftab ${authMode === "login" ? "act" : ""}`, style: { flex: 1 }, onClick: () => {
       setAuthMode("login");
       setANick("");
       setAEmail("");
@@ -2034,7 +2047,7 @@ textarea.inp { resize:vertical; min-height:50px; }
       setPendingUser(null);
       setAuthMode("login");
     } }, "\u2190 ", lang === "ka" ? "\u10E3\u10D9\u10D0\u10DC" : "Back to Login"))), toast && /* @__PURE__ */ React.createElement("div", { className: "toast", role: "status", "aria-live": "polite" }, toast));
-    return /* @__PURE__ */ React.createElement("div", { className: "app" }, /* @__PURE__ */ React.createElement("style", null, CSS), /* @__PURE__ */ React.createElement("div", { className: "amb amb-1" }), /* @__PURE__ */ React.createElement("div", { className: "amb amb-2" }), /* @__PURE__ */ React.createElement("div", { className: "hdr" }, /* @__PURE__ */ React.createElement("div", { style: { display: "flex", alignItems: "center", gap: 5 } }, /* @__PURE__ */ React.createElement("img", { src: LOGO_SM, alt: "Sakompiutere N1 Gaming", style: { height: 20 } }), /* @__PURE__ */ React.createElement("div", { className: "hdr-brand" }, L("brand"))), /* @__PURE__ */ React.createElement("div", { className: "hdr-right" }, /* @__PURE__ */ React.createElement("div", { className: "hdr-user" }, /* @__PURE__ */ React.createElement(Avatar, { u: user, size: 20 }), /* @__PURE__ */ React.createElement("span", { style: { fontSize: 11 } }, user.nick)), /* @__PURE__ */ React.createElement("div", { className: "theme-switch", onClick: toggleTheme, title: theme === "light" ? "Day" : "Night" }, /* @__PURE__ */ React.createElement("div", { className: "knob" }, theme === "light" ? "\u2600\uFE0F" : "\u{1F319}")), /* @__PURE__ */ React.createElement("button", { className: "hdr-btn", onClick: () => setLang(lang === "en" ? "ka" : "en") }, lang === "en" ? "\u{1F1EC}\u{1F1EA}" : "\u{1F1EC}\u{1F1E7}"), /* @__PURE__ */ React.createElement("button", { className: "hdr-btn", onClick: () => {
+    return /* @__PURE__ */ React.createElement("div", { className: "app" }, /* @__PURE__ */ React.createElement("style", null, CSS), /* @__PURE__ */ React.createElement("div", { className: "amb amb-1" }), /* @__PURE__ */ React.createElement("div", { className: "amb amb-2" }), /* @__PURE__ */ React.createElement("div", { className: "hdr" }, /* @__PURE__ */ React.createElement("div", { className: "hdr-left" }, /* @__PURE__ */ React.createElement("img", { src: LOGO_SM, alt: "Sakompiutere N1 Gaming", className: "hdr-logo" }), /* @__PURE__ */ React.createElement("div", { className: "hdr-brand", title: L("brand") }, L("brand"))), /* @__PURE__ */ React.createElement("div", { className: "hdr-right" }, /* @__PURE__ */ React.createElement("div", { className: "hdr-user" }, /* @__PURE__ */ React.createElement(Avatar, { u: user, size: 20 }), /* @__PURE__ */ React.createElement("span", { style: { fontSize: 11 } }, user.nick)), /* @__PURE__ */ React.createElement("div", { className: "theme-switch", onClick: toggleTheme, title: theme === "light" ? "Day" : "Night" }, /* @__PURE__ */ React.createElement("div", { className: "knob" }, theme === "light" ? "\u2600\uFE0F" : "\u{1F319}")), /* @__PURE__ */ React.createElement("button", { className: "hdr-btn", onClick: () => setLang(lang === "en" ? "ka" : "en") }, lang === "en" ? "\u{1F1EC}\u{1F1EA}" : "\u{1F1EC}\u{1F1E7}"), /* @__PURE__ */ React.createElement("button", { className: "hdr-btn", onClick: () => {
       setNotifOpen(!notifOpen);
       if (!notifOpen) setNotifs((n) => {
         const o = { ...n };
