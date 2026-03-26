@@ -363,19 +363,19 @@ body.light .theme-switch:active .knob { transform:translateX(22px) scale(.97); }
 .amb-2 { width:260px; height:260px; background:var(--coral); opacity:.032; bottom:-60px; right:-60px; }
 
 /* Header */
-.hdr { position:sticky; top:0; z-index:100; display:flex; align-items:center; justify-content:space-between; gap:12px; padding:12px 12px 10px; background:linear-gradient(180deg, rgba(22,28,44,.82), rgba(12,17,29,.62)); backdrop-filter:blur(30px) saturate(170%); -webkit-backdrop-filter:blur(30px) saturate(170%); border-bottom:1px solid rgba(255,255,255,.1); box-shadow:0 14px 36px rgba(0,0,0,.22); overflow:hidden; isolation:isolate; }
+.hdr { position:sticky; top:0; z-index:100; display:flex; align-items:center; justify-content:space-between; gap:10px; padding:10px 10px 9px; background:linear-gradient(180deg, rgba(22,28,44,.78), rgba(12,17,29,.56)); backdrop-filter:blur(28px) saturate(165%); -webkit-backdrop-filter:blur(28px) saturate(165%); border-bottom:1px solid rgba(255,255,255,.1); box-shadow:0 14px 36px rgba(0,0,0,.22); overflow:hidden; isolation:isolate; }
 .hdr::before { content:""; position:absolute; inset:0; pointer-events:none; background:linear-gradient(180deg, rgba(255,255,255,.16), rgba(255,255,255,.05) 40%, rgba(255,255,255,0)); }
 .hdr::after { content:""; position:absolute; inset:auto -18% -70% auto; width:220px; height:220px; border-radius:50%; background:radial-gradient(circle, rgba(78,205,196,.18), rgba(78,205,196,0) 68%); pointer-events:none; filter:blur(14px); opacity:.9; }
-.hdr-left { display:flex; align-items:center; gap:10px; min-width:0; flex:1 1 auto; position:relative; z-index:1; padding-right:6px; }
-.hdr-logo { height:30px; width:auto; flex:0 0 auto; filter:drop-shadow(0 6px 12px rgba(0,0,0,.24)); }
-.hdr-brand { min-width:0; max-width:100%; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; line-height:1.05; font-family:Nunito; font-weight:900; font-size:clamp(12px, 3.45vw, 16px); letter-spacing:.08px; background:linear-gradient(135deg,#b4fff5 0%,#72e9dc 34%,#7fd7ff 100%); -webkit-background-clip:text; -webkit-text-fill-color:transparent; text-shadow:0 0 24px rgba(127,215,255,.16); }
-.hdr-right { display:flex; gap:6px; align-items:center; justify-content:flex-end; flex:0 0 auto; min-width:0; max-width:50%; position:relative; z-index:1; flex-wrap:nowrap; }
+.hdr-left { display:flex; align-items:center; gap:11px; min-width:0; flex:1 1 auto; position:relative; z-index:1; padding-right:6px; }
+.hdr-logo { height:30px; flex:0 0 auto; filter:drop-shadow(0 6px 14px rgba(0,0,0,.24)); }
+.hdr-brand { min-width:0; max-width:100%; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; line-height:1.05; font-family:Nunito; font-weight:900; font-size:clamp(11px, 3.2vw, 15px); letter-spacing:.08px; background:linear-gradient(135deg,#b6fff5 0%,#72e9dc 32%,#7fd7ff 100%); -webkit-background-clip:text; -webkit-text-fill-color:transparent; text-shadow:0 0 26px rgba(127,215,255,.18); }
+.hdr-right { display:flex; gap:6px; align-items:center; justify-content:flex-end; flex:0 0 auto; min-width:0; max-width:42%; position:relative; z-index:1; }
 .hdr-user { display:flex; align-items:center; gap:5px; min-width:0; max-width:92px; background:linear-gradient(180deg, rgba(255,255,255,.11), rgba(255,255,255,.05)); border:1px solid rgba(255,255,255,.1); border-radius:999px; padding:3px 7px 3px 4px; font-size:11px; font-weight:700; font-family:Nunito; color:var(--tx); backdrop-filter:blur(14px); -webkit-backdrop-filter:blur(14px); box-shadow:inset 0 1px 0 rgba(255,255,255,.14); }
 .hdr-user span { min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
 .hdr-btn { width:32px; height:32px; display:inline-flex; align-items:center; justify-content:center; background:linear-gradient(180deg, rgba(255,255,255,.08), rgba(255,255,255,.03)); border:1px solid rgba(255,255,255,.08); color:var(--tx2); font-size:15px; cursor:pointer; padding:0; position:relative; border-radius:11px; flex:0 0 auto; backdrop-filter:blur(10px); -webkit-backdrop-filter:blur(10px); box-shadow:inset 0 1px 0 rgba(255,255,255,.08); }
 .hdr-btn:active { transform:scale(.88); }
-@media (max-width: 390px) { .hdr { padding:9px 8px 8px; gap:6px; } .hdr-left { gap:7px; padding-right:2px; } .hdr-right { gap:4px; max-width:54%; } .hdr-user { max-width:70px; padding-right:6px; } .hdr-user span { font-size:10px; } .hdr-btn { width:30px; height:30px; font-size:14px; } .hdr-logo { height:24px; } .hdr-brand { font-size:12px; } .theme-switch { width:46px; height:26px; } .theme-switch .knob { width:20px; height:20px; top:2px; left:2px; font-size:10px; } body.light .theme-switch .knob { transform:translateX(20px); } body.light .theme-switch:active .knob { transform:translateX(20px) scale(.97); } }
-@media (max-width: 350px) { .hdr-user span { display:none; } .hdr-user { max-width:none; padding-right:5px; } .hdr-right { max-width:58%; } .hdr-logo { height:22px; } .hdr-brand { font-size:11px; } }
+@media (max-width: 390px) { .hdr { padding:8px 8px 7px; gap:6px; } .hdr-left { gap:8px; padding-right:2px; } .hdr-right { gap:4px; max-width:46%; } .hdr-user { max-width:70px; padding-right:6px; } .hdr-user span { font-size:10px; } .hdr-btn { width:30px; height:30px; font-size:14px; } .hdr-logo { height:24px; } .theme-switch { width:46px; height:26px; } .theme-switch .knob { width:20px; height:20px; top:2px; left:2px; font-size:10px; } body.light .theme-switch .knob { transform:translateX(20px); } body.light .theme-switch:active .knob { transform:translateX(20px) scale(.97); } }
+@media (max-width: 350px) { .hdr-user span { display:none; } .hdr-user { max-width:none; padding-right:5px; } .hdr-right { max-width:56%; } .hdr-brand { font-size:10px; } .hdr-logo { height:22px; } }
 .badge { position:absolute; top:-2px; right:-3px; background:var(--coral); color:#fff; font-size:9px; font-weight:800; min-width:16px; height:16px; border-radius:8px; display:flex; align-items:center; justify-content:center; font-family:Nunito; border:2px solid var(--s1); }
 .hdr .avatar { flex:0 0 auto; }
 .hdr-user .avatar { border-color:rgba(255,255,255,.12); }
@@ -593,8 +593,7 @@ textarea.inp { resize:vertical; min-height:50px; }
 .multi-fab-inner { width:100%; background:rgba(15,18,25,.92); border:1px solid rgba(255,255,255,.08); border-radius:16px; padding:8px 12px; display:flex; align-items:center; justify-content:space-between; gap:8px; box-shadow:0 8px 32px rgba(0,0,0,.5); backdrop-filter:blur(16px); -webkit-backdrop-filter:blur(16px); }
 .multi-fab-icons { display:flex; gap:4px; min-width:0; flex:1 1 auto; overflow:hidden; flex-wrap:nowrap; }
 .multi-fab-count { font-size:11px; color:var(--tx2); font-weight:700; flex:0 0 auto; }
-.pc-card.multi-ready { box-shadow:inset 0 0 0 1px rgba(78,205,196,.18), 0 12px 26px rgba(0,0,0,.24); }
-.pc-card .pc-longpress-hint { position:absolute; right:8px; bottom:8px; font-size:8px; color:var(--tx2); opacity:.72; z-index:3; pointer-events:none; }
+.pc-multi-hint { margin-left:auto; font-size:10px; color:var(--tx2); white-space:nowrap; }
 @media (max-width: 390px) { .multi-fab { bottom:62px; width:min(calc(100vw - 14px), 420px); } .multi-fab-inner { padding:7px 10px; gap:6px; } }
 .lb-row { display:flex; align-items:center; gap:7px; padding:6px 8px; background:var(--s2); border:1px solid var(--s3); border-radius:9px; margin-bottom:4px; }
 .lb-row.me { border-color:rgba(78,205,196,.25); background:var(--t1); }
@@ -849,6 +848,10 @@ textarea.inp { resize:vertical; min-height:50px; }
     const [filter, setFilter] = useState("all");
     const [multi, setMulti] = useState(false);
     const [multiSel, setMultiSel] = useState([]);
+    const longPressMs = 420;
+    useEffect(() => {
+      if (multi && multiSel.length === 0) setMulti(false);
+    }, [multi, multiSel.length]);
     const [notifOpen, setNotifOpen] = useState(false);
     const [confetti, setConfetti] = useState(false);
     const [chatUid, setChatUid] = useState(null);
@@ -1449,50 +1452,61 @@ textarea.inp { resize:vertical; min-height:50px; }
         guestSub = `${lang === "ka" ? "\u10E8\u10D4\u10DB\u10D3\u10D4\u10D2\u10D8" : "Next at"} ${fmtWhen(nextBk.t0, lang)}`;
       }
       const visualState = isBusy ? "busy" : info.s === "soon" ? "soon" : "free";
+      const pressTimer = useRef(null);
+      const longPressTriggered = useRef(false);
+      const toggleMultiPc = () => {
+        if (isGuest) return;
+        if (!multi) setMulti(true);
+        setMultiSel((s) => s.includes(pc.id) ? s.filter((x) => x !== pc.id) : [...s, pc.id]);
+      };
+      const clearLongPress = () => {
+        if (pressTimer.current) {
+          clearTimeout(pressTimer.current);
+          pressTimer.current = null;
+        }
+      };
+      const startLongPress = () => {
+        if (isGuest) return;
+        longPressTriggered.current = false;
+        clearLongPress();
+        pressTimer.current = setTimeout(() => {
+          longPressTriggered.current = true;
+          toggleMultiPc();
+        }, longPressMs);
+      };
       return /* @__PURE__ */ React.createElement(
         "div",
         {
-          className: `pc-card pc-${visualState} ${isFree ? "free-glow" : ""} ${isMy ? "my-active" : ""} ${sel ? "multi-sel" : ""} ${!isGuest ? "multi-ready" : ""}`,
+          className: `pc-card pc-${visualState} ${isFree ? "free-glow" : ""} ${isMy ? "my-active" : ""} ${sel ? "multi-sel" : ""}`,
           style: { animationDelay: `${idx * 0.05}s` },
           onClick: () => {
-            if (pc.__lpTriggered) {
-              pc.__lpTriggered = false;
+            if (longPressTriggered.current) {
+              longPressTriggered.current = false;
               return;
             }
-            if (selectionActive && !isGuest) {
-              togglePcSelection(pc.id);
-              return;
+            if (multi && !isGuest) toggleMultiPc();
+            else {
+              setSheetData(pc);
+              setSheet(isGuest ? "guestpc" : "pcinfo");
+              setShowIss(false);
+              setIssDet("");
+              setAqDur(1);
             }
-            setSheetData(pc);
-            setSheet(isGuest ? "guestpc" : "pcinfo");
-            setShowIss(false);
-            setIssDet("");
-            setAqDur(1);
           },
-          onPointerDown: !isGuest ? (e) => {
-            if (e.pointerType === "mouse" && e.button !== 0) return;
-            if (pc.__lpTimer) clearTimeout(pc.__lpTimer);
-            pc.__lpTriggered = false;
-            pc.__lpTimer = setTimeout(() => {
-              pc.__lpTriggered = true;
-              togglePcSelection(pc.id);
-            }, 420);
-          } : void 0,
-          onPointerUp: !isGuest ? () => {
-            if (pc.__lpTimer) clearTimeout(pc.__lpTimer);
-          } : void 0,
-          onPointerLeave: !isGuest ? () => {
-            if (pc.__lpTimer) clearTimeout(pc.__lpTimer);
-          } : void 0,
-          onContextMenu: !isGuest ? (e) => e.preventDefault() : void 0
+          onMouseDown: startLongPress,
+          onMouseUp: clearLongPress,
+          onMouseLeave: clearLongPress,
+          onTouchStart: startLongPress,
+          onTouchEnd: clearLongPress,
+          onTouchCancel: clearLongPress
         },
         /* @__PURE__ */ React.createElement("div", { className: "glow", style: { background: isFree ? "rgba(52,211,153,.7)" : isBusy ? "rgba(255,76,76,.78)" : "rgba(251,191,36,.7)", top: "-18px", right: "-18px" } }),
         !isGuest && isHot && !isYou && /* @__PURE__ */ React.createElement("div", { className: "pc-badge", style: { background: "var(--c1)", color: "var(--coral)" } }, "\u{1F525}HOT"),
         !isGuest && isYou && /* @__PURE__ */ React.createElement("div", { className: "pc-badge", style: { background: "var(--g1)", color: "var(--gold)" } }, "\u2605YOU"),
-        selectionActive && !isGuest && /* @__PURE__ */ React.createElement("div", { style: { position: "absolute", top: 8, left: 8, width: 16, height: 16, borderRadius: "50%", border: sel ? "2px solid var(--teal)" : "1.5px solid var(--s4)", background: sel ? "var(--teal)" : "rgba(12,17,29,.82)", display: "flex", alignItems: "center", justifyContent: "center", color: sel ? "#0f1219" : "transparent", fontSize: 10, fontWeight: 900, zIndex: 4, boxShadow: "0 2px 8px rgba(0,0,0,.24)" } }, "\u2713"),
+        multi && !isGuest && /* @__PURE__ */ React.createElement("div", { style: { position: "absolute", top: 8, left: 8, width: 16, height: 16, borderRadius: "50%", border: sel ? "2px solid var(--teal)" : "1.5px solid var(--s4)", background: sel ? "var(--teal)" : "rgba(12,17,29,.82)", display: "flex", alignItems: "center", justifyContent: "center", color: sel ? "#0f1219" : "transparent", fontSize: 10, fontWeight: 900, zIndex: 4, boxShadow: "0 2px 8px rgba(0,0,0,.24)" } }, "\u2713"),
         /* @__PURE__ */ React.createElement("div", { className: "pc-topline" }, /* @__PURE__ */ React.createElement("div", { className: "pc-mini-id", style: { background: `${pc.c}22`, color: pc.c } }, pc.side, idx + 1), /* @__PURE__ */ React.createElement("div", { className: "pc-name-wrap" }, /* @__PURE__ */ React.createElement("div", { className: "pc-name" }, /* @__PURE__ */ React.createElement("span", { className: "pc-name-icon" }, pc.icon), pc.name), /* @__PURE__ */ React.createElement("div", { className: "pc-meta" }, isGuest ? lang === "ka" ? "\u10D3\u10D4\u10E2\u10D0\u10DA\u10D4\u10D1\u10D8\u10E1\u10D7\u10D5\u10D8\u10E1 \u10E8\u10D4\u10D4\u10EE\u10D4\u10D7" : "Tap for details" : lang === "ka" ? "\u10D3\u10D4\u10E2\u10D0\u10DA\u10D4\u10D1\u10D8 / \u10EF\u10D0\u10D5\u10E8\u10D0\u10DC\u10D8" : "Details / booking"))),
         /* @__PURE__ */ React.createElement("div", { className: "pc-visual", "aria-hidden": "true" }, /* @__PURE__ */ React.createElement("div", { className: "pc-room-grid" }), /* @__PURE__ */ React.createElement("div", { className: "pc-desk" }), /* @__PURE__ */ React.createElement("div", { className: "pc-monitor" }, /* @__PURE__ */ React.createElement("div", { className: "pc-screen" })), /* @__PURE__ */ React.createElement("div", { className: "pc-keyboard" }), isBusy && /* @__PURE__ */ React.createElement("div", { className: "pc-player" }, /* @__PURE__ */ React.createElement("div", { className: "pc-player-head" }), /* @__PURE__ */ React.createElement("div", { className: "pc-player-body" })), /* @__PURE__ */ React.createElement("div", { className: "pc-chair" })),
-        /* @__PURE__ */ React.createElement("div", { className: "pc-bottom" }, isGuest ? /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement("div", { style: { fontSize: 9, fontWeight: 700, color: isFree ? "var(--teal)" : info.s === "soon" ? "var(--gold)" : "var(--coral)", marginTop: 4, lineHeight: 1.35 } }, guestMain), /* @__PURE__ */ React.createElement("div", { style: { fontSize: 8, color: "var(--tx2)", marginTop: 3, lineHeight: 1.35 } }, guestSub)) : isBusy && info.bk ? /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement("div", { className: "pc-user" }, "\u{1F3AE} ", info.bk.un), /* @__PURE__ */ React.createElement("div", { className: "pc-prog" }, /* @__PURE__ */ React.createElement("div", { className: "pc-prog-fill", style: { width: `${prog}%` } })), /* @__PURE__ */ React.createElement("div", { className: "pc-time" }, remStr))  : isFree ? null : info.s === "soon" && info.bk ? /* @__PURE__ */ React.createElement("div", { style: { fontSize: 8, color: "var(--gold)", marginTop: 4, lineHeight: 1.35 } }, info.bk.un, " \xB7 ", fmtWhen(info.bk.t0, lang)) : null, /* @__PURE__ */ React.createElement("div", { style: { flex: 1 } }), !isGuest && info.q > 1 && /* @__PURE__ */ React.createElement("div", { className: "pc-queue" }, "\u{1F4CB} ", info.q, " ", L("queued")), !isGuest && !selectionActive && /* @__PURE__ */ React.createElement("div", { className: "pc-longpress-hint" }, lang === "ka" ? "გრძელი დაჭერა = multi" : "Hold = multi"))
+        /* @__PURE__ */ React.createElement("div", { className: "pc-bottom" }, !isGuest && isBusy && info.bk ? /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement("div", { className: "pc-user" }, "\u{1F3AE} ", info.bk.un), /* @__PURE__ */ React.createElement("div", { className: "pc-prog" }, /* @__PURE__ */ React.createElement("div", { className: "pc-prog-fill", style: { width: `${prog}%` } })), /* @__PURE__ */ React.createElement("div", { className: "pc-time" }, remStr)) : !isGuest && info.s === "soon" && info.bk ? /* @__PURE__ */ React.createElement("div", { style: { fontSize: 8, color: "var(--gold)", marginTop: 4, lineHeight: 1.35 } }, fmtWhen(info.bk.t0, lang)) : null, /* @__PURE__ */ React.createElement("div", { style: { flex: 1 } }), !isGuest && info.q > 1 && /* @__PURE__ */ React.createElement("div", { className: "pc-queue" }, "\u{1F4CB} ", info.q, " ", L("queued")))
       );
     };
     const renderHome = () => {
@@ -1505,12 +1519,12 @@ textarea.inp { resize:vertical; min-height:50px; }
         const s = pcStatus(p.id).s;
         return filter === "all" || filter === s;
       });
-      return /* @__PURE__ */ React.createElement("div", null, isHappyHour() && /* @__PURE__ */ React.createElement("div", { className: "happy-bar" }, L("happyHour")), announcements.length > 0 && /* @__PURE__ */ React.createElement("div", { style: { background: "linear-gradient(90deg, rgba(192,132,252,.08), rgba(56,189,248,.06))", border: "1px solid rgba(192,132,252,.15)", borderRadius: 10, padding: "7px 10px", marginBottom: 8 } }, announcements.slice(0, 2).map((a) => /* @__PURE__ */ React.createElement("div", { key: a.id, style: { fontSize: 10, marginBottom: announcements.length > 1 ? 3 : 0 } }, /* @__PURE__ */ React.createElement("span", { style: { color: "var(--lav)", fontWeight: 700 } }, "\u{1F4E2}"), " ", /* @__PURE__ */ React.createElement("span", { style: { color: "var(--tx)" } }, a.text), /* @__PURE__ */ React.createElement("span", { style: { fontSize: 7, color: "var(--tx2)", marginLeft: 4 } }, a.by, " \xB7 ", ago(a.ts, lang))))), /* @__PURE__ */ React.createElement("div", { className: "stat-bar" }, /* @__PURE__ */ React.createElement("div", { className: "stat-dot" }, /* @__PURE__ */ React.createElement("span", { style: { background: "var(--teal)" } }), " ", freeCount, " ", L("free")), /* @__PURE__ */ React.createElement("div", { className: "stat-dot" }, /* @__PURE__ */ React.createElement("span", { style: { background: "var(--coral)" } }), " ", busyCount, " ", L("playing")), /* @__PURE__ */ React.createElement("div", { className: "stat-dot" }, /* @__PURE__ */ React.createElement("span", { style: { background: "var(--gold)" } }), " ", soonCount, " ", L("soon"))), /* @__PURE__ */ React.createElement("div", { className: "filter-row" }, ["all", "free", "soon", "busy"].map((f) => /* @__PURE__ */ React.createElement("button", { key: f, className: `ftab ${filter === f ? "act" : ""}`, onClick: () => setFilter(f) }, L(f), " (", filterCounts[f], ")"))), /* @__PURE__ */ React.createElement("div", { className: "wings-box hall-shell" }, /* @__PURE__ */ React.createElement("div", { className: "hall-topline" }, /* @__PURE__ */ React.createElement("div", { className: "wing-label" }, L("leftWing")), /* @__PURE__ */ React.createElement("div", { className: "hall-aisle-head" }), /* @__PURE__ */ React.createElement("div", { className: "wing-label" }, L("rightWing"))), /* @__PURE__ */ React.createElement("div", { className: "hall-grid" }, Array.from({ length: 5 }).map((_, row) => {
+      return /* @__PURE__ */ React.createElement("div", null, isHappyHour() && /* @__PURE__ */ React.createElement("div", { className: "happy-bar" }, L("happyHour")), announcements.length > 0 && /* @__PURE__ */ React.createElement("div", { style: { background: "linear-gradient(90deg, rgba(192,132,252,.08), rgba(56,189,248,.06))", border: "1px solid rgba(192,132,252,.15)", borderRadius: 10, padding: "7px 10px", marginBottom: 8 } }, announcements.slice(0, 2).map((a) => /* @__PURE__ */ React.createElement("div", { key: a.id, style: { fontSize: 10, marginBottom: announcements.length > 1 ? 3 : 0 } }, /* @__PURE__ */ React.createElement("span", { style: { color: "var(--lav)", fontWeight: 700 } }, "\u{1F4E2}"), " ", /* @__PURE__ */ React.createElement("span", { style: { color: "var(--tx)" } }, a.text), /* @__PURE__ */ React.createElement("span", { style: { fontSize: 7, color: "var(--tx2)", marginLeft: 4 } }, a.by, " \xB7 ", ago(a.ts, lang))))), /* @__PURE__ */ React.createElement("div", { className: "stat-bar" }, /* @__PURE__ */ React.createElement("div", { className: "stat-dot" }, /* @__PURE__ */ React.createElement("span", { style: { background: "var(--teal)" } }), " ", freeCount, " ", L("free")), /* @__PURE__ */ React.createElement("div", { className: "stat-dot" }, /* @__PURE__ */ React.createElement("span", { style: { background: "var(--coral)" } }), " ", busyCount, " ", L("playing")), /* @__PURE__ */ React.createElement("div", { className: "stat-dot" }, /* @__PURE__ */ React.createElement("span", { style: { background: "var(--gold)" } }), " ", soonCount, " ", L("soon"))), /* @__PURE__ */ React.createElement("div", { className: "filter-row" }, ["all", "free", "soon", "busy"].map((f) => /* @__PURE__ */ React.createElement("button", { key: f, className: `ftab ${filter === f ? "act" : ""}`, onClick: () => setFilter(f) }, L(f), " (", filterCounts[f], ")")), /* @__PURE__ */ React.createElement("div", { className: "pc-multi-hint" }, multi ? (lang === "ka" ? "არჩევა აქტიურია" : "Multi active") : (lang === "ka" ? "მრავალი არჩევანი — ხანგრძლივი დაჭერა" : "Hold on PC for multi"))), /* @__PURE__ */ React.createElement("div", { className: "wings-box hall-shell" }, /* @__PURE__ */ React.createElement("div", { className: "hall-topline" }, /* @__PURE__ */ React.createElement("div", { className: "wing-label" }, L("leftWing")), /* @__PURE__ */ React.createElement("div", { className: "hall-aisle-head" }), /* @__PURE__ */ React.createElement("div", { className: "wing-label" }, L("rightWing"))), /* @__PURE__ */ React.createElement("div", { className: "hall-grid" }, Array.from({ length: 5 }).map((_, row) => {
         const lp = filterPcs(LEFT_PCS)[row];
         const rp = filterPcs(RIGHT_PCS)[row];
         const rowBorder = row < 4 ? "1px solid rgba(37,45,64,.3)" : "none";
         return /* @__PURE__ */ React.createElement(React.Fragment, { key: row }, /* @__PURE__ */ React.createElement("div", { className: "hall-cell left", style: { borderBottom: rowBorder } }, lp ? /* @__PURE__ */ React.createElement(PcCard, { pc: lp, idx: row }) : /* @__PURE__ */ React.createElement("div", { className: "pc-slot-empty" })), /* @__PURE__ */ React.createElement("div", { className: "hall-aisle-cell", style: { borderBottom: rowBorder } }), /* @__PURE__ */ React.createElement("div", { className: "hall-cell right", style: { borderBottom: rowBorder } }, rp ? /* @__PURE__ */ React.createElement(PcCard, { pc: rp, idx: row }) : /* @__PURE__ */ React.createElement("div", { className: "pc-slot-empty" })));
-      }))), multiSel.length > 0 && /* @__PURE__ */ React.createElement("div", { className: "multi-fab" }, /* @__PURE__ */ React.createElement("div", { className: "multi-fab-inner" }, /* @__PURE__ */ React.createElement("div", { className: "multi-fab-icons" }, multiSel.slice(0, 4).map((pid) => {
+      }))), multi && multiSel.length > 0 && /* @__PURE__ */ React.createElement("div", { className: "multi-fab" }, /* @__PURE__ */ React.createElement("div", { className: "multi-fab-inner" }, /* @__PURE__ */ React.createElement("div", { className: "multi-fab-icons" }, multiSel.slice(0, 4).map((pid) => {
         const p = ALL_PCS.find((x) => x.id === pid);
         return /* @__PURE__ */ React.createElement("span", { key: pid, style: { fontSize: 16 } }, p == null ? void 0 : p.icon);
       }), multiSel.length > 4 && /* @__PURE__ */ React.createElement("span", { className: "multi-fab-count" }, "+", multiSel.length - 4)), /* @__PURE__ */ React.createElement("button", { className: "btn btn-teal btn-sm", style: { flex: "0 0 auto", whiteSpace: "nowrap" }, onClick: () => {
