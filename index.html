@@ -52,7 +52,12 @@
     { id: "s7", icon: "\u26A1", en: "On Fire", ka: "\u10EA\u10D4\u10EA\u10EE\u10DA\u10D6\u10D4", cond: (u) => u.st >= 7 },
     { id: "b10", icon: "\u{1F4CB}", en: "Regular", ka: "\u10DB\u10E3\u10D3\u10DB\u10D8\u10D5\u10D8", cond: (u) => u.bk >= 10 }
   ];
-  const SHOP_ITEMS = [];
+  const SHOP_ITEMS = [
+    { id: "r1", icon: "\u{1F381}", en: "Free 30min", ka: "\u10E3\u10E4\u10D0\u10E1\u10DD 30\u10EC\u10D7", cost: 80 },
+    { id: "r2", icon: "\u2B50", en: "Free Hour", ka: "\u10E3\u10E4\u10D0\u10E1\u10DD \u10E1\u10D0\u10D0\u10D7\u10D8", cost: 150 },
+    { id: "r3", icon: "\u2728", en: "2\xD7 Coins", ka: "2\xD7 \u10DB\u10DD\u10DC\u10D4\u10E2\u10D0", cost: 60 },
+    { id: "r4", icon: "\u{1F48E}", en: "VIP", ka: "VIP", cost: 500 }
+  ];
   const ISSUES = [
     { id: "bs", icon: "\u{1F5A5}\uFE0F", en: "Black Screen", ka: "\u10E8\u10D0\u10D5\u10D8 \u10D4\u10D9\u10E0\u10D0\u10DC\u10D8" },
     { id: "bl", icon: "\u{1F7E6}", en: "Blue Screen", ka: "\u10DA\u10E3\u10E0\u10EF\u10D8 \u10D4\u10D9\u10E0\u10D0\u10DC\u10D8" },
@@ -310,7 +315,10 @@
     return { base, disc: tier.disc, final, coins };
   };
   const INIT_USERS = [];
-  function StatusPill() { return null; }
+  function StatusPill({ status, L }) {
+    const cls = status === "free" ? "pl-t" : status === "soon" ? "pl-g" : status === "busy" || status === "playing" ? "pl-c" : status === "pending" ? "pl-g" : status === "active" ? "pl-t" : "pl-x";
+    return /* @__PURE__ */ React.createElement("span", { className: `pl ${cls}` }, L(status === "busy" ? "busy" : status));
+  }
   const CSS = `
 @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=DM+Sans:wght@400;500;600;700&display=swap');
 html { scroll-behavior:smooth; }
@@ -342,11 +350,11 @@ body.light .pc-card .pc-visual { background:radial-gradient(circle at 50% 52%, r
 body.light .pc-card.pc-busy .pc-visual { background:radial-gradient(circle at 50% 50%, rgba(255,92,92,.20), rgba(255,240,242,.96) 72%); }
 body.light .pc-card.pc-soon .pc-visual { background:radial-gradient(circle at 50% 50%, rgba(255,187,69,.18), rgba(255,247,230,.96) 72%); }
 body.light .card, body.light .modal, body.light .sheet, body.light .bk-card { box-shadow:0 14px 30px rgba(120,145,185,.14); }
-.theme-switch { width:54px; height:32px; border-radius:999px; border:1px solid rgba(255,255,255,.1); background:linear-gradient(180deg, rgba(255,255,255,.08), rgba(255,255,255,.03)); position:relative; cursor:pointer; box-shadow:inset 0 1px 5px rgba(0,0,0,.1), 0 10px 24px rgba(0,0,0,.1); flex:0 0 auto; }
-.theme-switch .knob { position:absolute; top:3px; left:3px; width:24px; height:24px; border-radius:50%; background:linear-gradient(180deg,#fff,#e8eef8); display:flex; align-items:center; justify-content:center; font-size:12px; transition:transform .18s ease; box-shadow:0 2px 7px rgba(0,0,0,.15); }
-body.light .theme-switch .knob { transform:translateX(24px); }
+.theme-switch { width:50px; height:28px; border-radius:999px; border:1px solid var(--s3); background:var(--s2); position:relative; cursor:pointer; box-shadow:inset 0 1px 5px rgba(0,0,0,.1); flex:0 0 auto; }
+.theme-switch .knob { position:absolute; top:2px; left:2px; width:22px; height:22px; border-radius:50%; background:linear-gradient(180deg,#fff,#e8eef8); display:flex; align-items:center; justify-content:center; font-size:12px; transition:transform .18s ease; box-shadow:0 2px 7px rgba(0,0,0,.15); }
+body.light .theme-switch .knob { transform:translateX(22px); }
 .theme-switch:active .knob { transform:scale(.97); }
-body.light .theme-switch:active .knob { transform:translateX(24px) scale(.97); }
+body.light .theme-switch:active .knob { transform:translateX(22px) scale(.97); }
 .app { max-width:480px; margin:0 auto; position:relative; min-height:100vh; }
 
 /* Ambient blobs */
@@ -355,21 +363,23 @@ body.light .theme-switch:active .knob { transform:translateX(24px) scale(.97); }
 .amb-2 { width:260px; height:260px; background:var(--coral); opacity:.032; bottom:-60px; right:-60px; }
 
 /* Header */
-.hdr { position:sticky; top:0; z-index:100; display:flex; align-items:center; justify-content:space-between; gap:10px; padding:12px 12px 10px; background:linear-gradient(180deg, rgba(20,28,44,.82), rgba(11,17,29,.66)); backdrop-filter:blur(28px) saturate(180%); -webkit-backdrop-filter:blur(28px) saturate(180%); border-bottom:1px solid rgba(255,255,255,.1); box-shadow:0 18px 42px rgba(0,0,0,.2); overflow:hidden; }
-.hdr::before { content:""; position:absolute; inset:0; pointer-events:none; background:linear-gradient(180deg, rgba(255,255,255,.18), rgba(255,255,255,.045) 40%, rgba(255,255,255,0)); }
-.hdr::after { content:""; position:absolute; left:12px; right:12px; top:0; height:1px; background:linear-gradient(90deg, rgba(255,255,255,0), rgba(255,255,255,.32), rgba(255,255,255,0)); pointer-events:none; }
-.hdr-left { display:flex; align-items:center; gap:9px; min-width:0; flex:1 1 auto; position:relative; z-index:1; }
-.hdr-logo { height:30px; flex:0 0 auto; filter:drop-shadow(0 4px 10px rgba(0,0,0,.16)); }
-.hdr-brand { min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; line-height:1.05; font-family:Nunito; font-weight:900; font-size:clamp(12px, 3.2vw, 14px); letter-spacing:.14px; background:linear-gradient(135deg, rgba(255,255,255,.98), rgba(78,205,196,.95) 38%, rgba(56,189,248,.95) 88%); -webkit-background-clip:text; -webkit-text-fill-color:transparent; text-shadow:0 0 18px rgba(78,205,196,.16); }
-.hdr-right { display:flex; gap:6px; align-items:center; justify-content:flex-end; flex:0 0 auto; min-width:0; position:relative; z-index:1; }
-.hdr-user { display:flex; align-items:center; gap:6px; min-width:0; max-width:118px; background:linear-gradient(180deg, rgba(255,255,255,.12), rgba(255,255,255,.04)); border:1px solid rgba(255,255,255,.12); border-radius:999px; padding:4px 9px 4px 5px; font-size:11px; font-weight:800; font-family:Nunito; color:var(--tx); backdrop-filter:blur(14px); -webkit-backdrop-filter:blur(14px); box-shadow:inset 0 1px 0 rgba(255,255,255,.12), 0 8px 22px rgba(0,0,0,.12); }
+.hdr { position:sticky; top:0; z-index:100; display:flex; align-items:center; justify-content:space-between; gap:10px; padding:11px 12px 10px; background:linear-gradient(180deg, rgba(22,28,44,.82), rgba(12,17,29,.6)); backdrop-filter:blur(30px) saturate(175%); -webkit-backdrop-filter:blur(30px) saturate(175%); border-bottom:1px solid rgba(255,255,255,.1); box-shadow:0 14px 36px rgba(0,0,0,.22); overflow:hidden; isolation:isolate; }
+.hdr::before { content:""; position:absolute; inset:0; pointer-events:none; background:linear-gradient(180deg, rgba(255,255,255,.16), rgba(255,255,255,.05) 40%, rgba(255,255,255,0)); }
+.hdr::after { content:""; position:absolute; inset:auto -18% -70% auto; width:220px; height:220px; border-radius:50%; background:radial-gradient(circle, rgba(78,205,196,.18), rgba(78,205,196,0) 68%); pointer-events:none; filter:blur(14px); opacity:.9; }
+.hdr-left { display:flex; align-items:center; gap:10px; min-width:0; flex:1 1 auto; position:relative; z-index:1; padding-right:8px; }
+.hdr-logo { height:30px; width:auto; flex:0 0 auto; filter:drop-shadow(0 6px 14px rgba(0,0,0,.24)); }
+.hdr-brand { min-width:0; max-width:100%; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; line-height:1.05; font-family:Nunito; font-weight:900; font-size:clamp(12px, 3.25vw, 16px); letter-spacing:.08px; background:linear-gradient(135deg,#b5fff5 0%,#72e9dc 35%,#8fdcff 100%); -webkit-background-clip:text; -webkit-text-fill-color:transparent; text-shadow:0 0 24px rgba(127,215,255,.16); }
+.hdr-right { display:flex; gap:6px; align-items:center; justify-content:flex-end; flex:0 0 auto; min-width:0; max-width:44%; position:relative; z-index:1; }
+.hdr-user { display:flex; align-items:center; gap:5px; min-width:0; max-width:88px; background:linear-gradient(180deg, rgba(255,255,255,.11), rgba(255,255,255,.05)); border:1px solid rgba(255,255,255,.1); border-radius:999px; padding:3px 7px 3px 4px; font-size:11px; font-weight:700; font-family:Nunito; color:var(--tx); backdrop-filter:blur(14px); -webkit-backdrop-filter:blur(14px); box-shadow:inset 0 1px 0 rgba(255,255,255,.14); }
 .hdr-user span { min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
-.hdr-btn { width:34px; height:34px; display:inline-flex; align-items:center; justify-content:center; background:linear-gradient(180deg, rgba(255,255,255,.09), rgba(255,255,255,.045)); border:1px solid rgba(255,255,255,.1); color:var(--tx); font-size:16px; cursor:pointer; padding:0; position:relative; border-radius:12px; flex:0 0 auto; box-shadow:inset 0 1px 0 rgba(255,255,255,.08), 0 10px 24px rgba(0,0,0,.12); }
-.hdr-btn:active { transform:scale(.9); }
-@media (max-width: 430px) { .hdr { padding:10px 10px 9px; gap:8px; flex-wrap:wrap; } .hdr-left { flex:1 1 100%; } .hdr-right { width:100%; justify-content:space-between; gap:6px; } .hdr-user { max-width:calc(100% - 152px); } .hdr-brand { font-size:13px; } .hdr-logo { height:26px; } }
-@media (max-width: 390px) { .hdr { padding:9px 8px 8px; gap:7px; } .hdr-brand { font-size:12px; } .hdr-user { max-width:calc(100% - 142px); padding-right:7px; } .hdr-user span { font-size:10px; } .hdr-btn { width:32px; height:32px; font-size:15px; } .hdr-logo { height:24px; } .theme-switch { width:48px; height:28px; } .theme-switch .knob { width:22px; height:22px; top:2px; left:2px; font-size:11px; } body.light .theme-switch .knob { transform:translateX(20px); } body.light .theme-switch:active .knob { transform:translateX(20px) scale(.97); } }
-@media (max-width: 350px) { .hdr-right { gap:5px; } .hdr-user span { display:none; } .hdr-user { max-width:none; padding-right:6px; } .hdr-brand { font-size:11px; } }
+.hdr-btn { width:32px; height:32px; display:inline-flex; align-items:center; justify-content:center; background:linear-gradient(180deg, rgba(255,255,255,.08), rgba(255,255,255,.03)); border:1px solid rgba(255,255,255,.08); color:var(--tx2); font-size:15px; cursor:pointer; padding:0; position:relative; border-radius:11px; flex:0 0 auto; backdrop-filter:blur(10px); -webkit-backdrop-filter:blur(10px); box-shadow:inset 0 1px 0 rgba(255,255,255,.08); }
+.hdr-btn:active { transform:scale(.88); }
+@media (max-width: 390px) { .hdr { padding:8px 8px 7px; gap:6px; } .hdr-left { gap:7px; padding-right:2px; } .hdr-right { gap:4px; max-width:50%; } .hdr-user { max-width:64px; padding-right:6px; } .hdr-user span { font-size:10px; } .hdr-btn { width:30px; height:30px; font-size:14px; } .hdr-logo { height:24px; } .hdr-brand { font-size:clamp(11px, 3.1vw, 13px); } .theme-switch { width:46px; height:26px; } .theme-switch .knob { width:20px; height:20px; top:2px; left:2px; font-size:10px; } body.light .theme-switch .knob { transform:translateX(20px); } body.light .theme-switch:active .knob { transform:translateX(20px) scale(.97); } }
+@media (max-width: 350px) { .hdr-user span { display:none; } .hdr-user { max-width:none; padding-right:5px; } .hdr-right { max-width:58%; } .hdr-brand { font-size:11px; } .hdr-logo { height:22px; } }
 .badge { position:absolute; top:-2px; right:-3px; background:var(--coral); color:#fff; font-size:9px; font-weight:800; min-width:16px; height:16px; border-radius:8px; display:flex; align-items:center; justify-content:center; font-family:Nunito; border:2px solid var(--s1); }
+.hdr .avatar { flex:0 0 auto; }
+.hdr-user .avatar { border-color:rgba(255,255,255,.12); }
+body.light .hdr-user, body.light .hdr-btn { background:linear-gradient(180deg, rgba(255,255,255,.9), rgba(241,247,255,.72)); border-color:rgba(160,184,220,.5); box-shadow:inset 0 1px 0 rgba(255,255,255,.8); }
 
 /* Bottom nav */
 .bnav { position:fixed; bottom:0; left:50%; transform:translateX(-50%); width:100%; max-width:480px; z-index:100; background:rgba(22,27,38,.92); backdrop-filter:blur(20px); border-top:1px solid var(--s3); display:flex; padding:4px 2px 8px; gap:1px; }
@@ -400,7 +410,7 @@ body.light .theme-switch:active .knob { transform:translateX(24px) scale(.97); }
 .pl-x { background:rgba(100,116,139,.06); color:var(--tx2); border:1px solid rgba(100,116,139,.12); }
 
 /* Buttons */
-.btn { font-family:'DM Sans'; font-weight:700; border:none; border-radius:12px; cursor:pointer; padding:11px 18px; font-size:13px; transition:all .12s; min-height:42px; }
+.btn { font-family:'DM Sans'; font-weight:700; border:none; border-radius:12px; cursor:pointer; padding:11px 16px; font-size:13px; min-height:44px; transition:all .1s; }
 .btn:active { transform:scale(.95); }
 .btn:disabled { opacity:.3; cursor:not-allowed; transform:none; }
 .btn-teal { background:linear-gradient(135deg,#4ecdc4,#38bdf8); color:var(--bg); }
@@ -408,18 +418,18 @@ body.light .theme-switch:active .knob { transform:translateX(24px) scale(.97); }
 .btn-gold { background:linear-gradient(135deg,#ffd93d,#f0c929); color:var(--bg); }
 .btn-lav { background:linear-gradient(135deg,#c084fc,#a855f7); color:#fff; }
 .btn-ghost { background:var(--s3); color:var(--tx); }
-.btn-sm { padding:9px 14px; font-size:12px; border-radius:10px; min-height:40px; }
+.btn-sm { padding:9px 13px; font-size:12px; border-radius:10px; min-height:40px; }
 
 /* Inputs */
-.inp { width:100%; background:var(--s1); border:1.5px solid var(--s3); border-radius:12px; padding:12px 14px; color:var(--tx); font-family:'DM Sans'; font-size:14px; outline:none; min-height:46px; }
+.inp { width:100%; background:linear-gradient(180deg, rgba(255,255,255,.03), rgba(255,255,255,.01)); border:1.5px solid var(--s3); border-radius:12px; padding:11px 13px; min-height:44px; color:var(--tx); font-family:'DM Sans'; font-size:13px; outline:none; }
 .inp:focus { border-color:var(--teal); }
 .inp::placeholder { color:var(--s4); }
 textarea.inp { resize:vertical; min-height:50px; }
 
 /* Overlay & sheets */
 .overlay { position:fixed; inset:0; background:rgba(0,0,0,.5); backdrop-filter:blur(2px); z-index:200; animation:fadeIn .12s; }
-.sheet { position:fixed; bottom:0; left:50%; transform:translateX(-50%); width:100%; max-width:480px; max-height:86vh; background:var(--s1); border-top-left-radius:20px; border-top-right-radius:20px; z-index:201; overflow-y:auto; padding:12px 12px 28px; animation:slideUp .25s cubic-bezier(.32,.72,.37,1.08); }
-.modal { position:fixed; top:50%; left:50%; transform:translate(-50%,-50%); width:calc(100% - 32px); max-width:400px; max-height:86vh; background:var(--s1); border-radius:20px; z-index:201; overflow-y:auto; padding:24px 20px 28px; animation:modalIn .25s cubic-bezier(.32,.72,.37,1.08); border:1px solid var(--s3); box-shadow:0 24px 64px rgba(0,0,0,.5); }
+.sheet { position:fixed; bottom:0; left:50%; transform:translateX(-50%); width:100%; max-width:480px; max-height:86vh; background:linear-gradient(180deg, rgba(20,26,39,.98), rgba(14,19,30,.98)); border-top-left-radius:22px; border-top-right-radius:22px; z-index:201; overflow-y:auto; padding:14px 14px 30px; animation:slideUp .25s cubic-bezier(.32,.72,.37,1.08); border:1px solid rgba(255,255,255,.08); border-bottom:none; box-shadow:0 -18px 42px rgba(0,0,0,.34); }
+.modal { position:fixed; top:50%; left:50%; transform:translate(-50%,-50%); width:calc(100% - 28px); max-width:408px; max-height:86vh; background:linear-gradient(180deg, rgba(20,26,39,.98), rgba(14,19,30,.98)); border-radius:22px; z-index:201; overflow-y:auto; padding:24px 20px 28px; animation:modalIn .25s cubic-bezier(.32,.72,.37,1.08); border:1px solid rgba(255,255,255,.08); box-shadow:0 24px 64px rgba(0,0,0,.5); }
 @keyframes modalIn { from { opacity:0; transform:translate(-50%,-50%) scale(.92); } to { opacity:1; transform:translate(-50%,-50%) scale(1); } }
 .sheet-bar { width:32px; height:3px; background:var(--s4); border-radius:2px; margin:0 auto 12px; }
 .sheet h3 { font-family:Nunito; font-weight:800; font-size:16px; margin-bottom:10px; }
@@ -431,7 +441,7 @@ textarea.inp { resize:vertical; min-height:50px; }
 
 /* Filter tabs */
 .filter-row { display:flex; gap:4px; margin-bottom:8px; flex-wrap:wrap; }
-.ftab { padding:9px 14px; border-radius:18px; background:var(--s2); border:1px solid var(--s3); color:var(--tx2); font-size:12px; font-weight:700; cursor:pointer; font-family:'DM Sans'; min-height:40px; }
+.ftab { padding:10px 12px; min-height:42px; border-radius:14px; background:linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,.02)); border:1px solid var(--s3); color:var(--tx2); font-size:12px; font-weight:700; cursor:pointer; font-family:'DM Sans'; }
 .ftab:active { transform:scale(.93); }
 .ftab.act { background:var(--t1); color:var(--teal); border-color:rgba(78,205,196,.25); }
 .pc-slot-empty { min-height:100px; border:1px dashed rgba(136,150,171,.16); border-radius:14px; background:linear-gradient(180deg, rgba(255,255,255,.01), rgba(255,255,255,.02)); }
@@ -462,7 +472,7 @@ textarea.inp { resize:vertical; min-height:50px; }
 .pc-card .pc-mini-id { min-width:28px; height:28px; border-radius:10px; display:flex; align-items:center; justify-content:center; font-size:13px; font-weight:900; font-family:Nunito; border:1px solid rgba(255,255,255,.08); box-shadow:inset 0 1px 0 rgba(255,255,255,.05); }
 .pc-card .pc-name-wrap { min-width:0; flex:1; }
 .pc-card .pc-name { font-family:Nunito; font-weight:900; font-size:12px; letter-spacing:.15px; display:flex; align-items:center; gap:4px; }
-.pc-card .pc-name-icon { font-size:12px; opacity:.9; }
+.pc-card .pc-name-icon { font-size:12px; opacity:.9; touch-action:none; user-select:none; -webkit-user-select:none; }
 .pc-card .pc-meta { font-size:8px; color:var(--tx2); margin-top:2px; }
 .pc-card .pc-visual { height:94px; border-radius:14px; position:relative; overflow:hidden; margin-bottom:9px; border:1px solid rgba(255,255,255,.06); background:radial-gradient(circle at 50% 52%, rgba(77,124,255,.14), rgba(5,10,20,.82) 68%); box-shadow:inset 0 0 0 1px rgba(255,255,255,.02), inset 0 -30px 45px rgba(0,0,0,.3); }
 .pc-card .pc-visual::before { content:""; position:absolute; inset:8px; border-radius:12px; border:1px solid rgba(110,157,255,.08); }
@@ -566,7 +576,9 @@ textarea.inp { resize:vertical; min-height:50px; }
 .role-badge { font-size:7px; font-weight:800; padding:0 4px; border-radius:5px; }
 .role-admin { background:var(--c1); color:var(--coral); }
 .role-mod { background:var(--l1); color:var(--lav); }
-.dur-grid { display:grid; grid-template-columns:repeat(5,1fr); gap:4px; margin-bottom:8px; }
+.dur-grid { display:grid; grid-template-columns:repeat(5, minmax(0,1fr)); gap:6px; margin-bottom:10px; }
+.dur-grid .ftab { min-height:46px; padding:10px 0; font-size:12px; border-radius:14px; }
+@media (max-width:390px){ .dur-grid { gap:5px; } .dur-grid .ftab { min-height:44px; font-size:11px; } }
 .price-box { background:var(--s2); border:1px solid var(--s3); border-radius:10px; padding:10px; margin-bottom:8px; text-align:center; }
 .price-big { font-family:Nunito; font-weight:900; font-size:24px; color:var(--teal); }
 .coins-earn { font-family:Nunito; font-weight:700; color:var(--gold); font-size:12px; }
@@ -875,16 +887,8 @@ textarea.inp { resize:vertical; min-height:50px; }
     const [bkT1, setBkT1] = useState(() => fmtDT(new Date(alignFutureStart(Date.now(), 6e4) + 36e5)));
     const msgRef = useRef(null);
     const toastTimerRef = useRef(null);
-    const multiPressTimerRef = useRef(null);
-    const multiPressHandledRef = useRef(false);
-    const toggleMultiPc = useCallback((pid) => {
-      setMulti(true);
-      setMultiSel((s) => {
-        const next = s.includes(pid) ? s.filter((x) => x !== pid) : [...s, pid];
-        if (next.length === 0) setMulti(false);
-        return next;
-      });
-    }, []);
+    const longPressRef = useRef({ timer: null, fired: false });
+    const LONG_PRESS_MS = 420;
     const L = useCallback((k, v) => tx(k, lang, v), [lang]);
     useEffect(() => {
       document.body.classList.toggle("light", theme === "light");
@@ -916,6 +920,9 @@ textarea.inp { resize:vertical; min-height:50px; }
     useEffect(() => () => {
       if (toastTimerRef.current) clearTimeout(toastTimerRef.current);
     }, []);
+    useEffect(() => () => {
+      if (longPressRef.current.timer) clearTimeout(longPressRef.current.timer);
+    }, []);
     const toggleTheme = () => setTheme((t) => t === "light" ? "dark" : "light");
     useEffect(() => {
       const iv = setInterval(() => setTick((t) => t + 1), 3e4);
@@ -928,6 +935,27 @@ textarea.inp { resize:vertical; min-height:50px; }
       if (toastTimerRef.current) clearTimeout(toastTimerRef.current);
       setToast(msg);
       toastTimerRef.current = setTimeout(() => setToast(null), 2200);
+    };
+    const toggleMultiPc = (pid) => {
+      if (!user) return;
+      setMulti(true);
+      setMultiSel((s) => s.includes(pid) ? s.filter((x) => x !== pid) : [...s, pid]);
+    };
+    const startPcLongPress = (pid) => {
+      if (!user) return;
+      if (longPressRef.current.timer) clearTimeout(longPressRef.current.timer);
+      longPressRef.current.fired = false;
+      longPressRef.current.timer = setTimeout(() => {
+        longPressRef.current.fired = true;
+        toggleMultiPc(pid);
+      }, LONG_PRESS_MS);
+    };
+    const endPcLongPress = () => {
+      if (longPressRef.current.timer) {
+        clearTimeout(longPressRef.current.timer);
+        longPressRef.current.timer = null;
+      }
+      return longPressRef.current.fired;
     };
     const addNotif = (nuid, icon, text) => setNotifs((n) => {
       const o = { ...n };
@@ -1445,64 +1473,31 @@ textarea.inp { resize:vertical; min-height:50px; }
         guestSub = `${lang === "ka" ? "\u10E8\u10D4\u10DB\u10D3\u10D4\u10D2\u10D8" : "Next at"} ${fmtWhen(nextBk.t0, lang)}`;
       }
       const visualState = isBusy ? "busy" : info.s === "soon" ? "soon" : "free";
-      const clearMultiPress = () => {
-        if (multiPressTimerRef.current) {
-          clearTimeout(multiPressTimerRef.current);
-          multiPressTimerRef.current = null;
-        }
-      };
-      const beginMultiPress = () => {
-        if (isGuest) return;
-        clearMultiPress();
-        multiPressHandledRef.current = false;
-        multiPressTimerRef.current = setTimeout(() => {
-          multiPressHandledRef.current = true;
-          toggleMultiPc(pc.id);
-          try {
-            navigator.vibrate && navigator.vibrate(18);
-          } catch (e) {
-          }
-        }, 420);
-      };
-      const endMultiPress = () => {
-        clearMultiPress();
-      };
       return /* @__PURE__ */ React.createElement(
         "div",
         {
           className: `pc-card pc-${visualState} ${isFree ? "free-glow" : ""} ${isMy ? "my-active" : ""} ${sel ? "multi-sel" : ""}`,
           style: { animationDelay: `${idx * 0.05}s` },
           onClick: () => {
-            if (multiPressHandledRef.current) {
-              multiPressHandledRef.current = false;
+            if (endPcLongPress()) return;
+            if (multi && !isGuest) {
+              setMultiSel((s) => s.includes(pc.id) ? s.filter((x) => x !== pc.id) : [...s, pc.id]);
               return;
             }
-            if (multi && !isGuest) toggleMultiPc(pc.id);
-            else {
-              setSheetData(pc);
-              setSheet(isGuest ? "guestpc" : "pcinfo");
-              setShowIss(false);
-              setIssDet("");
-              setAqDur(1);
-            }
-          },
-          onMouseDown: beginMultiPress,
-          onMouseUp: endMultiPress,
-          onMouseLeave: endMultiPress,
-          onTouchStart: beginMultiPress,
-          onTouchEnd: endMultiPress,
-          onTouchCancel: endMultiPress,
-          onContextMenu: (e) => {
-            if (!isGuest) e.preventDefault();
+            setSheetData(pc);
+            setSheet(isGuest ? "guestpc" : "pcinfo");
+            setShowIss(false);
+            setIssDet("");
+            setAqDur(1);
           }
         },
         /* @__PURE__ */ React.createElement("div", { className: "glow", style: { background: isFree ? "rgba(52,211,153,.7)" : isBusy ? "rgba(255,76,76,.78)" : "rgba(251,191,36,.7)", top: "-18px", right: "-18px" } }),
         !isGuest && isHot && !isYou && /* @__PURE__ */ React.createElement("div", { className: "pc-badge", style: { background: "var(--c1)", color: "var(--coral)" } }, "\u{1F525}HOT"),
         !isGuest && isYou && /* @__PURE__ */ React.createElement("div", { className: "pc-badge", style: { background: "var(--g1)", color: "var(--gold)" } }, "\u2605YOU"),
         multi && !isGuest && /* @__PURE__ */ React.createElement("div", { style: { position: "absolute", top: 8, left: 8, width: 16, height: 16, borderRadius: "50%", border: sel ? "2px solid var(--teal)" : "1.5px solid var(--s4)", background: sel ? "var(--teal)" : "rgba(12,17,29,.82)", display: "flex", alignItems: "center", justifyContent: "center", color: sel ? "#0f1219" : "transparent", fontSize: 10, fontWeight: 900, zIndex: 4, boxShadow: "0 2px 8px rgba(0,0,0,.24)" } }, "\u2713"),
-        /* @__PURE__ */ React.createElement("div", { className: "pc-topline" }, /* @__PURE__ */ React.createElement("div", { className: "pc-mini-id", style: { background: `${pc.c}22`, color: pc.c } }, pc.side, idx + 1), /* @__PURE__ */ React.createElement("div", { className: "pc-name-wrap" }, /* @__PURE__ */ React.createElement("div", { className: "pc-name" }, /* @__PURE__ */ React.createElement("span", { className: "pc-name-icon" }, pc.icon), pc.name), /* @__PURE__ */ React.createElement("div", { className: "pc-meta" }, isGuest ? lang === "ka" ? "\u10D3\u10D4\u10E2\u10D0\u10DA\u10D4\u10D1\u10D8\u10E1\u10D7\u10D5\u10D8\u10E1 \u10E8\u10D4\u10D4\u10EE\u10D4\u10D7" : "Tap for details" : lang === "ka" ? "\u10D3\u10D4\u10E2\u10D0\u10DA\u10D4\u10D1\u10D8 / \u10EF\u10D0\u10D5\u10E8\u10D0\u10DC\u10D8" : "Details / booking"))),
+        /* @__PURE__ */ React.createElement("div", { className: "pc-topline" }, /* @__PURE__ */ React.createElement("div", { className: "pc-mini-id", style: { background: `${pc.c}22`, color: pc.c } }, pc.side, idx + 1), /* @__PURE__ */ React.createElement("div", { className: "pc-name-wrap" }, /* @__PURE__ */ React.createElement("div", { className: "pc-name" }, /* @__PURE__ */ React.createElement("span", { className: "pc-name-icon", onMouseDown: () => startPcLongPress(pc.id), onMouseUp: endPcLongPress, onMouseLeave: endPcLongPress, onTouchStart: () => startPcLongPress(pc.id), onTouchEnd: endPcLongPress, onTouchCancel: endPcLongPress }, pc.icon), pc.name), /* @__PURE__ */ React.createElement("div", { className: "pc-meta" }, isGuest ? lang === "ka" ? "\u10D3\u10D4\u10E2\u10D0\u10DA\u10D4\u10D1\u10D8\u10E1\u10D7\u10D5\u10D8\u10E1 \u10E8\u10D4\u10D4\u10EE\u10D4\u10D7" : "Tap for details" : multi ? lang === "ka" ? "\u10D2\u10E0\u10EB\u10D4\u10DA\u10D8 \u10D3\u10D0\u10ED\u10D4\u10E0\u10D0 = multi" : "Long press = multi" : lang === "ka" ? "\u10D3\u10D4\u10E2\u10D0\u10DA\u10D4\u10D1\u10D8 / \u10EF\u10D0\u10D5\u10E8\u10D0\u10DC\u10D8" : "Details / booking"))),
         /* @__PURE__ */ React.createElement("div", { className: "pc-visual", "aria-hidden": "true" }, /* @__PURE__ */ React.createElement("div", { className: "pc-room-grid" }), /* @__PURE__ */ React.createElement("div", { className: "pc-desk" }), /* @__PURE__ */ React.createElement("div", { className: "pc-monitor" }, /* @__PURE__ */ React.createElement("div", { className: "pc-screen" })), /* @__PURE__ */ React.createElement("div", { className: "pc-keyboard" }), isBusy && /* @__PURE__ */ React.createElement("div", { className: "pc-player" }, /* @__PURE__ */ React.createElement("div", { className: "pc-player-head" }), /* @__PURE__ */ React.createElement("div", { className: "pc-player-body" })), /* @__PURE__ */ React.createElement("div", { className: "pc-chair" })),
-        /* @__PURE__ */ React.createElement("div", { className: "pc-bottom" }, /* @__PURE__ */ React.createElement("div", { className: "pc-status", style: { color: isFree ? "var(--teal)" : info.s === "soon" ? "var(--gold)" : "var(--coral)" } }, L(info.s === "busy" ? "busy" : info.s)), isGuest ? /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement("div", { style: { fontSize: 9, fontWeight: 700, color: isFree ? "var(--teal)" : info.s === "soon" ? "var(--gold)" : "var(--coral)", marginTop: 4, lineHeight: 1.35 } }, guestMain), /* @__PURE__ */ React.createElement("div", { style: { fontSize: 8, color: "var(--tx2)", marginTop: 3, lineHeight: 1.35 } }, guestSub)) : isBusy && info.bk ? /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement("div", { className: "pc-user" }, "\u{1F3AE} ", info.bk.un), /* @__PURE__ */ React.createElement("div", { className: "pc-prog" }, /* @__PURE__ */ React.createElement("div", { className: "pc-prog-fill", style: { width: `${prog}%` } })), /* @__PURE__ */ React.createElement("div", { className: "pc-time" }, remStr)) : isFree ? /* @__PURE__ */ React.createElement("div", { style: { fontSize: 8, color: "var(--teal)", opacity: 0.75, marginTop: 4 } }, lang === "ka" ? "\u10DB\u10EC\u10D5\u10D0\u10DC\u10D4 \u10DB\u10DD\u10DC\u10D8\u10E2\u10DD\u10E0\u10D8 = \u10D7\u10D0\u10D5\u10D8\u10E1\u10E3\u10E4\u10D0\u10DA\u10D8" : "Green monitor = free") : info.s === "soon" && info.bk ? /* @__PURE__ */ React.createElement("div", { style: { fontSize: 8, color: "var(--gold)", marginTop: 4, lineHeight: 1.35 } }, info.bk.un, " \xB7 ", fmtWhen(info.bk.t0, lang)) : null, /* @__PURE__ */ React.createElement("div", { style: { flex: 1 } }), !isGuest && info.q > 1 && /* @__PURE__ */ React.createElement("div", { className: "pc-queue" }, "\u{1F4CB} ", info.q, " ", L("queued")))
+        /* @__PURE__ */ React.createElement("div", { className: "pc-bottom" }, /* @__PURE__ */ React.createElement("div", { style: { flex: 1 } }), !isGuest && info.q > 1 && /* @__PURE__ */ React.createElement("div", { className: "pc-queue" }, "📋 ", info.q, " ", L("queued")))
       );
     };
     const renderHome = () => {
@@ -1515,12 +1510,12 @@ textarea.inp { resize:vertical; min-height:50px; }
         const s = pcStatus(p.id).s;
         return filter === "all" || filter === s;
       });
-      return /* @__PURE__ */ React.createElement("div", null, isHappyHour() && /* @__PURE__ */ React.createElement("div", { className: "happy-bar" }, L("happyHour")), announcements.length > 0 && /* @__PURE__ */ React.createElement("div", { style: { background: "linear-gradient(90deg, rgba(192,132,252,.08), rgba(56,189,248,.06))", border: "1px solid rgba(192,132,252,.15)", borderRadius: 10, padding: "7px 10px", marginBottom: 8 } }, announcements.slice(0, 2).map((a) => /* @__PURE__ */ React.createElement("div", { key: a.id, style: { fontSize: 10, marginBottom: announcements.length > 1 ? 3 : 0 } }, /* @__PURE__ */ React.createElement("span", { style: { color: "var(--lav)", fontWeight: 700 } }, "\u{1F4E2}"), " ", /* @__PURE__ */ React.createElement("span", { style: { color: "var(--tx)" } }, a.text), /* @__PURE__ */ React.createElement("span", { style: { fontSize: 7, color: "var(--tx2)", marginLeft: 4 } }, a.by, " \xB7 ", ago(a.ts, lang))))), /* @__PURE__ */ React.createElement("div", { className: "stat-bar" }, /* @__PURE__ */ React.createElement("div", { className: "stat-dot" }, /* @__PURE__ */ React.createElement("span", { style: { background: "var(--teal)" } }), " ", freeCount, " ", L("free")), /* @__PURE__ */ React.createElement("div", { className: "stat-dot" }, /* @__PURE__ */ React.createElement("span", { style: { background: "var(--coral)" } }), " ", busyCount, " ", L("playing")), /* @__PURE__ */ React.createElement("div", { className: "stat-dot" }, /* @__PURE__ */ React.createElement("span", { style: { background: "var(--gold)" } }), " ", soonCount, " ", L("soon"))), /* @__PURE__ */ React.createElement("div", { className: "filter-row" }, ["all", "free", "soon", "busy"].map((f) => /* @__PURE__ */ React.createElement("button", { key: f, className: `ftab ${filter === f ? "act" : ""}`, onClick: () => setFilter(f) }, L(f), " (", filterCounts[f], ")"))), /* @__PURE__ */ React.createElement("div", { className: "wings-box hall-shell" }, /* @__PURE__ */ React.createElement("div", { className: "hall-topline" }, /* @__PURE__ */ React.createElement("div", { className: "wing-label" }, L("leftWing")), /* @__PURE__ */ React.createElement("div", { className: "hall-aisle-head" }), /* @__PURE__ */ React.createElement("div", { className: "wing-label" }, L("rightWing"))), /* @__PURE__ */ React.createElement("div", { className: "hall-grid" }, Array.from({ length: 5 }).map((_, row) => {
+      return /* @__PURE__ */ React.createElement("div", null, isHappyHour() && /* @__PURE__ */ React.createElement("div", { className: "happy-bar" }, L("happyHour")), announcements.length > 0 && /* @__PURE__ */ React.createElement("div", { style: { background: "linear-gradient(90deg, rgba(192,132,252,.08), rgba(56,189,248,.06))", border: "1px solid rgba(192,132,252,.15)", borderRadius: 10, padding: "7px 10px", marginBottom: 8 } }, announcements.slice(0, 2).map((a) => /* @__PURE__ */ React.createElement("div", { key: a.id, style: { fontSize: 10, marginBottom: announcements.length > 1 ? 3 : 0 } }, /* @__PURE__ */ React.createElement("span", { style: { color: "var(--lav)", fontWeight: 700 } }, "\u{1F4E2}"), " ", /* @__PURE__ */ React.createElement("span", { style: { color: "var(--tx)" } }, a.text), /* @__PURE__ */ React.createElement("span", { style: { fontSize: 7, color: "var(--tx2)", marginLeft: 4 } }, a.by, " \xB7 ", ago(a.ts, lang))))), /* @__PURE__ */ React.createElement("div", { className: "stat-bar" }, /* @__PURE__ */ React.createElement("div", { className: "stat-dot" }, /* @__PURE__ */ React.createElement("span", { style: { background: "var(--teal)" } }), " ", freeCount, " ", L("free")), /* @__PURE__ */ React.createElement("div", { className: "stat-dot" }, /* @__PURE__ */ React.createElement("span", { style: { background: "var(--coral)" } }), " ", busyCount, " ", L("playing")), /* @__PURE__ */ React.createElement("div", { className: "stat-dot" }, /* @__PURE__ */ React.createElement("span", { style: { background: "var(--gold)" } }), " ", soonCount, " ", L("soon"))), /* @__PURE__ */ React.createElement("div", { className: "filter-row" }, ["all", "free", "soon", "busy"].map((f) => /* @__PURE__ */ React.createElement("button", { key: f, className: `ftab ${filter === f ? "act" : ""}`, onClick: () => setFilter(f) }, L(f), " (", filterCounts[f], ")")) )), !user ? null : /* @__PURE__ */ React.createElement("div", { style: { fontSize: "9px", color: "var(--tx2)", margin: "2px 2px 8px" } }, lang === "ka" ? "რამდენიმე PC-ის ასარჩევად ხატულას დააჭირე დიდხანს" : "Long press a PC icon to select multiple PCs"), /* @__PURE__ */ React.createElement("div", { className: "wings-box hall-shell" }, /* @__PURE__ */ React.createElement("div", { className: "hall-topline" }, /* @__PURE__ */ React.createElement("div", { className: "wing-label" }, L("leftWing")), /* @__PURE__ */ React.createElement("div", { className: "hall-aisle-head" }), /* @__PURE__ */ React.createElement("div", { className: "wing-label" }, L("rightWing"))), /* @__PURE__ */ React.createElement("div", { className: "hall-grid" }, Array.from({ length: 5 }).map((_, row) => {
         const lp = filterPcs(LEFT_PCS)[row];
         const rp = filterPcs(RIGHT_PCS)[row];
         const rowBorder = row < 4 ? "1px solid rgba(37,45,64,.3)" : "none";
         return /* @__PURE__ */ React.createElement(React.Fragment, { key: row }, /* @__PURE__ */ React.createElement("div", { className: "hall-cell left", style: { borderBottom: rowBorder } }, lp ? /* @__PURE__ */ React.createElement(PcCard, { pc: lp, idx: row }) : /* @__PURE__ */ React.createElement("div", { className: "pc-slot-empty" })), /* @__PURE__ */ React.createElement("div", { className: "hall-aisle-cell", style: { borderBottom: rowBorder } }), /* @__PURE__ */ React.createElement("div", { className: "hall-cell right", style: { borderBottom: rowBorder } }, rp ? /* @__PURE__ */ React.createElement(PcCard, { pc: rp, idx: row }) : /* @__PURE__ */ React.createElement("div", { className: "pc-slot-empty" })));
-      }))), multiSel.length > 0 && /* @__PURE__ */ React.createElement("div", { className: "multi-fab" }, /* @__PURE__ */ React.createElement("div", { className: "multi-fab-inner" }, /* @__PURE__ */ React.createElement("div", { style: { fontSize: 10, color: "var(--tx2)", marginBottom: 4 } }, lang === "ka" ? "დააჭირე დიდხანს PC-ზე მრავალ არჩევისთვის" : "Hold any PC for multi-select"), /* @__PURE__ */ React.createElement("div", { className: "multi-fab-icons" }, multiSel.slice(0, 4).map((pid) => {
+      }))), multi && multiSel.length > 0 && /* @__PURE__ */ React.createElement("div", { className: "multi-fab" }, /* @__PURE__ */ React.createElement("div", { className: "multi-fab-inner" }, /* @__PURE__ */ React.createElement("div", { className: "multi-fab-icons" }, multiSel.slice(0, 4).map((pid) => {
         const p = ALL_PCS.find((x) => x.id === pid);
         return /* @__PURE__ */ React.createElement("span", { key: pid, style: { fontSize: 16 } }, p == null ? void 0 : p.icon);
       }), multiSel.length > 4 && /* @__PURE__ */ React.createElement("span", { className: "multi-fab-count" }, "+", multiSel.length - 4)), /* @__PURE__ */ React.createElement("button", { className: "btn btn-teal btn-sm", style: { flex: "0 0 auto", whiteSpace: "nowrap" }, onClick: () => {
@@ -1528,8 +1523,10 @@ textarea.inp { resize:vertical; min-height:50px; }
         setSheet("book");
         setBkDur(1);
         setBkCustom(false);
+      } }, L("book"), " ", multiSel.length, " PCs"), /* @__PURE__ */ React.createElement("button", { className: "btn btn-ghost btn-sm", style: { flex: "0 0 auto" }, onClick: () => {
         setMulti(false);
-      } }, L("book"), " ", multiSel.length, " PCs"))), /* @__PURE__ */ React.createElement("div", { style: { marginTop: 16, padding: "14px 0 4px", borderTop: "1px solid var(--s3)" } }, /* @__PURE__ */ React.createElement("div", { style: { display: "flex", justifyContent: "center", gap: 12, marginBottom: 10 } }, [
+        setMultiSel([]);
+      } }, "✕"))), /* @__PURE__ */ React.createElement("div", { style: { marginTop: 16, padding: "14px 0 4px", borderTop: "1px solid var(--s3)" } }, /* @__PURE__ */ React.createElement("div", { style: { display: "flex", justifyContent: "center", gap: 12, marginBottom: 10 } }, [
         { name: "Facebook", href: SOCIAL_LINKS.facebook, svg: /* @__PURE__ */ React.createElement("svg", { width: "20", height: "20", viewBox: "0 0 24 24", fill: "none" }, /* @__PURE__ */ React.createElement("path", { d: "M18 2h-3a5 5 0 00-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 011-1h3V2z", stroke: "var(--tx2)", strokeWidth: "2", strokeLinecap: "round", strokeLinejoin: "round" })) },
         { name: "Instagram", href: SOCIAL_LINKS.instagram, svg: /* @__PURE__ */ React.createElement("svg", { width: "20", height: "20", viewBox: "0 0 24 24", fill: "none" }, /* @__PURE__ */ React.createElement("rect", { x: "2", y: "2", width: "20", height: "20", rx: "5", stroke: "var(--tx2)", strokeWidth: "2" }), /* @__PURE__ */ React.createElement("circle", { cx: "12", cy: "12", r: "5", stroke: "var(--tx2)", strokeWidth: "2" }), /* @__PURE__ */ React.createElement("circle", { cx: "17.5", cy: "6.5", r: "1.5", fill: "var(--tx2)" })) },
         { name: "TikTok", href: SOCIAL_LINKS.tiktok, svg: /* @__PURE__ */ React.createElement("svg", { width: "20", height: "20", viewBox: "0 0 24 24", fill: "none" }, /* @__PURE__ */ React.createElement("path", { d: "M9 12a4 4 0 104 4V4a5 5 0 005 5", stroke: "var(--tx2)", strokeWidth: "2", strokeLinecap: "round", strokeLinejoin: "round" })) },
@@ -1693,12 +1690,12 @@ textarea.inp { resize:vertical; min-height:50px; }
       if (!user) return /* @__PURE__ */ React.createElement("div", { className: "empty", onClick: () => setSheet("auth"), style: { cursor: "pointer" } }, "\u{1F512} ", L("login"));
       const nxTier = getNextTier(user.hr);
       const prog = nxTier ? (user.hr - tier.hrs) / (nxTier.hrs - tier.hrs) * 100 : 100;
-      return /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("div", { className: "tier-hero", style: { background: `linear-gradient(135deg,${tier.c}11,var(--s2))`, borderColor: `${tier.c}33` } }, /* @__PURE__ */ React.createElement("div", { className: "avatar-upload", style: { marginBottom: 4 } }, /* @__PURE__ */ React.createElement(Avatar, { u: user, size: 72 }), /* @__PURE__ */ React.createElement("div", { className: "avatar-edit" }, "\u{1F4F7}"), /* @__PURE__ */ React.createElement("input", { type: "file", accept: "image/*", onChange: handleAvatarUpload })), /* @__PURE__ */ React.createElement("div", { style: { fontFamily: "Nunito", fontWeight: 900, fontSize: 18, color: tier.c, marginTop: 2 } }, tier[lang] || tier.en), /* @__PURE__ */ React.createElement("div", { style: { fontSize: 10, color: "var(--tx2)" } }, user.nick, " \xB7 ", L("level"), " ", Math.floor(user.hr / 5) + 1), /* @__PURE__ */ React.createElement("div", { style: { fontFamily: "Nunito", fontWeight: 800, fontSize: 26, color: "var(--gold)", marginTop: 2 } }, "\u{1FA99} ", user.co), /* @__PURE__ */ React.createElement("div", { style: { height: 4, background: "var(--s3)", borderRadius: 2, marginTop: 8, overflow: "hidden" } }, /* @__PURE__ */ React.createElement("div", { style: { height: "100%", width: `${prog}%`, borderRadius: 2, background: `linear-gradient(90deg,${tier.c},${(nxTier == null ? void 0 : nxTier.c) || tier.c})` } })), /* @__PURE__ */ React.createElement("div", { style: { display: "flex", justifyContent: "space-between", fontSize: 8, color: "var(--tx2)", marginTop: 2 } }, /* @__PURE__ */ React.createElement("span", null, user.hr, "h"), /* @__PURE__ */ React.createElement("span", null, nxTier ? `${nxTier.hrs}h` : "MAX"))), user.dc !== dayKey() && /* @__PURE__ */ React.createElement("div", { className: "daily-box", onClick: claimDaily }, /* @__PURE__ */ React.createElement("div", { style: { fontSize: 26, animation: "bob 2s infinite" } }, "\u{1F381}"), /* @__PURE__ */ React.createElement("div", { style: { flex: 1 } }, /* @__PURE__ */ React.createElement("div", { style: { fontWeight: 700, fontSize: 12 } }, L("dailyGift")), /* @__PURE__ */ React.createElement("div", { style: { fontSize: 10, color: "var(--gold)" } }, "+", Math.round(5 * tier.mul), " ", L("coins"))), /* @__PURE__ */ React.createElement("button", { className: "btn btn-gold btn-sm" }, L("claim"))), /* @__PURE__ */ React.createElement("div", { className: "streak-row" }, /* @__PURE__ */ React.createElement("div", { style: { fontSize: 22 } }, "\u{1F525}"), /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("div", { style: { fontFamily: "Nunito", fontWeight: 900, fontSize: 26, color: "var(--gold)" } }, user.st), /* @__PURE__ */ React.createElement("div", { style: { fontSize: 9, color: "var(--tx2)" } }, L("streak"))), /* @__PURE__ */ React.createElement("div", { className: "streak-dots", style: { marginLeft: "auto" } }, [...Array(7)].map((_, i) => /* @__PURE__ */ React.createElement("div", { key: i, className: `streak-dot ${i < (user.st % 7 || (user.st >= 7 ? 7 : 0)) ? "on" : ""}` })))), /* @__PURE__ */ React.createElement("div", { className: "stats-grid" }, /* @__PURE__ */ React.createElement("div", { className: "stat-card" }, /* @__PURE__ */ React.createElement("div", { className: "sv" }, user.hr, "h"), /* @__PURE__ */ React.createElement("div", { className: "sl" }, L("hours"))), /* @__PURE__ */ React.createElement("div", { className: "stat-card" }, /* @__PURE__ */ React.createElement("div", { className: "sv" }, user.bk), /* @__PURE__ */ React.createElement("div", { className: "sl" }, L("bookings"))), /* @__PURE__ */ React.createElement("div", { className: "stat-card" }, /* @__PURE__ */ React.createElement("div", { className: "sv" }, tier.mul, "\xD7"), /* @__PURE__ */ React.createElement("div", { className: "sl" }, "Multi")), /* @__PURE__ */ React.createElement("div", { className: "stat-card" }, /* @__PURE__ */ React.createElement("div", { className: "sv" }, tier.disc, "%"), /* @__PURE__ */ React.createElement("div", { className: "sl" }, "Disc"))), favPc && /* @__PURE__ */ React.createElement("div", { style: { fontSize: 10, color: "var(--tx2)" } }, L("favPc"), ": ", (_a = ALL_PCS.find((p) => p.id === favPc.pid)) == null ? void 0 : _a.icon, " ", (_b = ALL_PCS.find((p) => p.id === favPc.pid)) == null ? void 0 : _b.name, " (", favPc.n, ")"), /* @__PURE__ */ React.createElement("div", { style: { display: "flex", gap: 4, margin: "8px 0" } }, [["ranks", "\u{1F3C5}"], ["trophies", "\u{1F3C6}"], ["leaderboard", "\u{1F4CA}"]].map(
+      return /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("div", { className: "tier-hero", style: { background: `linear-gradient(135deg,${tier.c}11,var(--s2))`, borderColor: `${tier.c}33` } }, /* @__PURE__ */ React.createElement("div", { className: "avatar-upload", style: { marginBottom: 4 } }, /* @__PURE__ */ React.createElement(Avatar, { u: user, size: 72 }), /* @__PURE__ */ React.createElement("div", { className: "avatar-edit" }, "\u{1F4F7}"), /* @__PURE__ */ React.createElement("input", { type: "file", accept: "image/*", onChange: handleAvatarUpload })), /* @__PURE__ */ React.createElement("div", { style: { fontFamily: "Nunito", fontWeight: 900, fontSize: 18, color: tier.c, marginTop: 2 } }, tier[lang] || tier.en), /* @__PURE__ */ React.createElement("div", { style: { fontSize: 10, color: "var(--tx2)" } }, user.nick, " \xB7 ", L("level"), " ", Math.floor(user.hr / 5) + 1), /* @__PURE__ */ React.createElement("div", { style: { fontFamily: "Nunito", fontWeight: 800, fontSize: 26, color: "var(--gold)", marginTop: 2 } }, "\u{1FA99} ", user.co), /* @__PURE__ */ React.createElement("div", { style: { height: 4, background: "var(--s3)", borderRadius: 2, marginTop: 8, overflow: "hidden" } }, /* @__PURE__ */ React.createElement("div", { style: { height: "100%", width: `${prog}%`, borderRadius: 2, background: `linear-gradient(90deg,${tier.c},${(nxTier == null ? void 0 : nxTier.c) || tier.c})` } })), /* @__PURE__ */ React.createElement("div", { style: { display: "flex", justifyContent: "space-between", fontSize: 8, color: "var(--tx2)", marginTop: 2 } }, /* @__PURE__ */ React.createElement("span", null, user.hr, "h"), /* @__PURE__ */ React.createElement("span", null, nxTier ? `${nxTier.hrs}h` : "MAX"))), user.dc !== dayKey() && /* @__PURE__ */ React.createElement("div", { className: "daily-box", onClick: claimDaily }, /* @__PURE__ */ React.createElement("div", { style: { fontSize: 26, animation: "bob 2s infinite" } }, "\u{1F381}"), /* @__PURE__ */ React.createElement("div", { style: { flex: 1 } }, /* @__PURE__ */ React.createElement("div", { style: { fontWeight: 700, fontSize: 12 } }, L("dailyGift")), /* @__PURE__ */ React.createElement("div", { style: { fontSize: 10, color: "var(--gold)" } }, "+", Math.round(5 * tier.mul), " ", L("coins"))), /* @__PURE__ */ React.createElement("button", { className: "btn btn-gold btn-sm" }, L("claim"))), /* @__PURE__ */ React.createElement("div", { className: "streak-row" }, /* @__PURE__ */ React.createElement("div", { style: { fontSize: 22 } }, "\u{1F525}"), /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("div", { style: { fontFamily: "Nunito", fontWeight: 900, fontSize: 26, color: "var(--gold)" } }, user.st), /* @__PURE__ */ React.createElement("div", { style: { fontSize: 9, color: "var(--tx2)" } }, L("streak"))), /* @__PURE__ */ React.createElement("div", { className: "streak-dots", style: { marginLeft: "auto" } }, [...Array(7)].map((_, i) => /* @__PURE__ */ React.createElement("div", { key: i, className: `streak-dot ${i < (user.st % 7 || (user.st >= 7 ? 7 : 0)) ? "on" : ""}` })))), /* @__PURE__ */ React.createElement("div", { className: "stats-grid" }, /* @__PURE__ */ React.createElement("div", { className: "stat-card" }, /* @__PURE__ */ React.createElement("div", { className: "sv" }, user.hr, "h"), /* @__PURE__ */ React.createElement("div", { className: "sl" }, L("hours"))), /* @__PURE__ */ React.createElement("div", { className: "stat-card" }, /* @__PURE__ */ React.createElement("div", { className: "sv" }, user.bk), /* @__PURE__ */ React.createElement("div", { className: "sl" }, L("bookings"))), /* @__PURE__ */ React.createElement("div", { className: "stat-card" }, /* @__PURE__ */ React.createElement("div", { className: "sv" }, tier.mul, "\xD7"), /* @__PURE__ */ React.createElement("div", { className: "sl" }, "Multi")), /* @__PURE__ */ React.createElement("div", { className: "stat-card" }, /* @__PURE__ */ React.createElement("div", { className: "sv" }, tier.disc, "%"), /* @__PURE__ */ React.createElement("div", { className: "sl" }, "Disc"))), favPc && /* @__PURE__ */ React.createElement("div", { style: { fontSize: 10, color: "var(--tx2)" } }, L("favPc"), ": ", (_a = ALL_PCS.find((p) => p.id === favPc.pid)) == null ? void 0 : _a.icon, " ", (_b = ALL_PCS.find((p) => p.id === favPc.pid)) == null ? void 0 : _b.name, " (", favPc.n, ")"), /* @__PURE__ */ React.createElement("div", { style: { display: "flex", gap: 4, margin: "8px 0" } }, [["ranks", "\u{1F3C5}"], ["trophies", "\u{1F3C6}"], ["shop", "\u{1F381}"], ["leaderboard", "\u{1F4CA}"]].map(
         ([s, ic]) => /* @__PURE__ */ React.createElement("button", { key: s, className: `ftab ${profTab === s ? "act" : ""}`, onClick: () => setProfTab(s) }, ic, " ", L(s))
       )), profTab === "ranks" && TIERS.map((tr) => /* @__PURE__ */ React.createElement("div", { key: tr.id, className: "card", style: { marginBottom: 4, opacity: user.hr < tr.hrs ? 0.3 : 1, borderColor: tr.id === tier.id ? tr.c + "44" : void 0 } }, /* @__PURE__ */ React.createElement("div", { style: { display: "flex", alignItems: "center", gap: 6 } }, /* @__PURE__ */ React.createElement("span", { style: { fontSize: 20 } }, tr.icon), /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("div", { style: { fontWeight: 700, fontSize: 11, color: tr.id === tier.id ? tr.c : "var(--tx)" } }, tr[lang] || tr.en, tr.id === tier.id && " \u2713"), /* @__PURE__ */ React.createElement("div", { style: { fontSize: 9, color: "var(--tx2)" } }, tr.hrs, "h \xB7 ", tr.mul, "\xD7 \xB7 -", tr.disc, "%"))))), profTab === "trophies" && ACHIEVEMENTS.map((a) => {
         const ok = a.cond(user);
         return /* @__PURE__ */ React.createElement("div", { key: a.id, className: "card", style: { marginBottom: 4, opacity: ok ? 1 : 0.3 } }, /* @__PURE__ */ React.createElement("div", { style: { display: "flex", alignItems: "center", gap: 6 } }, /* @__PURE__ */ React.createElement("span", { style: { fontSize: 18 } }, ok ? a.icon : "\u{1F512}"), /* @__PURE__ */ React.createElement("div", { style: { fontWeight: 700, fontSize: 11 } }, a[lang] || a.en, ok && /* @__PURE__ */ React.createElement("span", { style: { color: "var(--teal)" } }, " \u2713"))));
-      }), false && SHOP_ITEMS.map((rw) => /* @__PURE__ */ React.createElement("div", { key: rw.id, className: "card", style: { marginBottom: 4, display: "flex", alignItems: "center", justifyContent: "space-between" } }, /* @__PURE__ */ React.createElement("div", { style: { display: "flex", gap: 6, alignItems: "center" } }, /* @__PURE__ */ React.createElement("span", { style: { fontSize: 18 } }, rw.icon), /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("div", { style: { fontWeight: 700, fontSize: 11 } }, rw[lang] || rw.en), /* @__PURE__ */ React.createElement("div", { style: { fontSize: 10, color: "var(--gold)" } }, "\u{1FA99}", rw.cost))), /* @__PURE__ */ React.createElement("button", { className: "btn btn-teal btn-sm", disabled: user.co < rw.cost, onClick: () => buyReward(rw) }, L("get")))), profTab === "leaderboard" && users.filter((u) => u.hr > 0).sort((a, b) => b.hr - a.hr).slice(0, 10).map((u, i) => {
+      }), profTab === "shop" && SHOP_ITEMS.map((rw) => /* @__PURE__ */ React.createElement("div", { key: rw.id, className: "card", style: { marginBottom: 4, display: "flex", alignItems: "center", justifyContent: "space-between" } }, /* @__PURE__ */ React.createElement("div", { style: { display: "flex", gap: 6, alignItems: "center" } }, /* @__PURE__ */ React.createElement("span", { style: { fontSize: 18 } }, rw.icon), /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("div", { style: { fontWeight: 700, fontSize: 11 } }, rw[lang] || rw.en), /* @__PURE__ */ React.createElement("div", { style: { fontSize: 10, color: "var(--gold)" } }, "\u{1FA99}", rw.cost))), /* @__PURE__ */ React.createElement("button", { className: "btn btn-teal btn-sm", disabled: user.co < rw.cost, onClick: () => buyReward(rw) }, L("get")))), profTab === "leaderboard" && users.filter((u) => u.hr > 0).sort((a, b) => b.hr - a.hr).slice(0, 10).map((u, i) => {
         const medals = ["\u{1F947}", "\u{1F948}", "\u{1F949}"];
         const uT = getTier(u.hr);
         return /* @__PURE__ */ React.createElement("div", { key: u.id, className: `lb-row ${u.id === user.id ? "me" : ""}` }, /* @__PURE__ */ React.createElement("div", { style: { fontFamily: "Nunito", fontWeight: 800, fontSize: 14, width: 22, textAlign: "center" } }, medals[i] || `#${i + 1}`), /* @__PURE__ */ React.createElement(Avatar, { u, size: 28 }), /* @__PURE__ */ React.createElement("div", { style: { flex: 1 } }, /* @__PURE__ */ React.createElement("div", { style: { fontWeight: 700, fontSize: 11, color: uT.c } }, u.nick), /* @__PURE__ */ React.createElement("div", { style: { fontSize: 8, color: "var(--tx2)" } }, u.hr, "h \xB7 \u{1FA99}", u.co, " \xB7 \u{1F525}", u.st)));
@@ -2059,7 +2056,7 @@ textarea.inp { resize:vertical; min-height:50px; }
       if (e.key === "Enter") submitAuth();
     };
     if (authLoading) return /* @__PURE__ */ React.createElement("div", { className: "app landing" }, /* @__PURE__ */ React.createElement("style", null, CSS), /* @__PURE__ */ React.createElement("div", { style: { display: "flex", alignItems: "center", justifyContent: "center", minHeight: "100vh", flexDirection: "column", gap: 12 } }, /* @__PURE__ */ React.createElement("img", { src: LOGO_LG, alt: "Sakompiutere N1 Gaming logo", style: { height: 56, opacity: 0.6 } }), /* @__PURE__ */ React.createElement("div", { style: { fontFamily: "Nunito", fontWeight: 800, fontSize: 14, color: "var(--tx2)" } }, "Loading...")));
-    if (!user) return /* @__PURE__ */ React.createElement("div", { className: "app" }, /* @__PURE__ */ React.createElement("style", null, CSS), /* @__PURE__ */ React.createElement("div", { className: "amb amb-1" }), /* @__PURE__ */ React.createElement("div", { className: "amb amb-2" }), /* @__PURE__ */ React.createElement("div", { className: "hdr" }, /* @__PURE__ */ React.createElement("div", { className: "hdr-left" }, /* @__PURE__ */ React.createElement("img", { src: LOGO_LG, alt: "Sakompiutere N1 Gaming", className: "hdr-logo" }), /* @__PURE__ */ React.createElement("div", { className: "hdr-brand", title: L("brand") }, L("brand"))), /* @__PURE__ */ React.createElement("div", { className: "hdr-right" }, /* @__PURE__ */ React.createElement("div", { className: "theme-switch", onClick: toggleTheme, title: theme === "light" ? "Day" : "Night" }, /* @__PURE__ */ React.createElement("div", { className: "knob" }, theme === "light" ? "\u2600\uFE0F" : "\u{1F319}")), /* @__PURE__ */ React.createElement("button", { className: "hdr-btn", onClick: () => setLang(lang === "en" ? "ka" : "en") }, lang === "en" ? "\u{1F1EC}\u{1F1EA}" : "\u{1F1EC}\u{1F1E7}"))), /* @__PURE__ */ React.createElement("div", { className: "content", style: { paddingBottom: 20 } }, renderGuestHome(), /* @__PURE__ */ React.createElement("div", { id: "guestAuthCard", className: "card", style: { marginTop: 12 } }, /* @__PURE__ */ React.createElement("div", { style: { fontFamily: "Nunito", fontWeight: 900, fontSize: 16, marginBottom: 4 } }, authMode === "login" ? `\u{1F511} ${L("login")}` : `\u2728 ${L("register")}`), /* @__PURE__ */ React.createElement("div", { style: { fontSize: 10, color: "var(--tx2)", marginBottom: 10 } }, lang === "ka" ? "\u10E8\u10D4\u10D3\u10D8\u10D7 \u10D3\u10D0\u10EF\u10D0\u10D5\u10E8\u10DC\u10D8\u10E1\u10D7\u10D5\u10D8\u10E1, \u10E1\u10E0\u10E3\u10DA\u10D8 \u10D2\u10D0\u10DC\u10E0\u10D8\u10D2\u10D8\u10E1\u10D0 \u10D3\u10D0 \u10DE\u10E0\u10DD\u10E4\u10D8\u10DA\u10D8\u10E1 \u10E4\u10E3\u10DC\u10E5\u10EA\u10D8\u10D4\u10D1\u10D8\u10E1\u10D7\u10D5\u10D8\u10E1." : "Log in for booking, full timeline, and profile features."), /* @__PURE__ */ React.createElement("div", { style: { display: "flex", gap: 4, marginBottom: 8 } }, /* @__PURE__ */ React.createElement("button", { className: `ftab ${authMode === "login" ? "act" : ""}`, style: { flex: 1 }, onClick: () => {
+    if (!user) return /* @__PURE__ */ React.createElement("div", { className: "app" }, /* @__PURE__ */ React.createElement("style", null, CSS), /* @__PURE__ */ React.createElement("div", { className: "amb amb-1" }), /* @__PURE__ */ React.createElement("div", { className: "amb amb-2" }), /* @__PURE__ */ React.createElement("div", { className: "hdr" }, /* @__PURE__ */ React.createElement("div", { className: "hdr-left" }, /* @__PURE__ */ React.createElement("img", { src: LOGO_SM, alt: "Sakompiutere N1 Gaming", className: "hdr-logo" }), /* @__PURE__ */ React.createElement("div", { className: "hdr-brand", title: L("brand") }, L("brand"))), /* @__PURE__ */ React.createElement("div", { className: "hdr-right" }, /* @__PURE__ */ React.createElement("div", { className: "theme-switch", onClick: toggleTheme, title: theme === "light" ? "Day" : "Night" }, /* @__PURE__ */ React.createElement("div", { className: "knob" }, theme === "light" ? "\u2600\uFE0F" : "\u{1F319}")), /* @__PURE__ */ React.createElement("button", { className: "hdr-btn", onClick: () => setLang(lang === "en" ? "ka" : "en") }, lang === "en" ? "\u{1F1EC}\u{1F1EA}" : "\u{1F1EC}\u{1F1E7}"))), /* @__PURE__ */ React.createElement("div", { className: "content", style: { paddingBottom: 20 } }, renderGuestHome(), /* @__PURE__ */ React.createElement("div", { id: "guestAuthCard", className: "card", style: { marginTop: 12 } }, /* @__PURE__ */ React.createElement("div", { style: { fontFamily: "Nunito", fontWeight: 900, fontSize: 16, marginBottom: 4 } }, authMode === "login" ? `\u{1F511} ${L("login")}` : `\u2728 ${L("register")}`), /* @__PURE__ */ React.createElement("div", { style: { fontSize: 10, color: "var(--tx2)", marginBottom: 10 } }, lang === "ka" ? "\u10E8\u10D4\u10D3\u10D8\u10D7 \u10D3\u10D0\u10EF\u10D0\u10D5\u10E8\u10DC\u10D8\u10E1\u10D7\u10D5\u10D8\u10E1, \u10E1\u10E0\u10E3\u10DA\u10D8 \u10D2\u10D0\u10DC\u10E0\u10D8\u10D2\u10D8\u10E1\u10D0 \u10D3\u10D0 \u10DE\u10E0\u10DD\u10E4\u10D8\u10DA\u10D8\u10E1 \u10E4\u10E3\u10DC\u10E5\u10EA\u10D8\u10D4\u10D1\u10D8\u10E1\u10D7\u10D5\u10D8\u10E1." : "Log in for booking, full timeline, and profile features."), /* @__PURE__ */ React.createElement("div", { style: { display: "flex", gap: 4, marginBottom: 8 } }, /* @__PURE__ */ React.createElement("button", { className: `ftab ${authMode === "login" ? "act" : ""}`, style: { flex: 1 }, onClick: () => {
       setAuthMode("login");
       setANick("");
       setAEmail("");
@@ -2084,7 +2081,7 @@ textarea.inp { resize:vertical; min-height:50px; }
       setPendingUser(null);
       setAuthMode("login");
     } }, "\u2190 ", lang === "ka" ? "\u10E3\u10D9\u10D0\u10DC" : "Back to Login"))), toast && /* @__PURE__ */ React.createElement("div", { className: "toast", role: "status", "aria-live": "polite" }, toast));
-    return /* @__PURE__ */ React.createElement("div", { className: "app" }, /* @__PURE__ */ React.createElement("style", null, CSS), /* @__PURE__ */ React.createElement("div", { className: "amb amb-1" }), /* @__PURE__ */ React.createElement("div", { className: "amb amb-2" }), /* @__PURE__ */ React.createElement("div", { className: "hdr" }, /* @__PURE__ */ React.createElement("div", { className: "hdr-left" }, /* @__PURE__ */ React.createElement("img", { src: LOGO_LG, alt: "Sakompiutere N1 Gaming", className: "hdr-logo" }), /* @__PURE__ */ React.createElement("div", { className: "hdr-brand", title: L("brand") }, L("brand"))), /* @__PURE__ */ React.createElement("div", { className: "hdr-right" }, /* @__PURE__ */ React.createElement("div", { className: "hdr-user" }, /* @__PURE__ */ React.createElement(Avatar, { u: user, size: 20 }), /* @__PURE__ */ React.createElement("span", { style: { fontSize: 11 } }, user.nick)), /* @__PURE__ */ React.createElement("div", { className: "theme-switch", onClick: toggleTheme, title: theme === "light" ? "Day" : "Night" }, /* @__PURE__ */ React.createElement("div", { className: "knob" }, theme === "light" ? "\u2600\uFE0F" : "\u{1F319}")), /* @__PURE__ */ React.createElement("button", { className: "hdr-btn", onClick: () => setLang(lang === "en" ? "ka" : "en") }, lang === "en" ? "\u{1F1EC}\u{1F1EA}" : "\u{1F1EC}\u{1F1E7}"), /* @__PURE__ */ React.createElement("button", { className: "hdr-btn", onClick: () => {
+    return /* @__PURE__ */ React.createElement("div", { className: "app" }, /* @__PURE__ */ React.createElement("style", null, CSS), /* @__PURE__ */ React.createElement("div", { className: "amb amb-1" }), /* @__PURE__ */ React.createElement("div", { className: "amb amb-2" }), /* @__PURE__ */ React.createElement("div", { className: "hdr" }, /* @__PURE__ */ React.createElement("div", { className: "hdr-left" }, /* @__PURE__ */ React.createElement("img", { src: LOGO_SM, alt: "Sakompiutere N1 Gaming", className: "hdr-logo" }), /* @__PURE__ */ React.createElement("div", { className: "hdr-brand", title: L("brand") }, L("brand"))), /* @__PURE__ */ React.createElement("div", { className: "hdr-right" }, /* @__PURE__ */ React.createElement("div", { className: "hdr-user" }, /* @__PURE__ */ React.createElement(Avatar, { u: user, size: 20 }), /* @__PURE__ */ React.createElement("span", { style: { fontSize: 11 } }, user.nick)), /* @__PURE__ */ React.createElement("div", { className: "theme-switch", onClick: toggleTheme, title: theme === "light" ? "Day" : "Night" }, /* @__PURE__ */ React.createElement("div", { className: "knob" }, theme === "light" ? "\u2600\uFE0F" : "\u{1F319}")), /* @__PURE__ */ React.createElement("button", { className: "hdr-btn", onClick: () => setLang(lang === "en" ? "ka" : "en") }, lang === "en" ? "\u{1F1EC}\u{1F1EA}" : "\u{1F1EC}\u{1F1E7}"), /* @__PURE__ */ React.createElement("button", { className: "hdr-btn", onClick: () => {
       setNotifOpen(!notifOpen);
       if (!notifOpen) setNotifs((n) => {
         const o = { ...n };
